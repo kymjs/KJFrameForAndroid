@@ -1,7 +1,7 @@
 KJFrameForAndroid
 =================
 
-*注由于网络问题，本项目已转移至国内代码托管平台请移步：[KJLibrary]（http://git.oschina.net/kymjs/KJLibrary）*
+*注由于网络问题，本项目已转移至国内代码托管平台请移步：[KJLibrar](http://git.oschina.net/kymjs/KJLibrary#readme)*
 
 ## 概述
 
@@ -33,6 +33,7 @@ Apache Licence是著名的非盈利开源组织Apache采用的协议。该协议
 如果编译出错，请修改项目根目录下的 project.properties 文件。<br>
 推荐使用Android 4.0 以上版本的SDK,请使用JDK1.6编译：
 > target=android-17
+
  1. 签出项目
 
         git clone https://git.oschina.net/kymjs/KJFrameForAndroid.git
