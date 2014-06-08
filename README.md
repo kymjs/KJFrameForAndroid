@@ -1,7 +1,7 @@
 KJFrameForAndroid
 =================
 
-*注由于网络问题，本项目已转移至国内代码托管平台请移步：[KJLibrar](http://git.oschina.net/kymjs/KJLibrary#readme)*
+*注由于网络问题，本项目已转移至国内代码托管平台请移步：[KJLibrary](http://git.oschina.net/kymjs/KJLibrary#readme)*
 
 ## 概述
 
