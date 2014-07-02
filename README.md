@@ -1,13 +1,11 @@
-KJFrameForAndroid
+﻿KJFrameForAndroid
 =================
-
-*注由于网络问题，本项目已转移至国内代码托管平台请移步：[KJLibrary](http://git.oschina.net/kymjs/KJLibrary#readme)*
 
 ## 概述
 
 **KJFrameForAndroid** 又叫KJLibrary，免费的、开源的、简易的、遵循Apache Licence 2.0开源协议发布的android应用开发框架，总共分为五大模块：UILibrary，UtilsLibrary，HttpLibrary，BitmapLibrary，DBLibrary。
 
-**UILibrary模块**分为两部分，widget、topology
+**UILibrary模块**分为两部分，widget、topology [更多介绍...](http://my.oschina.net/kymjs/blog/284897)<br>
 > widget部分包含了目前应用开发中常见的自定义控件，例如上下拉ListView、瀑布流、可缩放的ImageView。<br>
 > Topology部分包含一个使用IOC设计思想的控件初始化方式：可通过注解的方式进行UI绑定，与设置监听，在Activity和Fragment中均可以通过一行代码绑定控件并实现点击监听；还包含了在目前应用开发中常见的布局界面，如侧滑效果，高效的底部TAB导航，3D效果的切换。<br>
 > 同时UILibrary为开发者定义了完善的BaseActivity和BaseFragment，开发者只需手动继承就可以获得Topology部分的全部功能。<br>
