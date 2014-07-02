@@ -203,7 +203,6 @@ public class SystemTool {
      * 
      * @param context
      * @param pkgName
-     * @return
      */
     public static String getSign(Context context, String pkgName) {
         try {

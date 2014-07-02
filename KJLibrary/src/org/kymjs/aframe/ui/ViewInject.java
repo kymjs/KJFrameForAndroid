@@ -30,20 +30,30 @@ public class ViewInject {
 
     private ViewInject() {}
 
-    private static class UIHelperHolder {
+    private static class ClassHolder {
         private static final ViewInject instance = new ViewInject();
     }
 
     public static ViewInject create() {
-        return UIHelperHolder.instance;
+        return ClassHolder.instance;
     }
 
     public static void toast(String msg) {
         try {
-            Toast.makeText(KJActivityManager.create().topActivity(), msg,
-                    Toast.LENGTH_SHORT).show();
+            toast(KJActivityManager.create().topActivity(), msg);
         } catch (Exception e) {
         }
+    }
+
+    public static void longToast(String msg) {
+        try {
+            longToast(KJActivityManager.create().topActivity(), msg);
+        } catch (Exception e) {
+        }
+    }
+
+    public static void longToast(Context context, String msg) {
+        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
     }
 
     public static void toast(Context context, String msg) {

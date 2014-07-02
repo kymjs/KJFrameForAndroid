@@ -18,8 +18,7 @@ import android.content.Context;
 public class KJActivityManager {
     private static Stack<KJFrameActivity> activityStack;
 
-    private KJActivityManager() {
-    }
+    private KJActivityManager() {}
 
     private static class ManagerHolder {
         private static final KJActivityManager instance = new KJActivityManager();
@@ -39,6 +38,9 @@ public class KJActivityManager {
     public void addActivity(KJFrameActivity activity) {
         if (activityStack == null) {
             activityStack = new Stack<KJFrameActivity>();
+            if (CrashHandler.DEBUG) {
+                CrashHandler.create(activity);
+            }
         }
         activityStack.add(activity);
     }
