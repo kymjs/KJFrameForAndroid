@@ -42,7 +42,7 @@ import android.widget.TextView;
  * @created 2014-6-23
  */
 public abstract class ChoiceImageTemplate extends BaseFragment {
-
+    
     // widget
     private RelativeLayout mRootView;
     private RelativeLayout mFileLayout;
@@ -55,7 +55,7 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
     private List<FolderBean> datas = null;
     /** 用户选中的图片的地址集合（结果集） */
     protected List<String> checkFile = null;
-
+    
     @Override
     protected final View inflaterView(LayoutInflater inflater,
             ViewGroup container, Bundle bundle) {
@@ -104,13 +104,13 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
         mRootView.setBackgroundColor(0xffffffff);
         return mRootView;
     }
-
+    
     @Override
     protected void initData() {
         super.initData();
         datas = ChoiceImageUtil.LocalImgFileList(getActivity());
     }
-
+    
     @Override
     protected void initWidget(View parentView) {
         super.initWidget(parentView);
@@ -134,7 +134,7 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
         mBtnOk.setOnClickListener(this);
         mBtnCancel.setOnClickListener(this);
     }
-
+    
     @Override
     protected void widgetClick(View v) {
         super.widgetClick(v);
@@ -147,31 +147,31 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
             }
         }
     }
-
+    
     abstract protected void OnClickCommitEvent(View v);
-
+    
     /*********************** ListView（文件夹）适配器部分 ***********************/
-
+    
     static class ListViewHolder {
         ImageView img;
         TextView tv_folder;
         TextView tv_count;
     }
-
+    
     class FolderListAdapter extends BaseAdapter {
         // 内存缓存，防止每次都访问硬盘造成listview滑动卡顿
         private List<Bitmap> bitmaps = null;
-
+        
         // widget
         private LinearLayout itemView = null;
         private ImageView itemImg;
         private TextView itemTvFolder;
         private TextView itemTvCount;
-
+        
         public FolderListAdapter() {
             initData();
         }
-
+        
         private void initData() {
             bitmaps = new ArrayList<Bitmap>();
             for (int i = 0; i < datas.size(); i++) {
@@ -187,22 +187,22 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
                 }
             }
         }
-
+        
         @Override
         public int getCount() {
             return datas.size();
         }
-
+        
         @Override
         public Object getItem(int position) {
             return datas.get(position);
         }
-
+        
         @Override
         public long getItemId(int position) {
             return position;
         }
-
+        
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ListViewHolder holder = null;
@@ -224,7 +224,7 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
             holder.tv_folder.setText(datas.get(position).getFolderName());
             return convertView;
         }
-
+        
         /**
          * 创建并初始化一个item布局
          */
@@ -251,23 +251,23 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
             itemView.addView(textLayout);
         }
     }
-
+    
     /*********************** GridView（图片文件）适配器部分 ***********************/
     static class GridViewHolder {
         ImageView img;
         CheckBox cBox;
     }
-
+    
     class FileGridAdapter extends BaseAdapter {
         // 内存缓存，防止每次都访问硬盘造成listview滑动卡顿
         private List<Bitmap> bitmaps = null;
         private List<String> fileDatas = null;
-
+        
         // widget
         private RelativeLayout itemView = null;
         private ImageView itemImg;
         private CheckBox itemCbox;
-
+        
         public FileGridAdapter(List<String> datas) {
             checkFile = new LinkedList<String>();
             fileDatas = datas;
@@ -287,22 +287,22 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
                 }
             }
         }
-
+        
         @Override
         public int getCount() {
             return fileDatas.size();
         }
-
+        
         @Override
         public Object getItem(int position) {
             return fileDatas.get(position);
         }
-
+        
         @Override
         public long getItemId(int position) {
             return position;
         }
-
+        
         @Override
         public View getView(final int position, View convertView,
                 ViewGroup parent) {
@@ -332,7 +332,7 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
             });
             return convertView;
         }
-
+        
         private void initItemLayout() {
             itemView = new RelativeLayout(getActivity());
             itemImg = new ImageView(getActivity());

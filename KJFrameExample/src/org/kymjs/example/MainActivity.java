@@ -8,9 +8,9 @@ public class MainActivity extends BaseSplash {
     @Override
     protected void initWidget() {
         super.initWidget();
-        mImageView.setBackgroundResource(R.drawable.bg_img_menuback_cool);
+        mImageView.setBackgroundResource(R.drawable.bg);
     }
-
+    
     @Override
     protected void redirectTo() {
         ActivityUtils.skipActivity(this, TabExample.class);

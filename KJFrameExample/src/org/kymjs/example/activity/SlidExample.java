@@ -5,6 +5,7 @@ import org.kymjs.aframe.ui.activity.SlidTemplet;
 import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.aframe.ui.widget.ResideMenuItem;
 import org.kymjs.example.R;
+import org.kymjs.example.fragment.BitmapMistyExample;
 import org.kymjs.example.fragment.ChoiceImageExample;
 import org.kymjs.example.fragment.ExampleFragment;
 import org.kymjs.example.fragment.ScaleImageExample;
@@ -22,14 +23,14 @@ public class SlidExample extends SlidTemplet {
     private ResideMenuItem item3;
     private ResideMenuItem item4;
     private ResideMenuItem item5;
-
+    
     private BaseFragment fragContent;
-
+    
     @Override
     protected int setRootViewID() {
         return R.layout.aty_slid_example;
     }
-
+    
     @Override
     protected void initSlidMenu() {
         item1 = new ResideMenuItem(this, R.drawable.ic_launcher, "第一项");
@@ -48,14 +49,14 @@ public class SlidExample extends SlidTemplet {
         resideMenu.addMenuItem(item4);
         resideMenu.addMenuItem(item5);
     }
-
+    
     @Override
     protected void initWidget() {
         super.initWidget();
         fragContent = new ExampleFragment();
         changeFragment(fragContent);
     }
-
+    
     /**
      * 必须调用super()，否则界面触摸将被屏蔽
      */
@@ -64,13 +65,13 @@ public class SlidExample extends SlidTemplet {
         super.changeFragment(targetFragment);
         changeFragment(R.id.content, targetFragment);
     }
-
+    
     @Override
     public void onSlidMenuClick(View v) {
         if (v == item1) {
             changeFragment(new ExampleFragment());
         } else if (v == item2) {
-            changeFragment(new ExampleFragment());
+            changeFragment(new BitmapMistyExample());
         } else if (v == item3) {
             changeFragment(new ScaleImageExample());
         } else if (v == item4) {

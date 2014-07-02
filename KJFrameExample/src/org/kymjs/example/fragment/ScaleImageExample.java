@@ -30,8 +30,7 @@ public class ScaleImageExample extends BaseFragment {
     protected void initWidget(View parentView) {
         super.initWidget(parentView);
         ScaleImageView imageView = new ScaleImageView(getActivity(),
-                BitmapFactory.decodeResource(getResources(),
-                        R.drawable.bg_img_menuback_cool));
+                BitmapFactory.decodeResource(getResources(), R.drawable.bg));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
