@@ -13,25 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.tsz.afinal.exception;
+package net.tsz.afinal.utils;
 
-public class AfinalException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
-	
-	public AfinalException() {
-		super();
-	}
-	
-	public AfinalException(String msg) {
-		super(msg);
-	}
-	
-	public AfinalException(Throwable ex) {
-		super(ex);
-	}
-	
-	public AfinalException(String msg,Throwable ex) {
-		super(msg,ex);
-	}
+public class DBException extends AfinalException {
+    private static final long serialVersionUID = 1L;
+
+    public DBException() {
+    }
+
+    public DBException(String msg) {
+        super(msg);
+    }
+
+    public DBException(Throwable ex) {
+        super(ex);
+    }
+
+    public DBException(String msg, Throwable ex) {
+        super(msg, ex);
+    }
 
 }

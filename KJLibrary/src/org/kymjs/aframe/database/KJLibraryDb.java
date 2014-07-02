@@ -1,19 +1,19 @@
 /**
  * Copyright (c) 2012-2013, Michael Yang 杨福海 (www.yangfuhai.com).
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.tsz.afinal;
+package org.kymjs.aframe.database;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +31,7 @@ import net.tsz.afinal.db.table.KeyValue;
 import net.tsz.afinal.db.table.ManyToOne;
 import net.tsz.afinal.db.table.OneToMany;
 import net.tsz.afinal.db.table.TableInfo;
-import net.tsz.afinal.exception.DBException;
+import net.tsz.afinal.utils.DBException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -41,14 +41,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class KJLibraryDb {
-
+    
     private static final String TAG = "KJLibraryDb";
-
+    
     private static HashMap<String, KJLibraryDb> daoMap = new HashMap<String, KJLibraryDb>();
-
+    
     private SQLiteDatabase db;
     private DaoConfig config;
-
+    
     private KJLibraryDb(DaoConfig config) {
         if (config == null)
             throw new DBException("daoConfig is null");
@@ -66,7 +66,7 @@ public class KJLibraryDb {
         }
         this.config = config;
     }
-
+    
     private synchronized static KJLibraryDb getInstance(DaoConfig daoConfig) {
         KJLibraryDb dao = daoMap.get(daoConfig.getDbName());
         if (dao == null) {
@@ -75,7 +75,7 @@ public class KJLibraryDb {
         }
         return dao;
     }
-
+    
     /**
      * 创建KJLibraryDb
      * 
@@ -86,7 +86,7 @@ public class KJLibraryDb {
         config.setContext(context);
         return create(config);
     }
-
+    
     /**
      * 创建KJLibraryDb
      * 
@@ -100,7 +100,7 @@ public class KJLibraryDb {
         config.setDebug(isDebug);
         return create(config);
     }
-
+    
     /**
      * 创建KJLibraryDb
      * 
@@ -114,7 +114,7 @@ public class KJLibraryDb {
         config.setDbName(dbName);
         return create(config);
     }
-
+    
     /**
      * 创建 KJLibraryDb
      * 
@@ -132,7 +132,7 @@ public class KJLibraryDb {
         config.setDebug(isDebug);
         return create(config);
     }
-
+    
     /**
      * 创建KJLibraryDb
      * 
@@ -148,7 +148,7 @@ public class KJLibraryDb {
         config.setTargetDirectory(targetDirectory);
         return create(config);
     }
-
+    
     /**
      * 创建 KJLibraryDb
      * 
@@ -167,7 +167,7 @@ public class KJLibraryDb {
         config.setDebug(isDebug);
         return create(config);
     }
-
+    
     /**
      * 创建 KJLibraryDb
      * 
@@ -193,7 +193,7 @@ public class KJLibraryDb {
         config.setDbUpdateListener(dbUpdateListener);
         return create(config);
     }
-
+    
     /**
      * 
      * @param context
@@ -222,7 +222,7 @@ public class KJLibraryDb {
         config.setDbUpdateListener(dbUpdateListener);
         return create(config);
     }
-
+    
     /**
      * 创建KJLibraryDb
      * 
@@ -232,7 +232,7 @@ public class KJLibraryDb {
     public static KJLibraryDb create(DaoConfig daoConfig) {
         return getInstance(daoConfig);
     }
-
+    
     /**
      * 保存数据库，速度要比save快
      * 
@@ -242,7 +242,7 @@ public class KJLibraryDb {
         checkTableExist(entity.getClass());
         exeSqlInfo(SqlBuilder.buildInsertSql(entity));
     }
-
+    
     /**
      * 保存数据到数据库<br />
      * <b>注意：</b><br />
@@ -268,7 +268,7 @@ public class KJLibraryDb {
         }
         return false;
     }
-
+    
     /**
      * 把List<KeyValue>数据存储到ContentValues
      * 
@@ -284,9 +284,9 @@ public class KJLibraryDb {
             Log.w(TAG,
                     "insertContentValues: List<KeyValue> is empty or ContentValues is empty!");
         }
-
+        
     }
-
+    
     /**
      * 更新数据 （主键ID必须不能为空）
      * 
@@ -296,7 +296,7 @@ public class KJLibraryDb {
         checkTableExist(entity.getClass());
         exeSqlInfo(SqlBuilder.getUpdateSqlAsSqlInfo(entity));
     }
-
+    
     /**
      * 根据条件更新数据
      * 
@@ -308,7 +308,7 @@ public class KJLibraryDb {
         checkTableExist(entity.getClass());
         exeSqlInfo(SqlBuilder.getUpdateSqlAsSqlInfo(entity, strWhere));
     }
-
+    
     /**
      * 删除数据
      * 
@@ -319,7 +319,7 @@ public class KJLibraryDb {
         checkTableExist(entity.getClass());
         exeSqlInfo(SqlBuilder.buildDeleteSql(entity));
     }
-
+    
     /**
      * 根据主键删除数据
      * 
@@ -332,7 +332,7 @@ public class KJLibraryDb {
         checkTableExist(clazz);
         exeSqlInfo(SqlBuilder.buildDeleteSql(clazz, id));
     }
-
+    
     /**
      * 根据条件删除数据
      * 
@@ -346,7 +346,7 @@ public class KJLibraryDb {
         debugSql(sql);
         db.execSQL(sql);
     }
-
+    
     /**
      * 删除所有数据表
      */
@@ -369,7 +369,7 @@ public class KJLibraryDb {
             cursor = null;
         }
     }
-
+    
     private void exeSqlInfo(SqlInfo sqlInfo) {
         if (sqlInfo != null) {
             debugSql(sqlInfo.getSql());
@@ -378,7 +378,7 @@ public class KJLibraryDb {
             Log.e(TAG, "sava error:sqlInfo is null");
         }
     }
-
+    
     /**
      * 根据主键查找数据（默认不查询多对一或者一对多的关联数据）
      * 
@@ -404,7 +404,7 @@ public class KJLibraryDb {
         }
         return null;
     }
-
+    
     /**
      * 根据主键查找，同时查找“多对一”的数据（如果有多个“多对一”属性，则查找所有的“多对一”属性）
      * 
@@ -420,10 +420,10 @@ public class KJLibraryDb {
             T entity = CursorUtils.dbModel2Entity(dbModel, clazz);
             return loadManyToOne(entity, clazz);
         }
-
+        
         return null;
     }
-
+    
     /**
      * 根据条件查找，同时查找“多对一”的数据（只查找findClass中的类的数据）
      * 
@@ -444,7 +444,7 @@ public class KJLibraryDb {
         }
         return null;
     }
-
+    
     /**
      * 将entity中的“多对一”的数据填充满
      * 
@@ -488,7 +488,7 @@ public class KJLibraryDb {
         }
         return entity;
     }
-
+    
     /**
      * 根据主键查找，同时查找“一对多”的数据（如果有多个“一对多”属性，则查找所有的一对多”属性）
      * 
@@ -504,10 +504,10 @@ public class KJLibraryDb {
             T entity = CursorUtils.dbModel2Entity(dbModel, clazz);
             return loadOneToMany(entity, clazz);
         }
-
+        
         return null;
     }
-
+    
     /**
      * 根据主键查找，同时查找“一对多”的数据（只查找findClass中的“一对多”）
      * 
@@ -525,10 +525,10 @@ public class KJLibraryDb {
             T entity = CursorUtils.dbModel2Entity(dbModel, clazz);
             return loadOneToMany(entity, clazz, findClass);
         }
-
+        
         return null;
     }
-
+    
     /**
      * 将entity中的“一对多”的数据填充满
      * 
@@ -554,7 +554,7 @@ public class KJLibraryDb {
                             break;
                         }
                     }
-
+                    
                     if (isFind) {
                         List<?> list = findAllByWhere(one.getOneClass(),
                                 one.getColumn() + "=" + id);
@@ -576,7 +576,7 @@ public class KJLibraryDb {
         }
         return entity;
     }
-
+    
     /**
      * 查找所有的数据
      * 
@@ -586,7 +586,7 @@ public class KJLibraryDb {
         checkTableExist(clazz);
         return findAllBySql(clazz, SqlBuilder.getSelectSQL(clazz));
     }
-
+    
     /**
      * 查找所有数据
      * 
@@ -599,7 +599,7 @@ public class KJLibraryDb {
         return findAllBySql(clazz, SqlBuilder.getSelectSQL(clazz)
                 + " ORDER BY " + orderBy);
     }
-
+    
     /**
      * 根据条件查找所有数据
      * 
@@ -612,7 +612,7 @@ public class KJLibraryDb {
         return findAllBySql(clazz,
                 SqlBuilder.getSelectSQLByWhere(clazz, strWhere));
     }
-
+    
     /**
      * 根据条件查找所有数据
      * 
@@ -629,7 +629,7 @@ public class KJLibraryDb {
                 SqlBuilder.getSelectSQLByWhere(clazz, strWhere) + " ORDER BY "
                         + orderBy);
     }
-
+    
     /**
      * 根据条件查找所有数据
      * 
@@ -656,7 +656,7 @@ public class KJLibraryDb {
         }
         return null;
     }
-
+    
     /**
      * 根据sql语句查找数据，这个一般用于数据统计
      * 
@@ -676,7 +676,7 @@ public class KJLibraryDb {
         }
         return null;
     }
-
+    
     public List<DbModel> findDbModelListBySQL(String strSQL) {
         debugSql(strSQL);
         Cursor cursor = db.rawQuery(strSQL, null);
@@ -692,7 +692,7 @@ public class KJLibraryDb {
         }
         return dbModelList;
     }
-
+    
     /**
      * 检查是否已经创建表
      * 
@@ -705,11 +705,11 @@ public class KJLibraryDb {
             db.execSQL(sql);
         }
     }
-
+    
     private boolean tableIsExist(TableInfo table) {
         if (table.isCheckDatabese())
             return true;
-
+        
         Cursor cursor = null;
         try {
             String sql = "SELECT COUNT(*) AS c FROM sqlite_master WHERE type ='table' AND name ='"
@@ -723,7 +723,7 @@ public class KJLibraryDb {
                     return true;
                 }
             }
-
+            
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -731,15 +731,15 @@ public class KJLibraryDb {
                 cursor.close();
             cursor = null;
         }
-
+        
         return false;
     }
-
+    
     private void debugSql(String sql) {
         if (config != null && config.isDebug())
             android.util.Log.d("Debug SQL", ">>>>>>  " + sql);
     }
-
+    
     public static class DaoConfig {
         private Context mContext = null; // android上下文
         private String mDbName = "afinal.db"; // 数据库名字
@@ -748,47 +748,47 @@ public class KJLibraryDb {
         private DbUpdateListener dbUpdateListener;
         // private boolean saveOnSDCard = false;//是否保存到SD卡
         private String targetDirectory;// 数据库文件在sd卡中的目录
-
+        
         public Context getContext() {
             return mContext;
         }
-
+        
         public void setContext(Context context) {
             this.mContext = context;
         }
-
+        
         public String getDbName() {
             return mDbName;
         }
-
+        
         public void setDbName(String dbName) {
             this.mDbName = dbName;
         }
-
+        
         public int getDbVersion() {
             return dbVersion;
         }
-
+        
         public void setDbVersion(int dbVersion) {
             this.dbVersion = dbVersion;
         }
-
+        
         public boolean isDebug() {
             return debug;
         }
-
+        
         public void setDebug(boolean debug) {
             this.debug = debug;
         }
-
+        
         public DbUpdateListener getDbUpdateListener() {
             return dbUpdateListener;
         }
-
+        
         public void setDbUpdateListener(DbUpdateListener dbUpdateListener) {
             this.dbUpdateListener = dbUpdateListener;
         }
-
+        
         // public boolean isSaveOnSDCard() {
         // return saveOnSDCard;
         // }
@@ -796,16 +796,16 @@ public class KJLibraryDb {
         // public void setSaveOnSDCard(boolean saveOnSDCard) {
         // this.saveOnSDCard = saveOnSDCard;
         // }
-
+        
         public String getTargetDirectory() {
             return targetDirectory;
         }
-
+        
         public void setTargetDirectory(String targetDirectory) {
             this.targetDirectory = targetDirectory;
         }
     }
-
+    
     /**
      * 在SD卡的指定目录上创建文件
      * 
@@ -827,22 +827,22 @@ public class KJLibraryDb {
         } else {
             return SQLiteDatabase.openOrCreateDatabase(dbf, null);
         }
-
+        
         return null;
     }
-
+    
     class SqliteDbHelper extends SQLiteOpenHelper {
-
+        
         private DbUpdateListener mDbUpdateListener;
-
+        
         public SqliteDbHelper(Context context, String name, int version,
                 DbUpdateListener dbUpdateListener) {
             super(context, name, null, version);
             this.mDbUpdateListener = dbUpdateListener;
         }
-
+        
         public void onCreate(SQLiteDatabase db) {}
-
+        
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             if (mDbUpdateListener != null) {
                 mDbUpdateListener.onUpgrade(db, oldVersion, newVersion);
@@ -850,11 +850,11 @@ public class KJLibraryDb {
                 dropDb();
             }
         }
-
+        
     }
-
+    
     public interface DbUpdateListener {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion);
     }
-
+    
 }

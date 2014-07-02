@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.kymjs.aframe.KJConfig;
-import org.kymjs.aframe.exception.KJException;
+import org.kymjs.aframe.KJException;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -32,14 +32,14 @@ public class SystemTool {
         SimpleDateFormat df = new SimpleDateFormat(format);
         return df.format(new Date());
     }
-
+    
     /**
      * 返回当前系统时间
      */
     public static String getDataTime() {
         return getDataTime("HH:mm");
     }
-
+    
     /**
      * 获取手机IMEI码
      */
@@ -48,7 +48,7 @@ public class SystemTool {
                 .getSystemService(Activity.TELEPHONY_SERVICE);
         return tm.getDeviceId();
     }
-
+    
     /**
      * 获取手机系统SDK版本
      * 
@@ -57,7 +57,7 @@ public class SystemTool {
     public static int getSDKVersion() {
         return android.os.Build.VERSION.SDK_INT;
     }
-
+    
     /**
      * 获取系统版本
      * 
@@ -66,7 +66,7 @@ public class SystemTool {
     public static String getSystemVersion() {
         return android.os.Build.VERSION.RELEASE;
     }
-
+    
     /**
      * 调用系统发送短信
      */
@@ -76,7 +76,7 @@ public class SystemTool {
         intent.putExtra("sms_body", smsBody);
         cxt.startActivity(intent);
     }
-
+    
     /**
      * 判断网络是否连接
      */
@@ -86,7 +86,7 @@ public class SystemTool {
         NetworkInfo info = cm.getActiveNetworkInfo();
         return (info == null) ? false : true; // 网络是否连接
     }
-
+    
     /**
      * 仅wifi联网功能是否开启
      */
@@ -98,7 +98,7 @@ public class SystemTool {
             return true;
         }
     }
-
+    
     /**
      * 判断是否为wifi联网
      */
@@ -110,7 +110,7 @@ public class SystemTool {
                 .getState();
         return State.CONNECTED == state;
     }
-
+    
     /**
      * 隐藏系统键盘
      */
@@ -121,7 +121,7 @@ public class SystemTool {
                         aty.getCurrentFocus().getWindowToken(),
                         InputMethodManager.HIDE_NOT_ALWAYS);
     }
-
+    
     /**
      * 判断当前应用程序是否后台运行
      */
@@ -143,7 +143,7 @@ public class SystemTool {
         }
         return false;
     }
-
+    
     /**
      * 判断手机是否处理睡眠
      */
@@ -153,7 +153,7 @@ public class SystemTool {
         boolean isSleeping = kgMgr.inKeyguardRestrictedInputMode();
         return isSleeping;
     }
-
+    
     /**
      * 安装apk
      * 
@@ -171,7 +171,7 @@ public class SystemTool {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
-
+    
     /**
      * 获取当前应用程序的版本号
      */
@@ -186,7 +186,7 @@ public class SystemTool {
         }
         return version;
     }
-
+    
     /**
      * 回到home，后台运行
      */
@@ -197,7 +197,7 @@ public class SystemTool {
                 | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         context.startActivity(mHomeIntent);
     }
-
+    
     /**
      * 获取应用签名
      * 
@@ -214,7 +214,7 @@ public class SystemTool {
                     + "'s application not found");
         }
     }
-
+    
     /**
      * 将签名字符串转换成需要的32位签名
      */

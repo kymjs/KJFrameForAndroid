@@ -1,4 +1,4 @@
-package org.kymjs.aframe.exception;
+package org.kymjs.aframe;
 
 /**
  * KJLibrary's base exception class

@@ -5,7 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.regex.Pattern;
 
-import org.kymjs.aframe.exception.KJException;
+import org.kymjs.aframe.KJException;
 
 /**
  * 字符串操作工具包
@@ -15,14 +15,14 @@ public class StringUtils {
             .compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
     private final static Pattern phone = Pattern
             .compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
-
+    
     /**
      * 判断给定字符串是否空白串 空白串是指由空格、制表符、回车符、换行符组成的字符串 若输入字符串为null或空字符串，返回true
      */
     public static boolean isEmpty(CharSequence input) {
         if (input == null || "".equals(input))
             return true;
-
+        
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
             if (c != ' ' && c != '\t' && c != '\r' && c != '\n') {
@@ -31,7 +31,7 @@ public class StringUtils {
         }
         return true;
     }
-
+    
     /**
      * 判断是不是一个合法的电子邮件地址
      */
@@ -40,7 +40,7 @@ public class StringUtils {
             return false;
         return emailer.matcher(email).matches();
     }
-
+    
     /**
      * 判断是不是一个合法的手机号码
      */
@@ -49,7 +49,7 @@ public class StringUtils {
             return false;
         return phone.matcher(phoneNum).matches();
     }
-
+    
     /**
      * 字符串转整数
      * 
@@ -64,7 +64,7 @@ public class StringUtils {
         }
         return defValue;
     }
-
+    
     /**
      * 对象转整
      * 
@@ -76,7 +76,7 @@ public class StringUtils {
             return 0;
         return toInt(obj.toString(), 0);
     }
-
+    
     /**
      * String转long
      * 
@@ -90,7 +90,7 @@ public class StringUtils {
         }
         return 0;
     }
-
+    
     /**
      * String转double
      * 
@@ -104,7 +104,7 @@ public class StringUtils {
         }
         return 0D;
     }
-
+    
     /**
      * 字符串转布尔
      * 
@@ -118,7 +118,7 @@ public class StringUtils {
         }
         return false;
     }
-
+    
     /**
      * 判断一个字符串是不是数字
      */
@@ -130,7 +130,7 @@ public class StringUtils {
         }
         return true;
     }
-
+    
     /**
      * MD5加密
      */
@@ -144,7 +144,7 @@ public class StringUtils {
         } catch (UnsupportedEncodingException e) {
             throw new KJException("Huh, UTF-8 should be supported?", e);
         }
-
+        
         StringBuilder hex = new StringBuilder(hash.length * 2);
         for (byte b : hash) {
             if ((b & 0xFF) < 0x10)
@@ -153,7 +153,7 @@ public class StringUtils {
         }
         return hex.toString();
     }
-
+    
     /**
      * KJ加密
      */
@@ -165,7 +165,7 @@ public class StringUtils {
         }
         return hex.toString();
     }
-
+    
     /**
      * KJ解密
      */
