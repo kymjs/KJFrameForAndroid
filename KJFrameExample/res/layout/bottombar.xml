@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bottombar_group"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_alignParentBottom="true"
+    android:gravity="center"
+    android:orientation="horizontal" >
+
+    <RadioButton
+        android:id="@+id/bottombar_content1"
+        style="@style/bottombar"
+        android:text="测试" />
+
+    <RadioButton
+        android:id="@+id/bottombar_content2"
+        style="@style/bottombar"
+        android:text="测试" />
+
+    <RadioButton
+        android:id="@+id/bottombar_content3"
+        style="@style/bottombar"
+        android:text="测试" />
+
+    <RadioButton
+        android:id="@+id/bottombar_content4"
+        style="@style/bottombar"
+        android:text="测试" />
+
+</RadioGroup>
