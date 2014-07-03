@@ -6,6 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 
 public class BitmapHelper {
+    /**
+     * 图片压缩方法
+     * 
+     * @param bitmap
+     */
     public static void imageZoom(Bitmap bitmap) {
         // 图片允许最大空间 单位：KB
         double maxSize = 40.00;
@@ -21,7 +26,7 @@ public class BitmapHelper {
             double i = mid / maxSize;
             // 开始压缩 此处用到平方根 将宽带和高度压缩掉对应的平方根倍
             // （1.保持刻度和高度和原bitmap比率一致，压缩后也达到了最大大小占用空间的大小）
-            bitmap = zoomImage(bitmap, bitmap.getWidth() / Math.sqrt(i),
+            bitmap = scale(bitmap, bitmap.getWidth() / Math.sqrt(i),
                     bitmap.getHeight() / Math.sqrt(i));
         }
     }
@@ -29,28 +34,69 @@ public class BitmapHelper {
     /***
      * 图片的缩放方法
      * 
-     * @param bgimage
+     * @param src
      *            ：源图片资源
      * @param newWidth
      *            ：缩放后宽度
      * @param newHeight
      *            ：缩放后高度
-     * @return
      */
-    public static Bitmap zoomImage(Bitmap bgimage, double newWidth,
-            double newHeight) {
-        // 获取这个图片的宽和高
-        float width = bgimage.getWidth();
-        float height = bgimage.getHeight();
-        // 创建操作图片用的matrix对象
+    public static Bitmap scale(Bitmap src, double newWidth, double newHeight) {
+        float width = src.getWidth();
+        float height = src.getHeight();
         Matrix matrix = new Matrix();
-        // 计算宽高缩放率
         float scaleWidth = ((float) newWidth) / width;
         float scaleHeight = ((float) newHeight) / height;
-        // 缩放图片动作
         matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap bitmap = Bitmap.createBitmap(bgimage, 0, 0, (int) width,
+        Bitmap bitmap = Bitmap.createBitmap(src, 0, 0, (int) width,
                 (int) height, matrix, true);
+        src = null;
         return bitmap;
+    }
+
+    /**
+     * 图片的缩放方法
+     * 
+     * @param src
+     *            ：源图片资源
+     * @param scaleMatrix
+     *            ：缩放规则
+     */
+    public static Bitmap scale(Bitmap src, Matrix scaleMatrix) {
+        Bitmap bitmap = Bitmap.createBitmap(src, 0, 0, src.getWidth(),
+                src.getHeight(), scaleMatrix, true);
+        src = null;
+        return bitmap;
+    }
+
+    /**
+     * 图片的缩放方法
+     * 
+     * @param src
+     *            ：源图片资源
+     * @param scaleX
+     *            ：横向缩放比例
+     * @param scaleY
+     *            ：纵向缩放比例
+     */
+    public static Bitmap scale(Bitmap src, float scaleX, float scaleY) {
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleX, scaleY);
+        Bitmap bitmap = Bitmap.createBitmap(src, 0, 0, src.getWidth(),
+                src.getHeight(), matrix, true);
+        src = null;
+        return bitmap;
+    }
+
+    /**
+     * 图片的缩放方法
+     * 
+     * @param src
+     *            ：源图片资源
+     * @param scale
+     *            ：缩放比例
+     */
+    public static Bitmap scale(Bitmap src, float scale) {
+        return scale(src, scale, scale);
     }
 }
