@@ -1,7 +1,7 @@
 package org.kymjs.example.fragment;
 
 import org.kymjs.aframe.ui.ViewInject;
-import org.kymjs.aframe.ui.fragment.choiceimg.ChoiceImageTemplate;
+import org.kymjs.aframe.ui.fragment.ChoiceImageTemplate;
 
 import android.view.View;
 

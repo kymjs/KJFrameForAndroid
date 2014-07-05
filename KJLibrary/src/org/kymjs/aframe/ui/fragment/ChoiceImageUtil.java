@@ -1,4 +1,4 @@
-package org.kymjs.aframe.ui.fragment.choiceimg;
+package org.kymjs.aframe.ui.fragment;
 
 import java.io.File;
 import java.util.ArrayList;
