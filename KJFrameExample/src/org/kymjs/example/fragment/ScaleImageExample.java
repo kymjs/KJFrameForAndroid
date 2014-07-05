@@ -14,18 +14,23 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+/**
+ * 图片缩放控件展示
+ * 
+ * @author kymjs(kymjs123@gmail.com)
+ */
 public class ScaleImageExample extends BaseFragment {
     @BindView(id = R.id.layout)
     private LinearLayout layout;
     @BindView(id = R.id.button1, click = true)
     private Button button;
-    
+
     @Override
     protected View inflaterView(LayoutInflater inflater, ViewGroup container,
             Bundle bundle) {
         return inflater.inflate(R.layout.example_layout, null);
     }
-    
+
     @Override
     protected void initWidget(View parentView) {
         super.initWidget(parentView);
@@ -38,7 +43,7 @@ public class ScaleImageExample extends BaseFragment {
         button.setText("查看菜单");
         layout.addView(imageView);
     }
-    
+
     @Override
     protected void widgetClick(View v) {
         super.widgetClick(v);

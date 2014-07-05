@@ -5,6 +5,11 @@ import org.kymjs.aframe.ui.fragment.choiceimg.ChoiceImageTemplate;
 
 import android.view.View;
 
+/**
+ * 多图选择界面展示
+ * 
+ * @author kymjs(kymjs123@gmail.com)
+ */
 public class ChoiceImageExample extends ChoiceImageTemplate {
 
     @Override
