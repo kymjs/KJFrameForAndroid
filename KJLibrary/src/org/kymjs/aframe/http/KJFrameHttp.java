@@ -19,23 +19,23 @@ import org.kymjs.aframe.ThreadPoolManager;
  * @created 2014-6-5
  */
 public class KJFrameHttp {
-
+    
     private ThreadPoolManager pool;
     private HttpConfig config;
-
+    
     public KJFrameHttp(HttpConfig config) {
         this.config = config;
         pool = ThreadPoolManager.create();
     }
-
+    
     public KJFrameHttp() {
         this(new HttpConfig());
     }
-
+    
     /****************************** http请求 **********************************/
-
+    
     public void urlGet(String url, KJParams params,
-            HttpCallBack<Object> callback) {
+            HttpCallBack<? super Object> callback) {
         if (params != null) {
             StringBuilder str = new StringBuilder(url);
             str.append("?").append(params.toString());
@@ -43,16 +43,16 @@ public class KJFrameHttp {
         }
         urlGet(url, callback);
     }
-
-    public void urlGet(String url, HttpCallBack<Object> callback) {
+    
+    public void urlGet(String url, HttpCallBack<? super Object> callback) {
         pool.addTask(getGetHttpThread(url, callback));
     }
-
+    
     public void urlPost(String url, KJParams params,
-            HttpCallBack<Object> callback) {
+            HttpCallBack<? super Object> callback) {
         pool.addTask(getPostHttpThread(url, params, callback));
     }
-
+    
     /**
      * 获取一个Post请求线程
      * 
@@ -64,7 +64,7 @@ public class KJFrameHttp {
      *            回调接口
      */
     private Runnable getPostHttpThread(final String _url,
-            final KJParams params, final HttpCallBack<Object> callback) {
+            final KJParams params, final HttpCallBack<? super Object> callback) {
         return new Runnable() {
             @Override
             public void run() {
@@ -120,7 +120,7 @@ public class KJFrameHttp {
             }
         };
     }
-
+    
     /**
      * 获取一个Get请求线程
      * 
@@ -130,7 +130,7 @@ public class KJFrameHttp {
      *            回调接口
      */
     private Runnable getGetHttpThread(final String _url,
-            final HttpCallBack<Object> callback) {
+            final HttpCallBack<? super Object> callback) {
         return new Runnable() {
             @Override
             public void run() {
