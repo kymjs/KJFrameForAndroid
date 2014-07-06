@@ -7,19 +7,19 @@ package org.kymjs.aframe.http;
  * @version 1.0
  * @created 2014-6-5
  */
-public abstract class HttpCallBack<T> {
-
+public abstract class HttpCallBack<T extends Object> {
+    
     private boolean progress = false;
     private int rate = 1000 * 1;// 每秒
-
+    
     public boolean isProgress() {
         return progress;
     }
-
+    
     public int getRate() {
         return rate;
     }
-
+    
     /**
      * 设置进度,而且只有设置了这个了以后，onLoading才能有效。
      * 
@@ -33,19 +33,16 @@ public abstract class HttpCallBack<T> {
         this.rate = rate;
         return this;
     }
-
+    
     /**
      * onLoading方法有效progress
      * 
      * @param count
      * @param current
      */
-    public void onLoading(long count, long current) {
-    };
-
-    public void onSuccess(T t) {
-    };
-
-    public void onFailure(Throwable t, int errorNo, String strMsg) {
-    };
+    public void onLoading(long count, long current) {};
+    
+    public void onSuccess(Object object) {};
+    
+    public void onFailure(Throwable t, int errorNo, String strMsg) {};
 }

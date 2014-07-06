@@ -35,7 +35,7 @@ public class KJFrameHttp {
     /****************************** http请求 **********************************/
     
     public void urlGet(String url, KJParams params,
-            HttpCallBack<? super Object> callback) {
+            HttpCallBack<? extends Object> callback) {
         if (params != null) {
             StringBuilder str = new StringBuilder(url);
             str.append("?").append(params.toString());
@@ -44,12 +44,12 @@ public class KJFrameHttp {
         urlGet(url, callback);
     }
     
-    public void urlGet(String url, HttpCallBack<? super Object> callback) {
+    public void urlGet(String url, HttpCallBack<? extends Object> callback) {
         pool.addTask(getGetHttpThread(url, callback));
     }
     
     public void urlPost(String url, KJParams params,
-            HttpCallBack<? super Object> callback) {
+            HttpCallBack<? extends Object> callback) {
         pool.addTask(getPostHttpThread(url, params, callback));
     }
     
@@ -64,7 +64,7 @@ public class KJFrameHttp {
      *            回调接口
      */
     private Runnable getPostHttpThread(final String _url,
-            final KJParams params, final HttpCallBack<? super Object> callback) {
+            final KJParams params, final HttpCallBack<? extends Object> callback) {
         return new Runnable() {
             @Override
             public void run() {
@@ -130,7 +130,7 @@ public class KJFrameHttp {
      *            回调接口
      */
     private Runnable getGetHttpThread(final String _url,
-            final HttpCallBack<? super Object> callback) {
+            final HttpCallBack<? extends Object> callback) {
         return new Runnable() {
             @Override
             public void run() {
