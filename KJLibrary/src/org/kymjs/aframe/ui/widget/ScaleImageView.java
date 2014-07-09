@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 /**
- * 图片缩放控件
+ * 图片缩放控件（支持缩放、拖动、双击）
  * 
  * @update 重构代码，优化执行效率，优化阅读
  * @author kymjs(kymjs123@gmail.com)
