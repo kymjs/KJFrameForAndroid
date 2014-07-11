@@ -10,7 +10,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.ProgressDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -114,13 +113,6 @@ public class ViewInject {
                     }
                 }, year, month - 1, day);
         dialog.setTitle(title);
-        dialog.setButton(TimePickerDialog.BUTTON_POSITIVE, "确定",
-                new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
         dialog.show();
     }
 
@@ -131,14 +123,17 @@ public class ViewInject {
      *            要显示弹出窗的Activity
      * @param msg
      *            弹出窗上要显示的文字
+     * @param cancel
+     *            dialog是否可以被取消
      */
-    public static ProgressDialog getprogress(Activity aty, String msg) {
+    public static ProgressDialog getprogress(Activity aty, String msg,
+            boolean cancel) {
         // 实例化一个ProgressBarDialog
         ProgressDialog progressDialog = new ProgressDialog(aty);
         progressDialog.setMessage(msg);
         progressDialog.getWindow().setLayout(DensityUtils.getScreenW(aty),
                 DensityUtils.getScreenH(aty));
-        progressDialog.setCancelable(true);
+        progressDialog.setCancelable(cancel);
         // 设置ProgressBarDialog的显示样式
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();

@@ -29,7 +29,7 @@ public class FileUtils {
         return Environment.MEDIA_MOUNTED.equals(Environment
                 .getExternalStorageState());
     }
-    
+
     /**
      * 获取文件保存点
      */
@@ -37,7 +37,7 @@ public class FileUtils {
         File file = new File(getSavePath(fileNmae));
         return file;
     }
-    
+
     /**
      * 从指定文件夹获取文件
      */
@@ -47,7 +47,7 @@ public class FileUtils {
         file.mkdirs();
         return file;
     }
-    
+
     /**
      * 获取文件保存路径
      */
@@ -57,7 +57,7 @@ public class FileUtils {
         file.mkdirs();
         return file.getAbsolutePath() + "/" + fileName;
     }
-    
+
     /**
      * 输入流转byte[]
      */
@@ -75,7 +75,7 @@ public class FileUtils {
         byte[] in2b = swapStream.toByteArray();
         return in2b;
     }
-    
+
     /**
      * 把uri转为File对象
      */
@@ -83,6 +83,7 @@ public class FileUtils {
         if (SystemTool.getSDKVersion() < 11) {
             // 在API11以下可以使用：managedQuery
             String[] proj = { MediaStore.Images.Media.DATA };
+            @SuppressWarnings("deprecation")
             Cursor actualimagecursor = aty.managedQuery(uri, proj, null, null,
                     null);
             int actual_image_column_index = actualimagecursor
@@ -103,7 +104,7 @@ public class FileUtils {
             return new File(cursor.getString(column_index));
         }
     }
-    
+
     /**
      * 复制文件
      * 
@@ -125,7 +126,7 @@ public class FileUtils {
                 to.createNewFile();
             }
             os = new FileOutputStream(to);
-            
+
             byte[] buffer = new byte[1024];
             int len = 0;
             while (-1 != (len = is.read(buffer))) {
@@ -138,7 +139,7 @@ public class FileUtils {
             closeIO(is, os);
         }
     }
-    
+
     /**
      * 关闭流
      * 
@@ -159,7 +160,7 @@ public class FileUtils {
             }
         }
     }
-    
+
     /**
      * 从文件中读取文本
      * 
@@ -176,7 +177,7 @@ public class FileUtils {
         }
         return inputStream2String(is);
     }
-    
+
     /**
      * 从assets中读取文本
      * 
@@ -192,9 +193,9 @@ public class FileUtils {
                     + ".readFileFromAssets---->" + name + " not found");
         }
         return inputStream2String(is);
-        
+
     }
-    
+
     public static String inputStream2String(InputStream is) {
         if (null == is) {
             return null;
@@ -202,7 +203,7 @@ public class FileUtils {
         StringBuilder resultSb = null;
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            
+
             resultSb = new StringBuilder();
             String len;
             while (null != (len = br.readLine())) {
