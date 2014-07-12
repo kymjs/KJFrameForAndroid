@@ -8,7 +8,7 @@ import android.view.View;
  * @author kymjs(kymjs123@gmail.com)
  * 
  */
-public abstract class I_BitmapCallBack {
+public abstract class BitmapCallBack {
     /** bitmap载入时将回调 */
     public void imgLoading(final View view) {};
 

@@ -6,7 +6,7 @@ package org.kymjs.aframe.ui;
  * @author kymjs(kymjs123@gmail.com)
  * 
  */
-public abstract class I_UICallBack {
+public abstract class UICallBack {
     public void onCallBack() {};
 
     public void onCallBack(int i) {};

@@ -25,7 +25,7 @@ public class KJBitmapConfig {
     public boolean openProgress = false;
 
     /** 图片载入状态将会回调相应的方法 */
-    public I_BitmapCallBack callBack;
+    public BitmapCallBack callBack;
 
     /** 图片加载器,若认为KJLibrary的加载器不好，也可自定义图片加载器 */
     public I_ImageLoder imgLoader;
