@@ -68,7 +68,8 @@ public class KJBitmap {
      *            图片的URL
      */
     private void loadImage(View imageView, String imageUrl) {
-        config.callBack.imgLoading(imageView);
+        if (config.callBack != null)
+            config.callBack.imgLoading(imageView);
         final String imageKey = String.valueOf(imageView.getId());
         final Bitmap bitmap = mMemoryCache.get(imageKey);
         if (bitmap != null) {
@@ -77,7 +78,8 @@ public class KJBitmap {
             } else {
                 imageView.setBackgroundDrawable(new BitmapDrawable(bitmap));
             }
-            config.callBack.imgLoadSuccess(imageView);
+            if (config.callBack != null)
+                config.callBack.imgLoadSuccess(imageView);
         } else {
             if (imageView instanceof ImageView) {
                 ((ImageView) imageView).setImageBitmap(config.loadingBitmap);
@@ -101,10 +103,13 @@ public class KJBitmap {
 
         @Override
         protected Bitmap doInBackground(String... params) {
+            Bitmap bitmap = null;
             // 从指定链接调取image
             byte[] res = config.imgLoader.loadImage(params[0]);
-            Bitmap bitmap = BitmapCreate.bitmapFromByteArray(res, 0,
-                    res.length, config.width, config.height);
+            if (res != null) {
+                bitmap = BitmapCreate.bitmapFromByteArray(res, 0, res.length,
+                        config.width, config.height);
+            }
             if (bitmap != null) {
                 // 图片载入完成后缓存到LrcCache中
                 mMemoryCache.put(params[0], bitmap);
@@ -122,7 +127,8 @@ public class KJBitmap {
             } else {
                 imageView.setBackgroundDrawable(new BitmapDrawable(bitmap));
             }
-            config.callBack.imgLoadSuccess(imageView);
+            if (config.callBack != null)
+                config.callBack.imgLoadSuccess(imageView);
             taskCollection.remove(this);
         }
     }

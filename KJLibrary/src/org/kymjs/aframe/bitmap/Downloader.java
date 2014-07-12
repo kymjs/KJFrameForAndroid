@@ -1,9 +1,12 @@
 package org.kymjs.aframe.bitmap;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.kymjs.aframe.utils.FileUtils;
+import org.kymjs.aframe.utils.StringUtils;
 
 /**
  * 图片下载器：可以从网络或本地加载一张Bitmap并返回
@@ -14,9 +17,21 @@ import org.kymjs.aframe.utils.FileUtils;
  */
 public class Downloader implements I_ImageLoder {
 
+    /**
+     * 图片加载器协议的接口方法
+     */
     @Override
     public byte[] loadImage(String imagePath) {
-        return loadImgFromNet(imagePath);
+        byte[] img = null;
+        if (!StringUtils.isEmpty(imagePath)) {
+            if (imagePath.trim().toLowerCase().startsWith("http")) {
+                img = loadImgFromNet(imagePath);
+            } else {
+                img = loadImgFromFile(imagePath);
+            }
+
+        }
+        return img;
     }
 
     /**
@@ -38,12 +53,40 @@ public class Downloader implements I_ImageLoder {
             con.connect();
             data = FileUtils.input2byte(con.getInputStream());
         } catch (Exception e) {
-            KJBitmap.config.callBack.imgLoadFailure(imagePath, e.getMessage());
+            if (KJBitmap.config.callBack != null) {
+                KJBitmap.config.callBack.imgLoadFailure(imagePath,
+                        e.getMessage());
+            }
             e.printStackTrace();
         } finally {
             if (con != null) {
                 con.disconnect();
             }
+        }
+        return data;
+    }
+
+    /**
+     * 从本地载入一张图片
+     * 
+     * @param imagePath
+     *            图片的地址
+     */
+    private byte[] loadImgFromFile(String imagePath) {
+        byte[] data = null;
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(imagePath);
+            if (fis != null)
+                data = FileUtils.input2byte(fis);
+        } catch (FileNotFoundException e) {
+            if (KJBitmap.config.callBack != null) {
+                KJBitmap.config.callBack.imgLoadFailure(imagePath,
+                        e.getMessage());
+            }
+            e.printStackTrace();
+        } finally {
+            FileUtils.closeIO(fis);
         }
         return data;
     }
