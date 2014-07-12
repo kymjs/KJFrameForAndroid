@@ -139,14 +139,4 @@ public class ViewInject {
         progressDialog.show();
         return progressDialog;
     }
-
-    public abstract class UICallBack {
-        void onCallBack() {};
-
-        void onCallBack(int i) {};
-
-        void onCallBack(String str) {};
-
-        void onCallBack(int i, String str) {};
-    }
 }

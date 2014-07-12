@@ -15,6 +15,13 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageView;
 
+/**
+ * The BitmapLibrary's core classes
+ * 
+ * @author kymjs(kymjs123@gmail.com)
+ * @version 1.0
+ * @created 2014-7-11
+ */
 public class KJBitmap {
 
     private static KJBitmapConfig config; // 将配置文件设置为全局保证一次设置可一直使用
@@ -49,6 +56,30 @@ public class KJBitmap {
      *            图片的URL
      */
     public void display(View imageView, String imageUrl) {
+        if (config.openProgress) {
+            loadImageWithProgress(imageView, imageUrl);
+        } else {
+            loadImage(imageView, imageUrl);
+        }
+    }
+
+    /**
+     * 显示加载中的环形等待条
+     */
+    private void loadImageWithProgress(View imageView, String imageUrl) {
+        loadImage(imageView, imageUrl);
+    }
+
+    /**
+     * 加载图片（核心方法）
+     * 
+     * @param imageView
+     *            要显示图片的控件(ImageView设置src，普通View设置bg)
+     * @param imageUrl
+     *            图片的URL
+     */
+    private void loadImage(View imageView, String imageUrl) {
+        config.callBack.imgLoading(imageView);
         final String imageKey = String.valueOf(imageView.getId());
         final Bitmap bitmap = mMemoryCache.get(imageKey);
         if (bitmap != null) {
@@ -57,6 +88,7 @@ public class KJBitmap {
             } else {
                 imageView.setBackgroundDrawable(new BitmapDrawable(bitmap));
             }
+            config.callBack.imgLoadSuccess(imageView);
         } else {
             if (imageView instanceof ImageView) {
                 ((ImageView) imageView).setImageBitmap(config.loadingBitmap);
@@ -72,10 +104,10 @@ public class KJBitmap {
 
     /************************ 异步下载图片的任务类 *******************************/
     private class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
-        private View imageview;
+        private View imageView;
 
         public BitmapWorkerTask(View imageview) {
-            this.imageview = imageview;
+            this.imageView = imageview;
         }
 
         @Override
@@ -92,13 +124,14 @@ public class KJBitmap {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
-            if (imageview instanceof ImageView) {
+            if (imageView instanceof ImageView) {
                 if (bitmap != null) {
-                    ((ImageView) imageview).setImageBitmap(bitmap);
+                    ((ImageView) imageView).setImageBitmap(bitmap);
                 }
             } else {
-                imageview.setBackgroundDrawable(new BitmapDrawable(bitmap));
+                imageView.setBackgroundDrawable(new BitmapDrawable(bitmap));
             }
+            config.callBack.imgLoadSuccess(imageView);
             taskCollection.remove(this);
         }
 
