@@ -7,7 +7,7 @@ import org.kymjs.aframe.ui.widget.ResideMenuItem;
 import org.kymjs.example.R;
 import org.kymjs.example.fragment.BitmapMistyExample;
 import org.kymjs.example.fragment.ChoiceImageExample;
-import org.kymjs.example.fragment.NetBitmap;
+import org.kymjs.example.fragment.BitmapDisplay;
 import org.kymjs.example.fragment.ScaleImageExample;
 
 import android.view.View;
@@ -53,7 +53,7 @@ public class SlidExample extends SlidTemplet {
     @Override
     protected void initWidget() {
         super.initWidget();
-        fragContent = new NetBitmap();
+        fragContent = new BitmapDisplay();
         changeFragment(fragContent);
     }
 
@@ -69,7 +69,7 @@ public class SlidExample extends SlidTemplet {
     @Override
     public void onSlidMenuClick(View v) {
         if (v == item1) {
-            changeFragment(new NetBitmap());
+            changeFragment(new BitmapDisplay());
         } else if (v == item2) {
             changeFragment(new BitmapMistyExample());
         } else if (v == item3) {

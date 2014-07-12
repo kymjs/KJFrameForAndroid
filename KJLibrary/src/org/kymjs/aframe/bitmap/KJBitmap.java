@@ -3,6 +3,7 @@ package org.kymjs.aframe.bitmap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.kymjs.aframe.KJLoger;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
 
 import android.content.Context;
@@ -70,8 +71,8 @@ public class KJBitmap {
     private void loadImage(View imageView, String imageUrl) {
         if (config.callBack != null)
             config.callBack.imgLoading(imageView);
-        final String imageKey = String.valueOf(imageView.getId());
-        final Bitmap bitmap = mMemoryCache.get(imageKey);
+        final Bitmap bitmap = mMemoryCache.get(imageUrl);
+        KJLoger.debug("========" + (bitmap == null));
         if (bitmap != null) {
             if (imageView instanceof ImageView) {
                 ((ImageView) imageView).setImageBitmap(bitmap);

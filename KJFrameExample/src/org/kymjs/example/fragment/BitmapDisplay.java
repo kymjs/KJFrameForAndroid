@@ -19,7 +19,7 @@ import android.widget.ImageView;
  * 
  * @author kymjs(kymjs123@gmail.com)
  */
-public class NetBitmap extends BaseFragment {
+public class BitmapDisplay extends BaseFragment {
     @BindView(id = R.id.button1, click = true)
     private Button button;
     @BindView(id = R.id.imageview, click = true)
