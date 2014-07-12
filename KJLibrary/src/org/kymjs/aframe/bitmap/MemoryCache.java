@@ -4,7 +4,6 @@ import org.kymjs.aframe.utils.SystemTool;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
 
 /**
  * 使用lru算法的内存缓存池

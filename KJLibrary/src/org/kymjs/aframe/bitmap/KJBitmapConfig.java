@@ -21,12 +21,17 @@ public class KJBitmapConfig {
     public int height = 1000; // 不足1000则显示图片默认大小
     /** 载入时的图片 */
     public Bitmap loadingBitmap;
-    /** 图片载入状态将会回调相应的方法 */
-    public BitmapCallBack callBack;
     /** 是否开启载入图片时显示环形progressBar效果 */
     public boolean openProgress = false;
 
+    /** 图片载入状态将会回调相应的方法 */
+    public I_BitmapCallBack callBack;
+
+    /** 图片加载器,若认为KJLibrary的加载器不好，也可自定义图片加载器 */
+    public I_ImageLoder imgLoader;
+
     public KJBitmapConfig() {
         memoryCacheSize = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        imgLoader = new Downloader(); // 配置图片加载器
     }
 }

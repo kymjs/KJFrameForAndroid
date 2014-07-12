@@ -1,12 +1,9 @@
 package org.kymjs.aframe.bitmap;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
-import org.kymjs.aframe.utils.FileUtils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -23,11 +20,13 @@ import android.widget.ImageView;
  * @created 2014-7-11
  */
 public class KJBitmap {
-
-    private static KJBitmapConfig config; // 将配置文件设置为全局保证一次设置可一直使用
-    private MemoryCache mMemoryCache;
+    /**
+     * 图片加载的配置器：以static修饰的配置器，保证一次设置可一直使用
+     */
+    public static KJBitmapConfig config;
     /** 记录所有正在下载或等待下载的任务 */
     private Set<BitmapWorkerTask> taskCollection;
+    private MemoryCache mMemoryCache;
 
     public KJBitmap(Context context) {
         if (config == null) {
@@ -35,16 +34,6 @@ public class KJBitmap {
         }
         mMemoryCache = new MemoryCache(config.memoryCacheSize);
         taskCollection = new HashSet<BitmapWorkerTask>();
-    }
-
-    /**
-     * 设置图片加载的配置器
-     * 
-     * @param config
-     *            将以static修饰的配置器，保证一次设置可一直使用
-     */
-    public static void setConfig(KJBitmapConfig config) {
-        KJBitmap.config = config;
     }
 
     /**
@@ -102,7 +91,7 @@ public class KJBitmap {
         }
     }
 
-    /************************ 异步下载图片的任务类 *******************************/
+    /********************* 异步获取Bitmap并设置image的任务类 *********************/
     private class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
         private View imageView;
 
@@ -112,10 +101,12 @@ public class KJBitmap {
 
         @Override
         protected Bitmap doInBackground(String... params) {
-            // 在后台开始下载图片
-            Bitmap bitmap = downloadBitmap(params[0]);
+            // 从指定链接调取image
+            byte[] res = config.imgLoader.loadImage(params[0]);
+            Bitmap bitmap = BitmapCreate.bitmapFromByteArray(res, 0,
+                    res.length, config.width, config.height);
             if (bitmap != null) {
-                // 图片下载完成后缓存到LrcCache中
+                // 图片载入完成后缓存到LrcCache中
                 mMemoryCache.put(params[0], bitmap);
             }
             return bitmap;
@@ -133,37 +124,6 @@ public class KJBitmap {
             }
             config.callBack.imgLoadSuccess(imageView);
             taskCollection.remove(this);
-        }
-
-        /**
-         * 建立HTTP请求，并获取Bitmap对象。
-         * 
-         * @param imageUrl
-         *            图片的URL地址
-         * @return 解析后的Bitmap对象
-         */
-        private Bitmap downloadBitmap(String imageUrl) {
-            Bitmap bitmap = null;
-            HttpURLConnection con = null;
-            try {
-                URL url = new URL(imageUrl);
-                con = (HttpURLConnection) url.openConnection();
-                con.setConnectTimeout(config.timeOut);
-                con.setReadTimeout(config.timeOut * 2);
-                con.setRequestMethod("GET");
-                con.setDoInput(true);
-                con.connect();
-                byte[] data = FileUtils.input2byte(con.getInputStream());
-                bitmap = BitmapCreate.bitmapFromByteArray(data, 0, data.length,
-                        config.width, config.height);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (con != null) {
-                    con.disconnect();
-                }
-            }
-            return bitmap;
         }
     }
 }
