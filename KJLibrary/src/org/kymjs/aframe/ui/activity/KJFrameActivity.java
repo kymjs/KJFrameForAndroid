@@ -2,7 +2,7 @@ package org.kymjs.aframe.ui.activity;
 
 import org.kymjs.aframe.KJActivityManager;
 import org.kymjs.aframe.ui.AnnotateUtil;
-import org.kymjs.aframe.ui.BroadcastListener;
+import org.kymjs.aframe.ui.I_BroadcastReg;
 import org.kymjs.aframe.ui.ViewInject;
 
 import android.app.Activity;
@@ -20,7 +20,7 @@ import android.view.View.OnClickListener;
  * @lastChange 2014-5-30
  */
 public abstract class KJFrameActivity extends Activity implements
-        OnClickListener, BroadcastListener {
+        OnClickListener, I_BroadcastReg {
 
     protected abstract void setContent();
 

@@ -5,7 +5,7 @@ package org.kymjs.aframe.ui;
  * 
  * @author kymjs
  */
-public interface BroadcastListener {
+public interface I_BroadcastReg {
     void registerBroadcast();
     
     void unRegisterBroadcast();
