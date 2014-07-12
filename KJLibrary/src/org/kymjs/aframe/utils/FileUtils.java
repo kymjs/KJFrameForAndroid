@@ -39,6 +39,31 @@ public class FileUtils {
     }
 
     /**
+     * 将文件保存到本地
+     */
+    public static void saveFileCache(byte[] fileStream, String absPath) {
+        File file = new File(absPath);
+        FileOutputStream fos = null;
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+                fos = new FileOutputStream(file);
+                int len = 512;
+                int start = 0;
+                do {
+                    fos.write(fileStream, start, len);
+                    start += len;
+                } while (start <= fileStream.length);
+                fos.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                FileUtils.closeIO(fos);
+            }
+        }
+    }
+
+    /**
      * 从指定文件夹获取文件
      */
     public static File getSaveFile(String folder, String fileNmae) {

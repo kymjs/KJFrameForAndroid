@@ -30,6 +30,10 @@ public class KJBitmapConfig {
     /** 图片加载器,若认为KJLibrary的加载器不好，也可自定义图片加载器 */
     public I_ImageLoder imgLoader;
 
+    /** 是否开启本地图片缓存功能 */
+    public boolean openLocalCache = true;
+    public String cachePath = "/cache";
+
     public KJBitmapConfig() {
         memoryCacheSize = (int) (Runtime.getRuntime().maxMemory() / 1024);
         imgLoader = new Downloader(); // 配置图片加载器

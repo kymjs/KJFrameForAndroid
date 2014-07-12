@@ -3,8 +3,8 @@ package org.kymjs.aframe.bitmap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.kymjs.aframe.KJLoger;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
+import org.kymjs.aframe.utils.FileUtils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -72,7 +72,6 @@ public class KJBitmap {
         if (config.callBack != null)
             config.callBack.imgLoading(imageView);
         final Bitmap bitmap = mMemoryCache.get(imageUrl);
-        KJLoger.debug("========" + (bitmap == null));
         if (bitmap != null) {
             if (imageView instanceof ImageView) {
                 ((ImageView) imageView).setImageBitmap(bitmap);
@@ -107,13 +106,16 @@ public class KJBitmap {
             Bitmap bitmap = null;
             // 从指定链接调取image
             byte[] res = config.imgLoader.loadImage(params[0]);
+            if (config.openLocalCache) { // 建立本地缓存
+                FileUtils.saveFileCache(res,
+                        FileUtils.getSavePath(config.cachePath));
+            }
             if (res != null) {
                 bitmap = BitmapCreate.bitmapFromByteArray(res, 0, res.length,
                         config.width, config.height);
             }
             if (bitmap != null) {
-                // 图片载入完成后缓存到LrcCache中
-                mMemoryCache.put(params[0], bitmap);
+                mMemoryCache.put(params[0], bitmap); // 图片载入完成后缓存到LrcCache中
             }
             return bitmap;
         }
