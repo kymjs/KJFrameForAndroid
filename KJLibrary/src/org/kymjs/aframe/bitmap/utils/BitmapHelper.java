@@ -33,7 +33,7 @@ public class BitmapHelper {
      *            目标高度
      */
     public static BitmapFactory.Options calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+            final BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // 源图片的高度和宽度
         final int height = options.outHeight;
         final int width = options.outWidth;

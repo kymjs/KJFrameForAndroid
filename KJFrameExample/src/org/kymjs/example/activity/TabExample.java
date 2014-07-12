@@ -7,7 +7,7 @@ import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.example.R;
 import org.kymjs.example.fragment.BitmapMistyExample;
 import org.kymjs.example.fragment.ChoiceImageExample;
-import org.kymjs.example.fragment.ExampleFragment;
+import org.kymjs.example.fragment.NetBitmap;
 import org.kymjs.example.fragment.ScaleImageExample;
 
 import android.content.Intent;
@@ -20,7 +20,7 @@ import android.widget.RadioButton;
  * @author kymjs(kymjs123@gmail.com)
  */
 public class TabExample extends KJFragmentActivity {
-    
+
     @BindView(id = R.id.bottombar_content1, click = true)
     public RadioButton mRbtn1;
     @BindView(id = R.id.bottombar_content2, click = true)
@@ -29,17 +29,17 @@ public class TabExample extends KJFragmentActivity {
     private RadioButton mRbtn3;
     @BindView(id = R.id.bottombar_content4, click = true)
     private RadioButton mRbtn4;
-    
-    BaseFragment content1 = new ExampleFragment(); // 第一个界面
+
+    BaseFragment content1 = new NetBitmap(); // 第一个界面
     BaseFragment content2 = new ChoiceImageExample(); // 第二个界面
     BaseFragment content3 = new ScaleImageExample(); // 第三个界面
     BaseFragment content4 = new BitmapMistyExample(); // 第四个界面
-    
+
     @Override
     protected void setContent() {
         setContentView(R.layout.aty_tab_example);
     }
-    
+
     @Override
     protected void widgetClick(View v) {
         super.widgetClick(v);
@@ -49,7 +49,7 @@ public class TabExample extends KJFragmentActivity {
             ViewInject.toast("侧滑试试");
             break;
         case R.id.bottombar_content2:
-            changeFragment(content2);
+            changeFragment(content1);
             break;
         case R.id.bottombar_content3:
             changeFragment(content3);
@@ -59,7 +59,7 @@ public class TabExample extends KJFragmentActivity {
             break;
         }
     }
-    
+
     @Override
     protected void changeFragment(BaseFragment targetFragment) {
         changeFragment(R.id.content, targetFragment);

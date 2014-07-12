@@ -29,12 +29,20 @@ public class BitmapCreate {
      */
     public static Bitmap bitmapFromResource(Resources res, int resId,
             int reqWidth, int reqHeight) {
+        // BitmapFactory.Options options = new BitmapFactory.Options();
+        // options.inJustDecodeBounds = true;
+        // BitmapFactory.decodeResource(res, resId, options);
+        // options = BitmapHelper.calculateInSampleSize(options, reqWidth,
+        // reqHeight);
+        // return BitmapFactory.decodeResource(res, resId, options);
+
+        // 通过JNI的形式读取本地图片达到节省内存的目的
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(res, resId, options);
-        options = BitmapHelper.calculateInSampleSize(options, reqWidth,
-                reqHeight);
-        return BitmapFactory.decodeResource(res, resId, options);
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        options.inPurgeable = true;
+        options.inInputShareable = true;
+        InputStream is = res.openRawResource(resId);
+        return bitmapFromStream(is, null, reqWidth, reqHeight);
     }
 
     /**
@@ -93,7 +101,7 @@ public class BitmapCreate {
      * @param reqHeight
      *            目标高度
      */
-    public static Bitmap bitmapFromByteArray(InputStream is, Rect outPadding,
+    public static Bitmap bitmapFromStream(InputStream is, Rect outPadding,
             int reqWidth, int reqHeight) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
