@@ -19,7 +19,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
-import org.kymjs.aframe.utils.FileUtils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -154,10 +153,6 @@ public class KJBitmap {
             Bitmap bitmap = null;
             // 从指定链接调取image
             byte[] res = config.imgLoader.loadImage(params[0]);
-            if (config.openLocalCache) { // 建立本地缓存
-                FileUtils.saveFileCache(res,
-                        FileUtils.getSavePath(config.cachePath));
-            }
             if (res != null) {
                 bitmap = BitmapCreate.bitmapFromByteArray(res, 0, res.length,
                         config.width, config.height);

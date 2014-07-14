@@ -15,6 +15,7 @@
  */
 package org.kymjs.aframe.bitmap;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.HttpURLConnection;
@@ -39,12 +40,22 @@ public class Downloader implements I_ImageLoder {
     public byte[] loadImage(String imagePath) {
         byte[] img = null;
         if (!StringUtils.isEmpty(imagePath)) {
+            // 对于网络图片网络图片，首先从本地缓存读取，如果本地没有，则重新从网络中加载
             if (imagePath.trim().toLowerCase().startsWith("http")) {
-                img = loadImgFromNet(imagePath);
+                File file = FileUtils.getSaveFile(KJBitmap.config.cachePath,
+                        StringUtils.md5(imagePath));
+                if (file == null) {
+                    img = loadImgFromNet(imagePath);
+                } else {
+                    try {
+                        img = FileUtils.input2byte(new FileInputStream(file));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
             } else {
                 img = loadImgFromFile(imagePath);
             }
-
         }
         return img;
     }
@@ -67,6 +78,12 @@ public class Downloader implements I_ImageLoder {
             con.setDoInput(true);
             con.connect();
             data = FileUtils.input2byte(con.getInputStream());
+            // 建立本地缓存
+            if (KJBitmap.config.openLocalCache) {
+                FileUtils.saveFileCache(data,
+                        FileUtils.getSavePath(KJBitmap.config.cachePath),
+                        StringUtils.md5(imagePath));
+            }
         } catch (Exception e) {
             if (KJBitmap.config.callBack != null) {
                 KJBitmap.config.callBack.imgLoadFailure(imagePath,
@@ -92,8 +109,15 @@ public class Downloader implements I_ImageLoder {
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(imagePath);
-            if (fis != null)
+            if (fis != null) {
                 data = FileUtils.input2byte(fis);
+                // 建立本地缓存
+                if (KJBitmap.config.openLocalCache) {
+                    FileUtils.saveFileCache(data,
+                            FileUtils.getSavePath(KJBitmap.config.cachePath),
+                            StringUtils.md5(imagePath));
+                }
+            }
         } catch (FileNotFoundException e) {
             if (KJBitmap.config.callBack != null) {
                 KJBitmap.config.callBack.imgLoadFailure(imagePath,

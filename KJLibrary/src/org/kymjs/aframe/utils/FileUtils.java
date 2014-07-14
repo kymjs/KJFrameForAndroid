@@ -16,6 +16,7 @@
 package org.kymjs.aframe.utils;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
@@ -46,34 +47,29 @@ public class FileUtils {
     }
 
     /**
-     * 获取文件保存点
-     */
-    public static File getSaveFile(String fileNmae) {
-        File file = new File(getSavePath(fileNmae));
-        return file;
-    }
-
-    /**
      * 将文件保存到本地
      */
-    public static void saveFileCache(byte[] fileStream, String absPath) {
-        File file = new File(absPath);
-        FileOutputStream fos = null;
+    public static void saveFileCache(byte[] fileData, String folderPath,
+            String fileName) {
+        File folder = new File(folderPath);
+        folder.mkdirs();
+        File file = new File(folderPath, fileName);
+        ByteArrayInputStream is = new ByteArrayInputStream(fileData);
+        OutputStream os = null;
         if (!file.exists()) {
             try {
                 file.createNewFile();
-                fos = new FileOutputStream(file);
-                int len = 512;
-                int start = 0;
-                do {
-                    fos.write(fileStream, start, len);
-                    start += len;
-                } while (start <= fileStream.length);
-                fos.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
+                os = new FileOutputStream(file);
+                byte[] buffer = new byte[1024];
+                int len = 0;
+                while (-1 != (len = is.read(buffer))) {
+                    os.write(buffer, 0, len);
+                }
+                os.flush();
+            } catch (Exception e) {
+                throw new KJException(FileUtils.class.getClass().getName(), e);
             } finally {
-                FileUtils.closeIO(fos);
+                closeIO(is, os);
             }
         }
     }
@@ -82,20 +78,19 @@ public class FileUtils {
      * 从指定文件夹获取文件
      */
     public static File getSaveFile(String folder, String fileNmae) {
-        File file = new File(Environment.getExternalStorageDirectory() + "/"
-                + folder + "/" + fileNmae);
-        file.mkdirs();
-        return file;
+        File file = new File(Environment.getExternalStorageDirectory()
+                .getAbsoluteFile() + "/" + folder + "/" + fileNmae);
+        return file.exists() ? file : null;
     }
 
     /**
-     * 获取文件保存路径
+     * 获取文件夹路径
      */
-    public static String getSavePath(String fileName) {
+    public static String getSavePath(String folderName) {
         File file = new File(Environment.getExternalStorageDirectory()
-                + "/kjLibrary/");
+                .getAbsoluteFile() + "/" + folderName + "/");
         file.mkdirs();
-        return file.getAbsolutePath() + "/" + fileName;
+        return file.getAbsolutePath();
     }
 
     /**

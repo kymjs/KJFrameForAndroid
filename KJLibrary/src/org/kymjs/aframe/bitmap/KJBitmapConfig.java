@@ -47,7 +47,8 @@ public class KJBitmapConfig {
 
     /** 是否开启本地图片缓存功能 */
     public boolean openLocalCache = true;
-    public String cachePath = "/cache";
+    /** 本地图片缓存路径 */
+    public String cachePath = "/KJLibrary/";
 
     public KJBitmapConfig() {
         memoryCacheSize = (int) (Runtime.getRuntime().maxMemory() / 1024);
