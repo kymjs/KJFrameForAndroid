@@ -69,6 +69,39 @@ public class KJBitmap {
     }
 
     /**
+     * 加载网络图片
+     * 
+     * @param imageView
+     *            要显示图片的控件(ImageView设置src，普通View设置bg)
+     * @param imageUrl
+     *            图片的URL
+     * @param imgW
+     *            图片显示宽度。若大于图片本身大小，则只显示图片大小
+     * @param imgH
+     *            图片显示高度。若大于图片本身大小，则只显示图片大小
+     */
+    public void display(View imageView, String imageUrl, int imgW, int imgH) {
+        config.width = imgW;
+        config.height = imgH;
+        display(imageView, imageUrl);
+    }
+
+    /**
+     * 加载网络图片
+     * 
+     * @param imageView
+     *            要显示图片的控件(ImageView设置src，普通View设置bg)
+     * @param imageUrl
+     *            图片的URL
+     * @param loadingBitmap
+     *            图片载入过程中显示的图片
+     */
+    public void display(View imageView, String imageUrl, Bitmap loadingBitmap) {
+        config.loadingBitmap = loadingBitmap;
+        display(imageView, imageUrl);
+    }
+
+    /**
      * 显示加载中的环形等待条
      */
     private void loadImageWithProgress(View imageView, String imageUrl) {
