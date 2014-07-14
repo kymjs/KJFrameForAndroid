@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2012-2013, kymjs 张涛 (kymjs123@gmail.com).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kymjs.aframe.ui.activity;
 
 import org.kymjs.aframe.KJLoger;
@@ -19,11 +34,11 @@ public abstract class BaseActivity extends KJFrameActivity {
     public static enum ActivityState {
         RESUME, STOP, PAUSE, DESTORY
     }
-    
+
     public static enum ScreenOrientation {
         HORIZONTAL, VERTICAL, AUTO
     }
-    
+
     public Activity aty;
     // Activity状态
     public ActivityState activityState = ActivityState.DESTORY;
@@ -33,19 +48,19 @@ public abstract class BaseActivity extends KJFrameActivity {
     private boolean mHiddenActionBar = true;
     // 屏幕方向
     private ScreenOrientation orientation = ScreenOrientation.VERTICAL;
-    
+
     public void setAllowFullScreen(boolean allowFullScreen) {
         this.mAllowFullScreen = allowFullScreen;
     }
-    
+
     public void setHiddenActionBar(boolean hiddenActionBar) {
         this.mAllowFullScreen = hiddenActionBar;
     }
-    
+
     public void setScreenOrientation(ScreenOrientation orientation) {
         this.orientation = orientation;
     }
-    
+
     /***************************************************************************
      * 
      * print Activity callback methods
@@ -66,7 +81,7 @@ public abstract class BaseActivity extends KJFrameActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
             break;
         }
-        
+
         if (mHiddenActionBar) {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
         }
@@ -76,40 +91,40 @@ public abstract class BaseActivity extends KJFrameActivity {
         }
         super.onCreate(savedInstanceState);
     }
-    
+
     @Override
     protected void onStart() {
         super.onStart();
         KJLoger.state(this.getClass().getName(), "---------onStart ");
     }
-    
+
     @Override
     protected void onResume() {
         super.onResume();
         activityState = ActivityState.RESUME;
         KJLoger.state(this.getClass().getName(), "---------onResume ");
     }
-    
+
     @Override
     protected void onPause() {
         super.onPause();
         activityState = ActivityState.PAUSE;
         KJLoger.state(this.getClass().getName(), "---------onPause ");
     }
-    
+
     @Override
     protected void onStop() {
         super.onResume();
         activityState = ActivityState.STOP;
         KJLoger.state(this.getClass().getName(), "---------onStop ");
     }
-    
+
     @Override
     protected void onRestart() {
         super.onRestart();
         KJLoger.state(this.getClass().getName(), "---------onRestart ");
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
