@@ -20,9 +20,15 @@ import android.view.View.OnClickListener;
  * @lastChange 2014-5-30
  */
 public abstract class KJFrameActivity extends Activity implements
-        OnClickListener, I_BroadcastReg {
+        OnClickListener, I_BroadcastReg, I_KJActivity {
 
     protected abstract void setContent();
+
+    /** setContentView() */
+    @Override
+    public void setRootView() {
+        setContent();
+    }
 
     /** initialization widget */
     protected void initWidget() {}
@@ -30,8 +36,17 @@ public abstract class KJFrameActivity extends Activity implements
     /** initialization data */
     protected void initData() {}
 
+    /** initialization */
+    @Override
+    public void initialize() {
+        setRootView();
+        initData();
+        initWidget();
+    }
+
     /** listened widget's click method */
-    protected void widgetClick(View v) {}
+    @Override
+    public void widgetClick(View v) {}
 
     @Override
     public void onClick(View v) {
@@ -45,10 +60,8 @@ public abstract class KJFrameActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         KJActivityManager.create().addActivity(this);
-        setContent();
+        initialize();
         AnnotateUtil.initBindView(this);
-        initData();
-        initWidget();
         registerBroadcast();
     }
 

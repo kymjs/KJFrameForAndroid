@@ -41,7 +41,7 @@ public class TabExample extends KJFragmentActivity {
     }
 
     @Override
-    protected void widgetClick(View v) {
+    public void widgetClick(View v) {
         super.widgetClick(v);
         switch (v.getId()) {
         case R.id.bottombar_content1:

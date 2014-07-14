@@ -2,6 +2,7 @@ package org.kymjs.aframe;
 
 import java.util.Stack;
 
+import org.kymjs.aframe.ui.activity.I_KJActivity;
 import org.kymjs.aframe.ui.activity.KJFrameActivity;
 
 import android.app.Activity;
@@ -16,7 +17,7 @@ import android.content.Context;
  * @created 2014-2-28
  */
 public class KJActivityManager {
-    private static Stack<KJFrameActivity> activityStack;
+    private static Stack<I_KJActivity> activityStack;
 
     private KJActivityManager() {}
 
@@ -37,7 +38,7 @@ public class KJActivityManager {
      */
     public void addActivity(KJFrameActivity activity) {
         if (activityStack == null) {
-            activityStack = new Stack<KJFrameActivity>();
+            activityStack = new Stack<I_KJActivity>();
             if (CrashHandler.DEBUG) {
                 CrashHandler.create(activity);
             }
@@ -48,34 +49,34 @@ public class KJActivityManager {
     /**
      * 获取当前Activity（栈顶Activity）
      */
-    public KJFrameActivity topActivity() {
+    public Activity topActivity() {
         if (activityStack == null || activityStack.isEmpty()) {
             return null;
         }
-        KJFrameActivity activity = activityStack.lastElement();
-        return activity;
+        I_KJActivity activity = activityStack.lastElement();
+        return (Activity) activity;
     }
 
     /**
      * 获取当前Activity（栈顶Activity） 没有找到则返回null
      */
-    public KJFrameActivity findActivity(Class<?> cls) {
-        KJFrameActivity activity = null;
-        for (KJFrameActivity aty : activityStack) {
+    public Activity findActivity(Class<?> cls) {
+        I_KJActivity activity = null;
+        for (I_KJActivity aty : activityStack) {
             if (aty.getClass().equals(cls)) {
                 activity = aty;
                 break;
             }
         }
-        return activity;
+        return (Activity) activity;
     }
 
     /**
      * 结束当前Activity（栈顶Activity）
      */
     public void finishActivity() {
-        KJFrameActivity activity = activityStack.lastElement();
-        finishActivity(activity);
+        I_KJActivity activity = activityStack.lastElement();
+        finishActivity((Activity) activity);
     }
 
     /**
@@ -93,9 +94,9 @@ public class KJActivityManager {
      * 结束指定的Activity(重载)
      */
     public void finishActivity(Class<?> cls) {
-        for (KJFrameActivity activity : activityStack) {
+        for (I_KJActivity activity : activityStack) {
             if (activity.getClass().equals(cls)) {
-                finishActivity(activity);
+                finishActivity((Activity) activity);
             }
         }
     }
@@ -106,9 +107,9 @@ public class KJActivityManager {
      * @param cls
      */
     public void finishOthersActivity(Class<?> cls) {
-        for (KJFrameActivity activity : activityStack) {
+        for (I_KJActivity activity : activityStack) {
             if (!(activity.getClass().equals(cls))) {
-                finishActivity(activity);
+                finishActivity((Activity) activity);
             }
         }
     }
@@ -119,7 +120,7 @@ public class KJActivityManager {
     public void finishAllActivity() {
         for (int i = 0, size = activityStack.size(); i < size; i++) {
             if (null != activityStack.get(i)) {
-                activityStack.get(i).finish();
+                ((Activity) activityStack.get(i)).finish();
             }
         }
         activityStack.clear();
