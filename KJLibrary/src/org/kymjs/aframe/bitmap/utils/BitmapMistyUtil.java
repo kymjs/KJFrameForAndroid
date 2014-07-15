@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,7 +35,7 @@ import android.widget.ImageView;
  * @created 2014-6-30
  */
 public class BitmapMistyUtil {
-
+    
     /**
      * View的背景虚化方法
      * 
@@ -49,7 +49,7 @@ public class BitmapMistyUtil {
     public static void SetMistyBitmap(View imageview, Bitmap src, int radius) {
         if (imageview == null || src == null || radius < 1 || radius > 25)
             return;
-        if (SystemTool.getSDKVersion() >= 17) {
+        if (SystemTool.getSDKVersion() >= 18) {
             blur(src, imageview, radius);
         } else {
             if (imageview instanceof ImageView) {
@@ -60,7 +60,7 @@ public class BitmapMistyUtil {
             }
         }
     }
-
+    
     /**
      * 背景虚化方法，4.2系统以下的方法（效率很低，不推荐使用）
      * 
@@ -123,50 +123,50 @@ public class BitmapMistyUtil {
             }
             stackpointer = radius;
             for (x = 0; x < w; x++) {
-
+                
                 r[yi] = dv[rsum];
                 g[yi] = dv[gsum];
                 b[yi] = dv[bsum];
-
+                
                 rsum -= routsum;
                 gsum -= goutsum;
                 bsum -= boutsum;
-
+                
                 stackstart = stackpointer - radius + div;
                 sir = stack[stackstart % div];
-
+                
                 routsum -= sir[0];
                 goutsum -= sir[1];
                 boutsum -= sir[2];
-
+                
                 if (y == 0) {
                     vmin[x] = Math.min(x + radius + 1, wm);
                 }
                 p = pix[yw + vmin[x]];
-
+                
                 sir[0] = (p & 0xff0000) >> 16;
                 sir[1] = (p & 0x00ff00) >> 8;
                 sir[2] = (p & 0x0000ff);
-
+                
                 rinsum += sir[0];
                 ginsum += sir[1];
                 binsum += sir[2];
-
+                
                 rsum += rinsum;
                 gsum += ginsum;
                 bsum += binsum;
-
+                
                 stackpointer = (stackpointer + 1) % div;
                 sir = stack[(stackpointer) % div];
-
+                
                 routsum += sir[0];
                 goutsum += sir[1];
                 boutsum += sir[2];
-
+                
                 rinsum -= sir[0];
                 ginsum -= sir[1];
                 binsum -= sir[2];
-
+                
                 yi++;
             }
             yw += w;
@@ -176,19 +176,19 @@ public class BitmapMistyUtil {
             yp = -radius * w;
             for (i = -radius; i <= radius; i++) {
                 yi = Math.max(0, yp) + x;
-
+                
                 sir = stack[i + radius];
-
+                
                 sir[0] = r[yi];
                 sir[1] = g[yi];
                 sir[2] = b[yi];
-
+                
                 rbs = r1 - Math.abs(i);
-
+                
                 rsum += r[yi] * rbs;
                 gsum += g[yi] * rbs;
                 bsum += b[yi] * rbs;
-
+                
                 if (i > 0) {
                     rinsum += sir[0];
                     ginsum += sir[1];
@@ -198,7 +198,7 @@ public class BitmapMistyUtil {
                     goutsum += sir[1];
                     boutsum += sir[2];
                 }
-
+                
                 if (i < hm) {
                     yp += w;
                 }
@@ -209,53 +209,53 @@ public class BitmapMistyUtil {
                 // Preserve alpha channel: ( 0xff000000 & pix[yi] )
                 pix[yi] = (0xff000000 & pix[yi]) | (dv[rsum] << 16)
                         | (dv[gsum] << 8) | dv[bsum];
-
+                
                 rsum -= routsum;
                 gsum -= goutsum;
                 bsum -= boutsum;
-
+                
                 stackstart = stackpointer - radius + div;
                 sir = stack[stackstart % div];
-
+                
                 routsum -= sir[0];
                 goutsum -= sir[1];
                 boutsum -= sir[2];
-
+                
                 if (x == 0) {
                     vmin[y] = Math.min(y + r1, hm) * w;
                 }
                 p = x + vmin[y];
-
+                
                 sir[0] = r[p];
                 sir[1] = g[p];
                 sir[2] = b[p];
-
+                
                 rinsum += sir[0];
                 ginsum += sir[1];
                 binsum += sir[2];
-
+                
                 rsum += rinsum;
                 gsum += ginsum;
                 bsum += binsum;
-
+                
                 stackpointer = (stackpointer + 1) % div;
                 sir = stack[stackpointer];
-
+                
                 routsum += sir[0];
                 goutsum += sir[1];
                 boutsum += sir[2];
-
+                
                 rinsum -= sir[0];
                 ginsum -= sir[1];
                 binsum -= sir[2];
-
+                
                 yi += w;
             }
         }
         bitmap.setPixels(pix, 0, w, 0, 0, w, h);
         return (bitmap);
     }
-
+    
     /**
      * 背景虚化方法，仅在API 17以上的系统中才能使用ScriptIntrinsicBlur类
      * 
@@ -268,6 +268,7 @@ public class BitmapMistyUtil {
      */
     @SuppressLint("NewApi")
     private static void blur(Bitmap bkg, View imageView, float radius) {
+        imageView.measure(0, 0);
         Bitmap overlay = Bitmap.createBitmap(imageView.getMeasuredWidth(),
                 imageView.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(overlay);

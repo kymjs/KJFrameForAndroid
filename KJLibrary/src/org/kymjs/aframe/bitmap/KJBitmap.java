@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,15 +42,15 @@ public class KJBitmap {
     /** 记录所有正在下载或等待下载的任务 */
     private Set<BitmapWorkerTask> taskCollection;
     private MemoryCache mMemoryCache;
-
+    
     public KJBitmap(Context context) {
         if (config == null) {
             config = new KJBitmapConfig();
         }
-        mMemoryCache = new MemoryCache(config.memoryCacheSize * -1);
+        mMemoryCache = new MemoryCache(config.memoryCacheSize);
         taskCollection = new HashSet<BitmapWorkerTask>();
     }
-
+    
     /**
      * 加载网络图片
      * 
@@ -66,7 +66,7 @@ public class KJBitmap {
             loadImage(imageView, imageUrl);
         }
     }
-
+    
     /**
      * 加载网络图片
      * 
@@ -84,7 +84,7 @@ public class KJBitmap {
         config.height = imgH;
         display(imageView, imageUrl);
     }
-
+    
     /**
      * 加载网络图片
      * 
@@ -99,14 +99,14 @@ public class KJBitmap {
         config.loadingBitmap = loadingBitmap;
         display(imageView, imageUrl);
     }
-
+    
     /**
      * 显示加载中的环形等待条
      */
     private void loadImageWithProgress(View imageView, String imageUrl) {
         loadImage(imageView, imageUrl);
     }
-
+    
     /**
      * 加载图片（核心方法）
      * 
@@ -139,15 +139,15 @@ public class KJBitmap {
             task.execute(imageUrl);
         }
     }
-
+    
     /********************* 异步获取Bitmap并设置image的任务类 *********************/
     private class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
         private View imageView;
-
+        
         public BitmapWorkerTask(View imageview) {
             this.imageView = imageview;
         }
-
+        
         @Override
         protected Bitmap doInBackground(String... params) {
             Bitmap bitmap = null;
@@ -157,12 +157,12 @@ public class KJBitmap {
                 bitmap = BitmapCreate.bitmapFromByteArray(res, 0, res.length,
                         config.width, config.height);
             }
-            if (bitmap != null) {
+            if (bitmap != null && config.openMemoryCache) {
                 mMemoryCache.put(params[0], bitmap); // 图片载入完成后缓存到LrcCache中
             }
             return bitmap;
         }
-
+        
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
