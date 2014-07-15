@@ -18,10 +18,20 @@ package org.kymjs.aframe.bitmap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class LruCache<K, V> {
+/**
+ * 经过Least Recently Used（最近最少使用）算法处理的LinkedHashMap
+ * 
+ * @author Android Open Source Project
+ * @change kymjs(kymjs123@gmail.com)
+ * @version 1.0
+ * @created 2014-7-11
+ */
+public class LruLinkedMap<K, V> {
+    // LinkedHashMap与 HashMap 的不同之处在于维护着一个运行于所有条目的双向链表。
+    // 每次put的value都是放在链表的头部
     private final LinkedHashMap<K, V> map;
 
-    /** Size of this cache in units. Not necessarily the number of elements. */
+    /** 当前缓存区已使用大小 */
     private int size;
     private int maxSize;
 
@@ -38,7 +48,7 @@ public class LruCache<K, V> {
      *            this is the maximum sum of the sizes of the entries in this
      *            cache.
      */
-    public LruCache(int maxSize) {
+    public LruLinkedMap(int maxSize) {
         if (maxSize <= 0) {
             throw new IllegalArgumentException("maxSize <= 0");
         }
@@ -47,18 +57,15 @@ public class LruCache<K, V> {
     }
 
     /**
-     * Sets the size of the cache.
+     * 设置缓存区最大值
      * 
      * @param maxSize
      *            The new maximum size.
-     * 
-     * @hide
      */
     public void resize(int maxSize) {
         if (maxSize <= 0) {
             throw new IllegalArgumentException("maxSize <= 0");
         }
-
         synchronized (this) {
             this.maxSize = maxSize;
         }
@@ -66,10 +73,8 @@ public class LruCache<K, V> {
     }
 
     /**
-     * Returns the value for {@code key} if it exists in the cache or can be
-     * created by {@code #create}. If a value was returned, it is moved to the
-     * head of the queue. This returns null if a value is not cached and cannot
-     * be created.
+     * 根据key返回相应的value，如果存在或可以Create相应的value，否则返回null。如果一个value被返回，
+     * 这个value将被移动到list首部
      */
     public final V get(K key) {
         if (key == null) {
@@ -87,12 +92,11 @@ public class LruCache<K, V> {
         }
 
         /*
-         * Attempt to create a value. This may take a long time, and the map may
-         * be different when create() returns. If a conflicting value was added
-         * to the map while create() was working, we leave that value in the map
-         * and release the created value.
+         * 尝试创建一个value This may take a long time, and the map may be different
+         * when create() returns. If a conflicting value was added to the map
+         * while create() was working, we leave that value in the map and
+         * release the created value.
          */
-
         V createdValue = create(key);
         if (createdValue == null) {
             return null;
@@ -103,7 +107,7 @@ public class LruCache<K, V> {
             mapValue = map.put(key, createdValue);
 
             if (mapValue != null) {
-                // There was a conflict so undo that last put
+                // 如果为null表示产生了线程冲突，重新执行最后一次put
                 map.put(key, mapValue);
             } else {
                 size += safeSizeOf(key, createdValue);
@@ -120,8 +124,7 @@ public class LruCache<K, V> {
     }
 
     /**
-     * Caches {@code value} for {@code key}. The value is moved to the head of
-     * the queue.
+     * put value，value会被保存在队列头部
      * 
      * @return the previous value mapped by {@code key}.
      */
@@ -139,11 +142,9 @@ public class LruCache<K, V> {
                 size -= safeSizeOf(key, previous);
             }
         }
-
         if (previous != null) {
             entryRemoved(false, key, previous, value);
         }
-
         trimToSize(maxSize);
         return previous;
     }
@@ -167,16 +168,10 @@ public class LruCache<K, V> {
                     break;
                 }
 
-                // BEGIN LAYOUTLIB CHANGE
-                // get the last item in the linked list.
-                // This is not efficient, the goal here is to minimize the
-                // changes
-                // compared to the platform version.
                 Map.Entry<K, V> toEvict = null;
                 for (Map.Entry<K, V> entry : map.entrySet()) {
                     toEvict = entry;
                 }
-                // END LAYOUTLIB CHANGE
 
                 if (toEvict == null) {
                     break;
@@ -194,7 +189,7 @@ public class LruCache<K, V> {
     }
 
     /**
-     * Removes the entry for {@code key} if it exists.
+     * 如果key对应的value存在，则移除它
      * 
      * @return the previous value mapped by {@code key}.
      */
@@ -202,7 +197,6 @@ public class LruCache<K, V> {
         if (key == null) {
             throw new NullPointerException("key == null");
         }
-
         V previous;
         synchronized (this) {
             previous = map.remove(key);
@@ -210,11 +204,9 @@ public class LruCache<K, V> {
                 size -= safeSizeOf(key, previous);
             }
         }
-
         if (previous != null) {
             entryRemoved(false, key, previous, null);
         }
-
         return previous;
     }
 

@@ -65,7 +65,10 @@ public class KJActivityManager {
      * 获取当前Activity（栈顶Activity）
      */
     public Activity topActivity() {
-        if (activityStack == null || activityStack.isEmpty()) {
+        if (activityStack == null) {
+            throw new NullPointerException("Activity stack is Null");
+        }
+        if (activityStack.isEmpty()) {
             return null;
         }
         I_KJActivity activity = activityStack.lastElement();

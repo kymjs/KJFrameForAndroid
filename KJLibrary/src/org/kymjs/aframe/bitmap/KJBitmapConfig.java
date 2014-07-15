@@ -25,6 +25,8 @@ import android.graphics.Bitmap;
  * @created 2014-7-11
  */
 public class KJBitmapConfig {
+    public static final boolean isDEBUG = true;
+
     /** 网络连接等待时间 */
     public int timeOut = 5000;
     /** 内存缓存大小 */

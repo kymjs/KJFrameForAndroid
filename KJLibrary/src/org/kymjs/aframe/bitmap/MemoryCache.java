@@ -21,7 +21,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 
 /**
- * 使用lru算法的内存缓存池
+ * 使用lru算法的Bitmap内存缓存池
  * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
@@ -29,12 +29,12 @@ import android.graphics.Bitmap;
  */
 public class MemoryCache {
 
-    private LruCache<String, Bitmap> cache;
+    private LruLinkedMap<String, Bitmap> cache;
 
     @SuppressLint("NewApi")
     public MemoryCache() {
         int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        cache = new LruCache<String, Bitmap>(maxMemory / 8) {
+        cache = new LruLinkedMap<String, Bitmap>(maxMemory / 8) {
             @Override
             protected int sizeOf(String key, Bitmap value) {
                 super.sizeOf(key, value);
@@ -49,7 +49,7 @@ public class MemoryCache {
 
     @SuppressLint("NewApi")
     public MemoryCache(int maxSize) {
-        cache = new LruCache<String, Bitmap>(maxSize) {
+        cache = new LruLinkedMap<String, Bitmap>(maxSize) {
             @Override
             protected int sizeOf(String key, Bitmap value) {
                 super.sizeOf(key, value);

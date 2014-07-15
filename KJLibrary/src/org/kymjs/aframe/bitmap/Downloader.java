@@ -38,24 +38,26 @@ public class Downloader implements I_ImageLoder {
      */
     @Override
     public byte[] loadImage(String imagePath) {
+        if (StringUtils.isEmpty(imagePath)) {
+            return null;
+        }
         byte[] img = null;
-        if (!StringUtils.isEmpty(imagePath)) {
-            // 对于网络图片网络图片，首先从本地缓存读取，如果本地没有，则重新从网络中加载
-            if (imagePath.trim().toLowerCase().startsWith("http")) {
-                File file = FileUtils.getSaveFile(KJBitmap.config.cachePath,
-                        StringUtils.md5(imagePath));
-                if (file == null) {
-                    img = loadImgFromNet(imagePath);
-                } else {
-                    try {
-                        img = FileUtils.input2byte(new FileInputStream(file));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
+        if (!imagePath.trim().toLowerCase().startsWith("http")) { // 如果不是网络图片
+            img = loadImgFromFile(imagePath);
+        } else { // 网络图片：首先从本地缓存读取，如果本地没有，则重新从网络加载
+            File file = FileUtils.getSaveFile(KJBitmap.config.cachePath,
+                    StringUtils.md5(imagePath));
+            if (file == null) { // 本地没有缓存
+                img = loadImgFromNet(imagePath);
             } else {
-                img = loadImgFromFile(imagePath);
+                try {
+                    img = FileUtils.input2byte(new FileInputStream(file));
+                } catch (FileNotFoundException e) {
+                    if (KJBitmapConfig.isDEBUG)
+                        e.printStackTrace();
+                }
             }
+            file = null;
         }
         return img;
     }
@@ -89,7 +91,8 @@ public class Downloader implements I_ImageLoder {
                 KJBitmap.config.callBack.imgLoadFailure(imagePath,
                         e.getMessage());
             }
-            e.printStackTrace();
+            if (KJBitmapConfig.isDEBUG)
+                e.printStackTrace();
         } finally {
             if (con != null) {
                 con.disconnect();
@@ -110,20 +113,16 @@ public class Downloader implements I_ImageLoder {
         try {
             fis = new FileInputStream(imagePath);
             if (fis != null) {
+                // 本地图片就不加入本地缓存了
                 data = FileUtils.input2byte(fis);
-                // 建立本地缓存
-                if (KJBitmap.config.openLocalCache) {
-                    FileUtils.saveFileCache(data,
-                            FileUtils.getSavePath(KJBitmap.config.cachePath),
-                            StringUtils.md5(imagePath));
-                }
             }
         } catch (FileNotFoundException e) {
             if (KJBitmap.config.callBack != null) {
                 KJBitmap.config.callBack.imgLoadFailure(imagePath,
                         e.getMessage());
             }
-            e.printStackTrace();
+            if (KJBitmapConfig.isDEBUG)
+                e.printStackTrace();
         } finally {
             FileUtils.closeIO(fis);
         }

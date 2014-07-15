@@ -47,7 +47,7 @@ public class KJBitmap {
         if (config == null) {
             config = new KJBitmapConfig();
         }
-        mMemoryCache = new MemoryCache(config.memoryCacheSize);
+        mMemoryCache = new MemoryCache(config.memoryCacheSize * -1);
         taskCollection = new HashSet<BitmapWorkerTask>();
     }
 
