@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
+ * Copyright (c) 2014, kymjs 张涛 (kymjs123@gmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@ public class BitmapHelper {
      * @param bitmap
      *            要压缩的图片
      * @param maxSize
-     *            压缩后的大小
+     *            压缩后的大小，单位kb
      */
     public static void imageZoom(Bitmap bitmap, double maxSize) {
         // 将bitmap放至数组中，意在获得bitmap的大小（与实际读取的原文件要大）

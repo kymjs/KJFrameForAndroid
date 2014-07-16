@@ -87,10 +87,17 @@ public class FileUtils {
      * 获取文件夹路径
      */
     public static String getSavePath(String folderName) {
+        return getSaveFolder(folderName).getAbsolutePath();
+    }
+
+    /**
+     * 获取文件夹对象
+     */
+    public static File getSaveFolder(String folderName) {
         File file = new File(Environment.getExternalStorageDirectory()
                 .getAbsoluteFile() + "/" + folderName + "/");
         file.mkdirs();
-        return file.getAbsolutePath();
+        return file;
     }
 
     /**

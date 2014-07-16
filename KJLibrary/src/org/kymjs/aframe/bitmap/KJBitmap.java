@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
+ * Copyright (c) 2014, kymjs 张涛 (kymjs123@gmail.com).
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.kymjs.aframe.bitmap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.kymjs.aframe.bitmap.core.MemoryCache;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
 
 import android.content.Context;
@@ -36,13 +37,13 @@ import android.widget.ImageView;
  */
 public class KJBitmap {
     /**
-     * 图片加载的配置器：以static修饰的配置器，保证一次设置可一直使用
+     * 图片加载的配置器：单例配置器，保证一次设置可一直使用
      */
     public static KJBitmapConfig config;
     /** 记录所有正在下载或等待下载的任务 */
     private Set<BitmapWorkerTask> taskCollection;
     private MemoryCache mMemoryCache;
-    
+
     public KJBitmap(Context context) {
         if (config == null) {
             config = new KJBitmapConfig();
@@ -50,7 +51,7 @@ public class KJBitmap {
         mMemoryCache = new MemoryCache(config.memoryCacheSize);
         taskCollection = new HashSet<BitmapWorkerTask>();
     }
-    
+
     /**
      * 加载网络图片
      * 
@@ -66,7 +67,7 @@ public class KJBitmap {
             loadImage(imageView, imageUrl);
         }
     }
-    
+
     /**
      * 加载网络图片
      * 
@@ -80,11 +81,15 @@ public class KJBitmap {
      *            图片显示高度。若大于图片本身大小，则只显示图片大小
      */
     public void display(View imageView, String imageUrl, int imgW, int imgH) {
+        int tempW = config.width;
+        int tempH = config.height;
         config.width = imgW;
         config.height = imgH;
         display(imageView, imageUrl);
+        config.width = tempW;
+        config.height = tempH;
     }
-    
+
     /**
      * 加载网络图片
      * 
@@ -96,17 +101,20 @@ public class KJBitmap {
      *            图片载入过程中显示的图片
      */
     public void display(View imageView, String imageUrl, Bitmap loadingBitmap) {
+        Bitmap tempLoadBitmap = config.loadingBitmap;
         config.loadingBitmap = loadingBitmap;
         display(imageView, imageUrl);
+        config.loadingBitmap = tempLoadBitmap;
+        tempLoadBitmap = null;
     }
-    
+
     /**
      * 显示加载中的环形等待条
      */
     private void loadImageWithProgress(View imageView, String imageUrl) {
         loadImage(imageView, imageUrl);
     }
-    
+
     /**
      * 加载图片（核心方法）
      * 
@@ -139,15 +147,15 @@ public class KJBitmap {
             task.execute(imageUrl);
         }
     }
-    
+
     /********************* 异步获取Bitmap并设置image的任务类 *********************/
     private class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
         private View imageView;
-        
+
         public BitmapWorkerTask(View imageview) {
             this.imageView = imageview;
         }
-        
+
         @Override
         protected Bitmap doInBackground(String... params) {
             Bitmap bitmap = null;
@@ -162,7 +170,7 @@ public class KJBitmap {
             }
             return bitmap;
         }
-        
+
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
@@ -177,5 +185,74 @@ public class KJBitmap {
                 config.callBack.imgLoadSuccess(imageView);
             taskCollection.remove(this);
         }
+    }
+
+    /********************************* 配置器设置 *********************************/
+
+    /**
+     * 设置bitmap载入时显示的图片
+     * 
+     * @param b
+     */
+    public void configLoadingBitmap(Bitmap b) {
+        config.loadingBitmap = b;
+    }
+
+    /**
+     * 设置内存缓存大小
+     * 
+     * @param size
+     */
+    public void configMemoryCache(int size) {
+        config.memoryCacheSize = size;
+    }
+
+    /**
+     * 设置图片默认显示的宽高，如果参数大于图片本身的宽高则只显示图片本身宽高
+     */
+    public void configDefaultShape(int w, int h) {
+        config.width = w;
+        config.height = h;
+    }
+
+    /**
+     * 设置图片下载器
+     */
+    public void configDownloader(I_ImageLoder downloader) {
+        config.imgLoader = downloader;
+    }
+
+    /**
+     * 是否开启内存缓存
+     */
+    public void configOpenMemoryCache(boolean openCache) {
+        config.openMemoryCache = openCache;
+    }
+
+    /**
+     * 是否开启本地图片缓存功能
+     */
+    public void configOpenDiskCache(boolean openCache) {
+        config.openDiskCache = openCache;
+    }
+
+    /**
+     * 设置图片缓存路径
+     * 
+     * @param cachePath
+     */
+    public void configCachePath(String cachePath) {
+        config.cachePath = cachePath;
+    }
+
+    /**
+     * 设置配置器（静态的配置器可以直接被访问，此处使用函数只是为了代码的统一性）
+     * 
+     * @warn you should be call: (static) KJBitmap.config = your config.
+     */
+    @Deprecated
+    @SuppressWarnings("static-access")
+    public void setConfig(KJBitmapConfig config) {
+        this.config = config;
     }
 }

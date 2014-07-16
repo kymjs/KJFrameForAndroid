@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
+ * Copyright (c) 2014, kymjs 张涛 (kymjs123@gmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ public class Downloader implements I_ImageLoder {
             con.connect();
             data = FileUtils.input2byte(con.getInputStream());
             // 建立本地缓存
-            if (KJBitmap.config.openLocalCache) {
+            if (KJBitmap.config.openDiskCache) {
                 FileUtils.saveFileCache(data,
                         FileUtils.getSavePath(KJBitmap.config.cachePath),
                         StringUtils.md5(imagePath));

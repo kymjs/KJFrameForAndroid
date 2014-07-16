@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
+ * Copyright (c) 2014, kymjs 张涛 (kymjs123@gmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kymjs.aframe.bitmap;
+package org.kymjs.aframe.bitmap.core;
 
 import org.kymjs.aframe.utils.SystemTool;
 
@@ -29,12 +29,12 @@ import android.graphics.Bitmap;
  */
 public class MemoryCache {
 
-    private LruLinkedMap<String, Bitmap> cache;
+    private MemoryLruCache<String, Bitmap> cache;
 
     @SuppressLint("NewApi")
     public MemoryCache() {
         int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        cache = new LruLinkedMap<String, Bitmap>(maxMemory / 8) {
+        cache = new MemoryLruCache<String, Bitmap>(maxMemory / 8) {
             @Override
             protected int sizeOf(String key, Bitmap value) {
                 super.sizeOf(key, value);
@@ -49,7 +49,7 @@ public class MemoryCache {
 
     @SuppressLint("NewApi")
     public MemoryCache(int maxSize) {
-        cache = new LruLinkedMap<String, Bitmap>(maxSize) {
+        cache = new MemoryLruCache<String, Bitmap>(maxSize) {
             @Override
             protected int sizeOf(String key, Bitmap value) {
                 super.sizeOf(key, value);

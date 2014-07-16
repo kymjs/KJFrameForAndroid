@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kymjs.aframe.bitmap;
+package org.kymjs.aframe.bitmap.core;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -26,7 +26,7 @@ import java.util.Map;
  * @version 1.0
  * @created 2014-7-11
  */
-public class LruLinkedMap<K, V> {
+public class MemoryLruCache<K, V> {
     // LinkedHashMap与 HashMap 的不同之处在于维护着一个运行于所有条目的双向链表。
     // 每次put的value都是放在链表的头部
     private final LinkedHashMap<K, V> map;
@@ -48,7 +48,7 @@ public class LruLinkedMap<K, V> {
      *            this is the maximum sum of the sizes of the entries in this
      *            cache.
      */
-    public LruLinkedMap(int maxSize) {
+    public MemoryLruCache(int maxSize) {
         if (maxSize <= 0) {
             throw new IllegalArgumentException("maxSize <= 0");
         }
