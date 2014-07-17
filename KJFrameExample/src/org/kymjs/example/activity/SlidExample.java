@@ -1,13 +1,13 @@
 package org.kymjs.example.activity;
 
-import org.kymjs.aframe.KJActivityManager;
+import org.kymjs.aframe.ui.KJActivityManager;
 import org.kymjs.aframe.ui.activity.SlidTemplet;
 import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.aframe.ui.widget.ResideMenuItem;
 import org.kymjs.example.R;
+import org.kymjs.example.fragment.BitmapDisplay;
 import org.kymjs.example.fragment.BitmapMistyExample;
 import org.kymjs.example.fragment.ChoiceImageExample;
-import org.kymjs.example.fragment.BitmapDisplay;
 import org.kymjs.example.fragment.ScaleImageExample;
 
 import android.view.View;

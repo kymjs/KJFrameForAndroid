@@ -169,21 +169,7 @@ public class KJBitmap {
 
         @Override
         protected Bitmap doInBackground(String... params) {
-            Bitmap bitmap = null;
-            // 从指定链接调取image
-            byte[] res = config.imgLoader.loadImage(params[0]);
-            if (res != null) {
-                bitmap = BitmapCreate.bitmapFromByteArray(res, 0, res.length,
-                        config.width, config.height);
-            }
-            if (bitmap != null && config.openMemoryCache) {
-                // 图片载入完成后缓存到LrcCache中
-                mMemoryCache.put(StringUtils.md5(params[0]), bitmap);
-                if (config.isDEBUG)
-                    KJLoger.debugLog(getClass().getName(),
-                            "put to memory cache\n" + params[0]);
-            }
-            return bitmap;
+            return getBitmap(params[0]);
         }
 
         @Override
@@ -200,6 +186,63 @@ public class KJBitmap {
                 config.callBack.imgLoadSuccess(imageView);
             taskCollection.remove(this);
         }
+    }
+
+    /********************************* 属性方法 *********************************/
+
+    /**
+     * 从内存缓存读取Bitmap
+     * 
+     * @param key
+     *            图片地址Url
+     * @return 如果没有key对应的value返回null
+     */
+    public Bitmap getBitmapFromMemory(String key) {
+        return mMemoryCache.get(StringUtils.md5(key));
+    }
+
+    /**
+     * 从磁盘缓存读取Bitmap（注，这里有IO操作，应该放在线程中调用）
+     * 
+     * @param key
+     *            图片地址Url
+     * @return 如果没有key对应的value返回null
+     */
+    public Bitmap getBitmapFromDisk(String key) {
+        return config.imgLoader.getBitmapFromCache(key);
+    }
+
+    /**
+     * 从指定key获取一个Bitmap，而不关心获取方式（注：这里可能会有IO或网络操作，应该放在线程中调用）
+     * 
+     * @param key
+     *            图片地址Url
+     * @return
+     */
+    public Bitmap getBitmap(String key) {
+        Bitmap bitmap = getBitmapFromMemory(key);
+        if (bitmap == null) {
+            byte[] res = config.imgLoader.loadImage(key);
+            if (res != null) {
+                bitmap = BitmapCreate.bitmapFromByteArray(res, 0, res.length,
+                        config.width, config.height);
+            }
+            if (bitmap != null && config.openMemoryCache) {
+                // 图片载入完成后缓存到LrcCache中
+                mMemoryCache.put(StringUtils.md5(key), bitmap);
+                if (config.isDEBUG)
+                    KJLoger.debugLog(getClass().getName(),
+                            "put to memory cache\n" + key);
+            }
+        }
+        return bitmap;
+    }
+
+    /**
+     * 取消正在下载的任务
+     */
+    public void destory() {
+        taskCollection.clear();
     }
 
     /********************************* 配置器设置 *********************************/
@@ -261,12 +304,8 @@ public class KJBitmap {
     }
 
     /**
-     * 设置配置器（静态的配置器可以直接被访问，此处使用函数只是为了代码的统一性）
-     * 
-     * @warn you should be call: (static) KJBitmap.config = your config.
+     * 设置配置器
      */
-    @Deprecated
-    @SuppressWarnings("static-access")
     public void setConfig(KJBitmapConfig config) {
         this.config = config;
     }

@@ -70,6 +70,7 @@ public class BitmapMistyUtil {
      * @param radius
      *            虚化度Supported range 0 < radius <= 25
      */
+    @Deprecated
     private static Bitmap blur(Bitmap bkg, int radius) {
         Bitmap bitmap = bkg.copy(bkg.getConfig(), true);
         int w = bitmap.getWidth();

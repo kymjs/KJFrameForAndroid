@@ -22,8 +22,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.kymjs.aframe.KJLoger;
+import org.kymjs.aframe.bitmap.utils.BitmapCreate;
 import org.kymjs.aframe.utils.FileUtils;
 import org.kymjs.aframe.utils.StringUtils;
+
+import android.graphics.Bitmap;
 
 /**
  * 图片下载器：可以从网络或本地加载一张Bitmap并返回
@@ -141,5 +144,21 @@ public class Downloader implements I_ImageLoder {
             FileUtils.closeIO(fis);
         }
         return data;
+    }
+
+    /**
+     * 从磁盘缓存读取一个Bitmap
+     * 
+     * @return The bitmap or null if not found
+     */
+    @Override
+    public Bitmap getBitmapFromCache(String key) {
+        File file = FileUtils.getSaveFile(config.cachePath,
+                StringUtils.md5(key));
+        if (file != null)
+            return BitmapCreate.bitmapFromFile(file.getAbsolutePath(),
+                    config.width, config.height);
+        else
+            return null;
     }
 }

@@ -26,6 +26,8 @@ import org.kymjs.aframe.bitmap.utils.BitmapCreate;
 import org.kymjs.aframe.utils.FileUtils;
 import org.kymjs.aframe.utils.StringUtils;
 
+import android.graphics.Bitmap;
+
 /**
  * 使用lru算法缓存的图片下载器：可以从网络或本地加载一张Bitmap并返回
  * 
@@ -146,5 +148,15 @@ public class DownloadWithLruCache implements I_ImageLoder {
             FileUtils.closeIO(fis);
         }
         return data;
+    }
+
+    /**
+     * 从磁盘缓存读取一个Bitmap
+     * 
+     * @return The bitmap or null if not found
+     */
+    @Override
+    public Bitmap getBitmapFromCache(String key) {
+        return diskCache.get(StringUtils.md5(key));
     }
 }

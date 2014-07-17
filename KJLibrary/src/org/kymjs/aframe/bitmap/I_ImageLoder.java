@@ -15,6 +15,8 @@
  */
 package org.kymjs.aframe.bitmap;
 
+import android.graphics.Bitmap;
+
 /**
  * 图片载入接口协议，可自定义实现此协议的下载器
  * 
@@ -24,4 +26,6 @@ package org.kymjs.aframe.bitmap;
  */
 public interface I_ImageLoder {
     public byte[] loadImage(String imageUrl);
+
+    public Bitmap getBitmapFromCache(String key);
 }
