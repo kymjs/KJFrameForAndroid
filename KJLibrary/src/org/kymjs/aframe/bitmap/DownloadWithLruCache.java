@@ -56,8 +56,8 @@ public class DownloadWithLruCache implements I_ImageLoder {
         byte[] img = null;
         if (config.openDiskCache) { // 如果开启本地缓存，则调用lruCache查找
             img = diskCache.getByteArray(StringUtils.md5(imagePath));
-            if (config.isDEBUG) {
-                KJLoger.debug(getClass().getName() + "\n" + imagePath
+            if (config.isDEBUG && img != null) {
+                KJLoger.state(getClass().getName(), "\n" + imagePath
                         + "\ndownload success, from be disk LRU cache");
             }
         }
@@ -97,7 +97,7 @@ public class DownloadWithLruCache implements I_ImageLoder {
             }
 
             if (config.isDEBUG) {
-                KJLoger.debug(getClass().getName() + "\n" + imagePath
+                KJLoger.state(getClass().getName(), "\n" + imagePath
                         + "\ndownload success, from be net");
             }
         } catch (Exception e) {
@@ -133,7 +133,7 @@ public class DownloadWithLruCache implements I_ImageLoder {
                                     config.width, config.height));
                 }
                 if (config.isDEBUG) {
-                    KJLoger.debug(getClass().getName() + "\n" + imagePath
+                    KJLoger.state(getClass().getName(), "\n" + imagePath
                             + "\ndownload success, from be local disk file");
                 }
             }
