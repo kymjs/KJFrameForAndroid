@@ -15,7 +15,6 @@
  */
 package org.kymjs.aframe.ui;
 
-import org.kymjs.aframe.KJActivityManager;
 import org.kymjs.aframe.utils.DensityUtils;
 import org.kymjs.aframe.utils.StringUtils;
 import org.kymjs.aframe.utils.SystemTool;

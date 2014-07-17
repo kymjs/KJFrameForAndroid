@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kymjs.aframe;
+package org.kymjs.aframe.ui;
 
 import java.util.Stack;
 
@@ -54,9 +54,6 @@ public class KJActivityManager {
     public void addActivity(KJFrameActivity activity) {
         if (activityStack == null) {
             activityStack = new Stack<I_KJActivity>();
-            if (CrashHandler.DEBUG) {
-                CrashHandler.create(activity);
-            }
         }
         activityStack.add(activity);
     }

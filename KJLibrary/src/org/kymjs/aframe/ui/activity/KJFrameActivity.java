@@ -15,9 +15,9 @@
  */
 package org.kymjs.aframe.ui.activity;
 
-import org.kymjs.aframe.KJActivityManager;
 import org.kymjs.aframe.ui.AnnotateUtil;
 import org.kymjs.aframe.ui.I_BroadcastReg;
+import org.kymjs.aframe.ui.KJActivityManager;
 import org.kymjs.aframe.ui.ViewInject;
 
 import android.app.Activity;

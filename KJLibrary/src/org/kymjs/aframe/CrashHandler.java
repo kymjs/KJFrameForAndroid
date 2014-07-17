@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.TreeSet;
 
+import org.kymjs.aframe.ui.KJActivityManager;
 import org.kymjs.aframe.ui.ViewInject;
 import org.kymjs.aframe.utils.FileUtils;
 import org.kymjs.aframe.utils.StringUtils;
