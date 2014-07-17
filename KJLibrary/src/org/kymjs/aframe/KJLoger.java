@@ -26,6 +26,7 @@ import android.util.Log;
  */
 public class KJLoger {
     private static final boolean IS_DEBUG = true;
+    private static final boolean DEBUG_LOG = true;
     private static final boolean SHOW_ACTIVITY_STATE = false;
 
     public static final void debug(String msg) {
@@ -43,6 +44,12 @@ public class KJLoger {
     public static final void state(String packName, String state) {
         if (SHOW_ACTIVITY_STATE) {
             Log.d("state", packName + state);
+        }
+    }
+
+    public static final void debugLog(String packName, String state) {
+        if (DEBUG_LOG) {
+            Log.d("debug", packName + state);
         }
     }
 }

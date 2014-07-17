@@ -18,8 +18,10 @@ package org.kymjs.aframe.bitmap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.kymjs.aframe.KJLoger;
 import org.kymjs.aframe.bitmap.core.MemoryCache;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
+import org.kymjs.aframe.utils.StringUtils;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -36,14 +38,21 @@ import android.widget.ImageView;
  */
 public class KJBitmap {
     /**
-     * 图片加载的配置器：单例配置器，保证一次设置可一直使用
+     * 必须设置为单例，否则内存缓存无效
      */
-    public static KJBitmapConfig config;
+    private static KJBitmap instance = new KJBitmap();
     /** 记录所有正在下载或等待下载的任务 */
     private Set<BitmapWorkerTask> taskCollection;
+    /** LRU缓存器 */
     private MemoryCache mMemoryCache;
+    /** BitmapLabrary配置器 */
+    public KJBitmapConfig config;
 
-    public KJBitmap() {
+    public synchronized static KJBitmap create() {
+        return instance;
+    }
+
+    private KJBitmap() {
         if (config == null) {
             config = new KJBitmapConfig();
         }
@@ -125,7 +134,7 @@ public class KJBitmap {
     private void loadImage(View imageView, String imageUrl) {
         if (config.callBack != null)
             config.callBack.imgLoading(imageView);
-        final Bitmap bitmap = mMemoryCache.get(imageUrl);
+        Bitmap bitmap = mMemoryCache.get(StringUtils.md5(imageUrl));
         if (bitmap != null) {
             if (imageView instanceof ImageView) {
                 ((ImageView) imageView).setImageBitmap(bitmap);
@@ -134,6 +143,9 @@ public class KJBitmap {
             }
             if (config.callBack != null)
                 config.callBack.imgLoadSuccess(imageView);
+            if (config.isDEBUG)
+                KJLoger.debugLog(getClass().getName(),
+                        "download success, from memory cache\n" + imageUrl);
         } else {
             if (imageView instanceof ImageView) {
                 ((ImageView) imageView).setImageBitmap(config.loadingBitmap);
@@ -165,7 +177,11 @@ public class KJBitmap {
                         config.width, config.height);
             }
             if (bitmap != null && config.openMemoryCache) {
-                mMemoryCache.put(params[0], bitmap); // 图片载入完成后缓存到LrcCache中
+                // 图片载入完成后缓存到LrcCache中
+                mMemoryCache.put(StringUtils.md5(params[0]), bitmap);
+                if (config.isDEBUG)
+                    KJLoger.debugLog(getClass().getName(),
+                            "put to memory cache\n" + params[0]);
             }
             return bitmap;
         }

@@ -26,8 +26,8 @@ public class ListBitmapExample extends BaseFragment {
     protected View inflaterView(LayoutInflater inflater, ViewGroup container,
             Bundle bundle) {
         aty = getActivity();
-        kjb = new KJBitmap();
-        KJBitmap.config.loadingBitmap = BitmapCreate.bitmapFromResource(
+        kjb = KJBitmap.create();
+        kjb.config.loadingBitmap = BitmapCreate.bitmapFromResource(
                 getResources(), R.drawable.ic_launcher, 400, 400);
         return inflater.inflate(R.layout.listview, null);
     }

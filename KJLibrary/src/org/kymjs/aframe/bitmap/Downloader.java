@@ -59,8 +59,9 @@ public class Downloader implements I_ImageLoder {
                 try {
                     img = FileUtils.input2byte(new FileInputStream(file));
                     if (config.isDEBUG) {
-                        KJLoger.state(getClass().getName(), "\n" + imagePath
-                                + "\ndownload success, from be disk cache");
+                        KJLoger.debugLog(getClass().getName(),
+                                "download success, from be disk cache\n"
+                                        + imagePath);
                     }
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -96,8 +97,8 @@ public class Downloader implements I_ImageLoder {
                         StringUtils.md5(imagePath));
             }
             if (config.isDEBUG) {
-                KJLoger.state(getClass().getName(), "\n" + imagePath
-                        + "\ndownload success, from be net");
+                KJLoger.debugLog(getClass().getName(),
+                        "download success, from be net\n" + imagePath);
             }
         } catch (Exception e) {
             if (config.callBack != null) {
@@ -127,8 +128,8 @@ public class Downloader implements I_ImageLoder {
                 // 本地图片就不加入本地缓存了
                 data = FileUtils.input2byte(fis);
                 if (config.isDEBUG) {
-                    KJLoger.state(getClass().getName(), "\n" + imagePath
-                            + "\ndownload success, from be disk file");
+                    KJLoger.debugLog(getClass().getName(),
+                            "download success, from be disk file\n" + imagePath);
                 }
             }
         } catch (FileNotFoundException e) {
