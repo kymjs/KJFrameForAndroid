@@ -15,28 +15,34 @@
  */
 package org.kymjs.aframe.bitmap;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.kymjs.aframe.KJLoger;
+import org.kymjs.aframe.bitmap.core.DiskCache;
+import org.kymjs.aframe.bitmap.utils.BitmapCreate;
 import org.kymjs.aframe.utils.FileUtils;
 import org.kymjs.aframe.utils.StringUtils;
 
 /**
- * 图片下载器：可以从网络或本地加载一张Bitmap并返回
+ * 使用lru算法缓存的图片下载器：可以从网络或本地加载一张Bitmap并返回
  * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
  * @created 2014-7-11
  */
-public class Downloader implements I_ImageLoder {
+public class DownloadWithLruCache implements I_ImageLoder {
+
+    private DiskCache diskCache;
     private KJBitmapConfig config;
 
-    public Downloader(KJBitmapConfig config) {
+    public DownloadWithLruCache(KJBitmapConfig config) {
+        super();
         this.config = config;
+        diskCache = new DiskCache(config.cachePath, config.diskCacheSize,
+                config.isDEBUG);
     }
 
     /**
@@ -48,25 +54,19 @@ public class Downloader implements I_ImageLoder {
             return null;
         }
         byte[] img = null;
-        if (!imagePath.trim().toLowerCase().startsWith("http")) { // 如果不是网络图片
-            img = loadImgFromFile(imagePath);
-        } else { // 网络图片：首先从本地缓存读取，如果本地没有，则重新从网络加载
-            File file = FileUtils.getSaveFile(config.cachePath,
-                    StringUtils.md5(imagePath));
-            if (file == null) { // 本地没有缓存
-                img = loadImgFromNet(imagePath);
-            } else {
-                try {
-                    img = FileUtils.input2byte(new FileInputStream(file));
-                    if (config.isDEBUG) {
-                        KJLoger.debug(getClass().getName() + "\n" + imagePath
-                                + "\ndownload success, from be disk cache");
-                    }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+        if (config.openDiskCache) { // 如果开启本地缓存，则调用lruCache查找
+            img = diskCache.getByteArray(StringUtils.md5(imagePath));
+            if (config.isDEBUG) {
+                KJLoger.debug(getClass().getName() + "\n" + imagePath
+                        + "\ndownload success, from be disk LRU cache");
             }
-            file = null;
+        }
+        if (img == null) { // 重新读取资源
+            if (!imagePath.trim().toLowerCase().startsWith("http")) { // 如果不是网络图片
+                img = loadImgFromFile(imagePath);
+            } else { // 网络图片：首先从本地缓存读取，如果本地没有，则重新从网络加载
+                img = loadImgFromNet(imagePath);
+            }
         }
         return img;
     }
@@ -89,12 +89,13 @@ public class Downloader implements I_ImageLoder {
             con.setDoInput(true);
             con.connect();
             data = FileUtils.input2byte(con.getInputStream());
-            // 建立本地缓存
+            // 建立diskLru缓存
             if (config.openDiskCache) {
-                FileUtils.saveFileCache(data,
-                        FileUtils.getSavePath(config.cachePath),
-                        StringUtils.md5(imagePath));
+                diskCache.put(StringUtils.md5(imagePath), BitmapCreate
+                        .bitmapFromByteArray(data, 0, data.length,
+                                config.width, config.height));
             }
+
             if (config.isDEBUG) {
                 KJLoger.debug(getClass().getName() + "\n" + imagePath
                         + "\ndownload success, from be net");
@@ -124,11 +125,16 @@ public class Downloader implements I_ImageLoder {
         try {
             fis = new FileInputStream(imagePath);
             if (fis != null) {
-                // 本地图片就不加入本地缓存了
                 data = FileUtils.input2byte(fis);
+                // 建立diskLru缓存
+                if (config.openDiskCache) {
+                    diskCache.put(StringUtils.md5(imagePath), BitmapCreate
+                            .bitmapFromByteArray(data, 0, data.length,
+                                    config.width, config.height));
+                }
                 if (config.isDEBUG) {
                     KJLoger.debug(getClass().getName() + "\n" + imagePath
-                            + "\ndownload success, from be disk file");
+                            + "\ndownload success, from be local disk file");
                 }
             }
         } catch (FileNotFoundException e) {
