@@ -25,7 +25,7 @@ import android.graphics.Bitmap;
  * @created 2014-7-11
  */
 public class KJBitmapConfig {
-    public static final boolean isDEBUG = true;
+    public final boolean isDEBUG = true;
 
     /** 网络连接等待时间 */
     public int timeOut = 5000;
@@ -55,11 +55,12 @@ public class KJBitmapConfig {
     /** 是否开启本地图片缓存功能 */
     public boolean openDiskCache = true;
     /** 本地缓存大小 */
-    public int diskCacheSize;
+    public int diskCacheSize = 5 * 1024 * 1024;
 
     public KJBitmapConfig() {
-        diskCacheSize = 5 * 1024 * 1024;
+        super();
         memoryCacheSize = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        imgLoader = new Downloader(); // 配置图片加载器
+        // imgLoader = new Downloader(this); // 配置图片加载器
+        imgLoader = new DownloadWithLruCache(this);
     }
 }

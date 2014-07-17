@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.kymjs.aframe.KJLoger;
 import org.kymjs.aframe.utils.FileUtils;
 import org.kymjs.aframe.utils.StringUtils;
 
@@ -32,6 +33,11 @@ import org.kymjs.aframe.utils.StringUtils;
  * @created 2014-7-11
  */
 public class Downloader implements I_ImageLoder {
+    private KJBitmapConfig config;
+
+    public Downloader(KJBitmapConfig config) {
+        this.config = config;
+    }
 
     /**
      * 图片加载器协议的接口方法
@@ -45,16 +51,19 @@ public class Downloader implements I_ImageLoder {
         if (!imagePath.trim().toLowerCase().startsWith("http")) { // 如果不是网络图片
             img = loadImgFromFile(imagePath);
         } else { // 网络图片：首先从本地缓存读取，如果本地没有，则重新从网络加载
-            File file = FileUtils.getSaveFile(KJBitmap.config.cachePath,
+            File file = FileUtils.getSaveFile(config.cachePath,
                     StringUtils.md5(imagePath));
             if (file == null) { // 本地没有缓存
                 img = loadImgFromNet(imagePath);
             } else {
                 try {
                     img = FileUtils.input2byte(new FileInputStream(file));
+                    if (config.isDEBUG) {
+                        KJLoger.debug(getClass().getName() + imagePath
+                                + "download success, from be disk cache");
+                    }
                 } catch (FileNotFoundException e) {
-                    if (KJBitmapConfig.isDEBUG)
-                        e.printStackTrace();
+                    e.printStackTrace();
                 }
             }
             file = null;
@@ -74,25 +83,27 @@ public class Downloader implements I_ImageLoder {
         try {
             URL url = new URL(imagePath);
             con = (HttpURLConnection) url.openConnection();
-            con.setConnectTimeout(KJBitmap.config.timeOut);
-            con.setReadTimeout(KJBitmap.config.timeOut * 2);
+            con.setConnectTimeout(config.timeOut);
+            con.setReadTimeout(config.timeOut * 2);
             con.setRequestMethod("GET");
             con.setDoInput(true);
             con.connect();
             data = FileUtils.input2byte(con.getInputStream());
             // 建立本地缓存
-            if (KJBitmap.config.openDiskCache) {
+            if (config.openDiskCache) {
                 FileUtils.saveFileCache(data,
-                        FileUtils.getSavePath(KJBitmap.config.cachePath),
+                        FileUtils.getSavePath(config.cachePath),
                         StringUtils.md5(imagePath));
             }
-        } catch (Exception e) {
-            if (KJBitmap.config.callBack != null) {
-                KJBitmap.config.callBack.imgLoadFailure(imagePath,
-                        e.getMessage());
+            if (config.isDEBUG) {
+                KJLoger.debug(getClass().getName() + imagePath
+                        + "download success, from be net");
             }
-            if (KJBitmapConfig.isDEBUG)
-                e.printStackTrace();
+        } catch (Exception e) {
+            if (config.callBack != null) {
+                config.callBack.imgLoadFailure(imagePath, e.getMessage());
+            }
+            e.printStackTrace();
         } finally {
             if (con != null) {
                 con.disconnect();
@@ -115,14 +126,16 @@ public class Downloader implements I_ImageLoder {
             if (fis != null) {
                 // 本地图片就不加入本地缓存了
                 data = FileUtils.input2byte(fis);
+                if (config.isDEBUG) {
+                    KJLoger.debug(getClass().getName() + imagePath
+                            + "download success, from be disk file");
+                }
             }
         } catch (FileNotFoundException e) {
-            if (KJBitmap.config.callBack != null) {
-                KJBitmap.config.callBack.imgLoadFailure(imagePath,
-                        e.getMessage());
+            if (config.callBack != null) {
+                config.callBack.imgLoadFailure(imagePath, e.getMessage());
             }
-            if (KJBitmapConfig.isDEBUG)
-                e.printStackTrace();
+            e.printStackTrace();
         } finally {
             FileUtils.closeIO(fis);
         }

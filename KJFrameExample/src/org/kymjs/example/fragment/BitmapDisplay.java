@@ -40,7 +40,7 @@ public class BitmapDisplay extends BaseFragment {
             if (getActivity() instanceof SlidExample) {
                 ((SlidExample) getActivity()).changeSlidMenu();
             } else {
-                KJBitmap kjb = new KJBitmap(getActivity());
+                KJBitmap kjb = new KJBitmap();
                 // 载入本地图片
                 kjb.display(imageView, "/storage/sdcard0/1.jpg");
                 // 载入网络图片

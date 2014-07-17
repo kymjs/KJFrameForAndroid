@@ -21,7 +21,6 @@ import java.util.Set;
 import org.kymjs.aframe.bitmap.core.MemoryCache;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
@@ -44,7 +43,7 @@ public class KJBitmap {
     private Set<BitmapWorkerTask> taskCollection;
     private MemoryCache mMemoryCache;
 
-    public KJBitmap(Context context) {
+    public KJBitmap() {
         if (config == null) {
             config = new KJBitmapConfig();
         }

@@ -15,130 +15,371 @@
  */
 package org.kymjs.aframe.bitmap.core;
 
-import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import org.kymjs.aframe.bitmap.KJBitmap;
-import org.kymjs.aframe.bitmap.utils.BitmapCreate;
+import org.kymjs.aframe.KJLoger;
 import org.kymjs.aframe.utils.FileUtils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.os.Build;
+import android.os.Environment;
+import android.os.StatFs;
 
 /**
- * 使用lru算法的Bitmap磁盘缓存
+ * LRU算法实现的磁盘缓存器，只是一个简单版本的实现。 可以在ICS源代码中找到一个更强大和高效的磁盘LRU缓存解决方案
+ * (libcore/luni/src/main/java/libcore/io/DiskLruCache.java).
  * 
- * @from https://github.com/kuangsunny/KJFrameForAndroid
- * @author kuangsunny
  * @version 1.0
- * @created 2014-7-13
- * @change kymjs(kymjs123@gmail.com)
+ * @author kymjs(kymjs123@gmail.com)
  * @lastChange 2014-7-16
  */
 public class DiskCache {
-    private DiskLruCache mDiskCache;
+    private boolean debug = false;
+    private static long maxSize;
+    // constant
+    private static final String CACHE_FILENAME_PREFIX = "KJLibrary_";
+    private static final int MAX_REMOVALS = 4;
+    private static final int INITIAL_CAPACITY = 32;
+    private static final float LOAD_FACTOR = 0.75f;
+    private final File mFileDir;
+    private CompressFormat mCompressFormat = CompressFormat.JPEG;
 
-    private static int IO_BUFFER_SIZE = 16 * 1024; // 默认IO缓冲区大小
+    private int cacheSize = 0;
+    private int cacheByteSize = 0;
+    private final int maxCacheItemSize = 8192; // 8192 item default
+    private int mCompressQuality = 70;
 
-    public DiskCache() {
-        initLruCache();
+    private final Map<String, String> mLinkedHashMap = Collections
+            .synchronizedMap(new LinkedHashMap<String, String>(
+                    INITIAL_CAPACITY, LOAD_FACTOR, true));
+    /** 用于标识缓存路径下哪些是需要的缓存文件(也就是Cache头部标识) */
+    private static final FilenameFilter cacheFileFilter = new FilenameFilter() {
+        @Override
+        public boolean accept(File dir, String filename) {
+            return filename.startsWith(CACHE_FILENAME_PREFIX);
+        }
+    };
+
+    public DiskCache(String folderName) {
+        this(folderName, 16 * 1024 * 1024, false);
     }
+
+    public DiskCache(String folderName, long maxByteSize) {
+        this(folderName, maxByteSize, false);
+    }
+
+    public DiskCache(String folderName, long maxByteSize, boolean isDebug) {
+        mFileDir = FileUtils.getSaveFolder(folderName);
+        maxSize = maxByteSize;
+        debug = isDebug;
+    }
+
+    /*********************************************************************/
 
     /**
-     * 初始化容器类：mDiskCache
+     * 将bitmap写入文件缓存，然后再put
+     * 
+     * @param key
+     * @param data
      */
-    private void initLruCache() {
-        File diskCacheDir = FileUtils.getSaveFolder(KJBitmap.config.cachePath); // 缓存地址
-        try {
-            mDiskCache = DiskLruCache.open(diskCacheDir,
-                    KJBitmap.config.diskCacheSize);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void put(String k, Bitmap v) {
-        if (mDiskCache.isClosed()) { // 如果还没有初始化容器就先初始化容器
-            initLruCache();
-        }
-        DiskLruCache.Editor editor = null;
-        try {
-            editor = mDiskCache.edit(k);
-            if (editor != null) {
-                mDiskCache.flush();
-                editor.commit();
-            }
-        } catch (IOException e) {
-            try {
-                editor.abort();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-
-    }
-
-    public Bitmap get(String key) {
-        if (mDiskCache.isClosed()) {
-            initLruCache();
-        }
-        Bitmap bitmap = null;
-        DiskLruCache.Snapshot snapshot = null;
-        InputStream is = null;
-        BufferedInputStream bis = null;
-        try {
-            snapshot = mDiskCache.get(key);
-            if (snapshot != null) {
-                is = snapshot.getInputStream(0);
-                if (is != null) {
-                    bis = new BufferedInputStream(is, IO_BUFFER_SIZE);
-                    bitmap = BitmapCreate.bitmapFromStream(bis, null,
-                            KJBitmap.config.width, KJBitmap.config.height);
+    public void put(String key, Bitmap data) {
+        synchronized (mLinkedHashMap) {
+            if (mLinkedHashMap.get(key) == null) {
+                try {
+                    final String file = createFilePath(mFileDir, key);
+                    if (writeBitmapToFile(data, file)) { // 如果成功将图片写入文件
+                        put(key, file);
+                        debug("put - Added cache file, " + file);
+                        flushCache();
+                    }
+                } catch (final FileNotFoundException e) {
+                    debug("Error in put: " + e.getMessage());
+                } catch (final IOException e) {
+                    debug("Error in put: " + e.getMessage());
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            FileUtils.closeIO(is, bis, snapshot);
         }
-        return bitmap;
     }
 
-    public boolean containsKey(String key) {
-        if (mDiskCache.isClosed()) {
-            initLruCache();
-        }
-        boolean contained = false;
-        DiskLruCache.Snapshot snapshot = null;
-        try {
-            snapshot = mDiskCache.get(key);
-            contained = (snapshot != null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (snapshot != null) {
-                snapshot.close();
-            }
-        }
-        return contained;
+    private void put(String key, String file) {
+        mLinkedHashMap.put(key, file);
+        cacheSize = mLinkedHashMap.size();
+        cacheByteSize += new File(file).length();
     }
 
-    public void clearCache() {
-        if (mDiskCache.isClosed()) {
-            initLruCache();
-        }
-        try {
-            mDiskCache.delete();
-        } catch (IOException e) {
-            e.printStackTrace();
+    /**
+     * 刷新缓存，当前Cache占用空间超过了最大空间，从最少使用的entry开始删除，直到占用空间小于标准
+     */
+    private void flushCache() {
+        Entry<String, String> eldestEntry;
+        File eldestFile;
+        long eldestFileSize;
+        int count = 0;
+        while (count < MAX_REMOVALS
+                && (cacheSize > maxCacheItemSize || cacheByteSize > maxSize)) {
+            eldestEntry = mLinkedHashMap.entrySet().iterator().next();
+            eldestFile = new File(eldestEntry.getValue());
+            eldestFileSize = eldestFile.length();
+            mLinkedHashMap.remove(eldestEntry.getKey());
+            eldestFile.delete();
+            cacheSize = mLinkedHashMap.size();
+            cacheByteSize -= eldestFileSize;
+            count++;
+            debug("flushCache - Removed cache file, " + eldestFile + ", "
+                    + eldestFileSize);
         }
     }
 
     /**
-     * 获取缓存路径
+     * 从缓存读取bitmap
+     * 
+     * @return The bitmap or null if not found
      */
-    public File getCacheFolder() {
-        return mDiskCache.getDirectory();
+    public Bitmap get(String key) {
+        synchronized (mLinkedHashMap) {
+            final String file = mLinkedHashMap.get(key);
+            if (file != null) {
+                debug("Disk cache hit");
+                return BitmapFactory.decodeFile(file);
+            } else {
+                final String existingFile = createFilePath(mFileDir, key);
+                if (new File(existingFile).exists()) {
+                    put(key, existingFile);
+                    debug("Disk cache hit (existing file)");
+                    return BitmapFactory.decodeFile(existingFile);
+                }
+            }
+            return null;
+        }
+    }
+
+    /**
+     * 从缓存读取byte数组
+     * 
+     * @return The bitmap or null if not found
+     */
+    public byte[] getByteArray(String key) {
+        synchronized (mLinkedHashMap) {
+            final String file = mLinkedHashMap.get(key);
+            byte[] data = null;
+            FileInputStream fis = null;
+            if (file != null) {
+                debug("Disk cache hit");
+                try {
+                    fis = new FileInputStream(file);
+                } catch (FileNotFoundException e) {
+                    fis = null;
+                    e.printStackTrace();
+                }
+                data = FileUtils.input2byte(fis);
+            } else {
+                final String existingFile = createFilePath(mFileDir, key);
+                if (new File(existingFile).exists()) {
+                    put(key, existingFile);
+                    debug("Disk cache hit (existing file)");
+                    try {
+                        fis = new FileInputStream(existingFile);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        fis = null;
+                    }
+                    data = FileUtils.input2byte(fis);
+                }
+            }
+            FileUtils.closeIO(fis);
+            return data;
+        }
+    }
+
+    /**
+     * 检测key是否有对应的value存在
+     * 
+     * @param key
+     *            The unique identifier for the bitmap
+     * @return true if found, false otherwise
+     */
+    public boolean containsKey(String key) {
+        if (mLinkedHashMap.containsKey(key)) {
+            return true;
+        }
+
+        // 检测key是否对应一个实际的文件
+        final String existingFile = createFilePath(mFileDir, key);
+        if (new File(existingFile).exists()) {
+            // 如果找到key对应的实际文件，则加入map
+            put(key, existingFile);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 清楚全部缓存
+     */
+    public void clearCache() {
+        clearCache(mFileDir);
+    }
+
+    /**
+     * 本类不可以被直接调用应该通过调用
+     * {@link DiskLruCache#clearCache(android.content.Context, String)} or
+     * {@link DiskLruCache#clearCache()} 来调用它.
+     * 
+     * @param cacheDir
+     *            The directory to remove the cache files from
+     */
+    private static void clearCache(File cacheDir) {
+        final File[] files = cacheDir.listFiles(cacheFileFilter);
+        for (int i = 0; i < files.length; i++) {
+            files[i].delete();
+        }
+    }
+
+    /**
+     * Removes all disk cache entries from the application cache directory in
+     * the uniqueName sub-directory.
+     * 
+     * @param context
+     *            The context to use
+     * @param uniqueName
+     *            A unique cache directory name to append to the app cache
+     *            directory
+     */
+    public static void clearCache(Context context, String uniqueName) {
+        File cacheDir = getDiskCacheDir(context, uniqueName);
+        clearCache(cacheDir);
+    }
+
+    /**
+     * 查找一个可用的缓存文件夹 (首先查找外部存储，然后再找内部存储).
+     * 
+     * @param context
+     *            The context to use
+     * @param uniqueName
+     *            A unique directory name to append to the cache dir
+     * @return The cache dir
+     */
+    public static File getDiskCacheDir(Context context, String uniqueName) {
+        final String cachePath = Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
+                || !isExternalStorageRemovable() ? getExternalCacheDir(context)
+                .getPath() : context.getCacheDir().getPath();
+
+        return new File(cachePath + File.separator + uniqueName);
+    }
+
+    /**
+     * 返回文件的绝对路径
+     * 
+     * @param cacheDir
+     * @param key
+     * @return
+     */
+    public static String createFilePath(File cacheDir, String fileName) {
+        try {
+            return cacheDir.getAbsolutePath() + File.separator
+                    + CACHE_FILENAME_PREFIX
+                    + URLEncoder.encode(fileName.replace("*", ""), "UTF-8");
+        } catch (final UnsupportedEncodingException e) {
+            KJLoger.debug(e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * 在缓存目录下创建一个缓存文件
+     * 
+     * @param key
+     *            缓存文件名
+     */
+    public String createFilePath(String fileName) {
+        return createFilePath(mFileDir, fileName);
+    }
+
+    /**
+     * 设置压缩格式与压缩质量
+     * 
+     * @param compressFormat
+     * @param quality
+     */
+    public void setCompressParams(CompressFormat compressFormat, int quality) {
+        mCompressFormat = compressFormat;
+        mCompressQuality = quality;
+    }
+
+    /**
+     * 图片写入文件
+     */
+    private boolean writeBitmapToFile(Bitmap bitmap, String file)
+            throws IOException, FileNotFoundException {
+        if (bitmap == null)
+            return false;
+        OutputStream out = null;
+        try {
+            out = new BufferedOutputStream(new FileOutputStream(file),
+                    IO_BUFFER_SIZE);
+            return bitmap.compress(mCompressFormat, mCompressQuality, out);
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+        }
+    }
+
+    /******************* 替换原DiskLruCache.jar中Utils.java的函数 ********************/
+    private static final int IO_BUFFER_SIZE = 8 * 1024;
+
+    private static long getUsableSpace(File path) {
+        /*
+         * if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+         * return path.getUsableSpace(); }
+         */
+        final StatFs stats = new StatFs(path.getPath());
+        return (long) stats.getBlockSize() * (long) stats.getAvailableBlocks();
+    }
+
+    private static boolean isExternalStorageRemovable() {
+        /*
+         * if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+         * return Environment.isExternalStorageRemovable(); }
+         */
+        return true;
+    }
+
+    private static boolean hasExternalCacheDir() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO;
+    }
+
+    private static File getExternalCacheDir(Context context) {
+        if (hasExternalCacheDir()) {
+            return context.getExternalCacheDir();
+        }
+        // Before Froyo we need to construct the external cache dir ourselves
+        final String cacheDir = "/Android/data/" + context.getPackageName()
+                + "/cache/";
+        return new File(Environment.getExternalStorageDirectory().getPath()
+                + cacheDir);
+    }
+
+    /******************************* 辅助函数 ************************************/
+
+    private void debug(String msg) {
+        if (debug)
+            KJLoger.debug(msg);
     }
 }

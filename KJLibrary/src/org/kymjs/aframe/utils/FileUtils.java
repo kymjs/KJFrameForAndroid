@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
+ * Copyright (c) 2014, kymjs 张涛 (kymjs123@gmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,14 @@
  */
 package org.kymjs.aframe.utils;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +35,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -79,7 +83,11 @@ public class FileUtils {
      */
     public static File getSaveFile(String folder, String fileNmae) {
         File file = new File(Environment.getExternalStorageDirectory()
-                .getAbsoluteFile() + "/" + folder + "/" + fileNmae);
+                .getAbsoluteFile()
+                + File.separator
+                + folder
+                + File.separator
+                + fileNmae);
         return file.exists() ? file : null;
     }
 
@@ -95,7 +103,10 @@ public class FileUtils {
      */
     public static File getSaveFolder(String folderName) {
         File file = new File(Environment.getExternalStorageDirectory()
-                .getAbsoluteFile() + "/" + folderName + "/");
+                .getAbsoluteFile()
+                + File.separator
+                + folderName
+                + File.separator);
         file.mkdirs();
         return file;
     }
@@ -104,6 +115,8 @@ public class FileUtils {
      * 输入流转byte[]
      */
     public static final byte[] input2byte(InputStream inStream) {
+        if (inStream == null)
+            return null;
         ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
         byte[] buff = new byte[100];
         int rc = 0;
@@ -201,6 +214,32 @@ public class FileUtils {
                 throw new KJException(FileUtils.class.getClass().getName(), e);
             }
         }
+    }
+
+    /**
+     * 图片写入文件
+     * 
+     * @param bitmap
+     *            图片
+     * @param filePath
+     *            文件路径
+     * @return 是否写入成功
+     */
+    public static boolean bitmapToFile(Bitmap bitmap, String filePath) {
+        boolean isSuccess = false;
+        if (bitmap == null)
+            return isSuccess;
+        OutputStream out = null;
+        try {
+            out = new BufferedOutputStream(new FileOutputStream(filePath),
+                    8 * 1024);
+            isSuccess = bitmap.compress(CompressFormat.JPEG, 70, out);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            closeIO(out);
+        }
+        return isSuccess;
     }
 
     /**
