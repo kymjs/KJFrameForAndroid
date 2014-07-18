@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
+ * Copyright (c) 2014, kymjs 张涛 (kymjs123@gmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,9 @@ import android.util.Log;
  * @created 2014-2-28
  */
 public class KJLoger {
-    private static final boolean IS_DEBUG = true;
-    private static final boolean DEBUG_LOG = true;
-    private static final boolean SHOW_ACTIVITY_STATE = false;
+    public static final boolean IS_DEBUG = true;
+    public static final boolean DEBUG_LOG = true;
+    public static final boolean SHOW_ACTIVITY_STATE = false;
 
     public static final void debug(String msg) {
         if (IS_DEBUG) {

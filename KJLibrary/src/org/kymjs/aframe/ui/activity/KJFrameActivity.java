@@ -75,8 +75,8 @@ public abstract class KJFrameActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         KJActivityManager.create().addActivity(this);
-        initialize();
         AnnotateUtil.initBindView(this);
+        initialize();
         registerBroadcast();
     }
 
