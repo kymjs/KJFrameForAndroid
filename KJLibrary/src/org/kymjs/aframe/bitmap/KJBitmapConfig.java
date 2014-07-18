@@ -42,9 +42,6 @@ public class KJBitmapConfig {
     /** 图片载入状态将会回调相应的方法 */
     public BitmapCallBack callBack;
 
-    /** 图片加载器,若认为KJLibrary的加载器不好，也可自定义图片加载器 */
-    public I_ImageLoder imgLoader;
-
     /** 是否开启内存缓存功能 */
     public boolean openMemoryCache = true;
     /** 内存缓存大小 */
@@ -55,12 +52,10 @@ public class KJBitmapConfig {
     /** 是否开启本地图片缓存功能 */
     public boolean openDiskCache = true;
     /** 本地缓存大小 */
-    public int diskCacheSize = 5 * 1024 * 1024;
+    public int diskCacheSize = 10 * 1024 * 1024;
 
     public KJBitmapConfig() {
         super();
         memoryCacheSize = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        // imgLoader = new Downloader(this); // 配置图片加载器
-        imgLoader = new DownloadWithLruCache(this);
     }
 }

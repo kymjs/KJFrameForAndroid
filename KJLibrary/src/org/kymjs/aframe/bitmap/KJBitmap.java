@@ -40,15 +40,19 @@ public class KJBitmap {
     /**
      * 必须设置为单例，否则内存缓存无效
      */
-    private static KJBitmap instance = new KJBitmap();
+    private static KJBitmap instance;
     /** 记录所有正在下载或等待下载的任务 */
     private Set<BitmapWorkerTask> taskCollection;
     /** LRU缓存器 */
     private MemoryCache mMemoryCache;
+    /** 图片加载器,若认为KJLibrary的加载器不好，也可自定义图片加载器 */
+    private I_ImageLoder downloader;
     /** BitmapLabrary配置器 */
     public KJBitmapConfig config;
 
     public synchronized static KJBitmap create() {
+        if (instance == null)
+            instance = new KJBitmap();
         return instance;
     }
 
@@ -56,6 +60,8 @@ public class KJBitmap {
         if (config == null) {
             config = new KJBitmapConfig();
         }
+        // downloader = new Downloader(config); // 配置图片加载器
+        downloader = new DownloadWithLruCache(config); // 配置图片加载器
         mMemoryCache = new MemoryCache(config.memoryCacheSize);
         taskCollection = new HashSet<BitmapWorkerTask>();
     }
@@ -169,7 +175,7 @@ public class KJBitmap {
 
         @Override
         protected Bitmap doInBackground(String... params) {
-            return getBitmap(params[0]);
+            return getBitmapFromCache(params[0]);
         }
 
         @Override
@@ -209,20 +215,20 @@ public class KJBitmap {
      * @return 如果没有key对应的value返回null
      */
     public Bitmap getBitmapFromDisk(String key) {
-        return config.imgLoader.getBitmapFromCache(key);
+        return downloader.getBitmapFromDisk(key);
     }
 
     /**
-     * 从指定key获取一个Bitmap，而不关心获取方式（注：这里可能会有IO或网络操作，应该放在线程中调用）
+     * 从指定key获取一个Bitmap，而不关心是从哪个缓存获取的（注：这里可能会有IO或网络操作，应该放在线程中调用）
      * 
      * @param key
      *            图片地址Url
-     * @return
+     * @return 如果没有key对应的value返回null
      */
-    public Bitmap getBitmap(String key) {
+    public Bitmap getBitmapFromCache(String key) {
         Bitmap bitmap = getBitmapFromMemory(key);
         if (bitmap == null) {
-            byte[] res = config.imgLoader.loadImage(key);
+            byte[] res = downloader.loadImage(key);
             if (res != null) {
                 bitmap = BitmapCreate.bitmapFromByteArray(res, 0, res.length,
                         config.width, config.height);
@@ -277,7 +283,7 @@ public class KJBitmap {
      * 设置图片下载器
      */
     public void configDownloader(I_ImageLoder downloader) {
-        config.imgLoader = downloader;
+        this.downloader = downloader;
     }
 
     /**
