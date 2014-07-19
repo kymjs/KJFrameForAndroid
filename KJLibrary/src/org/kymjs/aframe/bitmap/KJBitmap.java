@@ -175,7 +175,20 @@ public class KJBitmap {
 
         @Override
         protected Bitmap doInBackground(String... params) {
-            return getBitmapFromCache(params[0]);
+            Bitmap bitmap = null;
+            byte[] res = downloader.loadImage(params[0]);
+            if (res != null) {
+                bitmap = BitmapCreate.bitmapFromByteArray(res, 0, res.length,
+                        config.width, config.height);
+            }
+            if (bitmap != null && config.openMemoryCache) {
+                // 图片载入完成后缓存到LrcCache中
+                putBitmapToMemory(params[0], bitmap);
+                if (config.isDEBUG)
+                    KJLoger.debugLog(getClass().getName(),
+                            "put to memory cache\n" + params[0]);
+            }
+            return bitmap;
         }
 
         @Override
@@ -195,6 +208,18 @@ public class KJBitmap {
     }
 
     /********************************* 属性方法 *********************************/
+
+    /**
+     * 添加bitmap到内存缓存
+     * 
+     * @param k
+     *            缓存的key
+     * @param v
+     *            要添加的bitmap
+     */
+    public void putBitmapToMemory(String k, Bitmap v) {
+        mMemoryCache.put(StringUtils.md5(k), v);
+    }
 
     /**
      * 从内存缓存读取Bitmap
@@ -235,7 +260,7 @@ public class KJBitmap {
             }
             if (bitmap != null && config.openMemoryCache) {
                 // 图片载入完成后缓存到LrcCache中
-                mMemoryCache.put(StringUtils.md5(key), bitmap);
+                putBitmapToMemory(key, bitmap);
                 if (config.isDEBUG)
                     KJLoger.debugLog(getClass().getName(),
                             "put to memory cache\n" + key);

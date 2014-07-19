@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
+ * Copyright (c) 2014, kymjs 张涛 (kymjs123@gmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,26 +27,30 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 /**
+ * update log:
+ * @1.5 abstract protocol: I_KJActivity
+ * @1.6 add method initThreadData()
+ */
+
+/**
  * Activity's framework,the developer shouldn't extends it
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.5
+ * @version 1.6
  * @created 2014-3-1
  * @lastChange 2014-5-30
  */
 public abstract class KJFrameActivity extends Activity implements
         OnClickListener, I_BroadcastReg, I_KJActivity {
 
-    protected abstract void setContent();
-
-    /** setContentView() */
-    @Override
-    public void setRootView() {
-        setContent();
-    }
-
     /** initialization widget */
     protected void initWidget() {}
+
+    /**
+     * initialization data. And this method run in background thread, so you
+     * shouldn't change ui
+     */
+    protected void initThreadData() {}
 
     /** initialization data */
     protected void initData() {}
@@ -54,9 +58,14 @@ public abstract class KJFrameActivity extends Activity implements
     /** initialization */
     @Override
     public void initialize() {
-        setRootView();
-        initData();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                initThreadData();
+            }
+        }).start();
         initWidget();
+        initData();
     }
 
     /** listened widget's click method */
@@ -75,7 +84,8 @@ public abstract class KJFrameActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         KJActivityManager.create().addActivity(this);
-        AnnotateUtil.initBindView(this);
+        setRootView(); // 必须放在annotate之前调用
+        AnnotateUtil.initBindView(this); // 必须放在initialization之前调用
         initialize();
         registerBroadcast();
     }

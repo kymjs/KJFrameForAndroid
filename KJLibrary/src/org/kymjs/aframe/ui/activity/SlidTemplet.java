@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
+ * Copyright (c) 2014, kymjs 张涛 (kymjs123@gmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ public abstract class SlidTemplet extends KJFragmentActivity implements
     protected abstract void initSlidMenu();
 
     @Override
-    protected void setContent() {
+    public void setRootView() {
         View root = View.inflate(this, setRootViewID(), null);
         setContentView(root);
         resideMenu = new ResideMenu(this);

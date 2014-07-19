@@ -21,13 +21,13 @@ import android.util.Log;
  * 应用程序的Log管理
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
+ * @version 1.1
  * @created 2014-2-28
  */
 public class KJLoger {
     public static final boolean IS_DEBUG = true;
     public static final boolean DEBUG_LOG = true;
-    public static final boolean SHOW_ACTIVITY_STATE = false;
+    public static final boolean SHOW_ACTIVITY_STATE = true;
 
     public static final void debug(String msg) {
         if (IS_DEBUG) {
@@ -43,7 +43,7 @@ public class KJLoger {
 
     public static final void state(String packName, String state) {
         if (SHOW_ACTIVITY_STATE) {
-            Log.d("state", packName + state);
+            Log.d("activity_state", packName + state);
         }
     }
 

@@ -36,7 +36,7 @@ public class TabExample extends KJFragmentActivity {
     BaseFragment content4 = new BitmapMistyExample(); // 第四个界面
 
     @Override
-    protected void setContent() {
+    public void setRootView() {
         setContentView(R.layout.aty_tab_example);
     }
 

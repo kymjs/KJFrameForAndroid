@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
+ * Copyright (c) 2014, kymjs 张涛 (kymjs123@gmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@ package org.kymjs.aframe.ui;
 
 import java.lang.reflect.Field;
 
-import org.kymjs.aframe.ui.activity.BaseActivity;
-import org.kymjs.aframe.ui.fragment.BaseFragment;
+import org.kymjs.aframe.KJException;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -44,11 +44,7 @@ public class AnnotateUtil {
                     boolean clickLis = bindView.click();
                     try {
                         field.setAccessible(true);
-                        if (clickLis && currentClass instanceof BaseActivity) {
-                            sourceView.findViewById(viewId).setOnClickListener(
-                                    (OnClickListener) currentClass);
-                        }
-                        if (clickLis && currentClass instanceof BaseFragment) {
+                        if (clickLis) {
                             sourceView.findViewById(viewId).setOnClickListener(
                                     (OnClickListener) currentClass);
                         }
@@ -69,6 +65,21 @@ public class AnnotateUtil {
      */
     public static void initBindView(Activity aty) {
         initBindView(aty, aty.getWindow().getDecorView());
+    }
+
+    /**
+     * 必须在setContentView之后调用
+     * 
+     * @param view
+     *            侵入式的view，例如使用inflater载入的view
+     */
+    public static void initBindView(View view) {
+        Context cxt = view.getContext();
+        if (cxt instanceof Activity) {
+            initBindView((Activity) cxt);
+        } else {
+            throw new KJException("the view don't have root view");
+        }
     }
 
     /**
