@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
+ * Copyright (c) 2014, kymjs 张涛 (kymjs123@gmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,299 +15,353 @@
  */
 package org.kymjs.aframe.ui.widget;
 
-import org.kymjs.aframe.utils.DensityUtils;
-
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ImageView;
 
 /**
- * 图片缩放控件（支持缩放、拖动、双击）
+ * 来自网络：图片缩放控件（支持缩放、拖动、双击、旋转）
  * 
- * @update 重构代码，优化执行效率，优化阅读
- * @author kymjs(kymjs123@gmail.com)
- * @version 1.1
- * @created 2014-6-12
+ * @author raomeng1
+ * @from http://blog.csdn.net/raomeng1/article/details/7829015
  */
 public class ScaleImageView extends ImageView {
+
     public enum ImageState {
         NONE, // 初始状态
         DRAG, // 拖动
-        ZOOM // 缩放
+        ZOOM, // 缩放
+        ROTATE, // 旋转
+        ZOOM_OR_ROTATE // 缩放或旋转
     }
 
-    // constant
-    private float MIN_SCALE = 0F; // 缩放比例
-    private float MAX_SCALE = 0F; // 缩放比例
-    ImageState mode = ImageState.NONE; // 当前模式
+    private ImageState mode = ImageState.NONE;
 
-    // data
-    private Bitmap imageRes = null;
+    static final float MAX_SCALE = 2.5f;
+
+    private float imageW; // 图片宽度
+    private float imageH; // 图片高度
+    private float rotatedImageW;
+    private float rotatedImageH;
+    private float viewW;
+    private float viewH;
+
     private Matrix matrix = new Matrix();
     private Matrix savedMatrix = new Matrix();
-    private Activity aty;
 
-    public ScaleImageView(Activity aty, Bitmap bitmap) {
-        super(aty);
-        this.aty = aty;
-        this.imageRes = bitmap; // 将图片设置成适合屏幕展示的大小
-        setupView(false); // 设置view属性
-        initScale(bitmap); // 初始化缩放比例
+    private PointF pA = new PointF();
+    private PointF pB = new PointF();
+    private PointF mid = new PointF();
+    private PointF lastClickPos = new PointF();
+
+    private long lastClickTime = 0; // 上次点击时间（用于计算双击）
+    private double rotation = 0.0;
+    private float dist = 1f; // 两点间距
+
+    public ScaleImageView(Context context) {
+        super(context);
+        initView();
+    }
+
+    public ScaleImageView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initView();
+    }
+
+    public ScaleImageView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        initView();
     }
 
     /**
-     * 初始化最大最小缩放比例
+     * 初始化控件
      */
-    private void initScale(Bitmap src) {
-        int screenWidth = DensityUtils.getDialogW(aty);
-        int screenHeight = DensityUtils.getScreenH(aty);
-        float minX = screenWidth * 0.666f / (float) src.getWidth();
-        float minY = screenHeight * 0.666f / (float) src.getHeight();
-        MIN_SCALE = minX < minY ? minX : minY;
-        float maxX = screenWidth / (float) src.getWidth();
-        float maxY = screenHeight / (float) src.getHeight();
-        MAX_SCALE = maxX > maxY ? maxX : maxY;
+    private void initView() {
+        setScaleType(ImageView.ScaleType.MATRIX);
     }
 
-    /**
-     * 更新最大最小缩放比例
-     */
-    private void refreshScale() {
-        int screenH = DensityUtils.getScreenH(aty);
-        int screenW = DensityUtils.getScreenW(aty);
-        float p[] = new float[9];
-        matrix.getValues(p);
-        // 当前图片宽高（p[0]、p[4]表示图片在XY方向上的缩放比）
-        float height = imageRes.getHeight() * p[4];
-        float width = imageRes.getWidth() * p[0];
-
-        float minX = screenW * 0.666f / width;
-        float minY = screenH * 0.666f / height;
-        MIN_SCALE = minX < minY ? minX : minY;
-        float maxX = screenW / (float) width;
-        float maxY = screenH / (float) height;
-        MAX_SCALE = maxX < maxY ? maxX : maxY;
+    public void setImageBitmap(Bitmap bm) {
+        super.setImageBitmap(bm);
+        setImageWidthHeight();
     }
 
-    /**
-     * 设置控件属性
-     * 
-     * @param newLoad
-     *            ：是否首次加载
-     */
-    private void setupView(boolean newLoad) {
-        setScaleType(ScaleType.MATRIX);
-        setBackgroundColor(0xff000000);
-        setImageBitmap(imageRes);
-        bitmapCenter(matrix, imageRes, newLoad);
-        setImageMatrix(matrix);
-        setOnTouchListener(new ImageOnTouchListener());
+    public void setImageDrawable(Drawable drawable) {
+        super.setImageDrawable(drawable);
+        setImageWidthHeight();
     }
 
-    /**
-     * 刷新图片
-     */
-    public void refresh(Bitmap bitmap) {
-        this.refresh(bitmap, false);
+    public void setImageResource(int resId) {
+        super.setImageResource(resId);
+        setImageWidthHeight();
     }
 
-    /**
-     * 刷新图片
-     */
-    public void refresh(Bitmap bitmap, boolean newLoad) {
-        this.imageRes = bitmap;
-        setupView(newLoad);
-    }
-
-    /**
-     * 将图片在屏幕居中显示
-     */
-    public void bitmapCenter(Matrix matrix, Bitmap bitmap) {
-        this.bitmapCenter(matrix, bitmap, false);
-    }
-
-    /**
-     * 将图片在屏幕居中显示
-     */
-    private void bitmapCenter(Matrix matrix, Bitmap bitmap, boolean newLoad) {
-        if (bitmap == null || matrix == null) {
+    private void setImageWidthHeight() {
+        Drawable d = getDrawable();
+        if (d == null) {
             return;
         }
-        Matrix m = new Matrix();
-        m.set(matrix);
-        // 图片显示区域
-        RectF rect = new RectF(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        // 将Matrix应用到Rect中并获取显示区域的宽高
-        m.mapRect(rect);
+        imageW = rotatedImageW = d.getIntrinsicWidth();
+        imageH = rotatedImageH = d.getIntrinsicHeight();
+        initImage();
+    }
+
+    /**
+     * 图片大小改变时回调
+     */
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        viewW = w;
+        viewH = h;
+        if (oldw == 0) { // 如果图片还没有计算大小
+            initImage();
+        } else {
+            fixScale(); // 固定大小
+            fixTranslation();
+            setImageMatrix(matrix);
+        }
+    }
+
+    /**
+     * 首次加载，初始化图片控件
+     */
+    private void initImage() {
+        if (viewW <= 0 || viewH <= 0 || imageW <= 0 || imageH <= 0) {
+            return;
+        }
+        mode = ImageState.NONE;
+        matrix.setScale(0, 0);
+        fixScale();
+        fixTranslation();
+        setImageMatrix(matrix);
+    }
+
+    /**
+     * 设置matrix，记录当前图片大小
+     */
+    private void fixScale() {
+        float p[] = new float[9];
+        matrix.getValues(p);
+        float curScale = Math.abs(p[0]) + Math.abs(p[1]);
+        float minScale = Math.min((float) viewW / (float) rotatedImageW,
+                (float) viewH / (float) rotatedImageH);
+        if (curScale < minScale) {
+            if (curScale > 0) {
+                double scale = minScale / curScale;
+                p[0] = (float) (p[0] * scale);
+                p[1] = (float) (p[1] * scale);
+                p[3] = (float) (p[3] * scale);
+                p[4] = (float) (p[4] * scale);
+                matrix.setValues(p);
+            } else {
+                matrix.setScale(minScale, minScale);
+            }
+        }
+    }
+
+    /**
+     * 最大缩放值
+     */
+    private float maxPostScale() {
+        float p[] = new float[9];
+        matrix.getValues(p);
+        float curScale = Math.abs(p[0]) + Math.abs(p[1]);
+
+        float minScale = Math.min((float) viewW / (float) rotatedImageW,
+                (float) viewH / (float) rotatedImageH);
+        float maxScale = Math.max(minScale, MAX_SCALE);
+        return maxScale / curScale;
+    }
+
+    /**
+     * 移动matrix
+     */
+    private void fixTranslation() {
+        RectF rect = new RectF(0, 0, imageW, imageH);
+        matrix.mapRect(rect);
+
         float height = rect.height();
         float width = rect.width();
+
         float deltaX = 0, deltaY = 0;
-        int screenHeight = DensityUtils.getScreenH(aty);
-        int screenWidth = DensityUtils.getScreenW(aty);
-        if (newLoad) { // 将图片设置成适合屏幕显示的大小
-            float X = screenWidth * 0.666f / (float) bitmap.getWidth();
-            float Y = screenHeight * 0.666f / (float) bitmap.getHeight();
-            float scale = Math.min(X, Y);
-            matrix.setScale(scale, scale);
-            bitmapCenter(matrix, bitmap, false);
-        }
-        // 纵坐标位移
-        if (height < screenHeight) {
-            deltaY = (screenHeight - height) / 2 - rect.top; // 减去原始高度
-        } else if (rect.top > 0) {
-            deltaY = -rect.top; // 减掉上端空白的高度
-        } else if (rect.bottom < screenHeight) {
-            deltaY = this.getHeight() - rect.bottom;
-        }
-        // 横坐标位移
-        if (width < screenWidth) {
-            deltaX = (screenWidth - width) / 2 - rect.left;
+
+        if (width < viewW) {
+            deltaX = (viewW - width) / 2 - rect.left;
         } else if (rect.left > 0) {
             deltaX = -rect.left;
-        } else if (rect.right < screenWidth) {
-            deltaX = screenWidth - rect.right;
+        } else if (rect.right < viewW) {
+            deltaX = viewW - rect.right;
         }
-        // 从当前点移动
+
+        if (height < viewH) {
+            deltaY = (viewH - height) / 2 - rect.top;
+        } else if (rect.top > 0) {
+            deltaY = -rect.top;
+        } else if (rect.bottom < viewH) {
+            deltaY = viewH - rect.bottom;
+        }
         matrix.postTranslate(deltaX, deltaY);
     }
 
-    /**
-     * 控件的触摸事件监听器类、以及与触摸事件相关的方法
-     * 
-     * kymjs(kymjs123@gmail.com)
-     */
-    class ImageOnTouchListener implements OnTouchListener {
-        /** 存储float类型的x，y值，就是你点下的坐标的X和Y */
-        private PointF prev = new PointF(); // 上一次
-        private PointF mid = new PointF(); // 当前
-        private float dist = 1F; // 两次点击的间距
-        private boolean normal = true; // 正常状态还是双击放大状态
-        // 判断双击需要
-        private final int DOUBLE_TAP_TIMEOUT = 200;
-        private MotionEvent mCurrentDownEvent;
-        private MotionEvent mPreviousUpEvent;
-
-        /**
-         * 两点的距离
-         */
-        private float spacing(MotionEvent event) {
-            float x = event.getX(0) - event.getX(1);
-            float y = event.getY(0) - event.getY(1);
-            return (float) Math.sqrt(x * x + y * y);
-        }
-
-        /**
-         * 两点的中点
-         */
-        private void midPoint(PointF point, MotionEvent event) {
-            float x = event.getX(0) + event.getX(1);
-            float y = event.getY(0) + event.getY(1);
-            point.set(x / 2, y / 2);
-        }
-
-        /**
-         * 判断两次按下时间间隔
-         */
-        private boolean isConsideredDoubleTap(MotionEvent firstDown,
-                MotionEvent firstUp, MotionEvent secondDown) {
-            if (firstDown == null || firstUp == null) {
-                return false;
-            }
-            if (secondDown.getEventTime() - firstUp.getEventTime() > DOUBLE_TAP_TIMEOUT) {
-                return false;
-            }
-            int deltaX = (int) firstUp.getX() - (int) secondDown.getX();
-            int deltaY = (int) firstUp.getY() - (int) secondDown.getY();
-            firstUp.recycle();
-            firstDown.recycle();
-            return deltaX * deltaX + deltaY * deltaY < 10000;
-        }
-
-        /**
-         * 双击图片的事件：放大到宽或高至少一个达到全屏
-         */
-        public void doubleClick() {
-            refreshScale();
-            if (normal) {
-                matrix.postScale(MAX_SCALE, MAX_SCALE, prev.x, prev.y);
-            } else {
-                matrix.postScale(MIN_SCALE, MIN_SCALE, prev.x, prev.y);
-            }
-            bitmapCenter(matrix, imageRes);
-            setImageMatrix(matrix);
-            normal = !normal;
-        }
-
-        /**
-         * 图片位置或大小改变后恢复之前的状态(双指缩放后或拖动后调用)
-         */
-        private void resetView() {
-            refreshScale();
-            float p[] = new float[9];
-            matrix.getValues(p);
-            if (mode == ImageState.ZOOM) {
-                if (p[0] < MIN_SCALE) {
-                    matrix.setScale(MIN_SCALE, MIN_SCALE);
-                }
-                if (p[0] > MAX_SCALE + 1) { // 双指缩放适当多放大一点
-                    matrix.set(savedMatrix);
-                }
-            }
-            bitmapCenter(matrix, imageRes);
-        }
-
-        public boolean onTouch(View v, MotionEvent event) {
-            switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            // 主点按下
-            case MotionEvent.ACTION_DOWN:
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+        // 主点按下 ：记录当前matrix，以及初始化按下坐标、图片状态
+        case MotionEvent.ACTION_DOWN:
+            savedMatrix.set(matrix);
+            pA.set(event.getX(), event.getY());
+            pB.set(event.getX(), event.getY());
+            mode = ImageState.DRAG;
+            break;
+        // 副点按下 ：如果间距大于10，记录此时matrix，以及两点的坐标、图片状态
+        case MotionEvent.ACTION_POINTER_DOWN:
+            if (event.getActionIndex() > 1) // 超过两个点返回
+                break;
+            dist = spacing(event.getX(0), event.getY(0), event.getX(1),
+                    event.getY(1));
+            if (dist > 10f) { // 如果连续两点距离大于10，则判定为多点模式
                 savedMatrix.set(matrix);
-                prev.set(event.getX(), event.getY());// 保存主点坐标
-                mode = ImageState.DRAG;
-                mCurrentDownEvent = MotionEvent.obtain(event);
-                if (isConsideredDoubleTap(mCurrentDownEvent, mPreviousUpEvent,
-                        event)) {
-                    doubleClick();
+                pA.set(event.getX(0), event.getY(0));
+                pB.set(event.getX(1), event.getY(1));
+                mid.set((event.getX(0) + event.getX(1)) / 2,
+                        (event.getY(0) + event.getY(1)) / 2);
+                mode = ImageState.ZOOM_OR_ROTATE;
+            }
+            break;
+
+        // 主点或负点抬起
+        case MotionEvent.ACTION_UP:
+        case MotionEvent.ACTION_POINTER_UP:
+            if (mode == ImageState.DRAG) {
+                if (spacing(pA.x, pA.y, pB.x, pB.y) < 50) {
+                    long now = System.currentTimeMillis();
+                    if (now - lastClickTime < 500
+                            && spacing(pA.x, pA.y, lastClickPos.x,
+                                    lastClickPos.y) < 50) {
+                        doubleClick(pA.x, pA.y);
+                        now = 0;
+                    }
+                    lastClickPos.set(pA);
+                    lastClickTime = now;
                 }
-                break;
-            // 副点按下
-            case MotionEvent.ACTION_POINTER_DOWN:
-                dist = spacing(event);
-                // 如果连续两点距离大于10，则判定为多点模式
-                if (spacing(event) > 10F) {
-                    savedMatrix.set(matrix);
-                    midPoint(mid, event);
-                    mode = ImageState.ZOOM;
+            } else if (mode == ImageState.ROTATE) {
+                int level = (int) Math.floor((rotation + Math.PI / 4)
+                        / (Math.PI / 2));
+                if (level == 4)
+                    level = 0;
+                matrix.set(savedMatrix);
+                matrix.postRotate(90 * level, mid.x, mid.y);
+                if (level == 1 || level == 3) {
+                    float tmp = rotatedImageW;
+                    rotatedImageW = rotatedImageH;
+                    rotatedImageH = tmp;
+                    fixScale();
                 }
-                break;
-            case MotionEvent.ACTION_UP:
-                mPreviousUpEvent = MotionEvent.obtain(event);
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                mode = ImageState.NONE;
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (mode == ImageState.DRAG) {
-                    matrix.set(savedMatrix);
-                    matrix.postTranslate(event.getX() - prev.x, event.getY()
-                            - prev.y);
-                } else if (mode == ImageState.ZOOM) {
-                    float newDist = spacing(event);
-                    if (newDist > 10) {
-                        matrix.set(savedMatrix);
-                        float tScale = newDist / dist;
-                        matrix.postScale(tScale, tScale, mid.x, mid.y);
+                fixTranslation();
+                setImageMatrix(matrix);
+            }
+            mode = ImageState.NONE;
+            break;
+
+        // 拖动时
+        case MotionEvent.ACTION_MOVE:
+            if (mode == ImageState.ZOOM_OR_ROTATE) {
+                PointF pC = new PointF(event.getX(1) - event.getX(0) + pA.x,
+                        event.getY(1) - event.getY(0) + pA.y);
+                double a = spacing(pB.x, pB.y, pC.x, pC.y);
+                double b = spacing(pA.x, pA.y, pC.x, pC.y);
+                double c = spacing(pA.x, pA.y, pB.x, pB.y);
+                if (a >= 10) {
+                    double cosB = (a * a + c * c - b * b) / (2 * a * c);
+                    double angleB = Math.acos(cosB);
+                    double PID4 = Math.PI / 4;
+                    if (angleB > PID4 && angleB < 3 * PID4) {
+                        mode = ImageState.ROTATE;
+                        rotation = 0;
+                    } else {
+                        mode = ImageState.ZOOM;
                     }
                 }
-                break;
             }
-            setImageMatrix(matrix);
-            resetView();
-            return true;
+
+            if (mode == ImageState.DRAG) {
+                matrix.set(savedMatrix);
+                pB.set(event.getX(), event.getY());
+                matrix.postTranslate(event.getX() - pA.x, event.getY() - pA.y);
+                fixTranslation();
+                setImageMatrix(matrix);
+            } else if (mode == ImageState.ZOOM) {
+                float newDist = spacing(event.getX(0), event.getY(0),
+                        event.getX(1), event.getY(1));
+                if (newDist > 10f) {
+                    matrix.set(savedMatrix);
+                    float tScale = Math.min(newDist / dist, maxPostScale());
+                    matrix.postScale(tScale, tScale, mid.x, mid.y);
+                    fixScale();
+                    fixTranslation();
+                    setImageMatrix(matrix);
+                }
+            } else if (mode == ImageState.ROTATE) {
+                PointF pC = new PointF(event.getX(1) - event.getX(0) + pA.x,
+                        event.getY(1) - event.getY(0) + pA.y);
+                double a = spacing(pB.x, pB.y, pC.x, pC.y);
+                double b = spacing(pA.x, pA.y, pC.x, pC.y);
+                double c = spacing(pA.x, pA.y, pB.x, pB.y);
+                if (b > 10) {
+                    double cosA = (b * b + c * c - a * a) / (2 * b * c);
+                    double angleA = Math.acos(cosA);
+                    double ta = pB.y - pA.y;
+                    double tb = pA.x - pB.x;
+                    double tc = pB.x * pA.y - pA.x * pB.y;
+                    double td = ta * pC.x + tb * pC.y + tc;
+                    if (td > 0) {
+                        angleA = 2 * Math.PI - angleA;
+                    }
+                    rotation = angleA;
+                    matrix.set(savedMatrix);
+                    matrix.postRotate((float) (rotation * 180 / Math.PI),
+                            mid.x, mid.y);
+                    setImageMatrix(matrix);
+                }
+
+            }
+            break;
         }
+        return true;
+    }
+
+    /**
+     * 两点的距离
+     */
+    private float spacing(float x1, float y1, float x2, float y2) {
+        float x = x1 - x2;
+        float y = y1 - y2;
+        return (float) Math.sqrt(x * x + y * y);
+    }
+
+    /**
+     * 双击时调用
+     */
+    private void doubleClick(float x, float y) {
+        float p[] = new float[9];
+        matrix.getValues(p);
+        float curScale = Math.abs(p[0]) + Math.abs(p[1]);
+
+        float minScale = Math.min((float) viewW / (float) rotatedImageW,
+                (float) viewH / (float) rotatedImageH);
+        if (curScale <= minScale + 0.01) { // 放大
+            float toScale = Math.max(minScale, MAX_SCALE) / curScale;
+            matrix.postScale(toScale, toScale, x, y);
+        } else { // 缩小
+            float toScale = minScale / curScale;
+            matrix.postScale(toScale, toScale, x, y);
+            fixTranslation();
+        }
+        setImageMatrix(matrix);
     }
 }

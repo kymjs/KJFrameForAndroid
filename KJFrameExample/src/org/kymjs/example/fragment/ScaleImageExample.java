@@ -34,13 +34,14 @@ public class ScaleImageExample extends BaseFragment {
     @Override
     protected void initWidget(View parentView) {
         super.initWidget(parentView);
-        ScaleImageView imageView = new ScaleImageView(getActivity(),
-                BitmapFactory.decodeResource(getResources(), R.drawable.bg));
+        ScaleImageView imageView = new ScaleImageView(getActivity());
+        imageView.setImageBitmap(BitmapFactory.decodeResource(getResources(),
+                R.drawable.bg));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(params);
-        button.setText("查看菜单");
+        button.setText("图片缩放旋转控件展示");
         layout.addView(imageView);
     }
 
