@@ -10,6 +10,7 @@ import org.kymjs.example.fragment.BitmapMistyExample;
 import org.kymjs.example.fragment.ChoiceImageExample;
 import org.kymjs.example.fragment.ListBitmapExample;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.view.View;
 import android.widget.RadioButton;
@@ -35,9 +36,21 @@ public class TabExample extends KJFragmentActivity {
     BaseFragment content3 = new ListBitmapExample(); // 第三个界面
     BaseFragment content4 = new BitmapMistyExample(); // 第四个界面
 
+    public ActionBar actionBar;
+
+    public TabExample() {
+        setHiddenActionBar(false);
+    }
+
     @Override
     public void setRootView() {
         setContentView(R.layout.aty_tab_example);
+    }
+
+    @Override
+    protected void initWidget() {
+        super.initWidget();
+        actionBar = getActionBar();
     }
 
     @Override
@@ -49,12 +62,15 @@ public class TabExample extends KJFragmentActivity {
             ViewInject.toast("侧滑试试");
             break;
         case R.id.bottombar_content2:
+            actionBar.setTitle("网络图片加载");
             changeFragment(content2);
             break;
         case R.id.bottombar_content3:
+            actionBar.setTitle("listview网络图片加载");
             changeFragment(content3);
             break;
         case R.id.bottombar_content4:
+            actionBar.setTitle("图片模糊效果");
             changeFragment(content4);
             break;
         }

@@ -10,6 +10,7 @@ import org.kymjs.example.fragment.BitmapMistyExample;
 import org.kymjs.example.fragment.ChoiceImageExample;
 import org.kymjs.example.fragment.ScaleImageExample;
 
+import android.app.ActionBar;
 import android.view.View;
 
 /**
@@ -24,10 +25,17 @@ public class SlidExample extends SlidTemplet {
     private ResideMenuItem item4;
     private ResideMenuItem item5;
 
+    public ActionBar actionBar;
+
     private BaseFragment fragContent;
+
+    public SlidExample() {
+        setHiddenActionBar(false);
+    }
 
     @Override
     protected int setRootViewID() {
+        actionBar = getActionBar();
         return R.layout.aty_slid_example;
     }
 
@@ -53,6 +61,7 @@ public class SlidExample extends SlidTemplet {
     @Override
     protected void initWidget() {
         super.initWidget();
+        actionBar.setTitle("侧滑效果演示");
         fragContent = new BitmapDisplay();
         changeFragment(fragContent);
     }
@@ -69,12 +78,16 @@ public class SlidExample extends SlidTemplet {
     @Override
     public void onSlidMenuClick(View v) {
         if (v == item1) {
+            actionBar.setTitle("网络图片加载");
             changeFragment(new BitmapDisplay());
         } else if (v == item2) {
+            actionBar.setTitle("图片模糊效果");
             changeFragment(new BitmapMistyExample());
         } else if (v == item3) {
+            actionBar.setTitle("图片缩放效果");
             changeFragment(new ScaleImageExample());
         } else if (v == item4) {
+            actionBar.setTitle("多图选择效果");
             changeFragment(new ChoiceImageExample());
         } else if (v == item5) {
             KJActivityManager.create().AppExit(SlidExample.this);

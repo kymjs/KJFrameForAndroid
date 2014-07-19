@@ -17,6 +17,7 @@ package org.kymjs.aframe.ui.activity;
 
 import org.kymjs.aframe.KJLoger;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -54,7 +55,7 @@ public abstract class BaseActivity extends KJFrameActivity {
     }
 
     public void setHiddenActionBar(boolean hiddenActionBar) {
-        this.mAllowFullScreen = hiddenActionBar;
+        this.mHiddenActionBar = hiddenActionBar;
     }
 
     public void setScreenOrientation(ScreenOrientation orientation) {
@@ -84,6 +85,9 @@ public abstract class BaseActivity extends KJFrameActivity {
 
         if (mHiddenActionBar) {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
+        } else {
+            ActionBar a = getActionBar();
+            a.show();
         }
         if (mAllowFullScreen) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,

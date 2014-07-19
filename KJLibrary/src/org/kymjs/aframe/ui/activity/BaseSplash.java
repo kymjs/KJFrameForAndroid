@@ -33,11 +33,14 @@ public class BaseSplash extends BaseActivity {
 
     protected ImageView mImageView;
 
-    @Override
-    public void setRootView() {
+    public BaseSplash() {
         setAllowFullScreen(true);
         setHiddenActionBar(true);
         setScreenOrientation(ScreenOrientation.VERTICAL);
+    }
+
+    @Override
+    public void setRootView() {
         mImageView = new ImageView(this);
         mImageView.setScaleType(ScaleType.FIT_XY);
         setContentView(mImageView);
