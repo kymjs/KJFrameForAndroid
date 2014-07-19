@@ -46,6 +46,6 @@ public class BitmapMistyExample extends BaseFragment {
         ViewInject.toast("模糊吗，叫你不要撸太多，偏不听");
         Bitmap src = BitmapFactory
                 .decodeResource(getResources(), R.drawable.bg);
-        src = BitmapMistyUtil.SetMistyBitmap(image, src, true);
+        src = BitmapMistyUtil.SetMistyBitmap(image, src);
     }
 }

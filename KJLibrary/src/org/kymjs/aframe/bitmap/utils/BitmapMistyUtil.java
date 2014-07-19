@@ -45,21 +45,17 @@ public class BitmapMistyUtil {
      * @param src
      *            将要虚化的图片
      */
-    public static Bitmap SetMistyBitmap(View imageview, Bitmap src,
-            boolean misty) {
+    public static Bitmap SetMistyBitmap(View imageview, Bitmap src) {
         if (imageview == null || src == null)
             return null;
-        if (misty) {
-            if (SystemTool.getSDKVersion() >= 18) {
-                src = blur(src, imageview, 12);
+        if (SystemTool.getSDKVersion() >= 18) {
+            src = blur(src, imageview, 12);
+        } else {
+            if (imageview instanceof ImageView) {
+                ((ImageView) imageview).setImageBitmap(blur(src));
             } else {
-                src = blur(src);
-                if (imageview instanceof ImageView) {
-                    ((ImageView) imageview).setImageBitmap(src);
-                } else {
-                    imageview.setBackgroundDrawable(new BitmapDrawable(
-                            imageview.getResources(), src));
-                }
+                imageview.setBackgroundDrawable(new BitmapDrawable(imageview
+                        .getResources(), blur(src)));
             }
         }
         return src;
@@ -303,9 +299,9 @@ public class BitmapMistyUtil {
                         pixG = Color.green(pixColor);
                         pixB = Color.blue(pixColor);
 
-                        newR = newR + (int) (pixR * gauss[idx]);
-                        newG = newG + (int) (pixG * gauss[idx]);
-                        newB = newB + (int) (pixB * gauss[idx]);
+                        newR += (pixR * gauss[idx]);
+                        newG += (pixG * gauss[idx]);
+                        newB += (pixB * gauss[idx]);
                         idx++;
                     }
                 }
