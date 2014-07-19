@@ -20,6 +20,7 @@ import org.kymjs.aframe.utils.SystemTool;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
@@ -43,27 +44,29 @@ public class BitmapMistyUtil {
      *            要显示虚化图片的控件（imageview则设置src，其他则设置bg）
      * @param src
      *            将要虚化的图片
-     * @param radius
-     *            虚化度Supported range 0 < radius <= 25
      */
-    public static void SetMistyBitmap(View imageview, Bitmap src, int radius) {
-        if (imageview == null || src == null || radius < 1 || radius > 25)
-            return;
-        if (SystemTool.getSDKVersion() >= 18) {
-            blur(src, imageview, radius);
-        } else {
-            if (imageview instanceof ImageView) {
-                ((ImageView) imageview).setImageBitmap(blur(src, radius));
+    public static Bitmap SetMistyBitmap(View imageview, Bitmap src,
+            boolean misty) {
+        if (imageview == null || src == null)
+            return null;
+        if (misty) {
+            if (SystemTool.getSDKVersion() >= 18) {
+                src = blur(src, imageview, 12);
             } else {
-                imageview.setBackgroundDrawable(new BitmapDrawable(imageview
-                        .getResources(), blur(src, radius)));
+                src = blur(src);
+                if (imageview instanceof ImageView) {
+                    ((ImageView) imageview).setImageBitmap(src);
+                } else {
+                    imageview.setBackgroundDrawable(new BitmapDrawable(
+                            imageview.getResources(), src));
+                }
             }
         }
+        return src;
     }
 
     /**
      * 背景虚化方法，4.2系统以下的方法（效率很低，不推荐使用）
-     * 核心算法是首先将图片放大100倍，保存到容器中，再从容器中读取创建成一个新的Bitmap
      * 
      * @param bkg
      *            将要虚化的图片
@@ -246,16 +249,80 @@ public class BitmapMistyUtil {
                 routsum += sir[0];
                 goutsum += sir[1];
                 boutsum += sir[2];
-
                 rinsum -= sir[0];
                 ginsum -= sir[1];
                 binsum -= sir[2];
-
                 yi += w;
             }
         }
         bitmap.setPixels(pix, 0, w, 0, 0, w, h);
-        return (bitmap);
+        return bitmap;
+    }
+
+    /**
+     * 背景虚化方法，4.2系统以下的方法（经过优化后的图片滤化函数）此效果是根据jhlabs的Filters.jar 改写过来应用在android
+     * 平台上。核心算法是高斯算法。
+     * 
+     * @explain 高斯算法解析：
+     * @explain 假设有矩阵：
+     * @0 A B C
+     * @1 D E F
+     * @2 G H I
+     * @3 那么，E点模糊后的rgb = （A.rgb+B.rgb+C.rgb+...+H.rgb+I.rgb）
+     * 
+     * @param bkg
+     *            将要虚化的图片
+     */
+    private static Bitmap blur(Bitmap src) {
+        // 设置高斯矩阵
+        int[] gauss = new int[] { 1, 2, 1, 2, 4, 2, 1, 2, 1 };
+        int width = src.getWidth();
+        int height = src.getHeight();
+        Bitmap bitmap = Bitmap.createBitmap(width, height,
+                Bitmap.Config.RGB_565);
+
+        int pixR = 0;
+        int pixG = 0;
+        int pixB = 0;
+        int pixColor = 0;
+        int newR = 0;
+        int newG = 0;
+        int newB = 0;
+        int delta = 16; // 值越小图片会越亮，越大则越暗
+        int idx = 0;
+        int[] pixels = new int[width * height];
+
+        src.getPixels(pixels, 0, width, 0, 0, width, height);
+        for (int i = 1, length = height - 1; i < length; i++) {
+            for (int k = 1, len = width - 1; k < len; k++) {
+                idx = 0;
+                for (int m = -1; m <= 1; m++) {
+                    for (int n = -1; n <= 1; n++) {
+                        pixColor = pixels[(i + m) * width + k + n];
+                        pixR = Color.red(pixColor);
+                        pixG = Color.green(pixColor);
+                        pixB = Color.blue(pixColor);
+
+                        newR = newR + (int) (pixR * gauss[idx]);
+                        newG = newG + (int) (pixG * gauss[idx]);
+                        newB = newB + (int) (pixB * gauss[idx]);
+                        idx++;
+                    }
+                }
+                newR /= delta;
+                newG /= delta;
+                newB /= delta;
+                newR = Math.min(255, Math.max(0, newR));
+                newG = Math.min(255, Math.max(0, newG));
+                newB = Math.min(255, Math.max(0, newB));
+                pixels[i * width + k] = Color.argb(255, newR, newG, newB);
+                newR = 0;
+                newG = 0;
+                newB = 0;
+            }
+        }
+        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+        return bitmap;
     }
 
     /**
@@ -269,7 +336,7 @@ public class BitmapMistyUtil {
      *            虚化度Supported range 0 < radius <= 25
      */
     @SuppressLint("NewApi")
-    private static void blur(Bitmap bkg, View imageView, float radius) {
+    private static Bitmap blur(Bitmap bkg, View imageView, float radius) {
         imageView.measure(0, 0);
         Bitmap overlay = Bitmap.createBitmap(imageView.getMeasuredWidth(),
                 imageView.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
@@ -290,5 +357,6 @@ public class BitmapMistyUtil {
                     imageView.getResources(), overlay));
         }
         rs.destroy();
+        return overlay;
     }
 }

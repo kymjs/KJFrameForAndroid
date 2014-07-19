@@ -6,6 +6,7 @@ import org.kymjs.aframe.ui.ViewInject;
 import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.example.R;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -43,8 +44,8 @@ public class BitmapMistyExample extends BaseFragment {
     protected void widgetClick(View v) {
         super.widgetClick(v);
         ViewInject.toast("模糊吗，叫你不要撸太多，偏不听");
-        BitmapMistyUtil
-                .SetMistyBitmap(image, BitmapFactory.decodeResource(
-                        getResources(), R.drawable.bg), 12);
+        Bitmap src = BitmapFactory
+                .decodeResource(getResources(), R.drawable.bg);
+        src = BitmapMistyUtil.SetMistyBitmap(image, src, true);
     }
 }
