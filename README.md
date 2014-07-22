@@ -10,12 +10,11 @@ KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复�
 * QQ群：[257053751(开发者群1)](http://shang.qq.com/wpa/qunwpa?idkey=00d92c040e81d87ccd21f8d0fffb10640baaa66da45254c3bd329b6ff7d46fef)
 * 第三方开发分支：[https://github.com/kuangsunny/KJFrameForAndroid](https://github.com/kuangsunny/KJFrameForAndroid)
 
+---
 # 框架使用
 clone下KJFrameForAndroid最新源码后，导入eclipse中，若只想使用框架而不考虑源码查看与学习，可直接复制KJLibrary工程中bin目录下的kjlibrary.jar文件至自己项目的libs文件夹中。若需要对源码改动或学习，可打开KJLibrary工程查看源码，同时结合KJFrameExample演示项目更好的学习，另外也可以自己新建工程，并右键工程->preference->Android->library->Add,选择KJLibrary工程加入后apply应用。
 
----
-## 使用 KJFrameForAndroid 应用开发框架需要在你项目的AndroidManifest.xml文件中加入以下权限：
-
+*注：使用 KJFrameForAndroid 应用开发框架需要在你项目的AndroidManifest.xml文件中加入以下权限：*
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -26,7 +25,7 @@ clone下KJFrameForAndroid最新源码后，导入eclipse中，若只想使用框
 
 ----
 
-## ==============各模块使用介绍==============
+## =================各模块使用介绍=================
 
 ## UILibrary模块
 
