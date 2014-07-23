@@ -36,13 +36,14 @@ public class ScaleImageExample extends BaseFragment {
     protected void initWidget(View parentView) {
         super.initWidget(parentView);
         final ScaleImageView imageView = new ScaleImageView(getActivity());
+        imageView.setBackgroundColor(0xff000000);
         imageView.setImageBitmap(BitmapFactory.decodeResource(getResources(),
                 R.drawable.bg));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(params);
-        button.setText("点击或侧滑");
+        button.setText("点击或侧滑返回");
         Button rotate = new Button(getActivity());
         rotate.setText("图片旋转功能开关");
         rotate.setOnClickListener(new OnClickListener() {
@@ -59,9 +60,9 @@ public class ScaleImageExample extends BaseFragment {
                 imageView.setCanDoubleClick(!imageView.canDoubleClick());
             }
         });
-        layout.addView(imageView);
         layout.addView(rotate);
         layout.addView(doubleClick);
+        layout.addView(imageView);
     }
 
     @Override
