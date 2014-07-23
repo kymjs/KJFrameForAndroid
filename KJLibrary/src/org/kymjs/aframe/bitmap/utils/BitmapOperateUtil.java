@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
+ * Copyright (c) 2014, kymjs 张涛 (kymjs123@gmail.com).
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import org.kymjs.aframe.utils.SystemTool;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -29,16 +30,16 @@ import android.view.View;
 import android.widget.ImageView;
 
 /**
- * 控件背景虚化工具类（imageview则设置src，其他则设置bg）
+ * 对bitmap特殊处理的工具类
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
+ * @version 1.1
  * @created 2014-6-30
  */
-public class BitmapMistyUtil {
+public class BitmapOperateUtil {
 
     /**
-     * View的背景虚化方法
+     * View的背景虚化方法（imageview则设置src，其他则设置bg）
      * 
      * @param imageView
      *            要显示虚化图片的控件（imageview则设置src，其他则设置bg）
@@ -52,10 +53,10 @@ public class BitmapMistyUtil {
             src = blur(src, imageview, 12);
         } else {
             if (imageview instanceof ImageView) {
-                ((ImageView) imageview).setImageBitmap(blur(src));
+                ((ImageView) imageview).setImageBitmap(blur(src, 12));
             } else {
                 imageview.setBackgroundDrawable(new BitmapDrawable(imageview
-                        .getResources(), blur(src)));
+                        .getResources(), blur(src, 12)));
             }
         }
         return src;
@@ -64,6 +65,9 @@ public class BitmapMistyUtil {
     /**
      * 背景虚化方法，4.2系统以下的方法（效率很低，不推荐使用）
      * 
+     * @核心算法 通过解析bitmap，将bitmap的每一个像素点的rgb值获取到；以每一个像素点为圆心，根据radius模糊度半径，
+     *       求得每个像素点在半径区域中的平均rgb值， 保存为模糊后的该点的rgb值。
+     *       这样做很显然效率非常低下，对于每个像素点都需要计算，而且半径越大计算起来越复杂。
      * @param bkg
      *            将要虚化的图片
      * @param radius
@@ -74,19 +78,19 @@ public class BitmapMistyUtil {
         Bitmap bitmap = bkg.copy(bkg.getConfig(), true);
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
-        int[] pix = new int[w * h];
-        bitmap.getPixels(pix, 0, w, 0, 0, w, h);
-        int wm = w - 1;
-        int hm = h - 1;
-        int wh = w * h;
-        int div = radius + radius + 1;
-        int r[] = new int[wh];
+        int[] pix = new int[w * h]; // 像素点矩阵
+        bitmap.getPixels(pix, 0, w, 0, 0, w, h); // 获取rgb颜色值，保存到pix中
+        int wm = w - 1; // 宽度
+        int hm = h - 1; // 高度
+        int wh = w * h; // 总像素个数
+        int div = radius + radius + 1; // 模糊度
+        int r[] = new int[wh]; // 整个bitmap中每个像素点的R值
         int g[] = new int[wh];
         int b[] = new int[wh];
         int rsum, gsum, bsum, x, y, i, p, yp, yi, yw;
-        int vmin[] = new int[Math.max(w, h)];
+        int vmin[] = new int[Math.max(w, h)]; // 宽高中更大的一个作为边界
         int divsum = (div + 1) >> 1;
-        divsum *= divsum;
+        divsum *= divsum; // 本来是πR的平方，但是忽略常量的变化
         int dv[] = new int[256 * divsum];
         for (i = 0; i < 256 * divsum; i++) {
             dv[i] = (i / divsum);
@@ -98,12 +102,12 @@ public class BitmapMistyUtil {
         int[] sir;
         int rbs;
         int r1 = radius + 1;
-        int routsum, goutsum, boutsum;
-        int rinsum, ginsum, binsum;
+        int routsum, goutsum, boutsum; // rgb输出时的值
+        int rinsum, ginsum, binsum; // rgb读入时的值
         for (y = 0; y < h; y++) {
             rinsum = ginsum = binsum = routsum = goutsum = boutsum = rsum = gsum = bsum = 0;
             for (i = -radius; i <= radius; i++) {
-                p = pix[yi + Math.min(wm, Math.max(i, 0))];
+                p = pix[yi + Math.min(wm, Math.max(i, 0))]; // 返回在[0,wm]区间的值坐标
                 sir = stack[i + radius];
                 sir[0] = (p & 0xff0000) >> 16;
                 sir[1] = (p & 0x00ff00) >> 8;
@@ -230,11 +234,9 @@ public class BitmapMistyUtil {
                 sir[0] = r[p];
                 sir[1] = g[p];
                 sir[2] = b[p];
-
                 rinsum += sir[0];
                 ginsum += sir[1];
                 binsum += sir[2];
-
                 rsum += rinsum;
                 gsum += ginsum;
                 bsum += binsum;
@@ -256,20 +258,51 @@ public class BitmapMistyUtil {
     }
 
     /**
-     * 背景虚化方法，4.2系统以下的方法（经过优化后的图片滤化函数）此效果是根据jhlabs的Filters.jar 改写过来应用在android
-     * 平台上。核心算法是高斯算法。
-     * 
-     * @explain 高斯算法解析：
-     * @explain 假设有矩阵：
-     * @0 A B C
-     * @1 D E F
-     * @2 G H I
-     * @3 那么，E点模糊后的rgb = （A.rgb+B.rgb+C.rgb+...+H.rgb+I.rgb）
+     * 背景虚化方法，仅在API 17以上的系统中才能使用ScriptIntrinsicBlur类
      * 
      * @param bkg
      *            将要虚化的图片
+     * @param imageView
+     *            要显示虚化图片的控件（imageview则设置src，其他则设置bg）
+     * @param radius
+     *            虚化度Supported range 0 < radius <= 25
      */
-    private static Bitmap blur(Bitmap src) {
+    @SuppressLint("NewApi")
+    private static Bitmap blur(Bitmap bkg, View imageView, float radius) {
+        imageView.measure(0, 0);
+        Bitmap overlay = Bitmap.createBitmap(imageView.getMeasuredWidth(),
+                imageView.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(overlay);
+        canvas.drawBitmap(bkg, -imageView.getLeft(), -imageView.getTop(), null);
+        RenderScript rs = RenderScript.create(imageView.getContext());
+        Allocation overlayAlloc = Allocation.createFromBitmap(rs, overlay);
+        ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(rs,
+                overlayAlloc.getElement());
+        blur.setInput(overlayAlloc);
+        blur.setRadius(radius);
+        blur.forEach(overlayAlloc);
+        overlayAlloc.copyTo(overlay);
+        if (imageView instanceof ImageView) {
+            ((ImageView) imageView).setImageBitmap(overlay);
+        } else {
+            imageView.setBackground(new BitmapDrawable(
+                    imageView.getResources(), overlay));
+        }
+        rs.destroy();
+        return overlay;
+    }
+
+    /**
+     * 更改图片色系，变亮或变暗
+     * 
+     * @param delta
+     *            图片的亮暗程度值，越小图片会越亮，取值范围(0,24)
+     * @return
+     */
+    public static Bitmap tone(Bitmap src, int delta) {
+        if (delta >= 24 || delta <= 0) {
+            return null;
+        }
         // 设置高斯矩阵
         int[] gauss = new int[] { 1, 2, 1, 2, 4, 2, 1, 2, 1 };
         int width = src.getWidth();
@@ -284,7 +317,6 @@ public class BitmapMistyUtil {
         int newR = 0;
         int newG = 0;
         int newB = 0;
-        int delta = 16; // 值越小图片会越亮，越大则越暗
         int idx = 0;
         int[] pixels = new int[width * height];
 
@@ -322,37 +354,33 @@ public class BitmapMistyUtil {
     }
 
     /**
-     * 背景虚化方法，仅在API 17以上的系统中才能使用ScriptIntrinsicBlur类
+     * 将彩色图转换为黑白图
      * 
-     * @param bkg
-     *            将要虚化的图片
-     * @param imageView
-     *            要显示虚化图片的控件（imageview则设置src，其他则设置bg）
-     * @param radius
-     *            虚化度Supported range 0 < radius <= 25
+     * @param 位图
+     * @return 返回转换好的位图
      */
-    @SuppressLint("NewApi")
-    private static Bitmap blur(Bitmap bkg, View imageView, float radius) {
-        imageView.measure(0, 0);
-        Bitmap overlay = Bitmap.createBitmap(imageView.getMeasuredWidth(),
-                imageView.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(overlay);
-        canvas.drawBitmap(bkg, -imageView.getLeft(), -imageView.getTop(), null);
-        RenderScript rs = RenderScript.create(imageView.getContext());
-        Allocation overlayAlloc = Allocation.createFromBitmap(rs, overlay);
-        ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(rs,
-                overlayAlloc.getElement());
-        blur.setInput(overlayAlloc);
-        blur.setRadius(radius);
-        blur.forEach(overlayAlloc);
-        overlayAlloc.copyTo(overlay);
-        if (imageView instanceof ImageView) {
-            ((ImageView) imageView).setImageBitmap(overlay);
-        } else {
-            imageView.setBackground(new BitmapDrawable(
-                    imageView.getResources(), overlay));
+    public static Bitmap convertToBlackWhite(Bitmap bmp) {
+        int width = bmp.getWidth();
+        int height = bmp.getHeight();
+        int[] pixels = new int[width * height];
+        bmp.getPixels(pixels, 0, width, 0, 0, width, height);
+
+        int alpha = 0xFF << 24; // 默认将bitmap当成24色图片
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                int grey = pixels[width * i + j];
+
+                int red = ((grey & 0x00FF0000) >> 16);
+                int green = ((grey & 0x0000FF00) >> 8);
+                int blue = (grey & 0x000000FF);
+
+                grey = (int) (red * 0.3 + green * 0.59 + blue * 0.11);
+                grey = alpha | (grey << 16) | (grey << 8) | grey;
+                pixels[width * i + j] = grey;
+            }
         }
-        rs.destroy();
-        return overlay;
+        Bitmap newBmp = Bitmap.createBitmap(width, height, Config.RGB_565);
+        newBmp.setPixels(pixels, 0, width, 0, 0, width, height);
+        return newBmp;
     }
 }
