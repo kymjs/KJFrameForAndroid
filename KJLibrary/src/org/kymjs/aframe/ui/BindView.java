@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
+ * Copyright (c) 2014, kymjs 张涛 (kymjs123@gmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ import java.lang.annotation.Target;
  * 注解式绑定控件
  * 
  * @author kymjs(kymjs123@gmail.com)
+ * @version 1.0
+ * @created 2014-7-11
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
