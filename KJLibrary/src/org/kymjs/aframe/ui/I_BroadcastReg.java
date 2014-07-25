@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
+ * Copyright (c) 2014, kymjs 张涛 (kymjs123@gmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,9 @@ package org.kymjs.aframe.ui;
 /**
  * 规范Activity中广播接受者注册的接口协议
  * 
- * @author kymjs
+ * @author kymjs(kymjs123@gmail.com)
+ * @version 1.0
+ * @created 2014-7-11
  */
 public interface I_BroadcastReg {
     void registerBroadcast();

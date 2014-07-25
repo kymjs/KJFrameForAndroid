@@ -30,6 +30,7 @@ import android.widget.ImageView;
  * 
  * @author raomeng1
  * @from http://blog.csdn.net/raomeng1/article/details/7829015
+ * @change kymjs(kymjs123@gmail.com) 添加双击缩放，双指旋转功能开关，可自行开关这些功能
  */
 public class ScaleImageView extends ImageView {
 
@@ -63,6 +64,25 @@ public class ScaleImageView extends ImageView {
     private long lastClickTime = 0; // 上次点击时间（用于计算双击）
     private double rotation = 0.0;
     private float dist = 1f; // 两点间距
+
+    private boolean canRotate = true; // 是否开启旋转图片功能
+    private boolean canDoubleClick = true; // 是否开启双击缩放功能
+
+    public void setCanDoubleClick(boolean canDoubleClick) {
+        this.canDoubleClick = canDoubleClick;
+    }
+
+    public boolean canDoubleClick() {
+        return canDoubleClick;
+    }
+
+    public void setCanRotate(boolean canRotate) {
+        this.canRotate = canRotate;
+    }
+
+    public boolean canRotate() {
+        return canRotate;
+    }
 
     public ScaleImageView(Context context) {
         super(context);
@@ -307,28 +327,30 @@ public class ScaleImageView extends ImageView {
                     setImageMatrix(matrix);
                 }
             } else if (mode == ImageState.ROTATE) {
-                PointF pC = new PointF(event.getX(1) - event.getX(0) + pA.x,
-                        event.getY(1) - event.getY(0) + pA.y);
-                double a = spacing(pB.x, pB.y, pC.x, pC.y);
-                double b = spacing(pA.x, pA.y, pC.x, pC.y);
-                double c = spacing(pA.x, pA.y, pB.x, pB.y);
-                if (b > 10) {
-                    double cosA = (b * b + c * c - a * a) / (2 * b * c);
-                    double angleA = Math.acos(cosA);
-                    double ta = pB.y - pA.y;
-                    double tb = pA.x - pB.x;
-                    double tc = pB.x * pA.y - pA.x * pB.y;
-                    double td = ta * pC.x + tb * pC.y + tc;
-                    if (td > 0) {
-                        angleA = 2 * Math.PI - angleA;
+                if (canRotate) {
+                    PointF pC = new PointF(
+                            event.getX(1) - event.getX(0) + pA.x, event.getY(1)
+                                    - event.getY(0) + pA.y);
+                    double a = spacing(pB.x, pB.y, pC.x, pC.y);
+                    double b = spacing(pA.x, pA.y, pC.x, pC.y);
+                    double c = spacing(pA.x, pA.y, pB.x, pB.y);
+                    if (b > 10) {
+                        double cosA = (b * b + c * c - a * a) / (2 * b * c);
+                        double angleA = Math.acos(cosA);
+                        double ta = pB.y - pA.y;
+                        double tb = pA.x - pB.x;
+                        double tc = pB.x * pA.y - pA.x * pB.y;
+                        double td = ta * pC.x + tb * pC.y + tc;
+                        if (td > 0) {
+                            angleA = 2 * Math.PI - angleA;
+                        }
+                        rotation = angleA;
+                        matrix.set(savedMatrix);
+                        matrix.postRotate((float) (rotation * 180 / Math.PI),
+                                mid.x, mid.y);
+                        setImageMatrix(matrix);
                     }
-                    rotation = angleA;
-                    matrix.set(savedMatrix);
-                    matrix.postRotate((float) (rotation * 180 / Math.PI),
-                            mid.x, mid.y);
-                    setImageMatrix(matrix);
                 }
-
             }
             break;
         }
@@ -348,20 +370,22 @@ public class ScaleImageView extends ImageView {
      * 双击时调用
      */
     private void doubleClick(float x, float y) {
-        float p[] = new float[9];
-        matrix.getValues(p);
-        float curScale = Math.abs(p[0]) + Math.abs(p[1]);
+        if (canDoubleClick) {
+            float p[] = new float[9];
+            matrix.getValues(p);
+            float curScale = Math.abs(p[0]) + Math.abs(p[1]);
 
-        float minScale = Math.min((float) viewW / (float) rotatedImageW,
-                (float) viewH / (float) rotatedImageH);
-        if (curScale <= minScale + 0.01) { // 放大
-            float toScale = Math.max(minScale, MAX_SCALE) / curScale;
-            matrix.postScale(toScale, toScale, x, y);
-        } else { // 缩小
-            float toScale = minScale / curScale;
-            matrix.postScale(toScale, toScale, x, y);
-            fixTranslation();
+            float minScale = Math.min((float) viewW / (float) rotatedImageW,
+                    (float) viewH / (float) rotatedImageH);
+            if (curScale <= minScale + 0.01) { // 放大
+                float toScale = Math.max(minScale, MAX_SCALE) / curScale;
+                matrix.postScale(toScale, toScale, x, y);
+            } else { // 缩小
+                float toScale = minScale / curScale;
+                matrix.postScale(toScale, toScale, x, y);
+                fixTranslation();
+            }
+            setImageMatrix(matrix);
         }
-        setImageMatrix(matrix);
     }
 }

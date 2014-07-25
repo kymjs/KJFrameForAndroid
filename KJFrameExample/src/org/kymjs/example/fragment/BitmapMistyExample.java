@@ -1,6 +1,6 @@
 package org.kymjs.example.fragment;
 
-import org.kymjs.aframe.bitmap.utils.BitmapMistyUtil;
+import org.kymjs.aframe.bitmap.utils.BitmapOperateUtil;
 import org.kymjs.aframe.ui.BindView;
 import org.kymjs.aframe.ui.ViewInject;
 import org.kymjs.aframe.ui.fragment.BaseFragment;
@@ -46,6 +46,7 @@ public class BitmapMistyExample extends BaseFragment {
         ViewInject.toast("模糊吗，叫你不要撸太多，偏不听");
         Bitmap src = BitmapFactory
                 .decodeResource(getResources(), R.drawable.bg);
-        src = BitmapMistyUtil.SetMistyBitmap(image, src);
+        src = BitmapOperateUtil.convertToBlackWhite(src);
+        image.setImageBitmap(src);
     }
 }

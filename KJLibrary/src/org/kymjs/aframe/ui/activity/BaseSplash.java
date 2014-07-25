@@ -29,9 +29,11 @@ import android.widget.ImageView.ScaleType;
  * 
  * @author kymjs(kymjs123@gmail.com)
  */
-public class BaseSplash extends BaseActivity {
+public abstract class BaseSplash extends BaseActivity {
 
     protected ImageView mImageView;
+
+    protected abstract void setRootBackground(ImageView view);
 
     public BaseSplash() {
         setAllowFullScreen(true);
@@ -44,7 +46,7 @@ public class BaseSplash extends BaseActivity {
         mImageView = new ImageView(this);
         mImageView.setScaleType(ScaleType.FIT_XY);
         setContentView(mImageView);
-        // mImageView.setImageResource(R.drawable.bg_start);
+        setRootBackground(mImageView);
     }
 
     @Override
