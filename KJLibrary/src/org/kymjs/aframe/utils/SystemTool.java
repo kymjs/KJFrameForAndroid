@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,9 +23,13 @@ import java.util.List;
 
 import org.kymjs.aframe.KJConfig;
 import org.kymjs.aframe.KJException;
+import org.kymjs.aframe.KJLoger;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.ActivityManager.MemoryInfo;
+import android.app.ActivityManager.RunningAppProcessInfo;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -253,5 +257,71 @@ public class SystemTool {
         } catch (Exception e) {
         }
         return "";
+    }
+
+    /**
+     * 获取设备的可用内存大小
+     * 
+     * @param cxt
+     *            应用上下文对象context
+     * @return 当前内存大小
+     */
+    public static int getDeviceUsableMemory(Context cxt) {
+        ActivityManager am = (ActivityManager) cxt
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        MemoryInfo mi = new MemoryInfo();
+        am.getMemoryInfo(mi);
+        // 返回当前系统的可用内存
+        return (int) (mi.availMem / (1024 * 1024));
+    }
+
+    /**
+     * 清理后台进程与服务
+     * 
+     * @param cxt
+     *            应用上下文对象context
+     * @return 被清理的数量
+     */
+    public static int gc(Context cxt) {
+        long i = getDeviceUsableMemory(cxt);
+        int count = 0; // 清理掉的进程数
+        ActivityManager am = (ActivityManager) cxt
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        // 获取正在运行的service列表
+        List<RunningServiceInfo> serviceList = am.getRunningServices(100);
+        if (serviceList != null)
+            for (RunningServiceInfo service : serviceList) {
+                try {
+                    android.os.Process.killProcess(service.pid);
+                    count++;
+                } catch (Exception e) {
+                    e.getStackTrace();
+                    continue;
+                }
+            }
+
+        // 获取正在运行的进程列表
+        List<RunningAppProcessInfo> processList = am.getRunningAppProcesses();
+        if (processList != null)
+            for (RunningAppProcessInfo process : processList) {
+                // 一般数值大于RunningAppProcessInfo.IMPORTANCE_SERVICE的进程都长时间没用或者空进程了
+                // 一般数值大于RunningAppProcessInfo.IMPORTANCE_VISIBLE的进程都是非可见进程，也就是在后台运行着
+                if (process.importance > RunningAppProcessInfo.IMPORTANCE_VISIBLE) {
+                    // pkgList 得到该进程下运行的包名
+                    String[] pkgList = process.pkgList;
+                    for (String pkgName : pkgList) {
+                        KJLoger.debug("======正在杀死包名：" + pkgName);
+                        try {
+                            am.killBackgroundProcesses(pkgName);
+                            count++;
+                        } catch (Exception e) { // 防止意外发生
+                            e.getStackTrace();
+                            continue;
+                        }
+                    }
+                }
+            }
+        KJLoger.debug("清理了" + (getDeviceUsableMemory(cxt) - i) + "M内存");
+        return count;
     }
 }

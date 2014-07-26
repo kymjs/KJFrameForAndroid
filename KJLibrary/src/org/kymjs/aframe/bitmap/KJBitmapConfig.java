@@ -24,7 +24,7 @@ import android.graphics.Bitmap;
  * @version 1.0
  * @created 2014-7-11
  */
-public class KJBitmapConfig {
+final public class KJBitmapConfig {
     public final boolean isDEBUG = true;
 
     /** 网络连接等待时间 */
