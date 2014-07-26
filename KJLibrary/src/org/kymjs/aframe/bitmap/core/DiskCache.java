@@ -286,8 +286,8 @@ public class DiskCache {
     /**
      * 返回文件的绝对路径
      * 
-     * @param cacheDir
-     * @param key
+     * @params cacheDir
+     * @params key
      * @return
      */
     public static String createFilePath(File cacheDir, String fileName) {
@@ -304,8 +304,7 @@ public class DiskCache {
     /**
      * 在缓存目录下创建一个缓存文件
      * 
-     * @param key
-     *            缓存文件名
+     * @params key 缓存文件名
      */
     public String createFilePath(String fileName) {
         return createFilePath(mFileDir, fileName);

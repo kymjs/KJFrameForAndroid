@@ -23,10 +23,10 @@ import android.content.SharedPreferences.Editor;
  * SharedPreferences操作工具包
  * 
  * @explain 本工具包只能在单进程项目下使用，多进程共享请使用如下demo的两行代码重写:
- * @line1 Context otherContext = c.createPackageContext( "com.android.contacts",
- *        Context.CONTEXT_IGNORE_SECURITY);
- * @line2 SharedPreferences sp = otherContext.getSharedPreferences( "my_file",
- *        Context.MODE_MULTI_PROCESS);
+ * @explain Context otherContext = c.createPackageContext(
+ *          "com.android.contacts", Context.CONTEXT_IGNORE_SECURITY);
+ * @explain SharedPreferences sp = otherContext.getSharedPreferences( "my_file",
+ *          Context.MODE_MULTI_PROCESS);
  * @author kymjs
  * @created 2013-2-27
  */

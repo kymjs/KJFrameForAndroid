@@ -41,10 +41,8 @@ public class BitmapOperateUtil {
     /**
      * View的背景虚化方法（imageview则设置src，其他则设置bg）
      * 
-     * @param imageView
-     *            要显示虚化图片的控件（imageview则设置src，其他则设置bg）
-     * @param src
-     *            将要虚化的图片
+     * @params imageView 要显示虚化图片的控件（imageview则设置src，其他则设置bg）
+     * @params src 将要虚化的图片
      */
     public static Bitmap SetMistyBitmap(View imageview, Bitmap src) {
         if (imageview == null || src == null)
@@ -356,7 +354,8 @@ public class BitmapOperateUtil {
     /**
      * 将彩色图转换为黑白图
      * 
-     * @param 位图
+     * @param bmp
+     *            位图
      * @return 返回转换好的位图
      */
     public static Bitmap convertToBlackWhite(Bitmap bmp) {

@@ -24,8 +24,9 @@ import android.app.FragmentTransaction;
  * Application BaseActivity plus. For ease of use, your Activity should overload
  * changeFragment(Fragment frag).
  * 
- * @if you want include the Fragment,you should extends it for your Activity
- * @else you should extends KJFrameActivity for your Activity
+ * @explain if you want include the Fragment,you should extends it for your
+ *          Activity
+ * @explain else you should extends KJFrameActivity for your Activity
  * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0

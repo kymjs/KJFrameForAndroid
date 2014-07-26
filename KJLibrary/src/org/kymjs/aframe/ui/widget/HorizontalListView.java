@@ -56,7 +56,7 @@ import android.widget.Scroller;
 /**
  * https://github.com/dinocore1/DevsmartLib-Android
  * 
- * @注意本类协议：MIT
+ * @warn 注意本类协议：MIT
  * @author dinocore1
  */
 public class HorizontalListView extends AdapterView<ListAdapter> {

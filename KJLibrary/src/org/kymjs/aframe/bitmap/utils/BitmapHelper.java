@@ -33,9 +33,10 @@ public class BitmapHelper {
     /**
      * 图片压缩处理（使用Options的方法）
      * 
-     * @使用方法 首先你要将Options的inJustDecodeBounds属性设置为true，BitmapFactory.decode一次图片。
-     *       然后将Options连同期望的宽度和高度一起传递到到本方法中。
-     *       之后再使用本方法的返回值做参数调用BitmapFactory.decode创建图片。
+     * @explain 使用方法：
+     *          首先你要将Options的inJustDecodeBounds属性设置为true，BitmapFactory.decode一次图片
+     *          。 然后将Options连同期望的宽度和高度一起传递到到本方法中。
+     *          之后再使用本方法的返回值做参数调用BitmapFactory.decode创建图片。
      * 
      * @explain BitmapFactory创建bitmap会尝试为已经构建的bitmap分配内存
      *          ，这时就会很容易导致OOM出现。为此每一种创建方法都提供了一个可选的Options参数

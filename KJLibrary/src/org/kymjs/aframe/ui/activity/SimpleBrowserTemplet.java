@@ -24,8 +24,8 @@ import android.webkit.WebViewClient;
 /**
  * 简单浏览器模板
  * 
- * @explain1 开发者必须首先实现initWebVie(WebView mWebView)方法，将webview返回
- * @explain2 若要显示网页，可手动调用mWebView.loadUrl(url);
+ * @explain 开发者必须首先实现initWebVie(WebView mWebView)方法，将webview返回
+ * @explain 若要显示网页，可手动调用mWebView.loadUrl(url);
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
  * @created 2014-6-23
