@@ -100,7 +100,7 @@ kjh.urlget("http://my.oschina.net/kymjs/blog", new StringRespond(){
 ```
 
 ## BitmapLibrary模块
-任何View(ImageView设置src，普通View设置bg)加载图片的时候都无需考虑图片加载过程中出现的oom和android容器快速滑动时候出现的图片错位等现象，同时无需考虑图片加载过程中出现的OOM。默认使用内存lru算法+磁盘lru算法缓存图片<br>
+任何View(ImageView设置src，普通View设置bg)加载图片的时候都无需考虑图片加载过程中出现的oom和android容器快速滑动时候出现的图片错位等现象，同时无需考虑图片加载过程中出现的OOM。默认使用内存lru算法+磁盘lru算法缓存图片 [详细介绍](http://my.oschina.net/kymjs/blog/295001)<br>
 **注：**在Android2.3之前，我们常常使用软引用或弱引用的形式去做缓存图片，然而根据Google的描述：垃圾回收器会更倾向于回收持有软引用或弱引用的对象，这让软引用和弱引用变得不再可靠。另外，Android 3.0 (API Level 11)中，图片的数据会存储在本地的内存当中，因而无法用一种可预见的方式将其释放，这就有潜在的风险造成应用程序的内存溢出并崩溃。BitmapLibrary使用lru算法去管理缓存，同时内存缓存配合磁盘缓存能更有效的管理缓存调用。
 ```java
 
