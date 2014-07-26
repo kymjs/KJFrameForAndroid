@@ -291,6 +291,8 @@ public class SystemTool {
         List<RunningServiceInfo> serviceList = am.getRunningServices(100);
         if (serviceList != null)
             for (RunningServiceInfo service : serviceList) {
+                if (service.pid == android.os.Process.myPid())
+                    continue;
                 try {
                     android.os.Process.killProcess(service.pid);
                     count++;

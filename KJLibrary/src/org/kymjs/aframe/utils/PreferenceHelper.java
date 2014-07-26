@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
+ * Copyright (c) 2014, kymjs 张涛 (kymjs123@gmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,11 @@ import android.content.SharedPreferences.Editor;
 /**
  * SharedPreferences操作工具包
  * 
+ * @explain 本工具包只能在单进程项目下使用，多进程共享请使用如下demo的两行代码重写:
+ * @line1 Context otherContext = c.createPackageContext( "com.android.contacts",
+ *        Context.CONTEXT_IGNORE_SECURITY);
+ * @line2 SharedPreferences sp = otherContext.getSharedPreferences( "my_file",
+ *        Context.MODE_MULTI_PROCESS);
  * @author kymjs
  * @created 2013-2-27
  */
