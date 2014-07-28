@@ -70,7 +70,7 @@ public class SlidExample extends SlidTemplet {
      * 必须调用super()，否则界面触摸将被屏蔽
      */
     @Override
-    protected void changeFragment(BaseFragment targetFragment) {
+    public void changeFragment(BaseFragment targetFragment) {
         super.changeFragment(targetFragment);
         changeFragment(R.id.content, targetFragment);
     }

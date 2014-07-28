@@ -77,7 +77,7 @@ public class TabExample extends KJFragmentActivity {
     }
 
     @Override
-    protected void changeFragment(BaseFragment targetFragment) {
+    public void changeFragment(BaseFragment targetFragment) {
         changeFragment(R.id.content, targetFragment);
     }
 }

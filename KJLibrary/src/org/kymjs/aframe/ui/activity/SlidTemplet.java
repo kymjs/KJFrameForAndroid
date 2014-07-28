@@ -65,7 +65,7 @@ public abstract class SlidTemplet extends KJFragmentActivity implements
     }
 
     @Override
-    protected void changeFragment(BaseFragment targetFragment) {
+    public void changeFragment(BaseFragment targetFragment) {
         // 清空不拦截触摸事件的控件（界面已经被替换）
         resideMenu.clearIgnoredViewList();
     }

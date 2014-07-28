@@ -35,7 +35,7 @@ import android.app.FragmentTransaction;
 public abstract class KJFragmentActivity extends BaseActivity {
 
     /** 改变界面的fragment */
-    protected void changeFragment(int resView, BaseFragment targetFragment) {
+    public void changeFragment(int resView, BaseFragment targetFragment) {
         FragmentTransaction transaction = getFragmentManager()
                 .beginTransaction();
         transaction.replace(resView, targetFragment, targetFragment.getClass()
@@ -48,5 +48,5 @@ public abstract class KJFragmentActivity extends BaseActivity {
     /**
      * 你应该调用changeFragment(R.id.content, targetFragment);
      */
-    protected abstract void changeFragment(BaseFragment targetFragment);
+    public abstract void changeFragment(BaseFragment targetFragment);
 }
