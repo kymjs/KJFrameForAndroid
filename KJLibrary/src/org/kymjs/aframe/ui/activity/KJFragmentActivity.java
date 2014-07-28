@@ -15,6 +15,7 @@
  */
 package org.kymjs.aframe.ui.activity;
 
+import org.kymjs.aframe.ui.KJActivityManager;
 import org.kymjs.aframe.ui.ViewInject;
 import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.kjlibrary.R;
@@ -45,7 +46,8 @@ public abstract class KJFragmentActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (openBackListener && keyCode == KeyEvent.KEYCODE_BACK
-                && getFragmentManager().getBackStackEntryCount() == 0) {
+                && getFragmentManager().getBackStackEntryCount() == 0
+                && KJActivityManager.create().getCount() < 2) {
             ViewInject.create().getExitDialog(this);
         }
         return super.onKeyDown(keyCode, event);
