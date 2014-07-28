@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
+ * Copyright (c) 2014, kymjs 张涛 (kymjs123@gmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,9 @@ public interface I_KJActivity {
     /** 初始化方法 */
     void initialize();
 
+    /** 设置root界面 */
     void setRootView();
 
+    /** 点击事件回调方法 */
     void widgetClick(View v);
 }

@@ -18,11 +18,9 @@ package org.kymjs.aframe.ui.activity;
 import org.kymjs.aframe.ui.AnnotateUtil;
 import org.kymjs.aframe.ui.I_BroadcastReg;
 import org.kymjs.aframe.ui.KJActivityManager;
-import org.kymjs.aframe.ui.ViewInject;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -98,14 +96,5 @@ public abstract class KJFrameActivity extends Activity implements
         super.onDestroy();
         unRegisterBroadcast();
         KJActivityManager.create().finishActivity(this);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK
-                && KJActivityManager.create().getCount() < 2) {
-            ViewInject.create().getExitDialog(this);
-        }
-        return super.onKeyDown(keyCode, event);
     }
 }

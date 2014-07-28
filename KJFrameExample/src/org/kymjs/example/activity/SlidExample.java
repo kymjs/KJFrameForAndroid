@@ -63,32 +63,32 @@ public class SlidExample extends SlidTemplet {
         super.initWidget();
         actionBar.setTitle("侧滑效果演示");
         fragContent = new BitmapDisplay();
-        changeFragment(fragContent);
+        changeFragment(false, fragContent);
     }
 
     /**
      * 必须调用super()，否则界面触摸将被屏蔽
      */
     @Override
-    public void changeFragment(BaseFragment targetFragment) {
-        super.changeFragment(targetFragment);
-        changeFragment(R.id.content, targetFragment);
+    public void changeFragment(boolean addStack, BaseFragment targetFragment) {
+        super.changeFragment(addStack, targetFragment);
+        changeFragment(R.id.content, addStack, targetFragment);
     }
 
     @Override
     public void onSlidMenuClick(View v) {
         if (v == item1) {
             actionBar.setTitle("网络图片加载");
-            changeFragment(new BitmapDisplay());
+            changeFragment(false, new BitmapDisplay());
         } else if (v == item2) {
             actionBar.setTitle("图片模糊效果");
-            changeFragment(new BitmapMistyExample());
+            changeFragment(false, new BitmapMistyExample());
         } else if (v == item3) {
             actionBar.setTitle("图片缩放效果");
-            changeFragment(new ScaleImageExample());
+            changeFragment(false, new ScaleImageExample());
         } else if (v == item4) {
             actionBar.setTitle("多图选择效果");
-            changeFragment(new ChoiceImageExample());
+            changeFragment(false, new ChoiceImageExample());
         } else if (v == item5) {
             KJActivityManager.create().AppExit(SlidExample.this);
         }

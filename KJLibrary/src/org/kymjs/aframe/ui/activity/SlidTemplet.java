@@ -54,7 +54,7 @@ public abstract class SlidTemplet extends KJFragmentActivity implements
     }
 
     /**
-     * 改变Menu状态
+     * 改变Menu状态，若是关闭则改为开启，若是开启则改为关闭
      */
     public void changeSlidMenu() {
         if (resideMenu.isOpened()) {
@@ -65,7 +65,7 @@ public abstract class SlidTemplet extends KJFragmentActivity implements
     }
 
     @Override
-    public void changeFragment(BaseFragment targetFragment) {
+    public void changeFragment(boolean addStack, BaseFragment targetFragment) {
         // 清空不拦截触摸事件的控件（界面已经被替换）
         resideMenu.clearIgnoredViewList();
     }

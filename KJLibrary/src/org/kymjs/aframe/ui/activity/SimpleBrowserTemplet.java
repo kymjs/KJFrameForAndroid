@@ -33,6 +33,7 @@ import android.webkit.WebViewClient;
 @SuppressLint("SetJavaScriptEnabled")
 public abstract class SimpleBrowserTemplet extends BaseActivity {
 
+    /** 浏览器的webview，你可以在子类中使用 */
     protected WebView mWebView;
 
     @Override

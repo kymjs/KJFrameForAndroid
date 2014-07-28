@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
+ * Copyright (c) 2014, kymjs 张涛 (kymjs123@gmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,12 @@
  */
 package org.kymjs.aframe.ui.activity;
 
+import org.kymjs.aframe.ui.ViewInject;
 import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.kjlibrary.R;
 
 import android.app.FragmentTransaction;
+import android.view.KeyEvent;
 
 /**
  * Application BaseActivity plus. For ease of use, your Activity should overload
@@ -29,24 +31,48 @@ import android.app.FragmentTransaction;
  * @explain else you should extends KJFrameActivity for your Activity
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
+ * @version 1.1
  * @created 2014-5-14
  */
 public abstract class KJFragmentActivity extends BaseActivity {
+    private boolean openBackListener = false;
+
+    public KJFragmentActivity() {
+        openBackListener = getBackListener();
+        setBackListener(false);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (openBackListener && keyCode == KeyEvent.KEYCODE_BACK
+                && getFragmentManager().getBackStackEntryCount() == 0) {
+            ViewInject.create().getExitDialog(this);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     /** 改变界面的fragment */
-    public void changeFragment(int resView, BaseFragment targetFragment) {
+    protected void changeFragment(int resView, boolean addStack,
+            BaseFragment targetFragment) {
         FragmentTransaction transaction = getFragmentManager()
                 .beginTransaction();
         transaction.replace(resView, targetFragment, targetFragment.getClass()
                 .getName());
         transaction.setCustomAnimations(R.anim.in_from_right,
                 R.anim.out_to_left);
+        if (addStack)
+            transaction.addToBackStack(null);
         transaction.commit();
     }
 
     /**
-     * 你应该调用changeFragment(R.id.content, targetFragment);
+     * 你应该在这里调用changeFragment(R.id.content, addStack, targetFragment);
+     * 
+     * @param addStack
+     *            是否加入返回栈（加入返回栈后，用户按下返回键可以返回调用本方法之前的界面）
+     * @param targetFragment
+     *            要改变的Activity
      */
-    public abstract void changeFragment(BaseFragment targetFragment);
+    public abstract void changeFragment(boolean addStack,
+            BaseFragment targetFragment);
 }

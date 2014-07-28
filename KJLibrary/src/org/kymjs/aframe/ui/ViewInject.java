@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, kymjs 张涛 (kymjs123@gmail.com).
+ * Copyright (c) 2014, kymjs 张涛 (kymjs123@gmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * 应用程序UI相关工具类
+ * 侵入式View的调用工具类
  * 
  * @author kymjs(kymjs123@gmail.com)
  */
@@ -47,10 +47,20 @@ public class ViewInject {
         private static final ViewInject instance = new ViewInject();
     }
 
+    /**
+     * 类对象创建方法
+     * 
+     * @return 本类的对象
+     */
     public static ViewInject create() {
         return ClassHolder.instance;
     }
 
+    /**
+     * 显示一个toast
+     * 
+     * @param msg
+     */
     public static void toast(String msg) {
         try {
             toast(KJActivityManager.create().topActivity(), msg);
@@ -58,6 +68,11 @@ public class ViewInject {
         }
     }
 
+    /**
+     * 长时间显示一个toast
+     * 
+     * @param msg
+     */
     public static void longToast(String msg) {
         try {
             longToast(KJActivityManager.create().topActivity(), msg);
@@ -65,10 +80,20 @@ public class ViewInject {
         }
     }
 
+    /**
+     * 长时间显示一个toast
+     * 
+     * @param msg
+     */
     public static void longToast(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * 显示一个toast
+     * 
+     * @param msg
+     */
     public static void toast(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
@@ -110,7 +135,7 @@ public class ViewInject {
     }
 
     /**
-     * 返回一个日期对话框（暂定）
+     * 返回一个日期对话框
      */
     public void getDateDialog(String title, final TextView textView) {
         final String[] time = SystemTool.getDataTime("yyyy-MM-dd").split("-");
