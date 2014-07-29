@@ -45,7 +45,7 @@ import android.view.inputmethod.InputMethodManager;
 
 public class SystemTool {
     /**
-     * 返回当前系统时间
+     * 指定格式返回当前系统时间
      */
     public static String getDataTime(String format) {
         SimpleDateFormat df = new SimpleDateFormat(format);
@@ -53,7 +53,7 @@ public class SystemTool {
     }
 
     /**
-     * 返回当前系统时间
+     * 返回当前系统时间(格式以HH:mm形式)
      */
     public static String getDataTime() {
         return getDataTime("HH:mm");
@@ -80,7 +80,7 @@ public class SystemTool {
     /**
      * 获取系统版本
      * 
-     * @return 例如2.3.3
+     * @return 形如2.3.3
      */
     public static String getSystemVersion() {
         return android.os.Build.VERSION.RELEASE;
@@ -133,6 +133,8 @@ public class SystemTool {
 
     /**
      * 隐藏系统键盘
+     * 
+     * @warn 必须是确定键盘显示时才能调用
      */
     public static void hideKeyBoard(Activity aty) {
         ((InputMethodManager) aty
