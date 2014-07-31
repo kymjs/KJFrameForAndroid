@@ -104,7 +104,7 @@ kjh.urlget("http://my.oschina.net/kymjs/blog", new StringRespond(){
 **注：**在Android2.3之前，我们常常使用软引用或弱引用的形式去做缓存图片，然而根据Google的描述：垃圾回收器会更倾向于回收持有软引用或弱引用的对象，这让软引用和弱引用变得不再可靠。另外，Android 3.0 (API Level 11)中，图片的数据会存储在本地的内存当中，因而无法用一种可预见的方式将其释放，这就有潜在的风险造成应用程序的内存溢出并崩溃。BitmapLibrary使用lru算法去管理缓存，同时内存缓存配合磁盘缓存能更有效的管理缓存调用。
 ```java
 
-KJBitmap kjb = KJBitmap.build();
+KJBitmap kjb = KJBitmap.create();
 /**
  * url不仅支持网络图片显示，同时支持本地SD卡上的图片显示；
  * view不仅可以是imageview，同时普通view也可以传入，框架会自动识别对imageview设置src对普通view设置bg
