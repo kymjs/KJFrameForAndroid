@@ -21,6 +21,7 @@ import org.kymjs.aframe.ui.ViewInject;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -31,7 +32,7 @@ import android.view.WindowManager;
  * Application BaseActivity,you should inherit it for your Activity
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.1
+ * @version 1.2
  * @created 2014-5-28
  */
 public abstract class BaseActivity extends KJFrameActivity {
@@ -105,6 +106,62 @@ public abstract class BaseActivity extends KJFrameActivity {
      */
     protected boolean getBackListener() {
         return this.mOpenBackListener;
+    }
+
+    /**
+     * skip to @param(cls)，and call @param(aty's) finish() method
+     */
+    @Override
+    public void skipActivity(Activity aty, Class<?> cls) {
+        showActivity(aty, cls);
+        aty.finish();
+    }
+
+    /**
+     * skip to @param(cls)，and call @param(aty's) finish() method
+     */
+    @Override
+    public void skipActivity(Activity aty, Intent it) {
+        showActivity(aty, it);
+        aty.finish();
+    }
+
+    /**
+     * skip to @param(cls)，and call @param(aty's) finish() method
+     */
+    @Override
+    public void skipActivity(Activity aty, Class<?> cls, Bundle extras) {
+        showActivity(aty, cls, extras);
+        aty.finish();
+    }
+
+    /**
+     * show to @param(cls)，but can't finish activity
+     */
+    @Override
+    public void showActivity(Activity aty, Class<?> cls) {
+        Intent intent = new Intent();
+        intent.setClass(aty, cls);
+        aty.startActivity(intent);
+    }
+
+    /**
+     * show to @param(cls)，but can't finish activity
+     */
+    @Override
+    public void showActivity(Activity aty, Intent it) {
+        aty.startActivity(it);
+    }
+
+    /**
+     * show to @param(cls)，but can't finish activity
+     */
+    @Override
+    public void showActivity(Activity aty, Class<?> cls, Bundle extras) {
+        Intent intent = new Intent();
+        intent.putExtras(extras);
+        intent.setClass(aty, cls);
+        aty.startActivity(intent);
     }
 
     /***************************************************************************

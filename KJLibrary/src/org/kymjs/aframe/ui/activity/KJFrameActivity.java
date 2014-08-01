@@ -28,18 +28,19 @@ import android.view.View.OnClickListener;
  * update log:
  * @1.5 abstract protocol: I_KJActivity
  * @1.6 add method initThreadData()
+ * @1.7 add abstract protocol:I_SkipActivity
  */
 
 /**
  * Activity's framework,the developer shouldn't extends it
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.6
+ * @version 1.7
  * @created 2014-3-1
  * @lastChange 2014-5-30
  */
 public abstract class KJFrameActivity extends Activity implements
-        OnClickListener, I_BroadcastReg, I_KJActivity {
+        OnClickListener, I_BroadcastReg, I_KJActivity, I_SkipActivity {
 
     /** initialization widget */
     protected void initWidget() {}
