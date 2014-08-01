@@ -64,9 +64,8 @@ public class ListBitmapExample extends BaseFragment {
             } else {
                 image = (ImageView) convertView;
             }
-            kjb.display(image, "/storage/sdcard0/1.jpg");
-            // kjb.display(image,
-            // "http://173.194.72.31/images/srpr/logo11w.png");
+            // kjb.display(image, "/storage/sdcard0/1.png");
+            kjb.display(image, "http://192.168.1.102:8080/1.png");
             return convertView;
         }
     }

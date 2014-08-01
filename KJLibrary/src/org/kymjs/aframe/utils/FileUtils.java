@@ -30,6 +30,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 import org.kymjs.aframe.KJException;
+import org.kymjs.aframe.bitmap.utils.BitmapCreate;
+import org.kymjs.aframe.bitmap.utils.BitmapHelper;
+import org.kymjs.aframe.bitmap.utils.BitmapOperateUtil;
 
 import android.app.Activity;
 import android.content.Context;
@@ -277,6 +280,12 @@ public class FileUtils {
 
     }
 
+    /**
+     * 输入流转字符串
+     * 
+     * @param is
+     * @return 一个流中的字符串
+     */
     public static String inputStream2String(InputStream is) {
         if (null == is) {
             return null;
@@ -284,7 +293,6 @@ public class FileUtils {
         StringBuilder resultSb = null;
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
             resultSb = new StringBuilder();
             String len;
             while (null != (len = br.readLine())) {
@@ -295,5 +303,20 @@ public class FileUtils {
             closeIO(is);
         }
         return null == resultSb ? null : resultSb.toString();
+    }
+
+    /**
+     * 纠正图片角度（有些相机拍照后相片会被系统旋转）
+     * 
+     * @param path
+     *            图片路径
+     */
+    public static void correctPictureAngle(String path) {
+        int angle = BitmapOperateUtil.readPictureDegree(path);
+        if (angle != 0) {
+            Bitmap image = BitmapHelper.rotate(angle,
+                    BitmapCreate.bitmapFromFile(path, 1000, 1000));
+            bitmapToFile(image, path);
+        }
     }
 }
