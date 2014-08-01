@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -27,8 +28,10 @@ public class ListBitmapExample extends BaseFragment {
             Bundle bundle) {
         aty = getActivity();
         kjb = KJBitmap.create();
+        kjb.config.width = 520;
+        kjb.config.height = (int) (520 * 0.45);
         kjb.config.loadingBitmap = BitmapCreate.bitmapFromResource(
-                getResources(), R.drawable.ic_launcher, 400, 400);
+                getResources(), R.drawable.ic_launcher, 1000, 1000);
         return inflater.inflate(R.layout.listview, null);
     }
 
@@ -61,11 +64,27 @@ public class ListBitmapExample extends BaseFragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = image = new ImageView(aty);
+                AbsListView.LayoutParams params = new AbsListView.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.width = kjb.config.width;
+                params.height = kjb.config.height;
+                image.setLayoutParams(params);
             } else {
                 image = (ImageView) convertView;
             }
             // kjb.display(image, "/storage/sdcard0/1.png");
-            kjb.display(image, "http://192.168.1.102:8080/1.png");
+            if (position % 2 == 0) {
+                // 5M的图片
+                kjb.display(
+                        image,
+                        "https://raw.githubusercontent.com/kymjs/KJFrameForAndroid/master/KJFrameExample/big_image.png");
+            } else {
+                // 2M的图片
+                kjb.display(
+                        image,
+                        "https://raw.githubusercontent.com/kymjs/KJFrameForAndroid/master/KJFrameExample/big_image2.jpg");
+            }
             return convertView;
         }
     }

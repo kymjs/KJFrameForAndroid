@@ -42,11 +42,11 @@ public class BitmapDisplay extends BaseFragment {
             } else {
                 KJBitmap kjb = KJBitmap.create();
                 // 载入本地图片
-                kjb.display(imageView, "/storage/sdcard0/1.png");
+                // kjb.display(imageView, "/storage/sdcard0/1.png");
                 // 载入网络图片
-                // kjb.display(
-                // imageView,
-                // "http://www.eoeandroid.com/data/attachment/forum/201107/18/142935bbi8d3zpf3d0dd7z.jpg");
+                kjb.display(
+                        imageView,
+                        "https://raw.githubusercontent.com/kymjs/KJFrameForAndroid/master/KJFrameExample/big_image2.jpg");
                 ViewInject.toast("网络图片加载");
             }
             break;
