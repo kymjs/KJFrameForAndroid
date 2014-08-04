@@ -63,8 +63,8 @@ public abstract class KJFrameActivity extends Activity implements
                 initThreadData();
             }
         }).start();
-        initWidget();
         initData();
+        initWidget();
     }
 
     /** listened widget's click method */
