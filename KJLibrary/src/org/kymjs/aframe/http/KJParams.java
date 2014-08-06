@@ -15,6 +15,8 @@
  */
 package org.kymjs.aframe.http;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -70,7 +72,12 @@ public class KJParams {
         while (it.hasNext()) {
             Entry<String, String> entry = it.next();
             String key = entry.getKey();
-            String value = entry.getValue();
+            String value;
+            try {
+                value = URLEncoder.encode(entry.getValue(), "utr-8");
+            } catch (UnsupportedEncodingException e) {
+                value = entry.getValue();
+            }
             str.append(key).append("=").append(value).append("&");
         }
         return str.toString();

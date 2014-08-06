@@ -27,7 +27,6 @@ public class HttpConfig {
     private static final int SOCKET_TIMEOUT = 8 * 1000; // 8秒
     private static final int READ_TIMEOUT = 8 * 1000; // 8秒
     private static final String CHAR_SET = "UTF8";
-    private static final String REQUEST_METHOD = "GET";
     private static final boolean DO_OUT_PUT = true;
     private static final String TYPE = "application/octet-stream";
 
@@ -35,7 +34,6 @@ public class HttpConfig {
     private int connectTimeOut; // 连接主机超时时间
     private int readTimeout; // 从主机读取数据超时时间
     private String charSet; // 字符编码格式
-    private String requestMethod; // 请求方式GET、POST、HEAD、OPTIONS、PUT、DELETE、TRACE
     private boolean doOutput; // 是否输出
     private boolean doInput; // 是否输入
     private boolean followRedirects; // 是否自动执行HTTP重定向
@@ -48,7 +46,6 @@ public class HttpConfig {
         readTimeout = READ_TIMEOUT;
         charSet = CHAR_SET;
         doOutput = DO_OUT_PUT;
-        requestMethod = REQUEST_METHOD;
         useCache = false;
         contentType = TYPE;
     }
@@ -99,14 +96,6 @@ public class HttpConfig {
 
     public void setCharSet(String charSet) {
         this.charSet = charSet;
-    }
-
-    public String getRequestMethod() {
-        return requestMethod;
-    }
-
-    public void setRequestMethod(String requestMethod) {
-        this.requestMethod = requestMethod;
     }
 
     public boolean isDoOutput() {

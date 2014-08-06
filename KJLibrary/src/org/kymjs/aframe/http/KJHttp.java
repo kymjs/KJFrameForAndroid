@@ -16,10 +16,10 @@
 package org.kymjs.aframe.http;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -48,7 +48,7 @@ public class KJHttp {
         this(new HttpConfig());
     }
 
-    /****************************** http请求 **********************************/
+    /*********************** HttpURLConnection get请求 *************************/
 
     public void urlGet(String url, KJParams params, I_HttpRespond callback) {
         if (params != null) {
@@ -61,68 +61,6 @@ public class KJHttp {
 
     public void urlGet(String url, I_HttpRespond callback) {
         pool.addTask(getGetHttpThread(url, callback));
-    }
-
-    public void urlPost(String url, KJParams params, I_HttpRespond callback) {
-        pool.addTask(getPostHttpThread(url, params, callback));
-    }
-
-    /**
-     * 获取一个Post请求线程
-     * 
-     * @param _url
-     *            网络地址
-     * @param params
-     *            post附带的参数集
-     * @param callback
-     *            回调接口
-     */
-    private Runnable getPostHttpThread(final String _url,
-            final KJParams params, final I_HttpRespond callback) {
-        return new Runnable() {
-            @Override
-            public void run() {
-                InputStream input = null;
-                OutputStream output = null;
-                BufferedReader reader = null;
-                try {
-                    URL url = new URL(_url);
-                    HttpURLConnection conn = (HttpURLConnection) url
-                            .openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setDoOutput(true);
-                    conn.setDoInput(true);
-                    conn.setUseCaches(config.isUseCache());
-                    conn.setReadTimeout(config.getReadTimeout());
-                    conn.setConnectTimeout(config.getConnectTimeOut());
-                    conn.setRequestProperty("Charset", config.getCharSet());
-                    output = conn.getOutputStream();
-                    input = conn.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(input));
-                    output.write(params.toString().getBytes());
-                    StringBuilder respond = new StringBuilder();
-                    int i = 0;
-                    int current = 0;
-                    int count = conn.getContentLength();
-                    char[] buf = new char[1024];
-                    while ((i = reader.read(buf)) != -1) {
-                        respond.append(buf, 0, i);
-                        // 每次循环调用一次
-                        if (I_HttpRespond.progress) {
-                            current += i;
-                            callback.loading(count, current);
-                        }
-                    }
-                    callback.success(respond.toString());
-                } catch (MalformedURLException e) {
-                    callback.failure(e, 3721, "URL错误");
-                } catch (IOException e) {
-                    callback.failure(e, 3722, "IO错误");
-                } finally {
-                    FileUtils.closeIO(input, output, reader);
-                }
-            }
-        };
     }
 
     /**
@@ -159,20 +97,84 @@ public class KJHttp {
                     while ((i = reader.read(buf)) != -1) {
                         respond.append(buf, 0, i);
                         // 每次循环调用一次
-                        if (I_HttpRespond.progress) {
+                        if (callback.progress) {
                             current += i;
-                            callback.loading(count, current);
+                            callback.onLoading(count, current);
                         }
                     }
-                    callback.success(respond.toString());
+                    callback.onSuccess(respond);
                 } catch (MalformedURLException e) {
-                    callback.failure(e, 3721, "URL错误");
+                    callback.onFailure(e, 3721, "URL错误");
                 } catch (IOException e) {
-                    callback.failure(e, 3722, "IO错误");
+                    callback.onFailure(e, 3722, "IO错误");
                 } finally {
                     FileUtils.closeIO(input, reader);
                 }
             }
         };
     }
+
+    /*********************** HttpURLConnection post请求 *************************/
+    public void urlPost(String url, KJParams params, I_HttpRespond callback) {
+        pool.addTask(getPostHttpThread(url, params, callback));
+    }
+
+    private Runnable getPostHttpThread(final String _url,
+            final KJParams params, final I_HttpRespond callback) {
+        return new Runnable() {
+            @Override
+            public void run() {
+                DataOutputStream out = null;
+                InputStream input = null;
+                BufferedReader reader = null;
+                try {
+                    URL url = new URL(_url);
+                    HttpURLConnection connection = (HttpURLConnection) url
+                            .openConnection();
+                    connection.setReadTimeout(config.getReadTimeout());
+                    connection.setConnectTimeout(config.getConnectTimeOut());
+                    connection.setRequestProperty("Charset",
+                            config.getCharSet());
+                    connection.setRequestProperty("Content-Type",
+                            "application/x-www-form-urlencoded");
+                    connection.setInstanceFollowRedirects(true);
+                    connection.setDoOutput(true);
+                    connection.setDoInput(true);
+                    connection.setRequestMethod("POST");
+                    connection.setUseCaches(false);
+                    connection.connect();
+                    if (params != null) {
+                        out = new DataOutputStream(connection.getOutputStream());
+                        out.writeBytes(params.toString());
+                        out.flush();
+                    }
+
+                    input = connection.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(input));
+                    StringBuilder respond = new StringBuilder();
+                    int i = 0;
+                    int current = 0;
+                    int count = connection.getContentLength();
+                    char[] buf = new char[1024];
+                    while ((i = reader.read(buf)) != -1) {
+                        respond.append(buf, 0, i);
+                        // 每次循环调用一次
+                        if (callback.progress) {
+                            current += i;
+                            callback.onLoading(count, current);
+                        }
+                    }
+                    callback.onSuccess(respond);
+                    connection.disconnect();
+                } catch (MalformedURLException e) {
+                    callback.onFailure(e, 3721, "URL错误");
+                } catch (IOException e) {
+                    callback.onFailure(e, 3722, "IO错误");
+                } finally {
+                    FileUtils.closeIO(out, input, reader);
+                }
+            }
+        };
+    }
+
 }
