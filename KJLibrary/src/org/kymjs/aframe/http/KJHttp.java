@@ -43,12 +43,25 @@ public class KJHttp {
         this.config = config;
     }
 
+    /**
+     * 使用默认http配置创建httpLibrary
+     */
     public KJHttp() {
         this(new HttpConfig());
     }
 
     /*********************** HttpURLConnection get请求 *************************/
 
+    /**
+     * 使用HttpURLConnection方式发起get请求
+     * 
+     * @param url
+     *            地址
+     * @param params
+     *            参数集
+     * @param callback
+     *            结果
+     */
     public void urlGet(String url, KJParams params, I_HttpRespond callback) {
         if (params != null) {
             StringBuilder str = new StringBuilder(url);
@@ -58,6 +71,14 @@ public class KJHttp {
         urlGet(url, callback);
     }
 
+    /**
+     * 使用HttpURLConnection方式发起get请求
+     * 
+     * @param url
+     *            地址
+     * @param callback
+     *            结果
+     */
     public void urlGet(String url, I_HttpRespond callback) {
         new HttpGetTask(callback).execute(url);
     }
@@ -128,6 +149,17 @@ public class KJHttp {
     }
 
     /*********************** HttpURLConnection post请求 *************************/
+
+    /**
+     * 使用HttpURLConnection方式发起post请求
+     * 
+     * @param url
+     *            地址
+     * @param params
+     *            参数集
+     * @param callback
+     *            结果
+     */
     public void urlPost(String url, KJParams params, I_HttpRespond callback) {
         new HttpPostTask(params, callback).execute(url);
     }

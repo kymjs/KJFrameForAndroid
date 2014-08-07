@@ -23,7 +23,13 @@ package org.kymjs.aframe.ui;
  * @created 2014-7-11
  */
 public interface I_BroadcastReg {
+    /**
+     * 注册广播
+     */
     void registerBroadcast();
 
+    /**
+     * 解除注册广播
+     */
     void unRegisterBroadcast();
 }

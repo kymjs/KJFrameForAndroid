@@ -50,10 +50,16 @@ public class HttpConfig {
         contentType = TYPE;
     }
 
+    /**
+     * 是否启用Cache
+     */
     public boolean isUseCache() {
         return useCache;
     }
 
+    /**
+     * 是否启用Cache
+     */
     public void setUseCache(boolean useCache) {
         this.useCache = useCache;
     }
@@ -66,34 +72,58 @@ public class HttpConfig {
         this.contentType = contentType;
     }
 
+    /**
+     * socket缓冲
+     */
     public int getSocketBuffer() {
         return socketBuffer;
     }
 
+    /**
+     * socket缓冲
+     */
     public void setSocketBuffer(int socketBuffer) {
         this.socketBuffer = socketBuffer;
     }
 
+    /**
+     * 链接响应超时时间
+     */
     public int getConnectTimeOut() {
         return connectTimeOut;
     }
 
+    /**
+     * 链接响应超时时间
+     */
     public void setConnectTimeOut(int connectTimeOut) {
         this.connectTimeOut = connectTimeOut;
     }
 
+    /**
+     * 链接超时时间
+     */
     public int getReadTimeout() {
         return readTimeout;
     }
 
+    /**
+     * 链接超时时间
+     */
     public void setReadTimeout(int readTimeout) {
         this.readTimeout = readTimeout;
     }
 
+    /**
+     * 字符串格式（默认UTF-8）
+     */
     public String getCharSet() {
         return charSet;
     }
 
+    /**
+     * 字符串格式（默认UTF-8）
+     */
     public void setCharSet(String charSet) {
         this.charSet = charSet;
     }
@@ -114,10 +144,16 @@ public class HttpConfig {
         this.doInput = doInput;
     }
 
+    /**
+     * 自动执行HTTP重定向
+     */
     public boolean isFollowRedirects() {
         return followRedirects;
     }
 
+    /**
+     * 自动执行HTTP重定向
+     */
     public void setFollowRedirects(boolean followRedirects) {
         this.followRedirects = followRedirects;
     }

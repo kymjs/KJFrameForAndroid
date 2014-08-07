@@ -44,6 +44,9 @@ final public class KJActivityManager {
         return ManagerHolder.instance;
     }
 
+    /**
+     * 获取当前Activity栈中元素个数
+     */
     public int getCount() {
         return activityStack.size();
     }
