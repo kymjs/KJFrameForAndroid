@@ -44,20 +44,22 @@ public class ScaleImageExample extends BaseFragment {
                 LinearLayout.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(params);
         button.setText("点击或侧滑返回");
-        Button rotate = new Button(getActivity());
-        rotate.setText("图片旋转功能开关");
+        final Button rotate = new Button(getActivity());
+        rotate.setText("可以旋转" + imageView.canRotate());
         rotate.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 imageView.setCanRotate(!imageView.canRotate());
+                rotate.setText("可以旋转" + imageView.canRotate());
             }
         });
-        Button doubleClick = new Button(getActivity());
-        doubleClick.setText("双击缩放功能开关");
+        final Button doubleClick = new Button(getActivity());
+        doubleClick.setText("双击或拉伸缩放" + imageView.canDoubleClick());
         doubleClick.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 imageView.setCanDoubleClick(!imageView.canDoubleClick());
+                doubleClick.setText("双击或拉伸缩放" + imageView.canDoubleClick());
             }
         });
         layout.addView(rotate);

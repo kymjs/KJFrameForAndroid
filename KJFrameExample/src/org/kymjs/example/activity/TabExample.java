@@ -5,9 +5,9 @@ import org.kymjs.aframe.ui.ViewInject;
 import org.kymjs.aframe.ui.activity.KJFragmentActivity;
 import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.example.R;
-import org.kymjs.example.fragment.BitmapDisplay;
 import org.kymjs.example.fragment.BitmapMistyExample;
 import org.kymjs.example.fragment.ChoiceImageExample;
+import org.kymjs.example.fragment.HttpExample;
 import org.kymjs.example.fragment.ListBitmapExample;
 
 import android.app.ActionBar;
@@ -32,7 +32,7 @@ public class TabExample extends KJFragmentActivity {
     private RadioButton mRbtn4;
 
     BaseFragment content1 = new ChoiceImageExample(); // 第一个界面
-    BaseFragment content2 = new BitmapDisplay(); // 第二个界面
+    BaseFragment content2 = new HttpExample(); // 第二个界面
     BaseFragment content3 = new ListBitmapExample(); // 第三个界面
     BaseFragment content4 = new BitmapMistyExample(); // 第四个界面
 
@@ -62,7 +62,7 @@ public class TabExample extends KJFragmentActivity {
             ViewInject.toast("侧滑试试");
             break;
         case R.id.bottombar_content2:
-            actionBar.setTitle("网络图片加载");
+            actionBar.setTitle("网络请求");
             changeFragment(false, content2);
             break;
         case R.id.bottombar_content3:

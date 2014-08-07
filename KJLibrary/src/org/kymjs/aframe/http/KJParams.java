@@ -74,7 +74,7 @@ public class KJParams {
             String key = entry.getKey();
             String value;
             try {
-                value = URLEncoder.encode(entry.getValue(), "utr-8");
+                value = URLEncoder.encode(entry.getValue(), "utf-8");
             } catch (UnsupportedEncodingException e) {
                 value = entry.getValue();
             }

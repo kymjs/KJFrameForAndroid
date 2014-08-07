@@ -15,12 +15,14 @@
  */
 package org.kymjs.aframe.http;
 
-public abstract class I_HttpRespond {
-    public boolean progress = false;
+public interface I_HttpRespond {
+    boolean isProgress();
 
-    void onLoading(long count, long current) {}
+    void setProgress(boolean open);
 
-    void onSuccess(Object t) {}
+    void onLoading(long count, long current);
 
-    void onFailure(Throwable t, int errorNo, String strMsg) {}
+    void onSuccess(Object t);
+
+    void onFailure(Throwable t, int errorNo, String strMsg);
 }
