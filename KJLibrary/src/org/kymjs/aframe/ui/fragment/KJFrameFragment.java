@@ -49,6 +49,12 @@ public abstract class KJFrameFragment extends Fragment implements
     /** initialization data */
     protected void initData() {}
 
+    /**
+     * initialization data. And this method run in background thread, so you
+     * shouldn't change ui
+     */
+    protected void initThreadData() {}
+
     /** widget click method */
     protected void widgetClick(View v) {}
 
@@ -62,6 +68,12 @@ public abstract class KJFrameFragment extends Fragment implements
             Bundle savedInstanceState) {
         View view = inflaterView(inflater, container, savedInstanceState);
         AnnotateUtil.initBindView(this, view);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                initThreadData();
+            }
+        }).start();
         initData();
         initWidget(view);
         return view;

@@ -31,7 +31,8 @@ public class ListBitmapExample extends BaseFragment {
         kjb.config.width = 520;
         kjb.config.height = (int) (520 * 0.45);
         kjb.config.loadingBitmap = BitmapCreate.bitmapFromResource(
-                getResources(), R.drawable.ic_launcher, 1000, 1000);
+                getResources(), R.drawable.ic_launcher, kjb.config.width,
+                kjb.config.height);
         return inflater.inflate(R.layout.listview, null);
     }
 

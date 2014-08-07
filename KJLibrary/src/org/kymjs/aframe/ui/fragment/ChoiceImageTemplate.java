@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.kymjs.aframe.bitmap.utils.BitmapCreate;
 import org.kymjs.aframe.bitmap.utils.BitmapHelper;
 import org.kymjs.aframe.utils.DensityUtils;
 import org.kymjs.kjlibrary.R;
@@ -194,10 +195,11 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
                         .getFilePath().get(0));
                 if (bitmap != null) {
                     // 压缩bitmap
-                    bitmaps.add(BitmapHelper.scale(bitmap, 80, 80));
+                    BitmapHelper.imageZoom(bitmap, 5);
+                    bitmaps.add(bitmap);
                 } else {
-                    bitmaps.add(BitmapFactory.decodeResource(getResources(),
-                            R.drawable.ic_launcher));
+                    bitmaps.add(BitmapCreate.bitmapFromResource(getResources(),
+                            R.drawable.ic_launcher, 80, 80));
                 }
             }
         }
@@ -273,7 +275,7 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
     }
 
     class FileGridAdapter extends BaseAdapter {
-        // 内存缓存，防止每次都访问硬盘造成listview滑动卡顿
+        // 防止每次都访问硬盘造成listview滑动卡顿
         private List<Bitmap> bitmaps = null;
         private List<String> fileDatas = null;
 
@@ -288,16 +290,22 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
             if (fileDatas == null) {
                 fileDatas = new ArrayList<String>();
             }
-            bitmaps = new ArrayList<Bitmap>();
+            if (bitmaps == null) {
+                bitmaps = new ArrayList<Bitmap>(datas.size());
+            } else {
+                bitmaps.clear();
+            }
             for (int i = 0; i < datas.size(); i++) {
                 // 创建bitmap
-                Bitmap bitmap = BitmapFactory.decodeFile(fileDatas.get(i));
+                Bitmap bitmap = BitmapCreate.bitmapFromFile(fileDatas.get(i),
+                        80, 80);
                 if (bitmap != null) {
                     // 压缩bitmap
-                    bitmaps.add(BitmapHelper.scale(bitmap, 80, 80));
+                    BitmapHelper.imageZoom(bitmap, 5);
+                    bitmaps.add(bitmap);
                 } else {
-                    bitmaps.add(BitmapFactory.decodeResource(getResources(),
-                            R.drawable.ic_launcher));
+                    bitmaps.add(BitmapCreate.bitmapFromResource(getResources(),
+                            R.drawable.ic_launcher, 80, 80));
                 }
             }
         }

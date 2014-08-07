@@ -31,9 +31,9 @@ final public class KJBitmapConfig {
     public int timeOut = 5000;
 
     /** 图片的宽度 */
-    public int width = 1000; // 不足1000则显示图片默认大小
+    public int width = 50; // 不足50则显示图片默认大小
     /** 图片的高度 */
-    public int height = 1000; // 不足1000则显示图片默认大小
+    public int height = 50; // 不足50则显示图片默认大小
 
     /** 载入时的图片 */
     public Bitmap loadingBitmap;
