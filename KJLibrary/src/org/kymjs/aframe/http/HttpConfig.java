@@ -28,7 +28,8 @@ public class HttpConfig {
     private static final int READ_TIMEOUT = 8 * 1000; // 8秒
     private static final String CHAR_SET = "UTF8";
     private static final boolean DO_OUT_PUT = true;
-    private static final String TYPE = "application/octet-stream";
+    private static int MAX_CONNECTION = 10;
+    private static final String TYPE = "application/x-www-form-urlencoded";
 
     private int socketBuffer; // socket缓冲区大小
     private int connectTimeOut; // 连接主机超时时间
@@ -39,6 +40,7 @@ public class HttpConfig {
     private boolean followRedirects; // 是否自动执行HTTP重定向
     private boolean useCache;
     private String contentType;
+    private int maxConnections; // http请求最大并发连接数
 
     public HttpConfig() {
         socketBuffer = DEFAULT_SOCKET_BUFFER_SIZE;
@@ -48,6 +50,7 @@ public class HttpConfig {
         doOutput = DO_OUT_PUT;
         useCache = false;
         contentType = TYPE;
+        maxConnections = MAX_CONNECTION;
     }
 
     /**
@@ -157,4 +160,19 @@ public class HttpConfig {
     public void setFollowRedirects(boolean followRedirects) {
         this.followRedirects = followRedirects;
     }
+
+    /**
+     * http请求最大并发连接数
+     */
+    public int getMaxConnections() {
+        return maxConnections;
+    }
+
+    /**
+     * http请求最大并发连接数
+     */
+    public void setMaxConnections(int maxConnections) {
+        this.maxConnections = maxConnections;
+    }
+
 }

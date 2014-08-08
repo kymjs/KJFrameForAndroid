@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.kymjs.aframe.KJException;
+
 /**
  * Http请求 参数集
  * 
@@ -29,25 +31,25 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version 1.1
  * @created 2014-6-5
  */
-public class KJParams {
+public class KJStringParams implements I_HttpParams {
     protected ConcurrentHashMap<String, String> urlParams;
 
     protected void init() {
-        urlParams = new ConcurrentHashMap<String, String>();
+        urlParams = new ConcurrentHashMap<String, String>(6);
     }
 
-    public KJParams() {
+    public KJStringParams() {
         init();
     }
 
-    public KJParams(Map<String, String> source) {
+    public KJStringParams(Map<String, String> source) {
         init();
         for (Map.Entry<String, String> entry : source.entrySet()) {
             put(entry.getKey(), entry.getValue());
         }
     }
 
-    public KJParams(String key, String value) {
+    public KJStringParams(String key, String value) {
         init();
         put(key, value);
     }
@@ -55,6 +57,8 @@ public class KJParams {
     public void put(String key, String value) {
         if (key != null && value != null) {
             urlParams.put(key, value);
+        } else {
+            throw new KJException("key or value is NULL");
         }
     }
 
@@ -62,7 +66,11 @@ public class KJParams {
      * 移除key与对应的value
      */
     public void remove(String key) {
-        urlParams.remove(key);
+        if (key == null) {
+            throw new KJException("key or value is NULL");
+        } else {
+            urlParams.remove(key);
+        }
     }
 
     @Override

@@ -1,8 +1,12 @@
 package org.kymjs.example.fragment;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import org.kymjs.aframe.KJLoger;
+import org.kymjs.aframe.http.KJFileParams;
 import org.kymjs.aframe.http.KJHttp;
-import org.kymjs.aframe.http.KJParams;
+import org.kymjs.aframe.http.KJStringParams;
 import org.kymjs.aframe.http.StringCallBack;
 import org.kymjs.aframe.ui.BindView;
 import org.kymjs.aframe.ui.ViewInject;
@@ -30,9 +34,9 @@ public class HttpExample extends BaseFragment {
     @Override
     protected void initWidget(View parentView) {
         super.initWidget(parentView);
-        btn1.setText("POST请求示例");
+        btn1.setText("POST请求JSON示例");
         btn2.setVisibility(View.VISIBLE);
-        btn2.setText("GET请求示例");
+        btn2.setText("GET请求JSON示例,更多请看代码");
     }
 
     @Override
@@ -48,6 +52,9 @@ public class HttpExample extends BaseFragment {
         }
     }
 
+    /**
+     * get请求json
+     */
     private void httpGetData() {
         KJHttp kjh = new KJHttp();
         kjh.urlGet("这里填网址！！！", new StringCallBack() {
@@ -64,14 +71,45 @@ public class HttpExample extends BaseFragment {
         });
     }
 
+    /**
+     * post上传文件
+     */
+    private void httpFile() {
+        KJHttp kjh = new KJHttp();
+        KJFileParams params = new KJFileParams();
+        params.put("user_id", "33");
+        try {
+            params.put(new File("/storage/sdcard0/1.jpg"));
+        } catch (FileNotFoundException e) {
+            ViewInject.toast("图片没有找到");
+        }
+        kjh.urlPost("http://l.tn10000.com/index.php/umessage/update_message",
+                params, new StringCallBack() {
+                    @Override
+                    public void onSuccess(String json) {
+                        ViewInject.longToast(json);
+                        KJLoger.debug(getClass().getName() + "网络信息：" + json);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t, int errorNo,
+                            String strMsg) {
+                        super.onFailure(t, errorNo, strMsg);
+                        ViewInject.longToast(strMsg);
+                    }
+                });
+    }
+
+    /**
+     * post请求json
+     */
     private void httpData() {
         KJHttp kjh = new KJHttp();
-        KJParams params = new KJParams();
-        params.put("uid", "13212347894");
-        params.put("password", "147852369");
-        params.put("login_type", "0");
-        kjh.urlPost("http://mr.tn10000.com/index.php/umessage/login", params,
-                new StringCallBack() {
+        KJStringParams params = new KJStringParams();
+        params.put("user_id", "33");
+        params.put("birthday", "2008-8-1");
+        kjh.urlPost("http://l.tn10000.com/index.php/umessage/update_message",
+                params, new StringCallBack() {
                     @Override
                     public void onSuccess(String json) {
                         ViewInject.longToast(json);
