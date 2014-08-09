@@ -18,6 +18,7 @@ package org.kymjs.aframe.http;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -364,4 +365,70 @@ public class KJHttp {
         }
     }
 
+    /*********************** HttpURLConnection 下载 *************************/
+
+    /**
+     * 使用HttpURLConnection方式下载文件
+     * 
+     * @param url
+     *            文件所在URL
+     * @param saveFile
+     *            文件本地保存路径
+     * @param open
+     *            是否开启断点续传
+     * @param callback
+     *            请求中的回调方法，目前只支持类：FileCallBack
+     */
+    public void urlDownload(String url, File saveFile, boolean open,
+            I_HttpRespond callback) {}
+
+    /**
+     * 使用HttpURLConnection方式下载文件
+     * 
+     * @param url
+     *            文件所在URL
+     * @param absFilePath
+     *            文件在本地保存的路径
+     * @param open
+     *            是否开启断点续传
+     * @param callback
+     *            请求中的回调方法，目前只支持类：FileCallBack
+     */
+    public void urlDownload(String url, String absFilePath, boolean open,
+            I_HttpRespond callback) {}
+
+    /**
+     * 使用HttpURLConnection方式下载文件，默认不启用断点续传
+     * 
+     * @param url
+     *            文件所在URL
+     * @param saveFile
+     *            文件本地保存路径
+     * @param callback
+     *            请求中的回调方法，目前只支持类：FileCallBack
+     */
+    public void urlDownload(String url, File saveFile, I_HttpRespond callback) {}
+
+    /**
+     * 使用HttpURLConnection方式下载文件，默认不启用断点续传
+     * 
+     * @param url
+     *            文件所在URL
+     * @param absFilePath
+     *            文件在本地保存的路径
+     * @param callback
+     *            请求中的回调方法，目前只支持类：FileCallBack
+     */
+    public void urlDownload(String url, String absFilePath,
+            I_HttpRespond callback) {}
+
+    private class DownloadTask extends AsyncTask<Object, Object, Object> {
+
+        @Override
+        protected Object doInBackground(Object... params) {
+
+            return null;
+        }
+
+    }
 }
