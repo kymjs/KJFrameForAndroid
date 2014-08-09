@@ -25,19 +25,34 @@ package org.kymjs.aframe.http;
 public abstract class StringCallBack implements I_HttpRespond {
     private boolean progress = false;
 
+    /**
+     * 是否开启上传进度显示
+     */
     public boolean isProgress() {
         return progress;
     }
 
+    /**
+     * 是否开启上传进度显示
+     */
     public void setProgress(boolean open) {
         progress = open;
     }
 
+    /**
+     * 网络请求成功后回调
+     */
     abstract public void onSuccess(String json);
 
+    /**
+     * 上传进度回调，必须调用了setProgress(true)，该方法才会回调
+     */
     @Override
     public void onLoading(long count, long current) {}
 
+    /**
+     * 网络请求异常后回调
+     */
     @Override
     public void onFailure(Throwable t, int errorNo, String strMsg) {}
 

@@ -41,6 +41,9 @@ public class KJHttp {
 
     private HttpConfig config;
 
+    /**
+     * 使用参数传递的配置器创建httpLibrary
+     */
     public KJHttp(HttpConfig config) {
         this.config = config;
     }
@@ -60,9 +63,9 @@ public class KJHttp {
      * @param url
      *            地址
      * @param params
-     *            参数集
+     *            参数集,可选类型：KJFileParams、KJStringParams
      * @param callback
-     *            结果
+     *            请求中的回调方法，可选类型：FileCallBack、StringCallBack
      */
     public void urlGet(String url, KJStringParams params, I_HttpRespond callback) {
         if (params != null) {
@@ -79,12 +82,15 @@ public class KJHttp {
      * @param url
      *            地址
      * @param callback
-     *            结果
+     *            请求中的回调方法，可选类型：FileCallBack、StringCallBack
      */
     public void urlGet(String url, I_HttpRespond callback) {
         new HttpUrlGetTask(callback).execute(url);
     }
 
+    /**
+     * 实现HttpUrlGet请求的任务
+     */
     private class HttpUrlGetTask extends AsyncTask<Object, Object, Object> {
         private I_HttpRespond callback;
 
@@ -158,9 +164,9 @@ public class KJHttp {
      * @param url
      *            地址
      * @param params
-     *            参数集
+     *            参数集,可选类型：KJFileParams、KJStringParams
      * @param callback
-     *            结果
+     *            请求中的回调方法，可选类型：FileCallBack、StringCallBack
      */
     public void urlPost(String url, I_HttpParams params, I_HttpRespond callback) {
         if (params instanceof KJStringParams) {
@@ -188,8 +194,8 @@ public class KJHttp {
             DataInputStream in = null;
             BufferedReader reader = null;
             StringBuilder respond = null;
+            String BOUNDARY = "---------7d4a6d158c9"; // 定义数据分隔线
             try {
-                String BOUNDARY = "---------7d4a6d158c9"; // 定义数据分隔线
                 URL url = new URL(urls[0].toString());
                 HttpURLConnection conn = (HttpURLConnection) url
                         .openConnection();

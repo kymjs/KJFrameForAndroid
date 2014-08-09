@@ -25,11 +25,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.kymjs.aframe.KJException;
 
 /**
- * Http请求 参数集
+ * 存储http请求中纯字符参数，如果你的http请求参数中包含了文件或数据流，你应该使用KJFileParams的对象作为kjh.urlPost()
+ * 方法的参数
  * 
+ * @explain 虽然你可以不论参数是否包含文件都使用该类对象作为kjh.urlPost()方法的参数，
+ *          但为了效率你应该为没有文件参数的kjh.urlPost()方法传递KJStringParams对象
+ * @explain 该类使用一个ConcurrentHashMap<String, String>保存字符串类型的参数
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.1
- * @created 2014-6-5
+ * @version 1.0
+ * @created 2014-8-7
  */
 public class KJStringParams implements I_HttpParams {
     protected ConcurrentHashMap<String, String> urlParams;
@@ -54,6 +58,12 @@ public class KJStringParams implements I_HttpParams {
         put(key, value);
     }
 
+    /**
+     * 添加一个指定的键值对，若k或v为null，则抛出KJException异常
+     * 
+     * @param key
+     * @param value
+     */
     public void put(String key, String value) {
         if (key != null && value != null) {
             urlParams.put(key, value);

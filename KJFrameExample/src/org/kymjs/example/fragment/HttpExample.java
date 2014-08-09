@@ -36,7 +36,7 @@ public class HttpExample extends BaseFragment {
         super.initWidget(parentView);
         btn1.setText("POST请求JSON示例");
         btn2.setVisibility(View.VISIBLE);
-        btn2.setText("GET请求JSON示例,更多请看代码");
+        btn2.setText("GET请求JSON示例,更多示例请看代码");
     }
 
     @Override
