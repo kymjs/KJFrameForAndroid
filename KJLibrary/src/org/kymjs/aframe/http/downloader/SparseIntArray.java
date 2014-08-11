@@ -1,8 +1,27 @@
+/*
+ * Copyright (c) 2014, KJFrameForAndroid 张涛 (kymjs123@gmail.com).
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kymjs.aframe.http.downloader;
 
 /**
  * 一个key值不可重复的有序k(int)-v(int)对集合类，使用一个从大到小的int数组存储key值，
  * 它的目的是用于替换HashMap<Integer, Integer>
+ * 
+ * @author kymjs(kymjs123@gmail.com)
+ * @version 1.0
+ * @created 2014-8-9
  */
 public class SparseIntArray implements Cloneable {
 

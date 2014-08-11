@@ -41,7 +41,7 @@ public class SlidExample extends SlidTemplet {
 
     @Override
     protected void initSlidMenu() {
-        item1 = new ResideMenuItem(this, R.drawable.ic_launcher, "加载网络图片");
+        item1 = new ResideMenuItem(this, R.drawable.ic_launcher, "加载网络图");
         item2 = new ResideMenuItem(this, R.drawable.ic_launcher, "模糊图片");
         item3 = new ResideMenuItem(this, R.drawable.ic_launcher, "图片缩放");
         item4 = new ResideMenuItem(this, R.drawable.ic_launcher, "多图选择");

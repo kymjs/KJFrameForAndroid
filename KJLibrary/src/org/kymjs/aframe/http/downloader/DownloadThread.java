@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2014, KJFrameForAndroid 张涛 (kymjs123@gmail.com).
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kymjs.aframe.http.downloader;
 
 import java.io.File;
@@ -9,31 +24,41 @@ import java.net.URL;
 import org.kymjs.aframe.KJLoger;
 
 /**
- * 下载线程类
+ * 多线程下载中实现每个线程的下载任务的类
+ * 
+ * @author kymjs(kymjs123@gmail.com)
+ * @version 1.0
+ * @created 2014-8-11
  */
 public class DownloadThread extends Thread {
-    private File saveFile;
-    private URL downUrl;
-    private int block;
+    private File saveFile; // 保存的文件
+    private URL url; // 下载地址
+    private int block; // 下载的大小
+    private int threadId = -1; // 当前线程的ID
+    private int downLength; // 已经下载的长度
+    private I_MulThreadLoader downloader; // 调用本线程的下载器类
 
-    /* 下载开始位置 */
-    private int threadId = -1;
-    private int downLength;
-    private boolean finish = false;
-    private FileDownLoader downloader;
+    private boolean finish = false; // 是否已经下载完成
 
     /**
-     * @param downloader
-     *            :下载器
-     * @param downUrl
-     *            :下载地址
-     * @param saveFile
-     *            :下载路径
+     * 构造方法
      * 
+     * @param downloader
+     *            下载器
+     * @param url
+     *            下载地址
+     * @param saveFile
+     *            下载路径
+     * @param block
+     *            要下载的文件大小
+     * @param downLength
+     *            已经下载的文件大小
+     * @param threadId
+     *            当前线程id
      */
-    public DownloadThread(FileDownLoader downloader, URL downUrl, File saveFile,
+    public DownloadThread(I_MulThreadLoader downloader, URL url, File saveFile,
             int block, int downLength, int threadId) {
-        this.downUrl = downUrl;
+        this.url = url;
         this.saveFile = saveFile;
         this.block = block;
         this.downloader = downloader;
@@ -46,7 +71,7 @@ public class DownloadThread extends Thread {
         if (downLength < block) {// 未下载完成
             try {
                 // 使用Get方式下载
-                HttpURLConnection http = (HttpURLConnection) downUrl
+                HttpURLConnection http = (HttpURLConnection) url
                         .openConnection();
                 http.setConnectTimeout(5 * 1000);
                 http.setRequestMethod("GET");
@@ -54,7 +79,7 @@ public class DownloadThread extends Thread {
                         "Accept",
                         "image/gif, image/jpeg, image/pjpeg, image/pjpeg, application/x-shockwave-flash, application/xaml+xml, application/vnd.ms-xpsdocument, application/x-ms-xbap, application/x-ms-application, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, */*");
                 http.setRequestProperty("Accept-Language", "zh-CN");
-                http.setRequestProperty("Referer", downUrl.toString());
+                http.setRequestProperty("Referer", url.toString());
                 http.setRequestProperty("Charset", "UTF-8");
 
                 int startPos = block * (threadId - 1) + downLength;// 开始位置
@@ -81,7 +106,6 @@ public class DownloadThread extends Thread {
                     downloader.update(this.threadId, downLength);
                     downloader.append(offset);
                 }
-
                 threadfile.close();
                 inStream.close();
                 KJLoger.debug("Thread " + this.threadId + " download finish");

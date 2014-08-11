@@ -23,6 +23,7 @@ package org.kymjs.aframe.http;
  * @created 2014-6-5
  */
 public class HttpConfig {
+    private static final int THREAD_COUNT = 6;
     private static final int DEFAULT_SOCKET_BUFFER_SIZE = 8 * 1024; // 8KB
     private static final int SOCKET_TIMEOUT = 8 * 1000; // 8秒
     private static final int READ_TIMEOUT = 8 * 1000; // 8秒
@@ -41,6 +42,7 @@ public class HttpConfig {
     private boolean useCache;
     private String contentType;
     private int maxConnections; // http请求最大并发连接数
+    private int downThreadCount;
 
     public HttpConfig() {
         socketBuffer = DEFAULT_SOCKET_BUFFER_SIZE;
@@ -51,6 +53,7 @@ public class HttpConfig {
         useCache = false;
         contentType = TYPE;
         maxConnections = MAX_CONNECTION;
+        downThreadCount = THREAD_COUNT;
     }
 
     /**
@@ -173,6 +176,20 @@ public class HttpConfig {
      */
     public void setMaxConnections(int maxConnections) {
         this.maxConnections = maxConnections;
+    }
+
+    /**
+     * 多线程下载的线程数
+     */
+    public int getDownThreadCount() {
+        return downThreadCount;
+    }
+
+    /**
+     * 多线程下载的线程数
+     */
+    public void setDownThreadCount(int downThreadCount) {
+        this.downThreadCount = downThreadCount;
     }
 
 }

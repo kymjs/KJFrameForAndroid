@@ -57,7 +57,7 @@ public abstract class FileCallBack implements I_HttpRespond {
     /**
      * 网络请求成功后回调
      */
-    abstract public void onSuccess(File json);
+    abstract public void onSuccess(File file);
 
     /**
      * 网络请求异常后回调

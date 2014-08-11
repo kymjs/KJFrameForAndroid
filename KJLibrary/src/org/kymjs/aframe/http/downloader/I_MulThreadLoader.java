@@ -15,29 +15,28 @@
  */
 package org.kymjs.aframe.http.downloader;
 
-import org.kymjs.aframe.http.I_HttpRespond;
-
 /**
- * 文件下载器接口协议
+ * 多线程文件下载器接口协议
  * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
  * @created 2014-8-11
  */
-public interface I_Fileloader {
+public interface I_MulThreadLoader extends I_Fileloader {
     /**
-     * 开始下载文件，监听下载数量的变化,不显示实时下载进度
+     * 累计已下载大小
      * 
-     * @return 已下载文件大小
+     * @param size
      */
-    int download();
+    void append(int size);
 
     /**
-     * 开始下载文件
+     * 更新指定线程最后下载的位置
      * 
-     * @param listener
-     *            监听下载数量的变化,如果不需要了解实时下载的数量,可以设置为null
-     * @return 已下载文件大小
+     * @param threadId
+     *            线程id
+     * @param pos
+     *            最后下载的位置
      */
-    int download(I_HttpRespond callback);
+    void update(int threadId, int pos);
 }

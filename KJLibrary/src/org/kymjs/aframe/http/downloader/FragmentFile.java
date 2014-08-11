@@ -1,17 +1,46 @@
+/*
+ * Copyright (c) 2014, KJFrameForAndroid 张涛 (kymjs123@gmail.com).
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kymjs.aframe.http.downloader;
 
-import java.util.Map;
+import org.kymjs.aframe.ui.KJActivityManager;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * 碎片文件保存到数据库的工具类
+ * 
+ * @author kymjs(kymjs123@gmail.com)
+ * @version 1.0
+ * @created 2014-8-11
+ */
 public class FragmentFile {
     private DBOpenHelper openHelper;
 
-    public FragmentFile(Context context) {
-        openHelper = new DBOpenHelper(context);
+    public FragmentFile() {
+        Context cxt = null;
+        try {
+            cxt = KJActivityManager.create().topActivity();
+        } catch (Exception e) {
+            cxt = KJActivityManager.create().topActivity()
+                    .getApplicationContext();
+        }
+        openHelper = new DBOpenHelper(cxt);
     }
 
     /**
@@ -38,18 +67,17 @@ public class FragmentFile {
      * @param path
      * @param map
      */
-    public void save(String path, Map<Integer, Integer> map) {// int threadid,
-                                                              // int position
+    public void save(String path, SparseIntArray map) {
+
         SQLiteDatabase db = openHelper.getWritableDatabase();
         db.beginTransaction();
 
         try {
-            for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            for (int i = 0; i < map.size(); i++) {
                 db.execSQL(
-                        "insert into filedownlog(downpath, threadid, downlength) values(?,?,?)",
-                        new Object[] { path, entry.getKey(), entry.getValue() });
+                        "insert into log(path, threadid, len) values(?,?,?)",
+                        new Object[] { path, map.keyAt(i), map.valueAt(i) });
             }
-
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -64,17 +92,14 @@ public class FragmentFile {
      * @param path
      * @param map
      */
-    public void update(String path, Map<Integer, Integer> map) {
+    public void update(String path, SparseIntArray map) {
         SQLiteDatabase db = openHelper.getWritableDatabase();
         db.beginTransaction();
-
         try {
-            for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-                db.execSQL(
-                        "update filedownlog set downlength=? where downpath=? and threadid=?",
-                        new Object[] { entry.getValue(), path, entry.getKey() });
+            for (int i = 0; i < map.size(); i++) {
+                db.execSQL("update log set len=? where path=? and threadid=?",
+                        new Object[] { map.valueAt(i), path, map.keyAt(i) });
             }
-
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -88,8 +113,7 @@ public class FragmentFile {
      */
     public void delete(String path) {
         SQLiteDatabase db = openHelper.getWritableDatabase();
-        db.execSQL("delete from filedownlog where downpath=?",
-                new Object[] { path });
+        db.execSQL("delete from log where path=?", new Object[] { path });
         db.close();
     }
 
@@ -102,12 +126,12 @@ public class FragmentFile {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL("CREATE TABLE IF NOT EXISTS filedownlog (id integer primary key autoincrement, url varchar(150), threadid INTEGER, len INTEGER)");
+            db.execSQL("CREATE TABLE IF NOT EXISTS log (id integer primary key autoincrement, path varchar(150), threadid INTEGER, len INTEGER)");
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("DROP TABLE IF EXISTS filedownlog");
+            db.execSQL("DROP TABLE IF EXISTS log");
             onCreate(db);
         }
     }

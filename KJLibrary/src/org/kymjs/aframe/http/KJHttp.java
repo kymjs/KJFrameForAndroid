@@ -27,6 +27,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.kymjs.aframe.KJException;
+import org.kymjs.aframe.http.downloader.FileDownLoader;
+import org.kymjs.aframe.http.downloader.I_Fileloader;
 import org.kymjs.aframe.utils.FileUtils;
 
 import android.os.AsyncTask;
@@ -368,37 +371,7 @@ public class KJHttp {
     /*********************** HttpURLConnection 下载 *************************/
 
     /**
-     * 使用HttpURLConnection方式下载文件
-     * 
-     * @param url
-     *            文件所在URL
-     * @param saveFile
-     *            文件本地保存路径
-     * @param open
-     *            是否开启断点续传
-     * @param callback
-     *            请求中的回调方法，目前只支持类：FileCallBack
-     */
-    public void urlDownload(String url, File saveFile, boolean open,
-            I_HttpRespond callback) {}
-
-    /**
-     * 使用HttpURLConnection方式下载文件
-     * 
-     * @param url
-     *            文件所在URL
-     * @param absFilePath
-     *            文件在本地保存的路径
-     * @param open
-     *            是否开启断点续传
-     * @param callback
-     *            请求中的回调方法，目前只支持类：FileCallBack
-     */
-    public void urlDownload(String url, String absFilePath, boolean open,
-            I_HttpRespond callback) {}
-
-    /**
-     * 使用HttpURLConnection方式下载文件，默认不启用断点续传
+     * 使用HttpURLConnection方式下载文件，默认启用断点续传
      * 
      * @param url
      *            文件所在URL
@@ -407,10 +380,12 @@ public class KJHttp {
      * @param callback
      *            请求中的回调方法，目前只支持类：FileCallBack
      */
-    public void urlDownload(String url, File saveFile, I_HttpRespond callback) {}
+    public void urlDownload(String url, File saveFile, I_HttpRespond callback) {
+        urlDownload(url, saveFile, true, callback);
+    }
 
     /**
-     * 使用HttpURLConnection方式下载文件，默认不启用断点续传
+     * 使用HttpURLConnection方式下载文件，默认启用断点续传
      * 
      * @param url
      *            文件所在URL
@@ -420,15 +395,78 @@ public class KJHttp {
      *            请求中的回调方法，目前只支持类：FileCallBack
      */
     public void urlDownload(String url, String absFilePath,
-            I_HttpRespond callback) {}
+            I_HttpRespond callback) {
+        urlDownload(url, absFilePath, true, callback);
+    }
 
-    private class DownloadTask extends AsyncTask<Object, Object, Object> {
+    /**
+     * 使用HttpURLConnection方式下载文件。不使用断点续传的功能还没做，暂时不让外界调用本方法
+     * 
+     * @param url
+     *            文件所在URL
+     * @param absFilePath
+     *            文件在本地保存的路径
+     * @param open
+     *            是否开启断点续传
+     * @param callback
+     *            请求中的回调方法，目前只支持类：FileCallBack
+     */
+    private void urlDownload(String url, String absFilePath, boolean open,
+            I_HttpRespond callback) {
+        int s = absFilePath.lastIndexOf(File.separator);
+        String dir = null;
+        if (s > 0) {
+            dir = absFilePath.substring(0, s);
+            File file = new File(dir);
+            file.mkdirs();
+            file = new File(absFilePath);
+            try {
+                file.createNewFile();
+                urlDownload(url, file, open, callback);
+            } catch (IOException e) {
+                throw new KJException("can not create file");
+            }
+        } else {
+            throw new KJException("can not create file dir");
+        }
+    }
 
-        @Override
-        protected Object doInBackground(Object... params) {
+    /**
+     * 使用HttpURLConnection方式下载文件。不使用断点续传的功能还没做，暂时不让外界调用本方法
+     * 
+     * @param url
+     *            文件所在URL
+     * @param saveFile
+     *            文件本地保存点
+     * @param open
+     *            是否开启断点续传
+     * @param callback
+     *            请求中的回调方法，目前只支持类：FileCallBack
+     */
+    private void urlDownload(String url, File saveFile, boolean open,
+            I_HttpRespond callback) {
+        if (open) {
+            new FileDownloadTask(saveFile, callback).execute(url);
+        } else {
+            // 不使用断点续传的功能还没做
+        }
+    }
 
-            return null;
+    class FileDownloadTask extends AsyncTask<Object, Object, I_Fileloader> {
+        private File saveFile;
+        private I_HttpRespond callback;
+
+        public FileDownloadTask(File saveFile, I_HttpRespond callback) {
+            this.saveFile = saveFile;
+            this.callback = callback;
         }
 
+        @Override
+        protected I_Fileloader doInBackground(Object... urls) {
+            I_Fileloader result = new FileDownLoader(urls[0].toString(),
+                    saveFile, config.getDownThreadCount());
+            result.download(callback);
+            return result;
+        }
     }
 }
