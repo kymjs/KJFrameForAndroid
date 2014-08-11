@@ -1,4 +1,4 @@
-KJFrameForAndroid
+﻿KJFrameForAndroid
 =================
 
 # KJFrameForAndroid 交流平台
@@ -74,6 +74,14 @@ public class TabExample extends BaseActivity {
     }
 }
 ```
+Topology中回调函数调用顺序：
+setRootView();
+@BindView
+initThreadData();（异步，线程中调用）
+initData();
+initWidget();
+registerBroadcast();
+
 
 ## UtilsLibrary模块
 包含了应用开发中的常用工具类，例如系统级别的Log管理、网络状态监测、Bitmap压缩工具类、获取屏幕宽高以及单位转换的工具类、错误信息处理与文件处理工具类、preference工具类、字符串操作与常用正则判断等。详细内容请自行查看项目文件中org.kymjs.aframe.utils包下的内容[更多介绍...](http://my.oschina.net/kymjs/blog)<br><br>
@@ -84,7 +92,7 @@ public class TabExample extends BaseActivity {
 ###普通get方法示例：
 ```java
 KJHttp kjh = new KJHttp();
-kjh.urlget("http://my.oschina.net/kymjs/blog", new StringRespond(){
+kjh.urlGet("http://my.oschina.net/kymjs/blog", new StringRespond(){
 
 	@Override
 	public void success(String t) {
@@ -96,6 +104,77 @@ kjh.urlget("http://my.oschina.net/kymjs/blog", new StringRespond(){
 		ViewInject.toast("网络加载失败，请检查您的网络");
 	}
 });
+
+```
+
+###普通post请求JSON方法示例：
+```java
+KJHttp kjh = new KJHttp();
+KJStringParams params = new KJStringParams();
+params.put("user_id", "33");
+params.put("birthday", "2008-8-1");
+kjh.urlPost("http://my.oschina.net/kymjs/blog", params, new StringRespond(){
+
+	@Override
+	public void success(String t) {
+			ViewInject.toast("显示JSON信息：" + t);
+	}
+
+	@Override
+	public void failure(Throwable t, int errorNo, String strMsg) {
+		ViewInject.toast("网络加载失败，请检查您的网络");
+	}
+});
+
+```
+###post上传文件方法示例：
+```java
+KJHttp kjh = new KJHttp();
+KJFileParams params = new KJFileParams();
+params.put("user_id", "33");
+params.put(new File("/storage/sdcard0/1.jpg"));//传file对象
+params.put(inputstream);//传文件输入流
+params.put(byteArray);//传文件byte数组
+//以上三种方法任选其一即可
+kjh.urlPost("http://my.oschina.net/kymjs/blog", params, new StringRespond(){
+
+	@Override
+	public void success(String t) {
+			ViewInject.toast("显示JSON信息：" + t);
+	}
+
+	@Override
+	public void failure(Throwable t, int errorNo, String strMsg) {
+		ViewInject.toast("网络加载失败，请检查您的网络");
+	}
+});
+
+```
+###多线程下载方法示例：
+```java
+KJHttp kjh = new KJHttp();
+FileCallBack file = new FileCallBack() {
+    @Override
+    public void onSuccess(File f) {
+        ViewInject.toast("下载成功");
+    }
+    @Override
+    public void onLoading(long count, long current) {
+        super.onLoading(count, current);
+        if (!maxed) {
+            mProgress.setMax((int) count);
+            maxed = true;
+        }
+        mProgress.setProgress((int) current);
+    }
+    @Override
+    public void onFailure(Throwable t, int errorNo, String strMsg) {
+        super.onFailure(t, errorNo, strMsg);
+        ViewInject.toast("失败原因： " + strMsg);
+    }
+};
+file.setProgress(true); // 若要调用onLoading，必须设置为true
+kjh.urlDownload(mEt.getText().toString(), "/storage/sdcard0/3.png",file);
 
 ```
 
