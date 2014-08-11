@@ -15,6 +15,8 @@
  */
 package org.kymjs.aframe.http;
 
+import org.kymjs.aframe.http.downloader.I_FileLoader;
+
 /**
  * HttpClient请求的配置类
  * 
@@ -43,6 +45,7 @@ public class HttpConfig {
     private String contentType;
     private int maxConnections; // http请求最大并发连接数
     private int downThreadCount;
+    private I_FileLoader downloader; // 文件下载器
 
     public HttpConfig() {
         socketBuffer = DEFAULT_SOCKET_BUFFER_SIZE;
@@ -190,6 +193,22 @@ public class HttpConfig {
      */
     public void setDownThreadCount(int downThreadCount) {
         this.downThreadCount = downThreadCount;
+    }
+
+    /**
+     * 文件下载器，默认采用系统自带下载器，你也可以使用自己的下载器
+     */
+    public I_FileLoader getDownloader() {
+        return downloader;
+    }
+
+    /**
+     * 设置文件下载器，默认采用系统自带下载器，你也可以使用自己的下载器
+     * 
+     * @param downloader
+     */
+    public void setDownloader(I_FileLoader downloader) {
+        this.downloader = downloader;
     }
 
 }

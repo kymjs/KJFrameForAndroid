@@ -2,10 +2,10 @@ package org.kymjs.example.fragment;
 
 import java.io.File;
 
-import org.kymjs.aframe.KJLoger;
 import org.kymjs.aframe.http.FileCallBack;
 import org.kymjs.aframe.http.KJHttp;
 import org.kymjs.aframe.ui.BindView;
+import org.kymjs.aframe.ui.ViewInject;
 import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.example.R;
 
@@ -37,7 +37,7 @@ public class DownloadExample extends BaseFragment {
     @Override
     protected void initWidget(View parentView) {
         super.initWidget(parentView);
-        mEt.setText("https://raw.githubusercontent.com/kymjs/KJFrameForAndroid/master/KJFrameExample/big_image.png");
+        mEt.setText("https://raw.githubusercontent.com/kymjs/KJFrameForAndroid/master/KJFrameExample/big_image2.jpg");
     }
 
     @Override
@@ -49,7 +49,7 @@ public class DownloadExample extends BaseFragment {
             FileCallBack file = new FileCallBack() {
                 @Override
                 public void onSuccess(File f) {
-                    KJLoger.debug("下载成功");
+                    ViewInject.toast("下载成功");
                 }
 
                 @Override
@@ -61,8 +61,14 @@ public class DownloadExample extends BaseFragment {
                     }
                     mProgress.setProgress((int) current);
                 }
+
+                @Override
+                public void onFailure(Throwable t, int errorNo, String strMsg) {
+                    super.onFailure(t, errorNo, strMsg);
+                    ViewInject.toast("失败原因： " + strMsg);
+                }
             };
-            file.setProgress(true);
+            file.setProgress(true); // 若要显示进度，必须设置为true
             kjh.urlDownload(mEt.getText().toString(), "/storage/sdcard0/3.png",
                     file);
             break;

@@ -22,7 +22,7 @@ package org.kymjs.aframe.http.downloader;
  * @version 1.0
  * @created 2014-8-11
  */
-public interface I_MulThreadLoader extends I_Fileloader {
+public interface I_MulThreadLoader extends I_FileLoader {
     /**
      * 累计已下载大小
      * 

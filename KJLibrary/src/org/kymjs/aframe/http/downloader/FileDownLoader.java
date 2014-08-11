@@ -25,9 +25,10 @@ import java.net.URL;
 
 import org.kymjs.aframe.KJException;
 import org.kymjs.aframe.http.I_HttpRespond;
+import org.kymjs.aframe.ui.KJActivityManager;
 
 /**
- * 多线程文件下载器类
+ * 多线程文件下载器类，你也可以通过实现I_MulThreadLoader或I_FileLoader接口协议来创建自己的下载器
  * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
@@ -45,7 +46,7 @@ public class FileDownLoader implements I_MulThreadLoader {
     SparseIntArray data = new SparseIntArray();
 
     /**
-     * 构建文件下载器,并没有流操作，不算耗时操作
+     * 构建文件下载器
      * 
      * @param _url
      *            下载路径
@@ -90,6 +91,7 @@ public class FileDownLoader implements I_MulThreadLoader {
                 if (this.fileSize <= 0) {
                     throw new KJException("Unkown file size ");
                 }
+
                 SparseIntArray logdata = fragmentFile.getData(_url);// 获取下载记录
                 if (logdata.size() > 0) { // 如果存在下载记录
                     for (int i = 0; i < logdata.size(); i++) {
@@ -97,9 +99,9 @@ public class FileDownLoader implements I_MulThreadLoader {
                         data.put(logdata.keyAt(i), logdata.valueAt(i));
                     }
                 }
-
+                // 如果当前线程信息和获取到的已保存信息一致
                 if (this.data.size() == this.threads.length) {
-                    // 下面计算所有线程已经下载的数据长度
+                    // 初始化已下载文件大小
                     for (int i = 0; i < this.threads.length; i++) {
                         this.loadSize += this.data.get(i + 1);
                     }
@@ -113,11 +115,10 @@ public class FileDownLoader implements I_MulThreadLoader {
                 throw new KJException("server response code is: "
                         + conn.getResponseCode());
             }
-            conn.disconnect();
         } catch (MalformedURLException e) {
-            throw new KJException("don't connection this url");
+            throw new KJException("don't connection this url", e);
         } catch (IOException e) {
-            throw new KJException("connection error");
+            throw new KJException("connection error", e);
         }
     }
 
@@ -134,14 +135,9 @@ public class FileDownLoader implements I_MulThreadLoader {
     }
 
     /**
-     * 开始下载文件
-     * 
-     * @param listener
-     *            监听下载数量的变化,如果不需要了解实时下载的数量,可以设置为null
-     * @return 已下载文件大小
+     * 初始化输出文件块位置
      */
-    @Override
-    public int download(I_HttpRespond callback) {
+    private URL initFile() {
         URL url = null;
         try {
             RandomAccessFile randOut = new RandomAccessFile(this.saveFile, "rw");
@@ -149,27 +145,26 @@ public class FileDownLoader implements I_MulThreadLoader {
                 randOut.setLength(this.fileSize);
             }
             randOut.close();
+        } catch (FileNotFoundException e) {
+            throw new KJException("file download fail :saveFile not found", e);
+        } catch (IOException e) {
+            throw new KJException(
+                    "file download fail :fileclose error,IOException", e);
+        }
+        try {
             url = new URL(this.loadUrl);
         } catch (MalformedURLException e) {
-            if (callback != null) {
-                callback.onFailure(e, 3721, "file download fail :url error");
-            }
-            throw new KJException("file download fail :url error");
-        } catch (FileNotFoundException e) {
-            if (callback != null) {
-                callback.onFailure(e, 3721,
-                        "file download fail :saveFile not found");
-            }
-            throw new KJException("file download fail :saveFile not found");
-        } catch (IOException e) {
-            if (callback != null) {
-                callback.onFailure(e, 3721,
-                        "file download fail :fileclose error,IOException");
-            }
-            throw new KJException(
-                    "file download fail :fileclose error,IOException");
+            throw new KJException("file download fail :url error", e);
         }
+        return url;
+    }
 
+    /**
+     * 初始化下载
+     * 
+     * @param url
+     */
+    private void initDownload(URL url) {
         // 如果map集合中保存的线程数与程序的线程数不同，则重新初始化
         if (this.data.size() != this.threads.length) {
             this.data.clear();
@@ -186,26 +181,40 @@ public class FileDownLoader implements I_MulThreadLoader {
             if (downLength < this.block && this.loadSize < this.fileSize) {
                 this.threads[i] = new DownloadThread(this, url, this.saveFile,
                         this.block, this.data.get(i + 1), i + 1);
-                this.threads[i].setPriority(7);
+                this.threads[i].setPriority(Thread.MAX_PRIORITY);
                 this.threads[i].start();
             } else {
                 this.threads[i] = null;
             }
         }
+
+        // 保存到数据库一次
         this.fragmentFile.save(this.loadUrl, this.data);
-        boolean notFinish = true;// 下载未完成
+    }
 
-        while (notFinish) {// 循环判断所有线程是否完成下载
-            // 如果设置了进度监听器，则回调相应方法
-            if (callback != null) {
-                callback.onLoading(this.fileSize, this.loadSize);
-            }
-            notFinish = false;// 假定全部线程下载完成
+    /**
+     * 开始下载文件
+     * 
+     * @param listener
+     *            监听下载数量的变化,如果不需要了解实时下载的数量,可以设置为null
+     * @return 已下载文件大小
+     */
+    @Override
+    public int download(final I_HttpRespond callback) {
+        URL url = initFile(); // 初始化每个线程的下载文件块
+        initDownload(url); // 设置每个线程的下载任务
 
+        // 阻塞态，判断所有线程是否完成下载
+        for (boolean isFinish = false; !isFinish;) {
+            // 假定下载完成
+            isFinish = true;
+            // 遍历每个线程，检测是否真的下载完成
             for (int i = 0; i < this.threads.length; i++) {
+
                 // 如果发现线程未完成下载
                 if (this.threads[i] != null && !this.threads[i].isFinish()) {
-                    notFinish = true;// 设置标志为下载没有完成
+                    isFinish = false;// 下载没有完成
+
                     // 如果下载失败,再重新下载
                     if (this.threads[i].getDownLength() == -1) {
                         this.threads[i] = new DownloadThread(this, url,
@@ -214,10 +223,19 @@ public class FileDownLoader implements I_MulThreadLoader {
                         this.threads[i].start();
                     }
                 }
+
             }
-        }
-        if (callback != null) {
-            callback.onSuccess(this.saveFile);
+
+            // 如果设置了进度监听器，则在UI线程中回调相应方法
+            if (callback != null && callback.isProgress()) {
+                KJActivityManager.create().topActivity()
+                        .runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onLoading(fileSize, loadSize);
+                            }
+                        });
+            }
         }
         fragmentFile.delete(this.loadUrl);
         return this.loadSize;

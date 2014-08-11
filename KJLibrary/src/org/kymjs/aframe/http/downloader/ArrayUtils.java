@@ -22,7 +22,7 @@ import java.lang.reflect.Array;
 // and the array size eats another 4 bytes
 
 /**
- * 本类摘自Android open source project 2006
+ * 本类摘自Android open source project 2006，部分改动
  * 
  * ArrayUtils contains some methods that you can call to find out the most
  * efficient increments by which to grow arrays.
@@ -32,13 +32,14 @@ public class ArrayUtils {
     private static final int CACHE_SIZE = 73;
     private static Object[] sCache = new Object[CACHE_SIZE];
 
-    private ArrayUtils() { /* cannot be instantiated */}
+    private ArrayUtils() {}
 
     public static int idealByteArraySize(int need) {
-        for (int i = 4; i < 32; i++)
-            if (need <= (1 << i) - 12)
+        for (int i = 4; i < 32; i++) {
+            if (need <= (1 << i) - 12) {
                 return (1 << i) - 12;
-
+            }
+        }
         return need;
     }
 
@@ -114,10 +115,7 @@ public class ArrayUtils {
         if (cache == null || cache.getClass().getComponentType() != kind) {
             cache = Array.newInstance(kind, 0);
             sCache[bucket] = cache;
-
-            // Log.e("cache", "new empty " + kind.getName() + " at " + bucket);
         }
-
         return (T[]) cache;
     }
 
@@ -134,11 +132,13 @@ public class ArrayUtils {
     public static <T> boolean contains(T[] array, T value) {
         for (T element : array) {
             if (element == null) {
-                if (value == null)
+                if (value == null) {
                     return true;
+                }
             } else {
-                if (value != null && element.equals(value))
+                if (value != null && element.equals(value)) {
                     return true;
+                }
             }
         }
         return false;

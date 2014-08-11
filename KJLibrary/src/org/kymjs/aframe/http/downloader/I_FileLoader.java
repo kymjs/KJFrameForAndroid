@@ -24,7 +24,7 @@ import org.kymjs.aframe.http.I_HttpRespond;
  * @version 1.0
  * @created 2014-8-11
  */
-public interface I_Fileloader {
+public interface I_FileLoader {
     /**
      * 开始下载文件，监听下载数量的变化,不显示实时下载进度
      * 

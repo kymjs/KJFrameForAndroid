@@ -48,7 +48,6 @@ public class FragmentFile {
      */
     public SparseIntArray getData(String path) {
         SparseIntArray data = new SparseIntArray();
-
         SQLiteDatabase db = openHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(
                 "select threadid, len from log where path=?",
@@ -68,10 +67,8 @@ public class FragmentFile {
      * @param map
      */
     public void save(String path, SparseIntArray map) {
-
         SQLiteDatabase db = openHelper.getWritableDatabase();
         db.beginTransaction();
-
         try {
             for (int i = 0; i < map.size(); i++) {
                 db.execSQL(
@@ -81,9 +78,8 @@ public class FragmentFile {
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
+            db.close();
         }
-
-        db.close();
     }
 
     /**
@@ -103,9 +99,8 @@ public class FragmentFile {
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
+            db.close();
         }
-
-        db.close();
     }
 
     /**

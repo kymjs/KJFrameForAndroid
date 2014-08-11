@@ -29,7 +29,7 @@ import java.net.URL;
 
 import org.kymjs.aframe.KJException;
 import org.kymjs.aframe.http.downloader.FileDownLoader;
-import org.kymjs.aframe.http.downloader.I_Fileloader;
+import org.kymjs.aframe.http.downloader.I_FileLoader;
 import org.kymjs.aframe.utils.FileUtils;
 
 import android.os.AsyncTask;
@@ -448,11 +448,13 @@ public class KJHttp {
         if (open) {
             new FileDownloadTask(saveFile, callback).execute(url);
         } else {
-            // 不使用断点续传的功能还没做
         }
     }
 
-    class FileDownloadTask extends AsyncTask<Object, Object, I_Fileloader> {
+    /**
+     * 实现HttpUrl下载文件的任务(目前已知BUG，当文件下载过程中中断网络，下载没有停止)
+     */
+    private class FileDownloadTask extends AsyncTask<Object, Object, Object> {
         private File saveFile;
         private I_HttpRespond callback;
 
@@ -462,11 +464,32 @@ public class KJHttp {
         }
 
         @Override
-        protected I_Fileloader doInBackground(Object... urls) {
-            I_Fileloader result = new FileDownLoader(urls[0].toString(),
-                    saveFile, config.getDownThreadCount());
-            result.download(callback);
-            return result;
+        protected Object doInBackground(Object... urls) {
+            try {
+                // 下载器可以自己通过实现I_FileLoader或者I_MulThreadLoader接口协议
+                I_FileLoader result = config.getDownloader();
+                if (result == null) {
+                    result = new FileDownLoader(urls[0].toString(), saveFile,
+                            config.getDownThreadCount());
+                }
+                result.download(callback);
+                return result;
+            } catch (final KJException e) {
+                return e;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            if (callback != null) {
+                if (result instanceof I_FileLoader) {
+                    callback.onSuccess(this.saveFile);
+                } else {
+                    KJException e = ((KJException) result);
+                    callback.onFailure(e, 3721, e.getMessage());
+                }
+            }
         }
     }
 }
