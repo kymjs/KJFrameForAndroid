@@ -4,6 +4,8 @@ import org.kymjs.aframe.bitmap.KJBitmap;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
 import org.kymjs.aframe.ui.BindView;
 import org.kymjs.aframe.ui.fragment.BaseFragment;
+import org.kymjs.aframe.ui.widget.KJListView;
+import org.kymjs.aframe.ui.widget.KJListView.KJListViewListener;
 import org.kymjs.example.R;
 
 import android.app.Activity;
@@ -14,14 +16,14 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 public class ListBitmapExample extends BaseFragment {
     @BindView(id = R.id.listview)
-    private ListView listview;
+    private KJListView listview;
 
     private Activity aty;
     private KJBitmap kjb;
+    private int count = 20;
 
     @Override
     protected View inflaterView(LayoutInflater inflater, ViewGroup container,
@@ -39,16 +41,39 @@ public class ListBitmapExample extends BaseFragment {
     @Override
     protected void initWidget(View parentView) {
         super.initWidget(parentView);
-        listview.setAdapter(new ListviewAdapter());
+        final ListviewAdapter adapter = new ListviewAdapter();
+        listview.setAdapter(adapter);
+        // 上拉刷新需要手动开启，下拉刷新默认开启
+        listview.setPullLoadEnable(true);
+        listview.setKJListViewListener(new KJListViewListener() {
+            @Override
+            public void onRefresh() { // 下拉刷新完成
+                count += 5;
+                listview.stopRefreshData();
+                adapter.refresh();
+            }
+
+            @Override
+            public void onLoadMore() { // 上拉刷新完成
+                count += 5;
+                listview.stopRefreshData();
+                adapter.refresh();
+            }
+        });
     }
 
-    class ListviewAdapter extends BaseAdapter {
+    private class ListviewAdapter extends BaseAdapter {
 
-        ImageView image;
+        private ImageView image;
 
         @Override
         public int getCount() {
-            return 30;
+            return count;
+        }
+
+        public void refresh() {
+            // notifyDataSetChanged();
+            notifyDataSetInvalidated();
         }
 
         @Override

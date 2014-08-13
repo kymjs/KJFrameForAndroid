@@ -19,13 +19,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.kymjs.aframe.bitmap.utils.BitmapCreate;
-import org.kymjs.aframe.bitmap.utils.BitmapHelper;
+import org.kymjs.aframe.bitmap.KJBitmap;
 import org.kymjs.aframe.utils.DensityUtils;
-import org.kymjs.kjlibrary.R;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -70,6 +66,8 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
     private List<FolderBean> datas = null;
     /** 用户选中的图片的地址集合（结果集） */
     protected List<String> checkFile = null;
+
+    KJBitmap kjb = KJBitmap.create();
 
     @Override
     protected final View inflaterView(LayoutInflater inflater,
@@ -163,46 +161,27 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
         }
     }
 
+    /**
+     * 用户选中图片点击确定后将会回调
+     * 
+     * @param v
+     */
     abstract protected void OnClickCommitEvent(View v);
 
     /*********************** ListView（文件夹）适配器部分 ***********************/
 
-    static class ListViewHolder {
+    private static class ListViewHolder {
         ImageView img;
         TextView tv_folder;
         TextView tv_count;
     }
 
-    class FolderListAdapter extends BaseAdapter {
-        // 内存缓存，防止每次都访问硬盘造成listview滑动卡顿
-        private List<Bitmap> bitmaps = null;
-
+    private class FolderListAdapter extends BaseAdapter {
         // widget
         private LinearLayout itemView = null;
         private ImageView itemImg;
         private TextView itemTvFolder;
         private TextView itemTvCount;
-
-        public FolderListAdapter() {
-            initData();
-        }
-
-        private void initData() {
-            bitmaps = new ArrayList<Bitmap>();
-            for (int i = 0; i < datas.size(); i++) {
-                // 创建bitmap
-                Bitmap bitmap = BitmapFactory.decodeFile(datas.get(i)
-                        .getFilePath().get(0));
-                if (bitmap != null) {
-                    // 压缩bitmap
-                    BitmapHelper.imageZoom(bitmap, 5);
-                    bitmaps.add(bitmap);
-                } else {
-                    bitmaps.add(BitmapCreate.bitmapFromResource(getResources(),
-                            R.drawable.ic_launcher, 80, 80));
-                }
-            }
-        }
 
         @Override
         public int getCount() {
@@ -233,8 +212,8 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
             } else {
                 holder = (ListViewHolder) convertView.getTag();
             }
-            // 从内存缓存bitmaps中读取图片
-            holder.img.setImageBitmap(bitmaps.get(position));
+            kjb.display(holder.img, datas.get(position).getFilePath().get(0),
+                    80, 80);
             holder.tv_count.setText("共有"
                     + datas.get(position).getFilePath().size() + "张图片");
             holder.tv_folder.setText(datas.get(position).getFolderName());
@@ -269,14 +248,12 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
     }
 
     /*********************** GridView（图片文件）适配器部分 ***********************/
-    static class GridViewHolder {
+    private static class GridViewHolder {
         ImageView img;
         CheckBox cBox;
     }
 
-    class FileGridAdapter extends BaseAdapter {
-        // 防止每次都访问硬盘造成listview滑动卡顿
-        private List<Bitmap> bitmaps = null;
+    private class FileGridAdapter extends BaseAdapter {
         private List<String> fileDatas = null;
 
         // widget
@@ -289,24 +266,6 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
             fileDatas = datas;
             if (fileDatas == null) {
                 fileDatas = new ArrayList<String>();
-            }
-            if (bitmaps == null) {
-                bitmaps = new ArrayList<Bitmap>(datas.size());
-            } else {
-                bitmaps.clear();
-            }
-            for (int i = 0; i < datas.size(); i++) {
-                // 创建bitmap
-                Bitmap bitmap = BitmapCreate.bitmapFromFile(fileDatas.get(i),
-                        80, 80);
-                if (bitmap != null) {
-                    // 压缩bitmap
-                    BitmapHelper.imageZoom(bitmap, 5);
-                    bitmaps.add(bitmap);
-                } else {
-                    bitmaps.add(BitmapCreate.bitmapFromResource(getResources(),
-                            R.drawable.ic_launcher, 80, 80));
-                }
             }
         }
 
@@ -339,8 +298,7 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
             } else {
                 holder = (GridViewHolder) convertView.getTag();
             }
-            // 从内存缓存bitmaps中读取图片
-            holder.img.setImageBitmap(bitmaps.get(position));
+            kjb.display(holder.img, fileDatas.get(position), 80, 80);
             convertView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
