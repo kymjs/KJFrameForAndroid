@@ -22,6 +22,8 @@ import android.widget.ImageView;
 public class BitmapDisplay extends BaseFragment {
     @BindView(id = R.id.button1, click = true)
     private Button button;
+    @BindView(id = R.id.button2, click = true)
+    private Button button2;
     @BindView(id = R.id.imageview, click = true)
     private ImageView imageView;
 
@@ -33,22 +35,30 @@ public class BitmapDisplay extends BaseFragment {
     }
 
     @Override
+    protected void initWidget(View parentView) {
+        super.initWidget(parentView);
+        button2.setVisibility(View.VISIBLE);
+        button2.setText("点击加载网络图片");
+    }
+
+    @Override
     protected void widgetClick(View v) {
         super.widgetClick(v);
         switch (v.getId()) {
         case R.id.button1:
             if (getActivity() instanceof SlidExample) {
                 ((SlidExample) getActivity()).changeSlidMenu();
-            } else {
-                KJBitmap kjb = KJBitmap.create();
-                // 载入本地图片
-                // kjb.display(imageView, "/storage/sdcard0/1.png");
-                // 载入网络图片
-                kjb.display(
-                        imageView,
-                        "https://raw.githubusercontent.com/kymjs/KJFrameForAndroid/master/KJFrameExample/big_image2.jpg");
-                ViewInject.toast("网络图片加载");
             }
+            break;
+        case R.id.button2:
+            KJBitmap kjb = KJBitmap.create();
+            // 载入本地图片
+            // kjb.display(imageView, "/storage/sdcard0/1.png");
+            // 载入网络图片
+            kjb.display(
+                    imageView,
+                    "https://raw.githubusercontent.com/kymjs/KJFrameForAndroid/master/KJFrameExample/big_image2.jpg");
+            ViewInject.toast("图片较大，加载中");
             break;
         }
     }

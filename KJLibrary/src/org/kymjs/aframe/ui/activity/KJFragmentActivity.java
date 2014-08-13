@@ -54,16 +54,13 @@ public abstract class KJFragmentActivity extends BaseActivity {
     }
 
     /** 改变界面的fragment */
-    protected void changeFragment(int resView, boolean addStack,
-            BaseFragment targetFragment) {
+    protected void changeFragment(int resView, BaseFragment targetFragment) {
         FragmentTransaction transaction = getFragmentManager()
                 .beginTransaction();
         transaction.replace(resView, targetFragment, targetFragment.getClass()
                 .getName());
         transaction.setCustomAnimations(R.anim.in_from_right,
                 R.anim.out_to_left);
-        if (addStack)
-            transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -75,6 +72,5 @@ public abstract class KJFragmentActivity extends BaseActivity {
      * @param targetFragment
      *            要改变的Activity
      */
-    public abstract void changeFragment(boolean addStack,
-            BaseFragment targetFragment);
+    public abstract void changeFragment(BaseFragment targetFragment);
 }

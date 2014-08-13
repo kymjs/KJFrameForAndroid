@@ -47,9 +47,9 @@ public class BitmapOperateUtil {
      * @params imageView 要显示虚化图片的控件（imageview则设置src，其他则设置bg）
      * @params src 将要虚化的图片
      */
-    public static Bitmap SetMistyBitmap(View imageview, Bitmap src) {
+    public static void SetMistyBitmap(View imageview, Bitmap src) {
         if (imageview == null || src == null)
-            return null;
+            return;
         if (SystemTool.getSDKVersion() >= 18) {
             src = blur(src, imageview, 12);
         } else {
@@ -60,15 +60,13 @@ public class BitmapOperateUtil {
                         .getResources(), blur(src, 12)));
             }
         }
-        return src;
     }
 
     /**
-     * 背景虚化方法，4.2系统以下的方法（效率很低，不推荐使用）
+     * 背景虚化方法，4.2系统以下的方法
      * 
-     * @核心算法 通过解析bitmap，将bitmap的每一个像素点的rgb值获取到；以每一个像素点为圆心，根据radius模糊度半径，
-     *       求得每个像素点在半径区域中的平均rgb值， 保存为模糊后的该点的rgb值。
-     *       这样做很显然效率非常低下，对于每个像素点都需要计算，而且半径越大计算起来越复杂。
+     * @explain 通过解析bitmap，将bitmap的每一个像素点的rgb值获取到；以每一个像素点为圆心，根据radius模糊度半径，
+     *          求得每个像素点在半径区域中的平均rgb值， 保存为模糊后的该点的rgb值。
      * @param bkg
      *            将要虚化的图片
      * @param radius
@@ -212,7 +210,6 @@ public class BitmapOperateUtil {
             yi = x;
             stackpointer = radius;
             for (y = 0; y < h; y++) {
-                // Preserve alpha channel: ( 0xff000000 & pix[yi] )
                 pix[yi] = (0xff000000 & pix[yi]) | (dv[rsum] << 16)
                         | (dv[gsum] << 8) | dv[bsum];
 

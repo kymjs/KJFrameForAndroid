@@ -61,21 +61,21 @@ public class TabExample extends KJFragmentActivity {
             break;
         case R.id.bottombar_content2:
             actionBar.setTitle("网络请求");
-            changeFragment(false, content2);
+            changeFragment(content2);
             break;
         case R.id.bottombar_content3:
             actionBar.setTitle("listview网络图片加载");
-            changeFragment(false, content3);
+            changeFragment(content3);
             break;
         case R.id.bottombar_content4:
             actionBar.setTitle("图片模糊效果");
-            changeFragment(false, content4);
+            changeFragment(content4);
             break;
         }
     }
 
     @Override
-    public void changeFragment(boolean addBackStack, BaseFragment targetFragment) {
-        changeFragment(R.id.content, addBackStack, targetFragment);
+    public void changeFragment(BaseFragment targetFragment) {
+        changeFragment(R.id.content, targetFragment);
     }
 }
