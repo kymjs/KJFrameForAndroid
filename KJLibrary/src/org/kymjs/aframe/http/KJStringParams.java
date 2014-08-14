@@ -18,10 +18,15 @@ package org.kymjs.aframe.http;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.message.BasicNameValuePair;
 import org.kymjs.aframe.KJException;
 
 /**
@@ -32,7 +37,7 @@ import org.kymjs.aframe.KJException;
  *          但为了效率你应该为没有文件参数的kjh.urlPost()方法传递KJStringParams对象
  * @explain 该类使用一个ConcurrentHashMap<String, String>保存字符串类型的参数
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
+ * @version 1.1
  * @created 2014-8-7
  */
 public class KJStringParams implements I_HttpParams {
@@ -99,5 +104,28 @@ public class KJStringParams implements I_HttpParams {
             str.append(key).append("=").append(value).append("&");
         }
         return str.toString();
+    }
+
+    /**
+     * 获取参数集，这里只是为了方便httpClient使用，如果是HttpUrlConnection直接调用toString()就行了
+     */
+    @Override
+    public HttpEntity getEntity() {
+        HttpEntity entity = null;
+        try {
+            entity = new UrlEncodedFormEntity(getParamsList(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return entity;
+    }
+
+    protected List<BasicNameValuePair> getParamsList() {
+        List<BasicNameValuePair> lparams = new LinkedList<BasicNameValuePair>();
+        for (ConcurrentHashMap.Entry<String, String> entry : urlParams
+                .entrySet()) {
+            lparams.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+        }
+        return lparams;
     }
 }

@@ -23,22 +23,80 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.WeakHashMap;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.zip.GZIPInputStream;
 
+import org.apache.http.Header;
+import org.apache.http.HeaderElement;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpResponseInterceptor;
+import org.apache.http.HttpVersion;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.HttpRequestRetryHandler;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.conn.params.ConnManagerParams;
+import org.apache.http.conn.params.ConnPerRouteBean;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.entity.HttpEntityWrapper;
+import org.apache.http.impl.client.AbstractHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.protocol.SyncBasicHttpContext;
 import org.kymjs.aframe.KJException;
+import org.kymjs.aframe.KJThreadExecutors;
 import org.kymjs.aframe.http.downloader.FileDownLoader;
 import org.kymjs.aframe.http.downloader.I_FileLoader;
 import org.kymjs.aframe.utils.FileUtils;
 
+import android.content.Context;
 import android.os.AsyncTask;
+
+/**
+ * update log
+ * 1.1 添加httpUrlConnection请求操作
+ * 1.2 添加httpUrlConnection下载操作
+ * 1.3 添加httpClient的post、get、put等方式请求
+ */
 
 /**
  * The HttpLibrary's core classes
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
+ * @version 1.3
  * @created 2014-7-14
  */
 public class KJHttp {
@@ -50,6 +108,8 @@ public class KJHttp {
      */
     public KJHttp(HttpConfig config) {
         this.config = config;
+        // 如果使用httpClient必须初始化，如果不使用，则无需调用
+        initHttpClient();
     }
 
     /**
@@ -222,10 +282,12 @@ public class KJHttp {
                     StringBuilder sb = new StringBuilder();
                     sb.append("--")
                             .append(BOUNDARY)
-                            .append("\r\nContent-Disposition: form-data;name=\"KJFrameForAndroid_File"
-                                    + i
-                                    + "\";filename=\"KJFrameForAndroid_File\"\r\n")
-                            .append("Content-Type:application/octet-stream\r\n\r\n");
+                            .append("\r\nContent-Disposition: form-data;name=\"")
+                            .append(HttpConfig.FileParamsKey)
+                            .append(i)
+                            .append("\";filename=\"")
+                            .append(HttpConfig.FileParamsName)
+                            .append("\"\r\nContent-Type:application/octet-stream\r\n\r\n");
                     byte[] data = sb.toString().getBytes();
                     out.write(data);
                     in = new DataInputStream(params.fileParams.get(i));
@@ -488,6 +550,445 @@ public class KJHttp {
                 } else {
                     KJException e = ((KJException) result);
                     callback.onFailure(e, 3721, e.getMessage());
+                }
+            }
+        }
+    }
+
+    /**************************** HttpClient method ******************************/
+
+    private DefaultHttpClient httpClient;
+    private ThreadPoolExecutor threadPool;
+    private HttpContext httpContext;
+    private Map<String, String> clientHeaderMap;
+    private Map<Context, List<WeakReference<Future<?>>>> requestMap;
+
+    /**
+     * 初始化httpClient
+     */
+    private void initHttpClient() {
+        BasicHttpParams httpParams = new BasicHttpParams();
+
+        ConnManagerParams.setTimeout(httpParams, config.getConnectTimeOut());
+        ConnManagerParams.setMaxConnectionsPerRoute(httpParams,
+                new ConnPerRouteBean(config.getMaxConnections()));
+        ConnManagerParams.setMaxTotalConnections(httpParams,
+                config.getMaxConnections());
+
+        HttpConnectionParams.setSoTimeout(httpParams,
+                config.getConnectTimeOut());
+        HttpConnectionParams.setConnectionTimeout(httpParams,
+                config.getConnectTimeOut());
+        HttpConnectionParams.setTcpNoDelay(httpParams, true);
+        HttpConnectionParams.setSocketBufferSize(httpParams,
+                config.getSocketBuffer());
+
+        HttpProtocolParams.setVersion(httpParams, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setUserAgent(httpParams, "KJLibrary");
+
+        SchemeRegistry schemeRegistry = new SchemeRegistry();
+        schemeRegistry.register(new Scheme("http", PlainSocketFactory
+                .getSocketFactory(), 80));
+        schemeRegistry.register(new Scheme("https", SSLSocketFactory
+                .getSocketFactory(), 443));
+        ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager(
+                httpParams, schemeRegistry);
+
+        httpContext = new SyncBasicHttpContext(new BasicHttpContext());
+        httpClient = new DefaultHttpClient(cm, httpParams);
+        httpClient.addRequestInterceptor(new HttpRequestInterceptor() {
+            @Override
+            public void process(HttpRequest request, HttpContext context) {
+                if (!request.containsHeader("Accept-Encoding")) {
+                    request.addHeader("Accept-Encoding", "gzip");
+                }
+
+                for (Entry<String, String> entry : clientHeaderMap.entrySet()) {
+                    request.addHeader(entry.getKey(), entry.getValue());
+                }
+            }
+        });
+
+        httpClient.addResponseInterceptor(new HttpResponseInterceptor() {
+            @Override
+            public void process(HttpResponse response, HttpContext context) {
+                final HttpEntity entity = response.getEntity();
+                if (entity == null) {
+                    return;
+                }
+                final Header encoding = entity.getContentEncoding();
+                if (encoding != null) {
+                    for (HeaderElement element : encoding.getElements()) {
+                        if (element.getName().equalsIgnoreCase("gzip")) {
+                            response.setEntity(new InflatingEntity(response
+                                    .getEntity()));
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+        threadPool = (ThreadPoolExecutor) KJThreadExecutors
+                .newCachedThreadPool();
+        httpClient.setHttpRequestRetryHandler(new RetryHandler(config
+                .getReadTimeout()));
+        requestMap = new WeakHashMap<Context, List<WeakReference<Future<?>>>>();
+        clientHeaderMap = new HashMap<String, String>();
+    }
+
+    /************************* HttpClient config method *************************/
+
+    /**
+     * 设置一个可选的cookie去标记请求
+     * 
+     * @param cookieStore
+     *            The CookieStore implementation to use, usually an instance of
+     *            {@link PersistentCookieStore}
+     */
+    public void setCookieStore(CookieStore cookieStore) {
+        httpContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
+    }
+
+    /**
+     * 设置代理请求头，默认是
+     * "Android Asynchronous Http Client/VERSION (http://loopj.com/android-async-http/)"
+     * 
+     * @param userAgent
+     *            the string to use in the User-Agent header.
+     */
+    public void setUserAgent(String userAgent) {
+        HttpProtocolParams.setUserAgent(this.httpClient.getParams(), userAgent);
+    }
+
+    /**
+     * 设置连接超时时间，默认为10s
+     * 
+     * @param timeout
+     *            the connect/socket timeout in milliseconds
+     */
+    public void setTimeout(int timeout) {
+        config.setReadTimeout(timeout);
+        config.setConnectTimeOut(timeout);
+        final HttpParams httpParams = this.httpClient.getParams();
+        ConnManagerParams.setTimeout(httpParams, timeout);
+        HttpConnectionParams.setSoTimeout(httpParams, timeout);
+        HttpConnectionParams.setConnectionTimeout(httpParams, timeout);
+    }
+
+    /**
+     * 设置以https方式连接
+     * 
+     * @param sslSocketFactory
+     *            the socket factory to use for https requests.
+     */
+    public void setSSLSocketFactory(SSLSocketFactory sslSocketFactory) {
+        this.httpClient.getConnectionManager().getSchemeRegistry()
+                .register(new Scheme("https", sslSocketFactory, 443));
+    }
+
+    /**
+     * 添加http请求头
+     * 
+     * @param header
+     *            the name of the header
+     * @param value
+     *            the contents of the header
+     */
+    public void addHeader(String header, String value) {
+        clientHeaderMap.put(header, value);
+    }
+
+    /**
+     * Sets basic authentication for the request. Uses AuthScope.ANY. This is
+     * the same as setBasicAuth('username','password',AuthScope.ANY)
+     * 
+     * @param user
+     * @param pass
+     */
+    public void setBasicAuth(String user, String pass) {
+        AuthScope scope = AuthScope.ANY;
+        setBasicAuth(user, pass, scope);
+    }
+
+    /**
+     * Sets basic authentication for the request. You should pass in your
+     * AuthScope for security. It should be like this
+     * setBasicAuth("username","password", new
+     * AuthScope("host",port,AuthScope.ANY_REALM))
+     * 
+     * @param user
+     * @param pass
+     * @param scope
+     *            - an AuthScope object
+     * 
+     */
+    public void setBasicAuth(String user, String pass, AuthScope scope) {
+        UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+                user, pass);
+        this.httpClient.getCredentialsProvider().setCredentials(scope,
+                credentials);
+    }
+
+    /**
+     * Cancels any pending (or potentially active) requests associated with the
+     * passed Context.
+     * <p>
+     * <b>Note:</b> This will only affect requests which were created with a
+     * non-null android Context. This method is intended to be used in the
+     * onDestroy method of your android activities to destroy all requests which
+     * are no longer required.
+     * 
+     * @param context
+     *            the android Context instance associated to the request.
+     * @param mayInterruptIfRunning
+     *            specifies if active requests should be cancelled along with
+     *            pending requests.
+     */
+    public void cancelRequests(Context context, boolean mayInterruptIfRunning) {
+        List<WeakReference<Future<?>>> requestList = requestMap.get(context);
+        if (requestList != null) {
+            for (WeakReference<Future<?>> requestRef : requestList) {
+                Future<?> request = requestRef.get();
+                if (request != null) {
+                    request.cancel(mayInterruptIfRunning);
+                }
+            }
+        }
+        requestMap.remove(context);
+    }
+
+    /************************* HttpClient get请求 *************************/
+
+    public void get(String url, HttpCallBack callback) {
+        get(null, url, null, callback);
+    }
+
+    public void get(String url, KJStringParams params, HttpCallBack callback) {
+        get(null, url, params, callback);
+    }
+
+    public void get(Context context, String url, HttpCallBack callback) {
+        get(context, url, null, callback);
+    }
+
+    public void get(Context context, String url, KJStringParams params,
+            HttpCallBack callback) {
+        if (params != null) {
+            StringBuilder str = new StringBuilder(url);
+            str.append("?").append(params.toString());
+            url = str.toString();
+        }
+        sendRequest(httpClient, httpContext, new HttpGet(url), null, callback,
+                context);
+    }
+
+    /************************* HttpClient post请求 *************************/
+    public void post(String url, HttpCallBack callback) {
+        post(null, url, null, callback);
+    }
+
+    public void post(String url, I_HttpParams params, HttpCallBack callback) {
+        post(null, url, params, callback);
+    }
+
+    public void post(Context context, String url, I_HttpParams params,
+            HttpCallBack callback) {
+        post(context, url, paramsToEntity(params), null, callback);
+    }
+
+    public void post(Context context, String url, HttpEntity entity,
+            String contentType, HttpCallBack callback) {
+        sendRequest(httpClient, httpContext,
+                addEntityToRequestBase(new HttpPost(url), entity), contentType,
+                callback, context);
+    }
+
+    /************************* HttpClient post请求 *************************/
+    public void put(String url, HttpCallBack callback) {
+        put(null, url, null, callback);
+    }
+
+    public void put(String url, I_HttpParams params, HttpCallBack callback) {
+        put(null, url, params, callback);
+    }
+
+    public void put(Context context, String url, I_HttpParams params,
+            HttpCallBack callback) {
+        put(context, url, paramsToEntity(params), null, callback);
+    }
+
+    public void put(Context context, String url, HttpEntity entity,
+            String contentType, HttpCallBack callback) {
+        sendRequest(httpClient, httpContext,
+                addEntityToRequestBase(new HttpPut(url), entity), contentType,
+                callback, context);
+    }
+
+    /************************ httpClient core method *******************************/
+    /**
+     * 发送一个请求
+     * 
+     * @param client
+     *            httpClient对象
+     * @param callback
+     *            Http请求过程中的回调方法接口
+     * @param context
+     */
+    protected void sendRequest(DefaultHttpClient client,
+            HttpContext httpContext, HttpUriRequest uriRequest,
+            String contentType, HttpCallBack callback, Context context) {
+        if (contentType != null) {
+            uriRequest.addHeader("Content-Type", contentType);
+        }
+        Future<?> request = threadPool.submit(new AsyncHttpRequest(client,
+                httpContext, uriRequest, callback));
+        if (context != null) {
+            // 在请求集中添加本次请求
+            List<WeakReference<Future<?>>> requestList = requestMap
+                    .get(context);
+            if (requestList == null) {
+                requestList = new LinkedList<WeakReference<Future<?>>>();
+                requestMap.put(context, requestList);
+            }
+            requestList.add(new WeakReference<Future<?>>(request));
+        }
+    }
+
+    /**
+     * 将http参数转换成HttpEntity集合
+     * 
+     * @param params
+     * @return
+     */
+    private HttpEntity paramsToEntity(I_HttpParams params) {
+        HttpEntity entity = null;
+        if (params != null) {
+            entity = params.getEntity();
+        }
+        return entity;
+    }
+
+    private HttpEntityEnclosingRequestBase addEntityToRequestBase(
+            HttpEntityEnclosingRequestBase requestBase, HttpEntity entity) {
+        if (entity != null) {
+            requestBase.setEntity(entity);
+        }
+        return requestBase;
+    }
+
+    /**
+     * 对httpClient的请求参数做封装
+     * 
+     * @author kymjs(kymjs123@gmail.com)
+     * @version 1.0
+     * @created 2014-8-14
+     */
+    private static class InflatingEntity extends HttpEntityWrapper {
+        public InflatingEntity(HttpEntity wrapped) {
+            super(wrapped);
+        }
+
+        @Override
+        public InputStream getContent() throws IOException {
+            return new GZIPInputStream(wrappedEntity.getContent());
+        }
+
+        @Override
+        public long getContentLength() {
+            return -1;
+        }
+    }
+
+    /**
+     * 一个http请求的线程
+     * 
+     * @author kymjs(kymjs123@gmail.com)
+     */
+    private class AsyncHttpRequest implements Runnable {
+        private final AbstractHttpClient client;
+        private final HttpContext context;
+        private final HttpUriRequest request;
+        private final HttpCallBack callback;
+        private int executionCount;
+
+        public AsyncHttpRequest(AbstractHttpClient client, HttpContext context,
+                HttpUriRequest request, HttpCallBack callback) {
+            this.client = client;
+            this.context = context;
+            this.request = request;
+            this.callback = callback;
+        }
+
+        /**
+         * 真正去执行一次请求
+         */
+        private void makeRequest() throws IOException {
+            if (!Thread.currentThread().isInterrupted()) {
+                try {
+                    HttpResponse response = client.execute(request, context);
+                    if (!Thread.currentThread().isInterrupted()) {
+                        if (callback != null) {
+                            callback.sendResponseMessage(response);
+                        }
+                    }
+                } catch (IOException e) {
+                    if (!Thread.currentThread().isInterrupted()) {
+                        throw e;
+                    }
+                }
+            }
+        }
+
+        /**
+         * 执行一次请求，如果发生错误尝试重连
+         */
+        private void makeRequestWithRetries() throws ConnectException {
+            boolean retry = true;
+            IOException cause = null;
+            HttpRequestRetryHandler retryHandler = client
+                    .getHttpRequestRetryHandler();
+            while (retry) {
+                try {
+                    makeRequest();
+                    return;
+                } catch (UnknownHostException e) {
+                    if (callback != null) {
+                        callback.sendFailureMessage(e, "can't resolve host");
+                    }
+                    return;
+                } catch (SocketException e) {
+                    if (callback != null) {
+                        callback.sendFailureMessage(e, "can't resolve host");
+                    }
+                    return;
+                } catch (SocketTimeoutException e) {
+                    if (callback != null) {
+                        callback.sendFailureMessage(e, "socket time out");
+                    }
+                    return;
+                } catch (IOException e) {
+                    cause = e;
+                    retry = retryHandler.retryRequest(cause, ++executionCount,
+                            context);
+                } catch (NullPointerException e) {
+                    cause = new IOException("NPE in HttpClient"
+                            + e.getMessage());
+                    retry = retryHandler.retryRequest(cause, ++executionCount,
+                            context);
+                }
+            }
+            ConnectException ex = new ConnectException();
+            ex.initCause(cause);
+            throw ex;
+        }
+
+        @Override
+        public void run() {
+            try {
+                makeRequestWithRetries();
+            } catch (IOException e) {
+                if (callback != null) {
+                    callback.sendFailureMessage(e, "ConnectException");
                 }
             }
         }

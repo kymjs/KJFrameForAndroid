@@ -25,6 +25,9 @@ import org.kymjs.aframe.http.downloader.I_FileLoader;
  * @created 2014-6-5
  */
 public class HttpConfig {
+    public static final String FileParamsName = "KJFrameForAndroid_File";
+    public static final String FileParamsKey = "KJLibrary";
+
     private static final int THREAD_COUNT = 6;
     private static final int DEFAULT_SOCKET_BUFFER_SIZE = 8 * 1024; // 8KB
     private static final int SOCKET_TIMEOUT = 8 * 1000; // 8秒

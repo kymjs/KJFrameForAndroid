@@ -108,7 +108,7 @@ public class HttpExample extends BaseFragment {
         KJStringParams params = new KJStringParams();
         params.put("user_id", "33");
         params.put("birthday", "2008-8-1");
-        kjh.urlPost("http://l.tn10000.com/index.php/umessage/update_message",
+        kjh.post("http://l.tn10000.com/index.php/umessage/update_message",
                 params, new StringCallBack() {
                     @Override
                     public void onSuccess(String json) {

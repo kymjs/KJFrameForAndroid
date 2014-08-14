@@ -21,28 +21,10 @@ import java.io.File;
  * 用于处理传递File的http请求回调类（例如文件下载）
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
+ * @version 1.1
  * @created 2014-8-8
  */
-public abstract class FileCallBack implements I_HttpRespond {
-    private boolean progress = false;
-
-    /**
-     * 是否开启上传进度显示
-     */
-    @Override
-    public boolean isProgress() {
-        return progress;
-    }
-
-    /**
-     * 是否开启上传进度显示
-     */
-    @Override
-    public void setProgress(boolean open) {
-        progress = open;
-    }
-
+public abstract class FileCallBack extends HttpCallBack {
     /**
      * 上传进度回调，必须调用了setProgress(true)，该方法才会回调
      */

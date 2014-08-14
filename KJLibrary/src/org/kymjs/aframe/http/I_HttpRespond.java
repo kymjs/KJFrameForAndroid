@@ -19,7 +19,7 @@ package org.kymjs.aframe.http;
  * http请求规范接口协议
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
+ * @version 1.2
  * @created 2014-8-7
  */
 public interface I_HttpRespond {

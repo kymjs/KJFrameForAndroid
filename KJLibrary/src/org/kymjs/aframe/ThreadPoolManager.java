@@ -19,12 +19,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * 线程池管理类
+ * 线程池管理类（你可以使用更好的替代类：org.kymjs.aframe.KJThreadExecutors）
  * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.1
  * @created 2014-6-5
  */
+@Deprecated
 final public class ThreadPoolManager {
     /*
      * 单类模式
@@ -60,7 +61,7 @@ final public class ThreadPoolManager {
     }
 
     /**
-     * 在线程池中执行我传进来的任务
+     * 在线程池中执行传入的任务
      */
     public void addTask(Runnable run) {
         service.execute(run);
