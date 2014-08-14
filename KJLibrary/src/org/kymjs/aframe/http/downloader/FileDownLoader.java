@@ -48,12 +48,9 @@ public class FileDownLoader implements I_MulThreadLoader {
     /**
      * 构建文件下载器
      * 
-     * @param _url
-     *            下载路径
-     * @param absFilePath
-     *            文件保存点
-     * @param threadNum
-     *            下载线程数
+     * @params _url 下载路径
+     * @params absFilePath 文件保存点
+     * @params threadNum 下载线程数
      */
     public FileDownLoader(String _url, File saveFile, int threadNum) {
         this.loadUrl = _url;

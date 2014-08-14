@@ -2,6 +2,8 @@ org.kymjs.aframe
 org.kymjs.aframe.bitmap
 org.kymjs.aframe.bitmap.core
 org.kymjs.aframe.bitmap.utils
+org.kymjs.aframe.database
+org.kymjs.aframe.database.utils
 org.kymjs.aframe.http
 org.kymjs.aframe.http.downloader
 org.kymjs.aframe.ui

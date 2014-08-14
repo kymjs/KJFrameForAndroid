@@ -23,7 +23,7 @@ clone下KJFrameForAndroid最新源码后，导入eclipse中，若只想使用框
 ```
 * 第一个是访问网络
 * 第二个是访问sdcard
-* 访问网络是请求网络图片的时候需要或者是http数据请求时候需要，访问sdcard是图片缓存的需要。
+* 访问网络是请求网络图片的时候需要或者是http数据请求时候需要，访问sdcard是图片缓存的需要(如果你使用utilsLibrary，针对不同的功能可能会需要更多的权限)。
 
 ----
 
@@ -74,12 +74,12 @@ public class TabExample extends BaseActivity {
 }
 ```
 Topology中回调函数调用顺序：
-setRootView();
-@BindView
-initThreadData();（异步，线程中调用）
-initData();
-initWidget();
-registerBroadcast();
+setRootView();<br>
+@BindView<br>
+initThreadData();（异步，线程中调用）<br>
+initData();<br>
+initWidget();<br>
+registerBroadcast();<br>
 
 
 ## UtilsLibrary模块
@@ -90,6 +90,11 @@ registerBroadcast();
 
 ###普通get方法示例：
 ```java
+// 使用HttpClient，与使用HttpUrlConnection的使用方法一样，就只具体写一种了
+KJHttp kjh = new KJHttp();
+kjh.get(String url,I_HttpParams params, HttpCallback callback);
+
+// 使用HttpUrlConnection
 KJHttp kjh = new KJHttp();
 kjh.urlGet("http://my.oschina.net/kymjs/blog", new StringRespond(){
 
@@ -108,12 +113,16 @@ kjh.urlGet("http://my.oschina.net/kymjs/blog", new StringRespond(){
 
 ###普通post请求JSON方法示例：
 ```java
+// 使用HttpClient，与使用HttpUrlConnection的使用方法一样，就只具体写一种了
+KJHttp kjh = new KJHttp();
+kjh.post(String url,I_HttpParams params, HttpCallback callback);
+
+// 使用HttpUrlConnection
 KJHttp kjh = new KJHttp();
 KJStringParams params = new KJStringParams();
 params.put("user_id", "33");
 params.put("birthday", "2008-8-1");
 kjh.urlPost("http://my.oschina.net/kymjs/blog", params, new StringRespond(){
-
 	@Override
 	public void success(String t) {
 			ViewInject.toast("显示JSON信息：" + t);
@@ -128,6 +137,10 @@ kjh.urlPost("http://my.oschina.net/kymjs/blog", params, new StringRespond(){
 ```
 ###post上传文件方法示例：
 ```java
+// 使用HttpClient，与使用HttpUrlConnection的使用方法一样，就只具体写一种了
+kjh.post(String url,I_HttpParams params, HttpCallback callback);
+
+// 使用HttpUrlConnection
 KJHttp kjh = new KJHttp();
 KJFileParams params = new KJFileParams();
 params.put("user_id", "33");
@@ -188,7 +201,7 @@ KJBitmap kjb = KJBitmap.create();
  * view不仅可以是imageview，同时普通view也可以传入，框架会自动识别对imageview设置src对普通view设置bg
  */
 // 载入本地图片
-kjb.display(imageView, "/storage/sdcard0/1.jpg");
+kjb.display(imageView, "/storage/sdcard0/1.jpg",80,80); //可选参数，设置要显示图片的宽高，不设置则默认显示原图
 // 载入网络图片
 kjb.display(textView, "http://www.eoeandroid.com/data/attachment/forum/201107/18/142935bbi8d3zpf3d0dd7z.jpg");
 

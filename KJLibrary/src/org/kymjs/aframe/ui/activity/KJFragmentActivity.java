@@ -67,10 +67,8 @@ public abstract class KJFragmentActivity extends BaseActivity {
     /**
      * 你应该在这里调用changeFragment(R.id.content, addStack, targetFragment);
      * 
-     * @param addStack
-     *            是否加入返回栈（加入返回栈后，用户按下返回键可以返回调用本方法之前的界面）
-     * @param targetFragment
-     *            要改变的Activity
+     * @params addStack 是否加入返回栈（加入返回栈后，用户按下返回键可以返回调用本方法之前的界面）
+     * @params targetFragment 要改变的Activity
      */
     public abstract void changeFragment(BaseFragment targetFragment);
 }
