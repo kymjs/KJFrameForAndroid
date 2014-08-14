@@ -23,6 +23,7 @@ import java.net.URL;
 
 import org.kymjs.aframe.KJLoger;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
+import org.kymjs.aframe.utils.CipherUtils;
 import org.kymjs.aframe.utils.FileUtils;
 import org.kymjs.aframe.utils.StringUtils;
 
@@ -56,7 +57,7 @@ public class Downloader implements I_ImageLoder {
             img = loadImgFromFile(imagePath);
         } else { // 网络图片：首先从本地缓存读取，如果本地没有，则重新从网络加载
             File file = FileUtils.getSaveFile(config.cachePath,
-                    StringUtils.md5(imagePath));
+                    CipherUtils.md5(imagePath));
             if (file == null) { // 本地没有缓存
                 img = loadImgFromNet(imagePath);
             } else {
@@ -98,7 +99,7 @@ public class Downloader implements I_ImageLoder {
             if (config.openDiskCache) {
                 FileUtils.saveFileCache(data,
                         FileUtils.getSavePath(config.cachePath),
-                        StringUtils.md5(imagePath));
+                        CipherUtils.md5(imagePath));
             }
             if (config.isDEBUG) {
                 KJLoger.debugLog(getClass().getName(),
@@ -155,7 +156,7 @@ public class Downloader implements I_ImageLoder {
     @Override
     public Bitmap getBitmapFromDisk(String key) {
         File file = FileUtils.getSaveFile(config.cachePath,
-                StringUtils.md5(key));
+                CipherUtils.md5(key));
         if (file != null)
             return BitmapCreate.bitmapFromFile(file.getAbsolutePath(),
                     config.width, config.height);

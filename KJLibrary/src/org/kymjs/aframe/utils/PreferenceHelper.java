@@ -28,7 +28,7 @@ import android.content.SharedPreferences.Editor;
  * @explain SharedPreferences sp = otherContext.getSharedPreferences( "my_file",
  *          Context.MODE_MULTI_PROCESS);
  * @author kymjs
- * @created 2013-2-27
+ * @created 2014-7-27
  */
 public class PreferenceHelper {
     public static void write(Context context, String fileName, String k, int v) {

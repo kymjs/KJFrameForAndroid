@@ -43,6 +43,13 @@ import android.net.Uri;
 import android.telephony.TelephonyManager;
 import android.view.inputmethod.InputMethodManager;
 
+/**
+ * 系统信息工具包
+ * 
+ * @author kymjs(kymjs123@gmail.com)
+ * @version 1.1
+ * @created 2014-8-14
+ */
 public class SystemTool {
     /**
      * 指定格式返回当前系统时间

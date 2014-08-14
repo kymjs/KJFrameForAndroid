@@ -23,6 +23,7 @@ import java.net.URL;
 import org.kymjs.aframe.KJLoger;
 import org.kymjs.aframe.bitmap.core.DiskCache;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
+import org.kymjs.aframe.utils.CipherUtils;
 import org.kymjs.aframe.utils.FileUtils;
 import org.kymjs.aframe.utils.StringUtils;
 
@@ -58,7 +59,7 @@ public class DownloadWithLruCache implements I_ImageLoder {
         }
         byte[] img = null;
         if (config.openDiskCache) { // 如果开启本地缓存，则调用lruCache查找
-            img = diskCache.getByteArray(StringUtils.md5(imagePath));
+            img = diskCache.getByteArray(CipherUtils.md5(imagePath));
             if (config.isDEBUG && img != null) {
                 KJLoger.debugLog(getClass().getName(), "\n" + imagePath
                         + "\ndownload success, from be disk LRU cache");
@@ -94,7 +95,7 @@ public class DownloadWithLruCache implements I_ImageLoder {
             data = FileUtils.input2byte(con.getInputStream());
             // 建立diskLru缓存
             if (config.openDiskCache) {
-                diskCache.put(StringUtils.md5(imagePath), BitmapCreate
+                diskCache.put(CipherUtils.md5(imagePath), BitmapCreate
                         .bitmapFromByteArray(data, 0, data.length,
                                 config.width, config.height));
             }
@@ -131,7 +132,7 @@ public class DownloadWithLruCache implements I_ImageLoder {
                 data = FileUtils.input2byte(fis);
                 // 建立diskLru缓存
                 if (config.openDiskCache) {
-                    diskCache.put(StringUtils.md5(imagePath), BitmapCreate
+                    diskCache.put(CipherUtils.md5(imagePath), BitmapCreate
                             .bitmapFromByteArray(data, 0, data.length,
                                     config.width, config.height));
                 }
@@ -158,6 +159,6 @@ public class DownloadWithLruCache implements I_ImageLoder {
      */
     @Override
     public Bitmap getBitmapFromDisk(String key) {
-        return diskCache.get(StringUtils.md5(key));
+        return diskCache.get(CipherUtils.md5(key));
     }
 }

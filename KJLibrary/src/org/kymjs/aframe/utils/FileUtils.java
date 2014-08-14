@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 
 import org.kymjs.aframe.KJException;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
@@ -44,6 +45,13 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 
+/**
+ * 文件与流处理工具类
+ * 
+ * @author kymjs(kymjs123@gmail.com)
+ * @version 1.1
+ * @created 2014-8-14
+ */
 public class FileUtils {
     /**
      * 检测SD卡是否存在
@@ -176,26 +184,36 @@ public class FileUtils {
         if (null == to) {
             return;
         }
-        InputStream is = null;
-        OutputStream os = null;
+        FileInputStream is = null;
+        FileOutputStream os = null;
         try {
             is = new FileInputStream(from);
             if (!to.exists()) {
                 to.createNewFile();
             }
             os = new FileOutputStream(to);
-
-            byte[] buffer = new byte[1024];
-            int len = 0;
-            while (-1 != (len = is.read(buffer))) {
-                os.write(buffer, 0, len);
-            }
-            os.flush();
+            copyFileFast(is, os);
         } catch (Exception e) {
             throw new KJException(FileUtils.class.getClass().getName(), e);
         } finally {
             closeIO(is, os);
         }
+    }
+
+    /**
+     * 快速复制文件（采用nio操作）
+     * 
+     * @param is
+     *            数据来源
+     * @param os
+     *            数据目标
+     * @throws IOException
+     */
+    public static void copyFileFast(FileInputStream is, FileOutputStream os)
+            throws IOException {
+        FileChannel in = is.getChannel();
+        FileChannel out = os.getChannel();
+        in.transferTo(0, in.size(), out);
     }
 
     /**

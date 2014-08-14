@@ -19,6 +19,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
 
+/**
+ * 系统屏幕的一些操作
+ * 
+ * @author kymjs(kymjs123@gmail.com)
+ * @version 1.1
+ * @created 2014-8-14
+ */
 public class DensityUtils {
 
     /**

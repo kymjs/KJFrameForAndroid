@@ -15,15 +15,15 @@
  */
 package org.kymjs.aframe.utils;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 import java.util.regex.Pattern;
-
-import org.kymjs.aframe.KJException;
 
 /**
  * 字符串操作工具包
+ * 
+ * @author kymjs(kymjs123@gmail.com)
+ * @version 1.1
+ * @created 2014-8-14
  */
 public class StringUtils {
     private final static Pattern emailer = Pattern
@@ -147,49 +147,40 @@ public class StringUtils {
     }
 
     /**
-     * MD5加密
+     * byte[]数组转换为16进制的字符串。
+     * 
+     * @param data
+     *            要转换的字节数组。
+     * @return 转换后的结果。
      */
-    public static String md5(String string) {
-        byte[] hash;
-        try {
-            hash = MessageDigest.getInstance("MD5").digest(
-                    string.getBytes("UTF-8"));
-        } catch (NoSuchAlgorithmException e) {
-            throw new KJException("Huh, MD5 should be supported?", e);
-        } catch (UnsupportedEncodingException e) {
-            throw new KJException("Huh, UTF-8 should be supported?", e);
+    public static final String byteArrayToHexString(byte[] data) {
+        StringBuilder sb = new StringBuilder(data.length * 2);
+        for (byte b : data) {
+            int v = b & 0xff;
+            if (v < 16) {
+                sb.append('0');
+            }
+            sb.append(Integer.toHexString(v));
         }
-
-        StringBuilder hex = new StringBuilder(hash.length * 2);
-        for (byte b : hash) {
-            if ((b & 0xFF) < 0x10)
-                hex.append("0");
-            hex.append(Integer.toHexString(b & 0xFF));
-        }
-        return hex.toString();
+        return sb.toString().toUpperCase(Locale.getDefault());
     }
 
     /**
-     * KJ加密
+     * 16进制表示的字符串转换为字节数组。
+     * 
+     * @param s
+     *            16进制表示的字符串
+     * @return byte[] 字节数组
      */
-    public static String KJencrypt(CharSequence str) {
-        char[] cstr = str.toString().toCharArray();
-        StringBuilder hex = new StringBuilder();
-        for (char c : cstr) {
-            hex.append((char) (c + 5));
+    public static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] d = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            // 两位一组，表示一个字节,把这样表示的16进制字符串，还原成一个进制字节
+            d[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character
+                    .digit(s.charAt(i + 1), 16));
         }
-        return hex.toString();
+        return d;
     }
 
-    /**
-     * KJ解密
-     */
-    public static String KJdecipher(CharSequence str) {
-        char[] cstr = str.toString().toCharArray();
-        StringBuilder hex = new StringBuilder();
-        for (char c : cstr) {
-            hex.append((char) (c - 5));
-        }
-        return hex.toString();
-    }
 }

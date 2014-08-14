@@ -21,7 +21,7 @@ import java.util.Set;
 import org.kymjs.aframe.KJLoger;
 import org.kymjs.aframe.bitmap.core.MemoryCache;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
-import org.kymjs.aframe.utils.StringUtils;
+import org.kymjs.aframe.utils.CipherUtils;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -141,7 +141,7 @@ public class KJBitmap {
         if (config.callBack != null) {
             config.callBack.imgLoading(imageView);
         }
-        Bitmap bitmap = mMemoryCache.get(StringUtils.md5(imageUrl));
+        Bitmap bitmap = mMemoryCache.get(CipherUtils.md5(imageUrl));
         if (bitmap != null) {
             // 对不同的控件调用不同的显示方式
             if (imageView instanceof ImageView) {
@@ -229,7 +229,7 @@ public class KJBitmap {
      *            要添加的bitmap
      */
     public void putBitmapToMemory(String k, Bitmap v) {
-        mMemoryCache.put(StringUtils.md5(k), v);
+        mMemoryCache.put(CipherUtils.md5(k), v);
     }
 
     /**
@@ -240,7 +240,7 @@ public class KJBitmap {
      * @return 如果没有key对应的value返回null
      */
     public Bitmap getBitmapFromMemory(String key) {
-        return mMemoryCache.get(StringUtils.md5(key));
+        return mMemoryCache.get(CipherUtils.md5(key));
     }
 
     /**
