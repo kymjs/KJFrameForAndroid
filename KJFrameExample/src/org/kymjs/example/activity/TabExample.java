@@ -49,6 +49,10 @@ public class TabExample extends KJFragmentActivity {
     protected void initWidget() {
         super.initWidget();
         actionBar = getActionBar();
+        mRbtn1.setText("侧滑");
+        mRbtn2.setText("网络请求");
+        mRbtn3.setText("列表图片");
+        mRbtn4.setText("下载");
     }
 
     @Override

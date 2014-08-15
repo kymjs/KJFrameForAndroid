@@ -50,24 +50,29 @@ public class BitmapHelper {
      * outHeight和outMimeType属性都会被赋值。
      * 
      * @param reqWidth
-     *            目标宽度
+     *            目标宽度,这里的宽高只是阀值，实际显示的图片将小于等于这个值
      * @param reqHeight
-     *            目标高度
+     *            目标高度,这里的宽高只是阀值，实际显示的图片将小于等于这个值
      */
     public static BitmapFactory.Options calculateInSampleSize(
-            final BitmapFactory.Options options, int reqWidth, int reqHeight) {
+            final BitmapFactory.Options options, final int reqWidth,
+            final int reqHeight) {
         // 源图片的高度和宽度
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
-        if (height > reqHeight || width > reqWidth) {
-            // 计算出实际宽高和目标宽高的比率
-            final int heightRatio = Math.round((float) height
-                    / (float) reqHeight);
-            final int widthRatio = Math.round((float) width / (float) reqWidth);
-            // 选择宽和高中最小的比率作为inSampleSize的值，这样可以保证最终图片的宽和高
-            // 一定都会大于等于目标的宽和高。
-            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+        if (height > 400 || width > 450) {
+            if (height > reqHeight || width > reqWidth) {
+                // 计算出实际宽高和目标宽高的比率
+                final int heightRatio = Math.round((float) height
+                        / (float) reqHeight);
+                final int widthRatio = Math.round((float) width
+                        / (float) reqWidth);
+                // 选择宽和高中最小的比率作为inSampleSize的值，这样可以保证最终图片的宽和高
+                // 一定都会大于等于目标的宽和高。
+                inSampleSize = heightRatio < widthRatio ? heightRatio
+                        : widthRatio;
+            }
         }
         // 设置压缩比例
         options.inSampleSize = inSampleSize;

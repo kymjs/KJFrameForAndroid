@@ -57,7 +57,10 @@ public class BitmapDisplay extends BaseFragment {
             // 载入网络图片
             kjb.display(
                     imageView,
-                    "https://raw.githubusercontent.com/kymjs/KJFrameForAndroid/master/KJFrameExample/big_image2.jpg");
+                    "http://imgsrc.baidu.com/forum/w%3D580/sign=b16bfbd859b5c9ea62f303ebe53bb622/588e5ece36d3d53933f0c2103887e950372ab0fd.jpg");
+            // kjb.display(
+            // imageView,
+            // "https://raw.githubusercontent.com/kymjs/KJFrameForAndroid/master/KJFrameExample/big_image2.jpg");
             ViewInject.toast("图片较大，加载中");
             break;
         }

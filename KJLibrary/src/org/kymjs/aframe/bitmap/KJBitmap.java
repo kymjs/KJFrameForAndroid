@@ -193,9 +193,10 @@ public class KJBitmap {
             if (bitmap != null && config.openMemoryCache) {
                 // 图片载入完成后缓存到LrcCache中
                 putBitmapToMemory(params[0], bitmap);
-                if (config.isDEBUG)
+                if (config.isDEBUG) {
                     KJLoger.debugLog(getClass().getName(),
                             "put to memory cache\n" + params[0]);
+                }
             }
             return bitmap;
         }

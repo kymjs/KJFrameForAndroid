@@ -27,6 +27,7 @@ import org.kymjs.aframe.utils.CipherUtils;
 import org.kymjs.aframe.utils.FileUtils;
 import org.kymjs.aframe.utils.StringUtils;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 
 /**
@@ -40,6 +41,7 @@ import android.graphics.Bitmap;
  * <br>
  *          <b>创建时间</b> 2014-7-11
  */
+@SuppressLint("DefaultLocale")
 public class DownloadWithLruCache implements I_ImageLoder {
 
     private DiskCache diskCache;
