@@ -24,9 +24,10 @@ import java.util.List;
  * @param <O>
  *            宿主实体的class
  * @param <M>
- *            多放实体class
+ *            多放实体class <br>
+ * <br>
+ *            <b>创建时间</b> 2014-8-15
  * @version 1.0
- * @created 2014-8-15
  */
 public class OneToManyLazyLoader<O, M> {
     O ownerEntity;

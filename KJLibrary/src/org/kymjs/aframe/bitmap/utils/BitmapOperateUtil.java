@@ -35,17 +35,22 @@ import android.widget.ImageView;
 /**
  * 对bitmap特殊处理的工具类
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-6-30
+ * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.1
- * @created 2014-6-30
  */
 public class BitmapOperateUtil {
 
     /**
      * View的背景虚化方法（imageview则设置src，其他则设置bg）
      * 
-     * @params imageView 要显示虚化图片的控件（imageview则设置src，其他则设置bg）
-     * @params src 将要虚化的图片
+     * @param imageview
+     *            要显示虚化图片的控件（imageview则设置src，其他则设置bg）
+     * @param src
+     *            将要虚化的图片
      */
     public static void SetMistyBitmap(View imageview, Bitmap src) {
         if (imageview == null || src == null)

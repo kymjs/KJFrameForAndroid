@@ -21,8 +21,9 @@ import android.graphics.Bitmap;
  * bitmapLibrary的配置器
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
- * @created 2014-7-11
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-7-11
  */
 final public class KJBitmapConfig {
     public final boolean isDEBUG = true;

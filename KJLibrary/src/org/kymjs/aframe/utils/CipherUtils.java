@@ -29,9 +29,12 @@ import org.kymjs.aframe.KJException;
 /**
  * 加密与解密的工具类
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-8-14
+ * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.1
- * @created 2014-8-14
  */
 public class CipherUtils {
     /**

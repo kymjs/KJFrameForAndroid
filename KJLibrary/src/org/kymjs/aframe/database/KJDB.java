@@ -39,8 +39,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * The DBLibrary's core classes
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-8-15
+ * 
  * @version 1.0
- * @created 2014-8-15
  */
 public class KJDB {
 
@@ -206,11 +209,11 @@ public class KJDB {
      * @param dbName
      *            数据库名字
      * @param isDebug
-     *            是否是调试模式：调试模式会log出sql信息
+     *            是否是调试模式,调试模式会log出sql信息
      * @param dbVersion
      *            数据库版本信息
-     * @param dbUpdateListener数据库升级监听器
-     *            ：如果监听器为null，升级的时候将会清空所所有的数据
+     * @param dbUpdateListener
+     *            数据库升级监听器,如果监听器为null，升级的时候将会清空所所有的数据
      * @return
      */
     public static KJDB create(Context context, String targetDirectory,
@@ -247,8 +250,8 @@ public class KJDB {
     }
 
     /**
-     * 保存数据到数据库<br />
-     * <b>注意：</b><br />
+     * 保存数据到数据库<br>
+     * <b>注意：</b> <br>
      * 保存成功后，entity的主键将被赋值（或更新）为数据库的主键， 只针对自增长的id有效
      * 
      * @param entity

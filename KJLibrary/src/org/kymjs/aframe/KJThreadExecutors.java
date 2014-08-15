@@ -68,9 +68,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  * java.util.concurrent.Executors，用于替代原org.kymjs.aframe.ThreadPoolManager类
  * 并做了适当修改，使其更适合于手机运行
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-8-14
+ * 
  * @author Doug Lea, kymjs(kymjs123@gmail.com)
  * @version 1.1
- * @created 2014-8-14
  */
 public class KJThreadExecutors {
 

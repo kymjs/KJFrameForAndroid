@@ -23,9 +23,12 @@ import android.graphics.Bitmap;
 /**
  * 使用lru算法的Bitmap内存缓存池
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-7-11
+ * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
- * @created 2014-7-11
  */
 public class MemoryCache {
 

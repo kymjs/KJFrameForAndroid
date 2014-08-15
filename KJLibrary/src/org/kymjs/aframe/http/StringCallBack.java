@@ -18,9 +18,12 @@ package org.kymjs.aframe.http;
 /**
  * 用于处理JSON的http请求回调类
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-8-5
+ * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.1
- * @created 2014-8-5
  */
 public abstract class StringCallBack extends HttpCallBack {
 

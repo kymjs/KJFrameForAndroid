@@ -46,9 +46,12 @@ import android.view.inputmethod.InputMethodManager;
 /**
  * 系统信息工具包
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-8-14
+ * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.1
- * @created 2014-8-14
  */
 public class SystemTool {
     /**
@@ -141,7 +144,8 @@ public class SystemTool {
     /**
      * 隐藏系统键盘
      * 
-     * @warn 必须是确定键盘显示时才能调用
+     * <br>
+     * <b>警告</b> 必须是确定键盘显示时才能调用
      */
     public static void hideKeyBoard(Activity aty) {
         ((InputMethodManager) aty

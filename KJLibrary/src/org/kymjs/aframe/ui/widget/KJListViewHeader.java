@@ -31,8 +31,9 @@ import android.widget.TextView;
  * 下拉刷新控件的头部（可供KJListView、KJScrollView使用）
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
- * @created 2014-7-5
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-7-5
  */
 public class KJListViewHeader extends LinearLayout {
     /** 头部刷新状态 */

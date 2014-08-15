@@ -29,8 +29,9 @@ import android.view.View.OnClickListener;
  * 注解工具类
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.1
- * @created 2014-6-5
+ * @version 1.1 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-6-5
  */
 public class AnnotateUtil {
     /**

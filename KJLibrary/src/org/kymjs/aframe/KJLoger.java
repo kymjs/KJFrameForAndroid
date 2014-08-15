@@ -20,9 +20,12 @@ import android.util.Log;
 /**
  * 应用程序的Log管理
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-2-28
+ * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.1
- * @created 2014-2-28
  */
 public class KJLoger {
     public static final boolean IS_DEBUG = true;

@@ -33,8 +33,9 @@ import android.widget.ImageView;
  * The BitmapLibrary's core classes
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
- * @created 2014-7-11
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-7-11
  */
 public class KJBitmap {
     /**

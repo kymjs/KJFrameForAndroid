@@ -23,8 +23,9 @@ import java.lang.annotation.Target;
 /**
  * 检测 字段是否已经被标注为 非数据库字段
  * 
- * @version 1.0
- * @created 2014-8-15
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-8-15
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

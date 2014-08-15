@@ -17,11 +17,14 @@ package org.kymjs.aframe.http.downloader;
 
 /**
  * 一个key值不可重复的有序k(int)-v(int)对集合类，使用一个从大到小的int数组存储key值，
- * 它的目的是用于替换HashMap<Integer, Integer>
+ * 它的目的是用于替换HashMap(Integer, Integer)
+ * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-8-9
  * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
- * @created 2014-8-9
  */
 public class SparseIntArray implements Cloneable {
 

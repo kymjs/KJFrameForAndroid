@@ -35,9 +35,11 @@ import android.view.View.OnClickListener;
  * Activity's framework,the developer shouldn't extends it
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.7
- * @created 2014-3-1
- * @lastChange 2014-5-30
+ * @version 1.7 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-3-1 <br>
+ * <br>
+ *          <b>最后修改时间</b> 2014-5-30
  */
 public abstract class KJFrameActivity extends Activity implements
         OnClickListener, I_BroadcastReg, I_KJActivity, I_SkipActivity {

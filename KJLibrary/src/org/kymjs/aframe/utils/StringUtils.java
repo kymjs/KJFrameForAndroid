@@ -21,9 +21,12 @@ import java.util.regex.Pattern;
 /**
  * 字符串操作工具包
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-8-14
+ * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.1
- * @created 2014-8-14
  */
 public class StringUtils {
     private final static Pattern emailer = Pattern

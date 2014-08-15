@@ -29,15 +29,16 @@ import org.kymjs.aframe.database.annotate.Table;
 /**
  * 对实体类JavaBean的一些操作
  * 
- * @version 1.0
- * @created 2014-8-15
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-8-15
  */
 public class ClassUtils {
 
     /**
      * 根据实体类 获得 实体类对应的表名
      * 
-     * @param entity
+     * @param clazz
      * @return
      */
     public static String getTableName(Class<?> clazz) {
@@ -57,7 +58,7 @@ public class ClassUtils {
     /**
      * 根据实体类 获得 实体类对应的表名
      * 
-     * @param entity
+     * @param clazz
      * @return
      */
     public static String getPrimaryKeyColumn(Class<?> clazz) {
@@ -99,7 +100,7 @@ public class ClassUtils {
     /**
      * 根据实体类 获得 实体类对应的表名
      * 
-     * @param entity
+     * @param clazz
      * @return
      */
     public static Field getPrimaryKeyField(Class<?> clazz) {
@@ -141,7 +142,7 @@ public class ClassUtils {
     /**
      * 根据实体类 获得 实体类对应的表名
      * 
-     * @param entity
+     * @param clazz
      * @return
      */
     public static String getPrimaryKeyFieldName(Class<?> clazz) {
@@ -152,9 +153,6 @@ public class ClassUtils {
     /**
      * 将对象转换为ContentValues
      * 
-     * @param entity
-     * @param selective
-     *            是否忽略 值为null的字段
      * @return
      */
     public static List<Property> getPropertyList(Class<?> clazz) {
@@ -195,9 +193,6 @@ public class ClassUtils {
     /**
      * 将对象转换为ContentValues
      * 
-     * @param entity
-     * @param selective
-     *            是否忽略 值为null的字段
      * @return
      */
     public static List<ManyToOne> getManyToOneList(Class<?> clazz) {
@@ -236,11 +231,6 @@ public class ClassUtils {
 
     /**
      * 将对象转换为ContentValues
-     * 
-     * @param entity
-     * @param selective
-     *            是否忽略 值为null的字段
-     * @return
      */
     public static List<OneToMany> getOneToManyList(Class<?> clazz) {
 

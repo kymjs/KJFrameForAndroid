@@ -27,8 +27,9 @@ import android.widget.TextView;
  * 上拉加载ListView的底部
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
- * @created 2014-7-5
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-7-5
  */
 public class KJListViewFooter extends LinearLayout {
     /** 头部刷新状态 */

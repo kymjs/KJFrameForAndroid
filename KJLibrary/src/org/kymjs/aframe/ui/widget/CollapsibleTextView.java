@@ -29,9 +29,11 @@ import android.widget.TextView.BufferType;
  * 可收缩展开的TextView
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.1
- * @created 2014-6-12
- * @lastChange 6-21
+ * @version 1.1 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-6-12 <br>
+ * <br>
+ *          <b>最后修改时间</b> 6-21
  */
 public class CollapsibleTextView extends LinearLayout {
 

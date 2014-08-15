@@ -28,8 +28,9 @@ import android.annotation.SuppressLint;
  * 属性 ，【非主键】的【基本数据类型】 都是属性
  * 
  * @author michael Young (www.YangFuhai.com)
- * @version 1.0
- * @created 2014-8-15
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-8-15
  */
 public class Property {
 
@@ -95,7 +96,6 @@ public class Property {
      * 获取某个实体执行某个方法的结果
      * 
      * @param obj
-     * @param method
      * @return
      */
     @SuppressWarnings("unchecked")

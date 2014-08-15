@@ -21,10 +21,15 @@ import java.util.Map;
 /**
  * 经过Least Recently Used（最近最少使用）算法处理的LinkedHashMap
  * 
+ * <br>
+ * <b>修改</b> kymjs(kymjs123@gmail.com)
+ * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-7-11
+ * 
  * @author Android Open Source Project
- * @change kymjs(kymjs123@gmail.com)
  * @version 1.0
- * @created 2014-7-11
  */
 public class MemoryLruCache<K, V> {
     // LinkedHashMap与 HashMap 的不同之处在于维护着一个运行于所有条目的双向链表。

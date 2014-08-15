@@ -39,11 +39,17 @@ import android.os.Looper;
  * 实现该接口并注册为程序中的默认未捕获异常处理 这样当未捕获异常发生时，就可以做些异常处理操作 例如：收集异常信息，发送错误报告 等。
  * UncaughtException处理类,当程序发生Uncaught异常的时候,由该类来接管程序,并记录发送错误报告.
  * 
+ * <br>
+ * <b>警告</b> 如果需错误报告到服务器，则需要手动重写postReport()方法
+ * 
+ * <br>
+ * <b>修改</b> kymjs(kymjs123@gmail.com)
+ * 
+ * <br>
+ * <b>创建时间</b> 2014-7-2
+ * 
  * @author wangjiegulu
- * @alter kymjs(kymjs123@gmail.com)
  * @from https://github.com/wangjiegulu/AndroidBucket.git
- * @warn 如果需错误报告到服务器，则需要手动重写postReport()方法
- * @create 2014-7-2
  */
 public class CrashHandler implements UncaughtExceptionHandler {
 

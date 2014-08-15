@@ -29,8 +29,9 @@ import android.widget.TextView;
  * 设置菜单的每一个item
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
- * @created 2014-5-31
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-5-31
  */
 public class ResideMenuItem extends LinearLayout {
     /** 菜单图标 */

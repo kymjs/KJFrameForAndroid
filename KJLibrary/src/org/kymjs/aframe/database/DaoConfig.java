@@ -22,9 +22,12 @@ import android.content.Context;
 /**
  * 数据库配置器
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-8-15
+ * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
- * @created 2014-8-15
  */
 final public class DaoConfig {
     private Context mContext = null; // android上下文

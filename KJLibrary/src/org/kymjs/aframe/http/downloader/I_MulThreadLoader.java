@@ -18,9 +18,12 @@ package org.kymjs.aframe.http.downloader;
 /**
  * 多线程文件下载器接口协议
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-8-11
+ * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
- * @created 2014-8-11
  */
 public interface I_MulThreadLoader extends I_FileLoader {
     /**

@@ -33,8 +33,9 @@ import android.os.Message;
  * 用于HttpClient请求时线程通信的处理、如果使用HttpUrlConnection无需继承该类
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
- * @created 2014-8-14
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-8-14
  */
 public abstract class HttpCallBack implements I_HttpRespond {
     /************************** class method ***********************************/

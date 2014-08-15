@@ -25,7 +25,9 @@ import android.view.View;
 /**
  * 具有侧滑缩放效果侧滑界面模板
  * 
- * @warn 在changeFragment()中必须调用super.changeFragment(targetFragment);
+ * <br>
+ * <b>警告</b> 在changeFragment()中必须调用super.changeFragment(targetFragment);
+ * 
  * @author kymjs(kymjs123@gmail.com)
  */
 public abstract class SlidTemplet extends KJFragmentActivity implements

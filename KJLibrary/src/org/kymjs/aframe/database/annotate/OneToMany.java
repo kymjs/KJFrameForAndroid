@@ -23,8 +23,9 @@ import java.lang.annotation.Target;
 /**
  * 标识一对多的属性列
  * 
- * @version 1.0
- * @created 2014-8-15
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-8-15
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

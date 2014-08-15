@@ -37,8 +37,9 @@ import android.widget.TextView;
  * 可上下拉刷新listview
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
- * @created 2014-7-5
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-7-5
  */
 public class KJListView extends ListView implements OnScrollListener {
     // listener

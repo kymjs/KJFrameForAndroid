@@ -95,9 +95,12 @@ import android.os.AsyncTask;
 /**
  * The HttpLibrary's core classes
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-7-14
+ * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.3
- * @created 2014-7-14
  */
 public class KJHttp {
 

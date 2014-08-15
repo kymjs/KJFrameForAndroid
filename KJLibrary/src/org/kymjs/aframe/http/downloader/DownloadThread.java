@@ -26,9 +26,12 @@ import org.kymjs.aframe.KJLoger;
 /**
  * 多线程下载中实现每个线程的下载任务的类
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-8-11
+ * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
- * @created 2014-8-11
  */
 public class DownloadThread extends Thread {
     private File saveFile; // 保存的文件

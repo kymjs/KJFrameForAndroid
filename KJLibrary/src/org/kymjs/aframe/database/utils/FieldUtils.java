@@ -31,8 +31,9 @@ import org.kymjs.aframe.database.annotate.Transient;
 /**
  * 字段操作工具类
  * 
- * @version 1.0
- * @created 2014-8-15
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-8-15
  */
 public class FieldUtils {
     public static Method getFieldGetMethod(Class<?> clazz, Field f) {
@@ -123,7 +124,7 @@ public class FieldUtils {
      * 获取某个字段的值
      * 
      * @param entity
-     * @param fieldName
+     * @param field
      * @return
      */
     public static Object getFieldValue(Object entity, Field field) {
@@ -147,8 +148,8 @@ public class FieldUtils {
      * 设置某个字段的值
      * 
      * @param entity
-     * @param fieldName
-     * @return
+     * @param field
+     * @param value
      */
     public static void setFieldValue(Object entity, Field field, Object value) {
         try {
@@ -188,8 +189,8 @@ public class FieldUtils {
     /**
      * 获取某个字段的值
      * 
-     * @param entity
-     * @param fieldName
+     * @param clazz
+     * @param columnName
      * @return
      */
     public static Field getFieldByColumnName(Class<?> clazz, String columnName) {
@@ -229,8 +230,10 @@ public class FieldUtils {
     /**
      * 获取某个字段的值
      * 
-     * @param entity
+     * @param clazz
+     *            JavaBean实例
      * @param fieldName
+     *            字段名
      * @return
      */
     public static Field getFieldByName(Class<?> clazz, String fieldName) {
@@ -250,8 +253,7 @@ public class FieldUtils {
     /**
      * 获取某个属性对应的 表的列
      * 
-     * @param entity
-     * @param fieldName
+     * @param field
      * @return
      */
     public static String getColumnByField(Field field) {

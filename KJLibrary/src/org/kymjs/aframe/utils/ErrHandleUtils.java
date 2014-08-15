@@ -23,9 +23,12 @@ import android.content.Intent;
 /**
  * 系统硬件错误处理
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-8-14
+ * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.1
- * @created 2014-8-14
  */
 public class ErrHandleUtils {
     /**

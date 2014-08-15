@@ -30,9 +30,12 @@ import org.kymjs.aframe.ui.KJActivityManager;
 /**
  * 多线程文件下载器类，你也可以通过实现I_MulThreadLoader或I_FileLoader接口协议来创建自己的下载器
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-8-11
+ * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
- * @created 2014-8-11
  */
 public class FileDownLoader implements I_MulThreadLoader {
     private FragmentFile fragmentFile; // 多线程下载的碎片块文件
@@ -48,9 +51,12 @@ public class FileDownLoader implements I_MulThreadLoader {
     /**
      * 构建文件下载器
      * 
-     * @params _url 下载路径
-     * @params absFilePath 文件保存点
-     * @params threadNum 下载线程数
+     * @param _url
+     *            下载路径
+     * @param saveFile
+     *            文件保存点
+     * @param threadNum
+     *            下载线程数
      */
     public FileDownLoader(String _url, File saveFile, int threadNum) {
         this.loadUrl = _url;
@@ -120,10 +126,8 @@ public class FileDownLoader implements I_MulThreadLoader {
     }
 
     /**
-     * 开始下载文件
+     * 开始下载文件, 监听下载数量的变化,不显示实时下载进度
      * 
-     * @param listener
-     *            监听下载数量的变化,不显示实时下载进度
      * @return 已下载文件大小
      */
     @Override
@@ -192,7 +196,7 @@ public class FileDownLoader implements I_MulThreadLoader {
     /**
      * 开始下载文件
      * 
-     * @param listener
+     * @param callback
      *            监听下载数量的变化,如果不需要了解实时下载的数量,可以设置为null
      * @return 已下载文件大小
      */

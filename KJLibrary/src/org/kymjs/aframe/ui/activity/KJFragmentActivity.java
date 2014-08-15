@@ -27,13 +27,15 @@ import android.view.KeyEvent;
  * Application BaseActivity plus. For ease of use, your Activity should overload
  * changeFragment(Fragment frag).
  * 
- * @explain if you want include the Fragment,you should extends it for your
- *          Activity
- * @explain else you should extends KJFrameActivity for your Activity
+ * <br>
+ * <b>说明</b> if you want include the Fragment,you should extends it for your
+ * Activity <br>
+ * <b>说明</b> else you should extends KJFrameActivity for your Activity
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.1
- * @created 2014-5-14
+ * @version 1.1 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-5-14
  */
 public abstract class KJFragmentActivity extends BaseActivity {
     private boolean openBackListener = false;
@@ -67,8 +69,8 @@ public abstract class KJFragmentActivity extends BaseActivity {
     /**
      * 你应该在这里调用changeFragment(R.id.content, addStack, targetFragment);
      * 
-     * @params addStack 是否加入返回栈（加入返回栈后，用户按下返回键可以返回调用本方法之前的界面）
-     * @params targetFragment 要改变的Activity
+     * @param targetFragment
+     *            要改变的Activity
      */
     public abstract void changeFragment(BaseFragment targetFragment);
 }

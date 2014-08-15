@@ -25,9 +25,12 @@ import android.graphics.Rect;
 /**
  * 不会发生OOM的 BitmapFactory
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-7-11
+ * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
- * @created 2014-7-11
  */
 public class BitmapCreate {
     /**

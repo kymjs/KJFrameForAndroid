@@ -31,15 +31,18 @@ import android.text.TextUtils;
 /**
  * sql语句生产者
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-8-15
+ * 
  * @version 1.0
- * @created 2014-8-15
  */
 public class SqlBuilder {
 
     /**
      * 获取插入的sql语句
      * 
-     * @param tableInfo
+     * @param entity
      * @return
      */
     public static SqlInfo buildInsertSql(Object entity) {

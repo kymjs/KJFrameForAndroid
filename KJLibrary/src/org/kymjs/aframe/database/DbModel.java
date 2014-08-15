@@ -20,8 +20,11 @@ import java.util.HashMap;
 /**
  * 数据库的模型
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-8-15
+ * 
  * @version 1.0
- * @created 2014-8-15
  */
 public class DbModel {
 

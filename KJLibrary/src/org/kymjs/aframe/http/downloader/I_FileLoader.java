@@ -21,8 +21,9 @@ import org.kymjs.aframe.http.I_HttpRespond;
  * 文件下载器接口协议
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
- * @created 2014-8-11
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-8-11
  */
 public interface I_FileLoader {
     /**
@@ -35,7 +36,7 @@ public interface I_FileLoader {
     /**
      * 开始下载文件
      * 
-     * @param listener
+     * @param callback
      *            监听下载数量的变化,如果不需要了解实时下载的数量,可以设置为null
      * @return 已下载文件大小
      */

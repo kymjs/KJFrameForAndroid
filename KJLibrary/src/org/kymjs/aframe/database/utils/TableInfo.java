@@ -24,8 +24,9 @@ import org.kymjs.aframe.KJException;
 /**
  * 表完整信息
  * 
- * @version 1.0
- * @created 2014-8-15
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-8-15
  */
 public class TableInfo {
 

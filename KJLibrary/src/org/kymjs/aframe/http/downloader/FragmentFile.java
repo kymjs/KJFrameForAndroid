@@ -25,9 +25,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * 碎片文件保存到数据库的工具类
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-8-11
+ * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
- * @created 2014-8-11
  */
 public class FragmentFile {
     private DBOpenHelper openHelper;

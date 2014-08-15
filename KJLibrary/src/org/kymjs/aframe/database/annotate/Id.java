@@ -21,10 +21,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @title Id主键配置
- * @description 不配置的时候默认找类的id或_id字段作为主键，column不配置的是默认为字段名
- * @version 1.0
- * @created 2014-8-15
+ * Id主键配置,不配置的时候默认找类的id或_id字段作为主键，column不配置的是默认为字段名
+ * 
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-8-15
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

@@ -20,8 +20,9 @@ import java.text.SimpleDateFormat;
 /**
  * 键值对封装
  * 
- * @version 1.0
- * @created 2014-8-15
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-8-15
  */
 public class KeyValue {
     private String key;

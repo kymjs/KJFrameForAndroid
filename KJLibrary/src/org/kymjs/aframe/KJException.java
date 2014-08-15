@@ -18,9 +18,12 @@ package org.kymjs.aframe;
 /**
  * KJLibrary's base exception class
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-2-28
+ * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
- * @created 2014-2-28
  */
 public class KJException extends RuntimeException {
     private static final long serialVersionUID = 1L;

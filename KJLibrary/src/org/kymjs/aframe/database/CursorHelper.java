@@ -28,8 +28,11 @@ import android.database.Cursor;
 /**
  * 游标操作的帮助类
  * 
+ * <br>
+ * <br>
+ * <b>创建时间</b> 2014-8-15
+ * 
  * @version 1.0
- * @created 2014-8-15
  */
 public class CursorHelper {
     /**

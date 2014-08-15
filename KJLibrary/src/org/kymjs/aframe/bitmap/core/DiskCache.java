@@ -46,8 +46,9 @@ import android.os.StatFs;
  * (libcore/luni/src/main/java/libcore/io/DiskLruCache.java).
  * 
  * @version 1.0
- * @author kymjs(kymjs123@gmail.com)
- * @lastChange 2014-7-16
+ * @author kymjs(kymjs123@gmail.com) <br>
+ * <br>
+ *         <b>创建时间</b> 2014-7-16
  */
 public class DiskCache {
     private boolean debug = false;
@@ -286,8 +287,10 @@ public class DiskCache {
     /**
      * 返回文件的绝对路径
      * 
-     * @params cacheDir
-     * @params key
+     * @param cacheDir
+     *            文件在SD卡的目录
+     * @param fileName
+     *            文件名
      * @return
      */
     public static String createFilePath(File cacheDir, String fileName) {
@@ -304,7 +307,8 @@ public class DiskCache {
     /**
      * 在缓存目录下创建一个缓存文件
      * 
-     * @params key 缓存文件名
+     * @param fileName
+     *            缓存文件名
      */
     public String createFilePath(String fileName) {
         return createFilePath(mFileDir, fileName);

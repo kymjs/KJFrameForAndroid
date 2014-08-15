@@ -44,13 +44,16 @@ import android.widget.TextView;
 /**
  * 多张图片选择效果的Fragment模板
  * 
- * @explain 开发者必须实现OnClickCommitEvent(View v)方法，此方法将在用户点击确定按钮时回调，
- *          此时用户选择的图片将存储在List.String类型的checkFile中。
- * @explain 可供开发者定制的组件有：mListView（用于显示文件夹列表） mBtnCancel、mBtnOk（用于显示取消与确定按钮）
- *          mGridView（用于显示选择的文件夹下的图片列表）
+ * <br>
+ * <b>说明</b> 开发者必须实现OnClickCommitEvent(View v)方法，此方法将在用户点击确定按钮时回调，
+ * 此时用户选择的图片将存储在List.String类型的checkFile中。 <br>
+ * <b>说明</b> 可供开发者定制的组件有：mListView（用于显示文件夹列表） mBtnCancel、mBtnOk（用于显示取消与确定按钮）
+ * mGridView（用于显示选择的文件夹下的图片列表）
+ * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
- * @created 2014-6-23
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-6-23
  */
 public abstract class ChoiceImageTemplate extends BaseFragment {
 

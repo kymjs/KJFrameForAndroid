@@ -27,8 +27,9 @@ import android.widget.ScrollView;
  * 有弹性的ScrollView 实现下拉弹回和上拉弹回
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
- * @created 2014-7-5
+ * @version 1.0 <br>
+ * <br>
+ *          <b>创建时间</b> 2014-7-5
  */
 public class KJScrollView extends ScrollView {
 
