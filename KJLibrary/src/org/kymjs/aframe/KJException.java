@@ -19,7 +19,6 @@ package org.kymjs.aframe;
  * KJLibrary's base exception class
  * 
  * <br>
- * <br>
  * <b>创建时间</b> 2014-2-28
  * 
  * @author kymjs(kymjs123@gmail.com)
