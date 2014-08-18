@@ -158,7 +158,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
     /**
      * 上传至服务器
      */
-    private void uploadLog() {
+    protected void uploadLog() {
         KJHttp kjh = new KJHttp();
         KJFileParams params = new KJFileParams();
         String[] list = FileUtils.getSaveFolder("KJLog").list();
