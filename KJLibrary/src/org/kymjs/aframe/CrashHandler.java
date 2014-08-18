@@ -15,206 +15,163 @@
  */
 package org.kymjs.aframe;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.Arrays;
-import java.util.Properties;
-import java.util.TreeSet;
 
+import org.kymjs.aframe.http.KJFileParams;
+import org.kymjs.aframe.http.KJHttp;
 import org.kymjs.aframe.ui.KJActivityManager;
-import org.kymjs.aframe.ui.ViewInject;
 import org.kymjs.aframe.utils.FileUtils;
-import org.kymjs.aframe.utils.StringUtils;
+import org.kymjs.aframe.utils.SystemTool;
 
 import android.content.Context;
-import android.os.Looper;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Build;
 
 /**
  * UncaughtExceptionHandler：线程未捕获异常控制器是用来处理未捕获异常的。 如果程序出现了未捕获异常默认情况下则会出现强行关闭对话框
  * 实现该接口并注册为程序中的默认未捕获异常处理 这样当未捕获异常发生时，就可以做些异常处理操作 例如：收集异常信息，发送错误报告 等。
- * UncaughtException处理类,当程序发生Uncaught异常的时候,由该类来接管程序,并记录发送错误报告.
+ * UncaughtException处理类,当程序发生Uncaught异常的时候,由该类来接管程序,并记录发送错误报告. <br>
  * 
- * <br>
- * <b>警告</b> 如果需错误报告到服务器，则需要手动重写postReport()方法
+ * <pre>
+ * 警告 : 如果需错误报告到服务器，需要设置 protected boolean openUpload = true;
+ *      且需要手动重写uploadLog()方法
+ * </pre>
  * 
- * <br>
- * <b>修改</b> kymjs(kymjs123@gmail.com)
- * 
- * <br>
  * <b>创建时间</b> 2014-7-2
  * 
- * @author wangjiegulu
- * @from https://github.com/wangjiegulu/AndroidBucket.git
+ * @author kymjs(kymjs123@gmail.com)
  */
 public class CrashHandler implements UncaughtExceptionHandler {
-
-    public static final boolean DEBUG = false; // 是否开启日志输出
-    private static final String POSTFIX_NAME = ".log"; // 错误报告文件的扩展名
-    private String toastMsg = "程序异常退出，请把日志发送给我们";
-
-    /** 系统默认的UncaughtException处理类 */
-    private UncaughtExceptionHandler mDefaultHandler;
-    private Properties mDeviceCrashInfo; // 设备信息
     private Context mContext;
-    private static CrashHandler instance = null;
+    protected boolean openUpload = true;
+    // log文件的后缀名
+    private static final String FILE_NAME_SUFFIX = ".log";
+    private static CrashHandler sInstance = null;
+    // 系统默认的异常处理（默认情况下，系统会终止当前的异常程序）
+    private UncaughtExceptionHandler mDefaultCrashHandler;
 
-    private CrashHandler() {}
+    private CrashHandler(Context cxt) {
+        // 获取系统默认的异常处理器
+        mDefaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
+        // 将当前实例设为系统默认的异常处理器
+        Thread.setDefaultUncaughtExceptionHandler(this);
+        // 获取Context，方便内部使用
+        mContext = cxt.getApplicationContext();
+    }
 
-    private synchronized static CrashHandler getInstance() {
-        if (instance == null) {
-            instance = new CrashHandler();
+    public synchronized static CrashHandler create(Context cxt) {
+        if (sInstance == null) {
+            sInstance = new CrashHandler(cxt);
         }
-        return instance;
+        return sInstance;
     }
 
     /**
-     * 获取系统默认的UncaughtException处理器, 设置该CrashHandler为程序的默认处理器
-     */
-    public static void create(Context ctx) {
-        create(ctx, null);
-    }
-
-    public static void create(Context ctx, String toastMsg) {
-        CrashHandler crashHandler = getInstance();
-        if (null != toastMsg) {
-            crashHandler.toastMsg = toastMsg;
-        }
-        crashHandler.mContext = ctx.getApplicationContext();
-        crashHandler.mDefaultHandler = Thread
-                .getDefaultUncaughtExceptionHandler();
-        Thread.setDefaultUncaughtExceptionHandler(crashHandler);
-    }
-
-    /**
-     * 当UncaughtException发生时会转入该函数来处理
+     * 这个是最关键的函数，当程序中有未被捕获的异常，系统将会自动调用#uncaughtException方法
+     * thread为出现未捕获异常的线程，ex为未捕获的异常，有了这个ex，我们就可以得到异常信息。
      */
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
-        if (!DEBUG) {
-            return;
-        }
-        saveCrashInfoToFile(ex);
-        if (!handleException(ex) && mDefaultHandler != null) {
-            // 如果用户没有处理则让系统默认的异常处理器来处理
-            mDefaultHandler.uncaughtException(thread, ex);
-        } else {
-            try {
-                // 让线程停止一会是为了显示Toast信息给用户
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-            }
-            KJActivityManager.create().AppExit(mContext);
-        }
-    }
-
-    /**
-     * 自定义错误处理,收集错误信息 发送错误报告等操作均在此完成. 开发者可以根据自己的情况来自定义异常处理逻辑
-     * 
-     * @return true:如果处理了该异常信息;否则返回false
-     */
-    private boolean handleException(Throwable ex) {
-        if (ex == null) {
-            return true;
-        }
-        new Thread() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                if (!StringUtils.isEmpty(toastMsg)) {
-                    // 使用Toast来显示异常信息
-                    // Toast 显示需要出现在一个线程的消息队列中
-                    ViewInject.longToast(mContext, toastMsg);
-                }
-                Looper.loop();
-            }
-        }.start();
-        return true;
-    }
-
-    /**
-     * 保存错误信息到文件中
-     */
-    private String saveCrashInfoToFile(Throwable ex) {
-        Writer info = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(info);
-        ex.printStackTrace(printWriter);
-
-        // getCause() 返回此 throwable 的 cause；如果 cause 不存在或未知，则返回 null。
-        Throwable cause = ex.getCause();
-        while (cause != null) {
-            cause.printStackTrace(printWriter);
-            cause = cause.getCause();
-        }
-        String result = info.toString();
-        printWriter.close();
-        mDeviceCrashInfo.put("device", result);
-
-        String fileName = null;
-        FileOutputStream trace = null;
         try {
-            // 保存文件
-            fileName = "kjlibrary-" + System.currentTimeMillis() + POSTFIX_NAME;
-            trace = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
-            mDeviceCrashInfo.store(trace, "");
-            trace.flush();
+            // 导出异常信息到SD卡中
+            saveToSDCard(ex);
+            // 通过网络上传异常信息
+            if (openUpload && SystemTool.isCheckNet(mContext)) {
+                uploadLog();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // 打印出当前调用栈信息,用于开发阶段调试
+        ex.printStackTrace();
+        // 如果系统提供了默认的异常处理器，则交给系统去结束我们的程序，否则就由我们自己结束自己
+        if (mDefaultCrashHandler != null) {
+            mDefaultCrashHandler.uncaughtException(thread, ex);
+        } else {
+            KJActivityManager.create().finishAllActivity();
+        }
+    }
+
+    private void saveToSDCard(Throwable ex) throws IOException {
+        File file = FileUtils.getSaveFile("KJLog",
+                SystemTool.getDataTime("YYYYMMDD") + System.currentTimeMillis()
+                        + FILE_NAME_SUFFIX);
+        try {
+            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(
+                    file)));
+            // 导出发生异常的时间
+            pw.println(SystemTool.getDataTime("YYYYMMDD_HH_mm"));
+
+            // 导出手机信息
+            dumpPhoneInfo(pw);
+
+            pw.println();
+            // 导出异常的调用栈信息
+            ex.printStackTrace(pw);
+            pw.close();
         } catch (Exception e) {
-        } finally {
-            FileUtils.closeIO(trace);
-        }
-        return fileName;
-    }
-
-    /**
-     * 在程序启动时候, 可以调用该函数来发送以前没有发送的报告
-     */
-    public void sendPreviousReportsToServer() {
-        sendCrashReportsToServer(mContext);
-    }
-
-    /**
-     * 获取错误报告文件名
-     */
-    private String[] getCrashReportFiles(Context ctx) {
-        File filesDir = ctx.getFilesDir();
-        // 实现FilenameFilter接口的类实例可用于过滤器文件名
-        FilenameFilter filter = new FilenameFilter() {
-            // accept(File dir, String name)
-            // 测试指定文件是否应该包含在某一文件列表中。
-            public boolean accept(File dir, String name) {
-                return name.endsWith(POSTFIX_NAME);
-            }
-        };
-        // list(FilenameFilter filter)
-        // 返回一个字符串数组，这些字符串指定此抽象路径名表示的目录中满足指定过滤器的文件和目录
-        return filesDir.list(filter);
-    }
-
-    /**
-     * 把错误报告发送给服务器,包含新产生的和以前没发送的.
-     * 
-     * @param ctx
-     */
-    private void sendCrashReportsToServer(Context ctx) {
-        String[] crFiles = getCrashReportFiles(ctx);
-        if (crFiles != null && crFiles.length > 0) {
-            TreeSet<String> sortedFiles = new TreeSet<String>();
-            sortedFiles.addAll(Arrays.asList(crFiles));
-
-            for (String fileName : sortedFiles) {
-                File cr = new File(ctx.getFilesDir(), fileName);
-                postReport(cr);
-                cr.delete();// 删除已发送的报告
-            }
         }
     }
 
+    private void dumpPhoneInfo(PrintWriter pw) throws NameNotFoundException {
+        // 应用的版本名称和版本号
+        PackageManager pm = mContext.getPackageManager();
+        PackageInfo pi = pm.getPackageInfo(mContext.getPackageName(),
+                PackageManager.GET_ACTIVITIES);
+        pw.print("App Version: ");
+        pw.print(pi.versionName);
+        pw.print('_');
+        pw.println(pi.versionCode);
+        pw.println();
+
+        // android版本号
+        pw.print("OS Version: ");
+        pw.print(Build.VERSION.RELEASE);
+        pw.print("_");
+        pw.println(Build.VERSION.SDK_INT);
+        pw.println();
+
+        // 手机制造商
+        pw.print("Vendor: ");
+        pw.println(Build.MANUFACTURER);
+        pw.println();
+
+        // 手机型号
+        pw.print("Model: ");
+        pw.println(Build.MODEL);
+        pw.println();
+
+        // cpu架构
+        pw.print("CPU ABI: ");
+        pw.println(Build.CPU_ABI);
+        pw.println();
+    }
+
     /**
-     * 使用HTTP Post 发送错误报告到服务器
+     * 上传至服务器
      */
-    protected void postReport(File file) {}
+    private void uploadLog() {
+        KJHttp kjh = new KJHttp();
+        KJFileParams params = new KJFileParams();
+        String[] list = FileUtils.getSaveFolder("KJLog").list();
+        try {
+            for (String filePath : list) {
+                params.put(new File(filePath));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        kjh.post("", params, null);
+        for (String filePath : list) {
+            new File(filePath).delete();
+        }
+    }
 }

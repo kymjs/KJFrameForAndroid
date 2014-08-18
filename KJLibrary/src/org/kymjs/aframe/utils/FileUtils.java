@@ -94,15 +94,18 @@ public class FileUtils {
 
     /**
      * 从指定文件夹获取文件
+     * 
+     * @return 如果文件不存在则创建,如果如果无法创建文件或文件名为空则返回null
      */
-    public static File getSaveFile(String folder, String fileNmae) {
-        File file = new File(Environment.getExternalStorageDirectory()
-                .getAbsoluteFile()
-                + File.separator
-                + folder
-                + File.separator
+    public static File getSaveFile(String folderPath, String fileNmae) {
+        File file = new File(getSavePath(folderPath) + File.separator
                 + fileNmae);
-        return file.exists() ? file : null;
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 
     /**

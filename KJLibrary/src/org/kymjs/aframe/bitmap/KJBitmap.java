@@ -54,10 +54,10 @@ public class KJBitmap {
     public static KJBitmapConfig config;
 
     public synchronized static KJBitmap create() {
+        config = new KJBitmapConfig();
         if (instance == null) {
             instance = new KJBitmap();
         }
-        config = new KJBitmapConfig();
         return instance;
     }
 
