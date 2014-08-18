@@ -27,7 +27,9 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 /**
  * The BitmapLibrary's core classes
@@ -49,18 +51,17 @@ public class KJBitmap {
     /** 图片加载器,若认为KJLibrary的加载器不好，也可自定义图片加载器 */
     private I_ImageLoder downloader;
     /** BitmapLabrary配置器 */
-    public KJBitmapConfig config;
+    public static KJBitmapConfig config;
 
     public synchronized static KJBitmap create() {
-        if (instance == null)
+        if (instance == null) {
             instance = new KJBitmap();
+        }
+        config = new KJBitmapConfig();
         return instance;
     }
 
     private KJBitmap() {
-        if (config == null) {
-            config = new KJBitmapConfig();
-        }
         // downloader = new Downloader(config); // 配置图片加载器
         downloader = new DownloadWithLruCache(config); // 配置图片加载器
         mMemoryCache = new MemoryCache(config.memoryCacheSize);
@@ -81,6 +82,27 @@ public class KJBitmap {
         } else {
             loadImage(imageView, imageUrl);
         }
+    }
+
+    /**
+     * 加载网络图片
+     * 
+     * @param imageView
+     *            要显示图片的控件(ImageView设置src，普通View设置bg)
+     * @param imageUrl
+     *            图片的URL
+     * @param openProgress
+     *            是否开启环形等待条
+     */
+    public void display(View imageView, String imageUrl, boolean openProgress) {
+        boolean temp = config.openProgress;
+        config.openProgress = openProgress;
+        if (config.openProgress) {
+            loadImageWithProgress(imageView, imageUrl);
+        } else {
+            loadImage(imageView, imageUrl);
+        }
+        config.openProgress = temp;
     }
 
     /**
@@ -127,6 +149,23 @@ public class KJBitmap {
      * 显示加载中的环形等待条
      */
     private void loadImageWithProgress(View imageView, String imageUrl) {
+        ProgressBar bar = new ProgressBar(imageView.getContext());
+        try {
+            ViewGroup parent = ((ViewGroup) imageView.getParent());
+            if (parent.findViewWithTag(imageUrl) == null) {
+                for (int i = 0; i < parent.getChildCount(); i++) {
+                    if (imageView.equals(parent.getChildAt(i))) {
+                        parent.addView(bar, i);
+                        break;
+                    }
+                }
+                bar.setTag(imageUrl);
+                imageView.setVisibility(View.GONE);
+            } else {
+                return;
+            }
+        } catch (ClassCastException e) {
+        }
         loadImage(imageView, imageUrl);
     }
 
@@ -158,6 +197,16 @@ public class KJBitmap {
             if (config.isDEBUG) {
                 KJLoger.debugLog(getClass().getName(),
                         "download success, from memory cache\n" + imageUrl);
+            }
+            // 如果设置了显示环形等待条
+            if (config.openProgress) {
+                try {
+                    ViewGroup parent = ((ViewGroup) imageView.getParent());
+                    parent.removeView(parent.findViewWithTag(imageUrl));
+                } catch (ClassCastException e) {
+                } finally {
+                    imageView.setVisibility(View.VISIBLE);
+                }
             }
         } else {
             if (imageView instanceof ImageView) {
@@ -215,6 +264,17 @@ public class KJBitmap {
             // 如果设置了回调接口，调用回调函数
             if (config.callBack != null) {
                 config.callBack.imgLoadSuccess(imageView);
+            }
+
+            // 如果设置了显示环形等待条
+            if (config.openProgress) {
+                try {
+                    ViewGroup parent = ((ViewGroup) imageView.getParent());
+                    parent.removeView(parent.findViewWithTag(url));
+                } catch (ClassCastException e) {
+                } finally {
+                    imageView.setVisibility(View.VISIBLE);
+                }
             }
             taskCollection.remove(this);
         }

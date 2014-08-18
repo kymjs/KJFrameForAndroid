@@ -30,7 +30,7 @@ import org.kymjs.aframe.utils.StringUtils;
 import android.graphics.Bitmap;
 
 /**
- * 图片下载器：可以从网络或本地加载一张Bitmap并返回；你应该使用性能更优的替代类 {@see
+ * 图片下载器：可以从网络或本地加载一张Bitmap并返回，你应该使用性能更优的替代类 {@see
  * org.kymjs.aframe.bitmap.DownloadWithLruCache}
  * 
  * <br>
@@ -88,7 +88,7 @@ public class Downloader implements I_ImageLoder {
      * @param imagePath
      *            图片的地址
      */
-    private byte[] loadImgFromNet(String imagePath) {
+    private byte[] loadImgFromNet(final String imagePath) {
         byte[] data = null;
         HttpURLConnection con = null;
         try {

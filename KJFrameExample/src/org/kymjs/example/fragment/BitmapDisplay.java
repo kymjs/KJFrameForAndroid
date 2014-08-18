@@ -24,6 +24,8 @@ public class BitmapDisplay extends BaseFragment {
     private Button button;
     @BindView(id = R.id.button2, click = true)
     private Button button2;
+    @BindView(id = R.id.button3, click = true)
+    private Button button3;
     @BindView(id = R.id.imageview, click = true)
     private ImageView imageView;
 
@@ -39,6 +41,8 @@ public class BitmapDisplay extends BaseFragment {
         super.initWidget(parentView);
         button2.setVisibility(View.VISIBLE);
         button2.setText("点击加载网络图片");
+        button3.setVisibility(View.VISIBLE);
+        button3.setText("图片加载过程中显示环形等待条");
     }
 
     @Override
@@ -58,9 +62,13 @@ public class BitmapDisplay extends BaseFragment {
             kjb.display(
                     imageView,
                     "http://imgsrc.baidu.com/forum/w%3D580/sign=b16bfbd859b5c9ea62f303ebe53bb622/588e5ece36d3d53933f0c2103887e950372ab0fd.jpg");
-            // kjb.display(
-            // imageView,
-            // "https://raw.githubusercontent.com/kymjs/KJFrameForAndroid/master/KJFrameExample/big_image2.jpg");
+            break;
+        case R.id.button3:
+            KJBitmap kjbitmap = KJBitmap.create();
+            kjbitmap.display(
+                    imageView,
+                    "https://raw.githubusercontent.com/kymjs/KJFrameForAndroid/master/KJFrameExample/big_image2.jpg",
+                    true); // 开启环形等待条
             ViewInject.toast("图片较大，加载中");
             break;
         }

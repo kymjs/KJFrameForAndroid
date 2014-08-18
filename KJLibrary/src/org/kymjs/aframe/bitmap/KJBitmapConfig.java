@@ -39,10 +39,10 @@ final public class KJBitmapConfig {
 
     /** 载入时的图片 */
     public Bitmap loadingBitmap;
-    /** 是否开启载入图片时显示环形progressBar效果 */
-    public boolean openProgress = false;
     /** 图片载入状态将会回调相应的方法 */
     public BitmapCallBack callBack;
+    /** 是否开启载入图片时显示环形progressBar效果 */
+    public boolean openProgress = false;
 
     /** 是否开启内存缓存功能 */
     public boolean openMemoryCache = true;
