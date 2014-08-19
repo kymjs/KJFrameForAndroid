@@ -77,13 +77,13 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.SyncBasicHttpContext;
 import org.kymjs.aframe.core.KJException;
+import org.kymjs.aframe.core.KJTaskExecutor;
 import org.kymjs.aframe.core.KJThreadExecutors;
 import org.kymjs.aframe.http.downloader.FileDownLoader;
 import org.kymjs.aframe.http.downloader.I_FileLoader;
 import org.kymjs.aframe.utils.FileUtils;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 /**
  * update log
@@ -132,7 +132,8 @@ public class KJHttp {
      * @param callback
      *            请求中的回调方法，可选类型：FileCallBack、StringCallBack
      */
-    public void urlGet(String url, KJStringParams params, I_HttpRespond callback) {
+    public void urlGet(String url, KJStringParams params,
+            I_HttpRespond callback) {
         if (params != null) {
             StringBuilder str = new StringBuilder(url);
             str.append("?").append(params.toString());
@@ -156,7 +157,8 @@ public class KJHttp {
     /**
      * 实现HttpUrlGet请求的任务
      */
-    private class HttpUrlGetTask extends AsyncTask<Object, Object, Object> {
+    private class HttpUrlGetTask extends
+            KJTaskExecutor<Object, Object, Object> {
         private I_HttpRespond callback;
 
         public HttpUrlGetTask(I_HttpRespond callback) {
@@ -175,10 +177,12 @@ public class KJHttp {
                 conn.setUseCaches(config.isUseCache());
                 conn.setReadTimeout(config.getReadTimeout());
                 conn.setConnectTimeout(config.getConnectTimeOut());
-                conn.setRequestProperty("Charset", config.getCharSet());
+                conn.setRequestProperty("Charset",
+                        config.getCharSet());
                 conn.setRequestMethod("GET");
                 input = conn.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(input));
+                reader = new BufferedReader(new InputStreamReader(
+                        input));
                 int i = 0, current = 0;
                 int count = conn.getContentLength();
                 char[] buf = new char[1024];
@@ -233,22 +237,26 @@ public class KJHttp {
      * @param callback
      *            请求中的回调方法，可选类型：FileCallBack、StringCallBack
      */
-    public void urlPost(String url, I_HttpParams params, I_HttpRespond callback) {
+    public void urlPost(String url, I_HttpParams params,
+            I_HttpRespond callback) {
         if (params instanceof KJStringParams) {
             new HttpUrlPostTask(params, callback).execute(url);
         } else if (params instanceof KJFileParams) {
-            new HttpUrlFileTask((KJFileParams) params, callback).execute(url);
+            new HttpUrlFileTask((KJFileParams) params, callback)
+                    .execute(url);
         }
     }
 
     /**
      * 实现HttpUrlFile请求的任务
      */
-    private class HttpUrlFileTask extends AsyncTask<Object, Object, Object> {
+    private class HttpUrlFileTask extends
+            KJTaskExecutor<Object, Object, Object> {
         private I_HttpRespond callback;
         private KJFileParams params;
 
-        public HttpUrlFileTask(KJFileParams param, I_HttpRespond callback) {
+        public HttpUrlFileTask(KJFileParams param,
+                I_HttpRespond callback) {
             this.callback = callback;
             this.params = param;
         }
@@ -271,13 +279,15 @@ public class KJHttp {
                 conn.setRequestMethod("POST");
                 conn.setReadTimeout(config.getReadTimeout());
                 conn.setConnectTimeout(config.getConnectTimeOut());
-                conn.setRequestProperty("Charset", config.getCharSet());
+                conn.setRequestProperty("Charset",
+                        config.getCharSet());
                 conn.setInstanceFollowRedirects(true);
                 conn.setRequestProperty("connection", "Keep-Alive");
                 conn.setRequestProperty("Content-Type",
                         "multipart/form-data; boundary=" + BOUNDARY);
                 out = new DataOutputStream(conn.getOutputStream());
-                byte[] end_data = ("\r\n--" + BOUNDARY + "--\r\n").getBytes();// 定义最后数据分隔线
+                byte[] end_data = ("\r\n--" + BOUNDARY + "--\r\n")
+                        .getBytes();// 定义最后数据分隔线
                 int leng = params.fileParams.size();
                 for (int i = 0; i < leng; i++) {
                     StringBuilder sb = new StringBuilder();
@@ -350,11 +360,13 @@ public class KJHttp {
     /**
      * 实现HttpUrlPost请求的任务
      */
-    private class HttpUrlPostTask extends AsyncTask<Object, Object, Object> {
+    private class HttpUrlPostTask extends
+            KJTaskExecutor<Object, Object, Object> {
         private I_HttpRespond callback;
         private I_HttpParams params;
 
-        public HttpUrlPostTask(I_HttpParams param, I_HttpRespond callback) {
+        public HttpUrlPostTask(I_HttpParams param,
+                I_HttpRespond callback) {
             this.callback = callback;
             this.params = param;
         }
@@ -370,8 +382,10 @@ public class KJHttp {
                 HttpURLConnection connection = (HttpURLConnection) url
                         .openConnection();
                 connection.setReadTimeout(config.getReadTimeout());
-                connection.setConnectTimeout(config.getConnectTimeOut());
-                connection.setRequestProperty("Charset", config.getCharSet());
+                connection.setConnectTimeout(config
+                        .getConnectTimeOut());
+                connection.setRequestProperty("Charset",
+                        config.getCharSet());
                 connection.setRequestProperty("Content-Type",
                         config.getContentType());
                 connection.setInstanceFollowRedirects(true);
@@ -381,13 +395,15 @@ public class KJHttp {
                 connection.setUseCaches(false);
                 connection.connect();
                 if (params != null) {
-                    out = new DataOutputStream(connection.getOutputStream());
+                    out = new DataOutputStream(
+                            connection.getOutputStream());
                     out.writeBytes(params.toString());
                     out.flush();
                 }
 
                 input = connection.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(input));
+                reader = new BufferedReader(new InputStreamReader(
+                        input));
                 respond = new StringBuilder();
                 int i = 0;
                 int current = 0;
@@ -443,7 +459,8 @@ public class KJHttp {
      * @param callback
      *            请求中的回调方法，目前只支持类：FileCallBack
      */
-    public void urlDownload(String url, File saveFile, I_HttpRespond callback) {
+    public void urlDownload(String url, File saveFile,
+            I_HttpRespond callback) {
         urlDownload(url, saveFile, true, callback);
     }
 
@@ -474,8 +491,8 @@ public class KJHttp {
      * @param callback
      *            请求中的回调方法，目前只支持类：FileCallBack
      */
-    private void urlDownload(String url, String absFilePath, boolean open,
-            I_HttpRespond callback) {
+    private void urlDownload(String url, String absFilePath,
+            boolean open, I_HttpRespond callback) {
         int s = absFilePath.lastIndexOf(File.separator);
         String dir = null;
         if (s > 0) {
@@ -517,7 +534,8 @@ public class KJHttp {
     /**
      * 实现HttpUrl下载文件的任务(目前已知BUG，当文件下载过程中中断网络，下载没有停止)
      */
-    private class FileDownloadTask extends AsyncTask<Object, Object, Object> {
+    private class FileDownloadTask extends
+            KJTaskExecutor<Object, Object, Object> {
         private File saveFile;
         private I_HttpRespond callback;
 
@@ -532,8 +550,8 @@ public class KJHttp {
                 // 下载器可以自己通过实现I_FileLoader或者I_MulThreadLoader接口协议
                 I_FileLoader result = config.getDownloader();
                 if (result == null) {
-                    result = new FileDownLoader(urls[0].toString(), saveFile,
-                            config.getDownThreadCount());
+                    result = new FileDownLoader(urls[0].toString(),
+                            saveFile, config.getDownThreadCount());
                 }
                 result.download(callback);
                 return result;
@@ -570,7 +588,8 @@ public class KJHttp {
     private void initHttpClient() {
         BasicHttpParams httpParams = new BasicHttpParams();
 
-        ConnManagerParams.setTimeout(httpParams, config.getConnectTimeOut());
+        ConnManagerParams.setTimeout(httpParams,
+                config.getConnectTimeOut());
         ConnManagerParams.setMaxConnectionsPerRoute(httpParams,
                 new ConnPerRouteBean(config.getMaxConnections()));
         ConnManagerParams.setMaxTotalConnections(httpParams,
@@ -584,7 +603,8 @@ public class KJHttp {
         HttpConnectionParams.setSocketBufferSize(httpParams,
                 config.getSocketBuffer());
 
-        HttpProtocolParams.setVersion(httpParams, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setVersion(httpParams,
+                HttpVersion.HTTP_1_1);
         HttpProtocolParams.setUserAgent(httpParams, "KJLibrary");
 
         SchemeRegistry schemeRegistry = new SchemeRegistry();
@@ -597,38 +617,50 @@ public class KJHttp {
 
         httpContext = new SyncBasicHttpContext(new BasicHttpContext());
         httpClient = new DefaultHttpClient(cm, httpParams);
-        httpClient.addRequestInterceptor(new HttpRequestInterceptor() {
-            @Override
-            public void process(HttpRequest request, HttpContext context) {
-                if (!request.containsHeader("Accept-Encoding")) {
-                    request.addHeader("Accept-Encoding", "gzip");
-                }
+        httpClient
+                .addRequestInterceptor(new HttpRequestInterceptor() {
+                    @Override
+                    public void process(HttpRequest request,
+                            HttpContext context) {
+                        if (!request
+                                .containsHeader("Accept-Encoding")) {
+                            request.addHeader("Accept-Encoding",
+                                    "gzip");
+                        }
 
-                for (Entry<String, String> entry : clientHeaderMap.entrySet()) {
-                    request.addHeader(entry.getKey(), entry.getValue());
-                }
-            }
-        });
-
-        httpClient.addResponseInterceptor(new HttpResponseInterceptor() {
-            @Override
-            public void process(HttpResponse response, HttpContext context) {
-                final HttpEntity entity = response.getEntity();
-                if (entity == null) {
-                    return;
-                }
-                final Header encoding = entity.getContentEncoding();
-                if (encoding != null) {
-                    for (HeaderElement element : encoding.getElements()) {
-                        if (element.getName().equalsIgnoreCase("gzip")) {
-                            response.setEntity(new InflatingEntity(response
-                                    .getEntity()));
-                            break;
+                        for (Entry<String, String> entry : clientHeaderMap
+                                .entrySet()) {
+                            request.addHeader(entry.getKey(),
+                                    entry.getValue());
                         }
                     }
-                }
-            }
-        });
+                });
+
+        httpClient
+                .addResponseInterceptor(new HttpResponseInterceptor() {
+                    @Override
+                    public void process(HttpResponse response,
+                            HttpContext context) {
+                        final HttpEntity entity = response
+                                .getEntity();
+                        if (entity == null) {
+                            return;
+                        }
+                        final Header encoding = entity
+                                .getContentEncoding();
+                        if (encoding != null) {
+                            for (HeaderElement element : encoding
+                                    .getElements()) {
+                                if (element.getName()
+                                        .equalsIgnoreCase("gzip")) {
+                                    response.setEntity(new InflatingEntity(
+                                            response.getEntity()));
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                });
         threadPool = (ThreadPoolExecutor) KJThreadExecutors
                 .newCachedThreadPool();
         httpClient.setHttpRequestRetryHandler(new RetryHandler(config
@@ -647,7 +679,8 @@ public class KJHttp {
      *            {@link PersistentCookieStore}
      */
     public void setCookieStore(CookieStore cookieStore) {
-        httpContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
+        httpContext.setAttribute(ClientContext.COOKIE_STORE,
+                cookieStore);
     }
 
     /**
@@ -658,7 +691,8 @@ public class KJHttp {
      *            the string to use in the User-Agent header.
      */
     public void setUserAgent(String userAgent) {
-        HttpProtocolParams.setUserAgent(this.httpClient.getParams(), userAgent);
+        HttpProtocolParams.setUserAgent(this.httpClient.getParams(),
+                userAgent);
     }
 
     /**
@@ -673,7 +707,8 @@ public class KJHttp {
         final HttpParams httpParams = this.httpClient.getParams();
         ConnManagerParams.setTimeout(httpParams, timeout);
         HttpConnectionParams.setSoTimeout(httpParams, timeout);
-        HttpConnectionParams.setConnectionTimeout(httpParams, timeout);
+        HttpConnectionParams
+                .setConnectionTimeout(httpParams, timeout);
     }
 
     /**
@@ -726,8 +761,8 @@ public class KJHttp {
     public void setBasicAuth(String user, String pass, AuthScope scope) {
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
                 user, pass);
-        this.httpClient.getCredentialsProvider().setCredentials(scope,
-                credentials);
+        this.httpClient.getCredentialsProvider().setCredentials(
+                scope, credentials);
     }
 
     /**
@@ -745,8 +780,10 @@ public class KJHttp {
      *            specifies if active requests should be cancelled along with
      *            pending requests.
      */
-    public void cancelRequests(Context context, boolean mayInterruptIfRunning) {
-        List<WeakReference<Future<?>>> requestList = requestMap.get(context);
+    public void cancelRequests(Context context,
+            boolean mayInterruptIfRunning) {
+        List<WeakReference<Future<?>>> requestList = requestMap
+                .get(context);
         if (requestList != null) {
             for (WeakReference<Future<?>> requestRef : requestList) {
                 Future<?> request = requestRef.get();
@@ -764,7 +801,8 @@ public class KJHttp {
         get(null, url, null, callback);
     }
 
-    public void get(String url, KJStringParams params, HttpCallBack callback) {
+    public void get(String url, KJStringParams params,
+            HttpCallBack callback) {
         get(null, url, params, callback);
     }
 
@@ -772,15 +810,15 @@ public class KJHttp {
         get(context, url, null, callback);
     }
 
-    public void get(Context context, String url, KJStringParams params,
-            HttpCallBack callback) {
+    public void get(Context context, String url,
+            KJStringParams params, HttpCallBack callback) {
         if (params != null) {
             StringBuilder str = new StringBuilder(url);
             str.append("?").append(params.toString());
             url = str.toString();
         }
-        sendRequest(httpClient, httpContext, new HttpGet(url), null, callback,
-                context);
+        sendRequest(httpClient, httpContext, new HttpGet(url), null,
+                callback, context);
     }
 
     /************************* HttpClient post请求 *************************/
@@ -788,20 +826,21 @@ public class KJHttp {
         post(null, url, null, callback);
     }
 
-    public void post(String url, I_HttpParams params, HttpCallBack callback) {
+    public void post(String url, I_HttpParams params,
+            HttpCallBack callback) {
         post(null, url, params, callback);
     }
 
-    public void post(Context context, String url, I_HttpParams params,
-            HttpCallBack callback) {
+    public void post(Context context, String url,
+            I_HttpParams params, HttpCallBack callback) {
         post(context, url, paramsToEntity(params), null, callback);
     }
 
     public void post(Context context, String url, HttpEntity entity,
             String contentType, HttpCallBack callback) {
         sendRequest(httpClient, httpContext,
-                addEntityToRequestBase(new HttpPost(url), entity), contentType,
-                callback, context);
+                addEntityToRequestBase(new HttpPost(url), entity),
+                contentType, callback, context);
     }
 
     /************************* HttpClient post请求 *************************/
@@ -809,7 +848,8 @@ public class KJHttp {
         put(null, url, null, callback);
     }
 
-    public void put(String url, I_HttpParams params, HttpCallBack callback) {
+    public void put(String url, I_HttpParams params,
+            HttpCallBack callback) {
         put(null, url, params, callback);
     }
 
@@ -821,8 +861,8 @@ public class KJHttp {
     public void put(Context context, String url, HttpEntity entity,
             String contentType, HttpCallBack callback) {
         sendRequest(httpClient, httpContext,
-                addEntityToRequestBase(new HttpPut(url), entity), contentType,
-                callback, context);
+                addEntityToRequestBase(new HttpPut(url), entity),
+                contentType, callback, context);
     }
 
     /************************ httpClient core method *******************************/
@@ -841,8 +881,8 @@ public class KJHttp {
         if (contentType != null) {
             uriRequest.addHeader("Content-Type", contentType);
         }
-        Future<?> request = threadPool.submit(new AsyncHttpRequest(client,
-                httpContext, uriRequest, callback));
+        Future<?> request = threadPool.submit(new AsyncHttpRequest(
+                client, httpContext, uriRequest, callback));
         if (context != null) {
             // 在请求集中添加本次请求
             List<WeakReference<Future<?>>> requestList = requestMap
@@ -870,7 +910,8 @@ public class KJHttp {
     }
 
     private HttpEntityEnclosingRequestBase addEntityToRequestBase(
-            HttpEntityEnclosingRequestBase requestBase, HttpEntity entity) {
+            HttpEntityEnclosingRequestBase requestBase,
+            HttpEntity entity) {
         if (entity != null) {
             requestBase.setEntity(entity);
         }
@@ -912,8 +953,9 @@ public class KJHttp {
         private final HttpCallBack callback;
         private int executionCount;
 
-        public AsyncHttpRequest(AbstractHttpClient client, HttpContext context,
-                HttpUriRequest request, HttpCallBack callback) {
+        public AsyncHttpRequest(AbstractHttpClient client,
+                HttpContext context, HttpUriRequest request,
+                HttpCallBack callback) {
             this.client = client;
             this.context = context;
             this.request = request;
@@ -926,7 +968,8 @@ public class KJHttp {
         private void makeRequest() throws IOException {
             if (!Thread.currentThread().isInterrupted()) {
                 try {
-                    HttpResponse response = client.execute(request, context);
+                    HttpResponse response = client.execute(request,
+                            context);
                     if (!Thread.currentThread().isInterrupted()) {
                         if (callback != null) {
                             callback.sendResponseMessage(response);
@@ -954,28 +997,31 @@ public class KJHttp {
                     return;
                 } catch (UnknownHostException e) {
                     if (callback != null) {
-                        callback.sendFailureMessage(e, "can't resolve host");
+                        callback.sendFailureMessage(e,
+                                "can't resolve host");
                     }
                     return;
                 } catch (SocketException e) {
                     if (callback != null) {
-                        callback.sendFailureMessage(e, "can't resolve host");
+                        callback.sendFailureMessage(e,
+                                "can't resolve host");
                     }
                     return;
                 } catch (SocketTimeoutException e) {
                     if (callback != null) {
-                        callback.sendFailureMessage(e, "socket time out");
+                        callback.sendFailureMessage(e,
+                                "socket time out");
                     }
                     return;
                 } catch (IOException e) {
                     cause = e;
-                    retry = retryHandler.retryRequest(cause, ++executionCount,
-                            context);
+                    retry = retryHandler.retryRequest(cause,
+                            ++executionCount, context);
                 } catch (NullPointerException e) {
                     cause = new IOException("NPE in HttpClient"
                             + e.getMessage());
-                    retry = retryHandler.retryRequest(cause, ++executionCount,
-                            context);
+                    retry = retryHandler.retryRequest(cause,
+                            ++executionCount, context);
                 }
             }
             ConnectException ex = new ConnectException();
