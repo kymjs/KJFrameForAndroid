@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kymjs.aframe;
+package org.kymjs.aframe.core;
 
 import java.security.AccessControlContext;
 import java.security.AccessController;
@@ -66,13 +66,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * 线程池管理类:本类摘自jdk1.8中的
  * java.util.concurrent.Executors，用于替代原org.kymjs.aframe.ThreadPoolManager类
- * 并做了适当修改，使其更适合于手机运行
- * 
- * <br>
- * <br>
+ * 并做了适当修改，使其更适合于手机运行<br>
  * <b>创建时间</b> 2014-8-14
  * 
- * @author Doug Lea, kymjs(kymjs123@gmail.com)
+ * @author Doug Lea
+ * @author kymjs(kymjs123@gmail.com)
  * @version 1.1
  */
 public class KJThreadExecutors {

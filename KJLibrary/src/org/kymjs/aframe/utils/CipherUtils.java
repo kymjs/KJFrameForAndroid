@@ -24,19 +24,17 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
-import org.kymjs.aframe.KJException;
+import org.kymjs.aframe.core.KJException;
 
 /**
- * 加密与解密的工具类
+ * 加密与解密的工具类<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-8-14
  * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.1
  */
-public class CipherUtils {
+public final class CipherUtils {
     /**
      * MD5加密
      */

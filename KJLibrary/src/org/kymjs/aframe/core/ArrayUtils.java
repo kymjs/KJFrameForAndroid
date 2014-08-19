@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kymjs.aframe.http.downloader;
+package org.kymjs.aframe.core;
 
 import java.lang.reflect.Array;
 
@@ -22,12 +22,16 @@ import java.lang.reflect.Array;
 // and the array size eats another 4 bytes
 
 /**
- * 本类摘自Android open source project 2006，部分改动
+ * 本类摘自Android open source project 2006，部分改动 <br>
  * 
  * ArrayUtils contains some methods that you can call to find out the most
- * efficient increments by which to grow arrays.
+ * efficient increments by which to grow arrays. <br>
+ * <b>创建时间</b> 2014-7-16
+ * 
+ * @version 1.0
+ * @author kymjs(kymjs123@gmail.com)
  */
-public class ArrayUtils {
+public final class ArrayUtils {
     private static Object[] EMPTY = new Object[0];
     private static final int CACHE_SIZE = 73;
     private static Object[] sCache = new Object[CACHE_SIZE];

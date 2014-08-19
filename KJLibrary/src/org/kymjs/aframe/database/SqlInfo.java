@@ -18,10 +18,8 @@ package org.kymjs.aframe.database;
 import java.util.LinkedList;
 
 /**
- * sql语句的全部信息
+ * sql语句的全部信息<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-8-15
  * 
  * @version 1.0

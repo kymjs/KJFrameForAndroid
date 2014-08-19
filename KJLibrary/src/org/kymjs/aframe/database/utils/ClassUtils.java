@@ -21,17 +21,17 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kymjs.aframe.KJException;
+import org.kymjs.aframe.core.KJException;
 import org.kymjs.aframe.database.ManyToOneLazyLoader;
 import org.kymjs.aframe.database.annotate.Id;
 import org.kymjs.aframe.database.annotate.Table;
 
 /**
- * 对实体类JavaBean的一些操作
+ * 对实体类JavaBean的一些操作<br>
  * 
- * @version 1.0 <br>
- * <br>
- *          <b>创建时间</b> 2014-8-15
+ * <b>创建时间</b> 2014-8-15
+ * 
+ * @version 1.0
  */
 public class ClassUtils {
 

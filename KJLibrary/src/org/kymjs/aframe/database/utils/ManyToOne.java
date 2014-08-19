@@ -16,11 +16,11 @@
 package org.kymjs.aframe.database.utils;
 
 /**
- * 多对一的字段
+ * 多对一的字段<br>
  * 
- * @version 1.0 <br>
- * <br>
- *          <b>创建时间</b> 2014-8-15
+ * <b>创建时间</b> 2014-8-15
+ * 
+ * @version 1.0
  */
 public class ManyToOne extends Property {
 

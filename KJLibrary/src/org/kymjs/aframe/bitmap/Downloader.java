@@ -31,15 +31,12 @@ import android.graphics.Bitmap;
 
 /**
  * 图片下载器：可以从网络或本地加载一张Bitmap并返回，你应该使用性能更优的替代类 {@see
- * org.kymjs.aframe.bitmap.DownloadWithLruCache}
- * 
- * <br>
- * <b>说明</b> 采用工厂方法模式设计的下载器， 同时本类也是一个具体工厂类，生产具体的产品byte[]
+ * org.kymjs.aframe.bitmap.DownloadWithLruCache}<br>
+ * <b>说明</b> 采用工厂方法模式设计的下载器， 同时本类也是一个具体工厂类，生产具体的产品byte[]<br>
+ * <b>创建时间</b> 2014-7-11
  * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0 <br>
- * <br>
- *          <b>创建时间</b> 2014-7-11
  */
 @Deprecated
 public class Downloader implements I_ImageLoder {

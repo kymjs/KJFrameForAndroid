@@ -32,10 +32,8 @@ import org.apache.http.protocol.HttpContext;
 import android.os.SystemClock;
 
 /**
- * 对于响应失败的请求尝试重连
+ * 对于响应失败的请求尝试重连<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-8-14
  * 
  * @author kymjs(kymjs123@gmail.com)

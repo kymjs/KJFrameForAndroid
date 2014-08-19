@@ -13,19 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kymjs.aframe.bitmap.core;
+package org.kymjs.aframe.core;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * 经过Least Recently Used（最近最少使用）算法处理的LinkedHashMap
+ * 经过Least Recently Used（最近最少使用）算法处理的LinkedHashMap<br>
  * 
- * <br>
- * <b>修改</b> kymjs(kymjs123@gmail.com)
- * 
- * <br>
- * <br>
+ * <b>修改</b> kymjs(kymjs123@gmail.com)<br>
  * <b>创建时间</b> 2014-7-11
  * 
  * @author Android Open Source Project

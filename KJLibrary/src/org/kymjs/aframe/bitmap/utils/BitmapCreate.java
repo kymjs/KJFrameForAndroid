@@ -23,10 +23,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
 /**
- * 不会发生OOM的 BitmapFactory
+ * 不会发生OOM的 BitmapFactory<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-7-11
  * 
  * @author kymjs(kymjs123@gmail.com)

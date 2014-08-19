@@ -29,12 +29,12 @@ import android.view.Window;
 import android.view.WindowManager;
 
 /**
- * Application BaseActivity,you should inherit it for your Activity
+ * Application BaseActivity,you should inherit it for your Activity<br>
+ * 
+ * <b>创建时间</b> 2014-5-28
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.2 <br>
- * <br>
- *          <b>创建时间</b> 2014-5-28
+ * @version 1.2
  */
 public abstract class BaseActivity extends KJFrameActivity {
     /**

@@ -18,12 +18,12 @@ package org.kymjs.aframe.http;
 import org.kymjs.aframe.http.downloader.I_FileLoader;
 
 /**
- * HttpClient请求的配置类
+ * HttpClient请求的配置类<br>
+ * 
+ * <b>创建时间</b> 2014-6-5
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.1 <br>
- * <br>
- *          <b>创建时间</b> 2014-6-5
+ * @version 1.1
  */
 public class HttpConfig {
     public static final String FileParamsName = "KJFrameForAndroid_File";

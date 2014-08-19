@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kymjs.aframe.http.downloader;
+package org.kymjs.aframe.core;
 
 /**
  * 一个key值不可重复的有序k(int)-v(int)对集合类，使用一个从大到小的int数组存储key值，
- * 它的目的是用于替换HashMap(Integer, Integer)
+ * 它的目的是用于替换HashMap(Integer, Integer)<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-8-9
  * 
  * @author kymjs(kymjs123@gmail.com)

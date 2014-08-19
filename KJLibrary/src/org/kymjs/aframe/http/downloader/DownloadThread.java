@@ -24,10 +24,8 @@ import java.net.URL;
 import org.kymjs.aframe.KJLoger;
 
 /**
- * 多线程下载中实现每个线程的下载任务的类
+ * 多线程下载中实现每个线程的下载任务的类<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-8-11
  * 
  * @author kymjs(kymjs123@gmail.com)

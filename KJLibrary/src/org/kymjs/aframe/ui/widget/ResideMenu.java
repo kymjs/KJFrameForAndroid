@@ -41,7 +41,12 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 /**
- * 本类是对菜单界面设置动画与样式
+ * 本类是对菜单界面设置动画与样式<br>
+ * 
+ * <b>创建时间</b> 2014-5-31
+ * 
+ * @author kymjs(kymjs123@gmail.com)
+ * @version 1.0
  */
 public class ResideMenu extends FrameLayout implements
         GestureDetector.OnGestureListener {

@@ -26,9 +26,8 @@ import android.view.MotionEvent;
 import android.widget.ImageView;
 
 /**
- * 来自网络：图片缩放控件（支持缩放、拖动、双击、旋转）
+ * 来自网络：图片缩放控件（支持缩放、拖动、双击、旋转）<br>
  * 
- * <br>
  * <b>修改</b> kymjs(kymjs123@gmail.com) 添加双击缩放，双指旋转功能开关，可自行开关这些功能
  * 
  * @author raomeng1

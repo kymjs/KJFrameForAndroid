@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.kymjs.aframe.KJException;
+import org.kymjs.aframe.core.KJException;
 import org.kymjs.aframe.database.utils.Id;
 import org.kymjs.aframe.database.utils.KeyValue;
 import org.kymjs.aframe.database.utils.ManyToOne;
@@ -29,10 +29,8 @@ import org.kymjs.aframe.database.utils.TableInfo;
 import android.text.TextUtils;
 
 /**
- * sql语句生产者
+ * sql语句生产者<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-8-15
  * 
  * @version 1.0

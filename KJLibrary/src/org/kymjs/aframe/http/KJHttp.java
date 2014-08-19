@@ -76,8 +76,8 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.SyncBasicHttpContext;
-import org.kymjs.aframe.KJException;
-import org.kymjs.aframe.KJThreadExecutors;
+import org.kymjs.aframe.core.KJException;
+import org.kymjs.aframe.core.KJThreadExecutors;
 import org.kymjs.aframe.http.downloader.FileDownLoader;
 import org.kymjs.aframe.http.downloader.I_FileLoader;
 import org.kymjs.aframe.utils.FileUtils;
@@ -93,10 +93,8 @@ import android.os.AsyncTask;
  */
 
 /**
- * The HttpLibrary's core classes
+ * The HttpLibrary's core classes<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-7-14
  * 
  * @author kymjs(kymjs123@gmail.com)

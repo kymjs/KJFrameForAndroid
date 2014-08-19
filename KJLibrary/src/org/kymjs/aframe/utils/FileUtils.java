@@ -30,10 +30,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 
-import org.kymjs.aframe.KJException;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
 import org.kymjs.aframe.bitmap.utils.BitmapHelper;
 import org.kymjs.aframe.bitmap.utils.BitmapOperateUtil;
+import org.kymjs.aframe.core.KJException;
 
 import android.app.Activity;
 import android.content.Context;
@@ -46,16 +46,14 @@ import android.os.Environment;
 import android.provider.MediaStore;
 
 /**
- * 文件与流处理工具类
+ * 文件与流处理工具类<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-8-14
  * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.1
  */
-public class FileUtils {
+public final class FileUtils {
     /**
      * 检测SD卡是否存在
      */

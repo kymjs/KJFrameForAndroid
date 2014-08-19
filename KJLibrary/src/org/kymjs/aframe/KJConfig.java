@@ -15,7 +15,7 @@
  */
 package org.kymjs.aframe;
 
-final public class KJConfig {
+public final class KJConfig {
 
     public static final int VERSION = 1;
 

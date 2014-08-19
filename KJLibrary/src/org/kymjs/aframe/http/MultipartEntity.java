@@ -32,7 +32,7 @@ import org.apache.http.message.BasicHeader;
 /**
  * 用于向网络发送http参数，这个类参考自老外的博客，并做了适当修改
  * http://blog.rafaelsanches.com/2011/01/29/upload-using-multipart-post-
- * using-httpclient-in-android/)
+ * using-httpclient-in-android/)<br>
  * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0

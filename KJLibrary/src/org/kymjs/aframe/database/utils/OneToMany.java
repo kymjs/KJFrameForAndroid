@@ -16,11 +16,11 @@
 package org.kymjs.aframe.database.utils;
 
 /**
- * 一对多的字段
+ * 一对多的字段<br>
  * 
- * @version 1.0 <br>
- * <br>
- *          <b>创建时间</b> 2014-8-15
+ * <b>创建时间</b> 2014-8-15
+ * 
+ * @version 1.0
  */
 public class OneToMany extends Property {
 

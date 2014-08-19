@@ -21,8 +21,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.kymjs.aframe.KJLoger;
-import org.kymjs.aframe.bitmap.core.DiskCache;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
+import org.kymjs.aframe.core.DiskCache;
 import org.kymjs.aframe.utils.CipherUtils;
 import org.kymjs.aframe.utils.FileUtils;
 import org.kymjs.aframe.utils.StringUtils;
@@ -31,15 +31,12 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 
 /**
- * 使用lru算法缓存的图片下载器：可以从网络或本地加载一张Bitmap并返回
- * 
- * <br>
- * <b>说明</b> 采用工厂方法模式设计的下载器，同时本类也是一个具体工厂类，生产具体的产品byte[]
+ * 使用lru算法缓存的图片下载器：可以从网络或本地加载一张Bitmap并返回<br>
+ * <b>说明</b> 采用工厂方法模式设计的下载器，同时本类也是一个具体工厂类，生产具体的产品byte[]<br>
+ * <b>创建时间</b> 2014-7-11
  * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0 <br>
- * <br>
- *          <b>创建时间</b> 2014-7-11
  */
 @SuppressLint("DefaultLocale")
 public class DownloadWithLruCache implements I_ImageLoder {

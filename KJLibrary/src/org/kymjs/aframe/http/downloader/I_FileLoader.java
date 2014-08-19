@@ -18,12 +18,12 @@ package org.kymjs.aframe.http.downloader;
 import org.kymjs.aframe.http.I_HttpRespond;
 
 /**
- * 文件下载器接口协议
+ * 文件下载器接口协议<br>
+ * 
+ * <b>创建时间</b> 2014-8-11
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0 <br>
- * <br>
- *          <b>创建时间</b> 2014-8-11
+ * @version 1.0
  */
 public interface I_FileLoader {
     /**

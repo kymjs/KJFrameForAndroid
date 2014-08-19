@@ -13,16 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kymjs.aframe;
+package org.kymjs.aframe.core;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * 线程池管理类（你可以使用更好的替代类：org.kymjs.aframe.KJThreadExecutors）
- * 
- * <br>
- * <br>
+ * 线程池管理类（你可以使用更好的替代类：org.kymjs.aframe.KJThreadExecutors）<br>
  * <b>创建时间</b> 2014-6-5
  * 
  * @author kymjs(kymjs123@gmail.com)

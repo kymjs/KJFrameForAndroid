@@ -16,10 +16,8 @@
 package org.kymjs.aframe.http;
 
 /**
- * 用于处理JSON的http请求回调类
+ * 用于处理JSON的http请求回调类<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-8-5
  * 
  * @author kymjs(kymjs123@gmail.com)

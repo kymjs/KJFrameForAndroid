@@ -16,12 +16,12 @@
 package org.kymjs.aframe.ui;
 
 /**
- * 规范Activity中广播接受者注册的接口协议
+ * 规范Activity中广播接受者注册的接口协议<br>
+ * 
+ * <b>创建时间</b> 2014-7-11
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0 <br>
- * <br>
- *          <b>创建时间</b> 2014-7-11
+ * @version 1.0
  */
 public interface I_BroadcastReg {
     /**

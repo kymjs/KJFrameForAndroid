@@ -19,14 +19,14 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 
-import org.kymjs.aframe.KJException;
+import org.kymjs.aframe.core.KJException;
 
 /**
- * 表完整信息
+ * 表完整信息<br>
  * 
- * @version 1.0 <br>
- * <br>
- *          <b>创建时间</b> 2014-8-15
+ * <b>创建时间</b> 2014-8-15
+ * 
+ * @version 1.0
  */
 public class TableInfo {
 

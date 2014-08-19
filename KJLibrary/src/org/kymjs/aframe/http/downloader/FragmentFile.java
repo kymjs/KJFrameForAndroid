@@ -15,6 +15,7 @@
  */
 package org.kymjs.aframe.http.downloader;
 
+import org.kymjs.aframe.core.SparseIntArray;
 import org.kymjs.aframe.ui.KJActivityManager;
 
 import android.content.Context;
@@ -23,10 +24,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * 碎片文件保存到数据库的工具类
+ * 碎片文件保存到数据库的工具类<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-8-11
  * 
  * @author kymjs(kymjs123@gmail.com)

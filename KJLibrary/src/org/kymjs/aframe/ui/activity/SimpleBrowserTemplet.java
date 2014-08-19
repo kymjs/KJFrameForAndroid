@@ -22,16 +22,14 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 /**
- * 简单浏览器模板
+ * 简单浏览器模板<br>
  * 
- * <br>
  * <b>说明</b> 开发者必须首先实现initWebVie(WebView
- * mWebView)方法，将webview返回。若要显示网页，可手动调用mWebView.loadUrl(url);
+ * mWebView)方法，将webview返回。若要显示网页，可手动调用mWebView.loadUrl(url);<br>
+ * <b>创建时间</b> 2014-6-23
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0 <br>
- * <br>
- *          <b>创建时间</b> 2014-6-23
+ * @version 1.0
  */
 @SuppressLint("SetJavaScriptEnabled")
 public abstract class SimpleBrowserTemplet extends BaseActivity {

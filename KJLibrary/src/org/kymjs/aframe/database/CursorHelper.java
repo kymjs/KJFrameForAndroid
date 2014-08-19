@@ -26,10 +26,8 @@ import org.kymjs.aframe.database.utils.TableInfo;
 import android.database.Cursor;
 
 /**
- * 游标操作的帮助类
+ * 游标操作的帮助类<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-8-15
  * 
  * @version 1.0

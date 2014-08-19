@@ -22,8 +22,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import org.kymjs.aframe.KJException;
 import org.kymjs.aframe.KJLoger;
+import org.kymjs.aframe.core.KJException;
 import org.kymjs.aframe.database.utils.KeyValue;
 import org.kymjs.aframe.database.utils.ManyToOne;
 import org.kymjs.aframe.database.utils.OneToMany;
@@ -37,10 +37,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * The DBLibrary's core classes
+ * The DBLibrary's core classes<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-8-15
  * 
  * @version 1.0

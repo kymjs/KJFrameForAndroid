@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kymjs.aframe.bitmap.core;
+package org.kymjs.aframe.core;
 
 import org.kymjs.aframe.utils.SystemTool;
 
@@ -21,16 +21,14 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 
 /**
- * 使用lru算法的Bitmap内存缓存池
+ * 使用lru算法的Bitmap内存缓存池<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-7-11
  * 
- * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
+ * @author kymjs(kymjs123@gmail.com)
  */
-public class MemoryCache {
+public final class MemoryCache {
 
     private MemoryLruCache<String, Bitmap> cache;
 

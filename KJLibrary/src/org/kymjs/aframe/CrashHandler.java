@@ -40,10 +40,8 @@ import android.os.Build;
  * 实现该接口并注册为程序中的默认未捕获异常处理 这样当未捕获异常发生时，就可以做些异常处理操作 例如：收集异常信息，发送错误报告 等。
  * UncaughtException处理类,当程序发生Uncaught异常的时候,由该类来接管程序,并记录发送错误报告. <br>
  * 
- * <pre>
- * 警告 : 如果需错误报告到服务器，需要设置 protected boolean openUpload = true;
- *      且需要手动重写uploadLog()方法
- * </pre>
+ * <b>警告</b> : 如果需错误报告到服务器，需要设置 protected boolean openUpload = true;
+ * 且需要手动重写uploadLog()方法<br>
  * 
  * <b>创建时间</b> 2014-7-2
  * 

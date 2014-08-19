@@ -29,11 +29,11 @@ import org.kymjs.aframe.database.annotate.Property;
 import org.kymjs.aframe.database.annotate.Transient;
 
 /**
- * 字段操作工具类
+ * 字段操作工具类<br>
  * 
- * @version 1.0 <br>
- * <br>
- *          <b>创建时间</b> 2014-8-15
+ * <b>创建时间</b> 2014-8-15
+ * 
+ * @version 1.0
  */
 public class FieldUtils {
     public static Method getFieldGetMethod(Class<?> clazz, Field f) {

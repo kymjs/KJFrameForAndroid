@@ -20,12 +20,12 @@ import org.kymjs.aframe.KJLoger;
 import android.os.Bundle;
 
 /**
- * Application's base Fragment,you should inherit it for your Fragment
+ * Application's base Fragment,you should inherit it for your Fragment<br>
+ * 
+ * <b>创建时间</b> 2014-5-28
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0 <br>
- * <br>
- *          <b>创建时间</b> 2014-5-28
+ * @version 1.0
  */
 public abstract class BaseFragment extends KJFrameFragment {
 

@@ -18,14 +18,13 @@ package org.kymjs.aframe.bitmap;
 import android.graphics.Bitmap;
 
 /**
- * bitmapLibrary的配置器
+ * bitmapLibrary的配置器<br>
+ * <b>创建时间</b> 2014-7-11
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0 <br>
- * <br>
- *          <b>创建时间</b> 2014-7-11
+ * @version 1.0
  */
-final public class KJBitmapConfig {
+public final class KJBitmapConfig {
     public static final int DEFAULT = Integer.MAX_VALUE;
     public final boolean isDEBUG = true;
 

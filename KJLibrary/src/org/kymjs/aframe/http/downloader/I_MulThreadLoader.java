@@ -16,10 +16,8 @@
 package org.kymjs.aframe.http.downloader;
 
 /**
- * 多线程文件下载器接口协议
+ * 多线程文件下载器接口协议<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-8-11
  * 
  * @author kymjs(kymjs123@gmail.com)

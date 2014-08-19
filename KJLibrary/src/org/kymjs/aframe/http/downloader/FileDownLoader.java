@@ -23,15 +23,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.kymjs.aframe.KJException;
+import org.kymjs.aframe.core.KJException;
+import org.kymjs.aframe.core.SparseIntArray;
 import org.kymjs.aframe.http.I_HttpRespond;
 import org.kymjs.aframe.ui.KJActivityManager;
 
 /**
- * 多线程文件下载器类，你也可以通过实现I_MulThreadLoader或I_FileLoader接口协议来创建自己的下载器
+ * 多线程文件下载器类，你也可以通过实现I_MulThreadLoader或I_FileLoader接口协议来创建自己的下载器<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-8-11
  * 
  * @author kymjs(kymjs123@gmail.com)
@@ -46,7 +45,7 @@ public class FileDownLoader implements I_MulThreadLoader {
     private int block; // 每条线程下载的长度
     private String loadUrl; // 下载路径
     // 缓存各线程下载的长度(k作为线程id,v作为下载的长度)
-    SparseIntArray data = new SparseIntArray();
+    private SparseIntArray data = new SparseIntArray();
 
     /**
      * 构建文件下载器

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kymjs.aframe.bitmap.core;
+package org.kymjs.aframe.core;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -43,14 +43,14 @@ import android.os.StatFs;
 
 /**
  * LRU算法实现的磁盘缓存器，只是一个简单版本的实现。 可以在ICS源代码中找到一个更强大和高效的磁盘LRU缓存解决方案
- * (libcore/luni/src/main/java/libcore/io/DiskLruCache.java).
+ * (libcore/luni/src/main/java/libcore/io/DiskLruCache.java). <br>
+ * 
+ * <b>创建时间</b> 2014-7-16
  * 
  * @version 1.0
- * @author kymjs(kymjs123@gmail.com) <br>
- * <br>
- *         <b>创建时间</b> 2014-7-16
+ * @author kymjs(kymjs123@gmail.com)
  */
-public class DiskCache {
+public final class DiskCache {
     private boolean debug = false;
     private static long maxSize;
     // constant

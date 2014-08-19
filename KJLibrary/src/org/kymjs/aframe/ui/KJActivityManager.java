@@ -25,12 +25,12 @@ import android.app.ActivityManager;
 import android.content.Context;
 
 /**
- * 应用程序Activity管理类：用于Activity管理和应用程序退出
+ * 应用程序Activity管理类：用于Activity管理和应用程序退出<br>
+ * 
+ * <b>创建时间</b> 2014-2-28
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.1 <br>
- * <br>
- *          <b>创建时间</b> 2014-2-28
+ * @version 1.1
  */
 final public class KJActivityManager {
     private static Stack<I_KJActivity> activityStack;

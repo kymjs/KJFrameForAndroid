@@ -22,8 +22,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.kymjs.aframe.KJConfig;
-import org.kymjs.aframe.KJException;
 import org.kymjs.aframe.KJLoger;
+import org.kymjs.aframe.core.KJException;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -44,16 +44,14 @@ import android.telephony.TelephonyManager;
 import android.view.inputmethod.InputMethodManager;
 
 /**
- * 系统信息工具包
+ * 系统信息工具包<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-8-14
  * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.1
  */
-public class SystemTool {
+public final class SystemTool {
     /**
      * 指定格式返回当前系统时间
      */

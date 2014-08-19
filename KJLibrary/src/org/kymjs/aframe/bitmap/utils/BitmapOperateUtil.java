@@ -33,10 +33,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 /**
- * 对bitmap特殊处理的工具类
+ * 对bitmap特殊处理的工具类<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-6-30
  * 
  * @author kymjs(kymjs123@gmail.com)

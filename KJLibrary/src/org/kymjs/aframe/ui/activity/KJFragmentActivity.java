@@ -25,17 +25,16 @@ import android.view.KeyEvent;
 
 /**
  * Application BaseActivity plus. For ease of use, your Activity should overload
- * changeFragment(Fragment frag).
+ * changeFragment(Fragment frag).<br>
  * 
- * <br>
  * <b>说明</b> if you want include the Fragment,you should extends it for your
  * Activity <br>
- * <b>说明</b> else you should extends KJFrameActivity for your Activity
+ * <b>说明</b> else you should extends KJFrameActivity for your Activity<br>
+ * 
+ * <b>创建时间</b> 2014-5-14
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.1 <br>
- * <br>
- *          <b>创建时间</b> 2014-5-14
+ * @version 1.1
  */
 public abstract class KJFragmentActivity extends BaseActivity {
     private boolean openBackListener = false;

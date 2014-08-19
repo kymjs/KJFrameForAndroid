@@ -16,14 +16,13 @@
 package org.kymjs.aframe.database;
 
 /**
- * 多对一延迟加载类
+ * 多对一延迟加载类<br>
+ * <b>创建时间</b> 2014-8-15
  * 
  * @param <O>
  *            宿主实体的class
  * @param <M>
- *            多放实体class <br>
- * <br>
- *            <b>创建时间</b> 2014-8-15
+ *            多放实体class
  * @version 1.0
  */
 public class ManyToOneLazyLoader<M, O> {

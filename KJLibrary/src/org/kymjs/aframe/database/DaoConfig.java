@@ -20,10 +20,8 @@ import org.kymjs.aframe.database.KJDB.DbUpdateListener;
 import android.content.Context;
 
 /**
- * 数据库配置器
+ * 数据库配置器<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-8-15
  * 
  * @author kymjs(kymjs123@gmail.com)

@@ -18,9 +18,8 @@ package org.kymjs.aframe.bitmap;
 import android.graphics.Bitmap;
 
 /**
- * 图片载入接口协议，可自定义实现此协议的下载器
+ * 图片载入接口协议，可自定义实现此协议的下载器<br>
  * 
- * <br>
  * <b>说明</b> 采用工厂方法模式设计的下载器，本类也是一个抽象工厂类，用于生产byte[]产品 <br>
  * <b>创建时间</b> 2014-7-11
  * 

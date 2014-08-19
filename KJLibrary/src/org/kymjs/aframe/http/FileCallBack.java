@@ -18,12 +18,12 @@ package org.kymjs.aframe.http;
 import java.io.File;
 
 /**
- * 用于处理传递File的http请求回调类（例如文件下载）
+ * 用于处理传递File的http请求回调类（例如文件下载）<br>
+ * 
+ * <b>创建时间</b> 2014-8-8
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.1 <br>
- * <br>
- *          <b>创建时间</b> 2014-8-8
+ * @version 1.1
  */
 public abstract class FileCallBack extends HttpCallBack {
     /**

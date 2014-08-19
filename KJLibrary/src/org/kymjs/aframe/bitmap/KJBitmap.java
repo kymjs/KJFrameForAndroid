@@ -19,8 +19,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.kymjs.aframe.KJLoger;
-import org.kymjs.aframe.bitmap.core.MemoryCache;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
+import org.kymjs.aframe.core.MemoryCache;
 import org.kymjs.aframe.utils.CipherUtils;
 
 import android.graphics.Bitmap;
@@ -32,12 +32,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 /**
- * The BitmapLibrary's core classes
+ * The BitmapLibrary's core classes<br>
+ * <b>创建时间</b> 2014-7-11
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0 <br>
- * <br>
- *          <b>创建时间</b> 2014-7-11
+ * @version 1.0
  */
 public class KJBitmap {
     /**

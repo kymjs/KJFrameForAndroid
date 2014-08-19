@@ -22,10 +22,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 
 /**
- * Bitmap操作助手，包含了图片大小压缩、缩放
+ * Bitmap操作助手，包含了图片大小压缩、缩放<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-6-30
  * 
  * @author kymjs(kymjs123@gmail.com)

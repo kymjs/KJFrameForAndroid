@@ -19,10 +19,8 @@ import android.graphics.Bitmap;
 import android.view.View;
 
 /**
- * 系统界面工具类
+ * 系统界面工具类<br>
  * 
- * <br>
- * <br>
  * <b>创建时间</b> 2014-8-14
  * 
  * @author kymjs(kymjs123@gmail.com)

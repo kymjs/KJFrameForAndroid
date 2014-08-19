@@ -27,19 +27,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
-import org.kymjs.aframe.KJException;
+import org.kymjs.aframe.core.KJException;
 
 /**
  * 存储http请求中纯字符参数，如果你的http请求参数中包含了文件或数据流，你应该使用KJFileParams的对象作为kjh.urlPost()
- * 方法的参数
+ * 方法的参数<br>
  * 
- * <br>
+ * 
  * <b>说明</b> 虽然你可以不论参数是否包含文件都使用该类对象作为kjh.urlPost()方法的参数，
  * 但为了效率你应该为没有文件参数的kjh.urlPost()方法传递KJStringParams对象 <br>
- * <b>说明</b> 该类使用一个ConcurrentHashMap(String, String)保存字符串类型的参数
- * 
- * <br>
- * <br>
+ * <b>说明</b> 该类使用一个ConcurrentHashMap(String, String)保存字符串类型的参数<br>
  * <b>创建时间</b> 2014-8-7
  * 
  * @author kymjs(kymjs123@gmail.com)
