@@ -676,7 +676,7 @@ public class KJHttp {
      * 
      * @param cookieStore
      *            The CookieStore implementation to use, usually an instance of
-     *            {@link PersistentCookieStore}
+     *            PersistentCookieStore
      */
     public void setCookieStore(CookieStore cookieStore) {
         httpContext.setAttribute(ClientContext.COOKIE_STORE,

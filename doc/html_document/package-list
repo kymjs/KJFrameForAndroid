@@ -1,7 +1,7 @@
 org.kymjs.aframe
 org.kymjs.aframe.bitmap
-org.kymjs.aframe.bitmap.core
 org.kymjs.aframe.bitmap.utils
+org.kymjs.aframe.core
 org.kymjs.aframe.database
 org.kymjs.aframe.database.annotate
 org.kymjs.aframe.database.utils
