@@ -32,7 +32,7 @@ import android.graphics.Bitmap;
 /**
  * 图片下载器：可以从网络或本地加载一张Bitmap并返回，你应该使用性能更优的替代类 {@see
  * org.kymjs.aframe.bitmap.DownloadWithLruCache}<br>
- * <b>说明</b> 采用工厂方法模式设计的下载器， 同时本类也是一个具体工厂类，生产具体的产品byte[]<br>
+ * <b>说明</b> 采用模板方法模式设计的下载器， 同时本类也是一个具体模板类，实现具体的模板方法<br>
  * <b>创建时间</b> 2014-7-11
  * 
  * @author kymjs(kymjs123@gmail.com)
@@ -64,7 +64,8 @@ public class Downloader implements I_ImageLoder {
                 img = loadImgFromNet(imagePath);
             } else {
                 try {
-                    img = FileUtils.input2byte(new FileInputStream(file));
+                    img = FileUtils.input2byte(new FileInputStream(
+                            file));
                     if (config.isDEBUG) {
                         KJLoger.debugLog(getClass().getName(),
                                 "download success, from be disk cache\n"
@@ -109,7 +110,8 @@ public class Downloader implements I_ImageLoder {
             }
         } catch (Exception e) {
             if (config.callBack != null) {
-                config.callBack.imgLoadFailure(imagePath, e.getMessage());
+                config.callBack.imgLoadFailure(imagePath,
+                        e.getMessage());
             }
             e.printStackTrace();
         } finally {
@@ -136,12 +138,14 @@ public class Downloader implements I_ImageLoder {
                 data = FileUtils.input2byte(fis);
                 if (config.isDEBUG) {
                     KJLoger.debugLog(getClass().getName(),
-                            "download success, from be disk file\n" + imagePath);
+                            "download success, from be disk file\n"
+                                    + imagePath);
                 }
             }
         } catch (FileNotFoundException e) {
             if (config.callBack != null) {
-                config.callBack.imgLoadFailure(imagePath, e.getMessage());
+                config.callBack.imgLoadFailure(imagePath,
+                        e.getMessage());
             }
             e.printStackTrace();
         } finally {
@@ -159,10 +163,12 @@ public class Downloader implements I_ImageLoder {
     public Bitmap getBitmapFromDisk(String key) {
         File file = FileUtils.getSaveFile(config.cachePath,
                 CipherUtils.md5(key));
-        if (file != null)
-            return BitmapCreate.bitmapFromFile(file.getAbsolutePath(),
-                    config.width, config.height);
-        else
+        if (file != null) {
+            return BitmapCreate.bitmapFromFile(
+                    file.getAbsolutePath(), config.width,
+                    config.height);
+        } else {
             return null;
+        }
     }
 }

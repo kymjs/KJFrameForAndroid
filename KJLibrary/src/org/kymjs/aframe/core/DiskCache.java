@@ -59,7 +59,7 @@ public final class DiskCache {
     private static final int INITIAL_CAPACITY = 32;
     private static final float LOAD_FACTOR = 0.75f;
     private final File mFileDir;
-    private CompressFormat mCompressFormat = CompressFormat.JPEG;
+    private CompressFormat mCompressFormat = CompressFormat.PNG;
 
     private int cacheSize = 0;
     private int cacheByteSize = 0;
