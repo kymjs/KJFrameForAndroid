@@ -49,7 +49,7 @@ import android.os.Build;
  */
 public class CrashHandler implements UncaughtExceptionHandler {
     private Context mContext;
-    protected boolean openUpload = true;
+    public boolean openUpload = true;
     // log文件的后缀名
     private static final String FILE_NAME_SUFFIX = ".log";
     private static CrashHandler sInstance = null;
@@ -58,7 +58,8 @@ public class CrashHandler implements UncaughtExceptionHandler {
 
     private CrashHandler(Context cxt) {
         // 获取系统默认的异常处理器
-        mDefaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
+        mDefaultCrashHandler = Thread
+                .getDefaultUncaughtExceptionHandler();
         // 将当前实例设为系统默认的异常处理器
         Thread.setDefaultUncaughtExceptionHandler(this);
         // 获取Context，方便内部使用
@@ -99,12 +100,14 @@ public class CrashHandler implements UncaughtExceptionHandler {
     }
 
     private void saveToSDCard(Throwable ex) throws IOException {
-        File file = FileUtils.getSaveFile("KJLog",
-                SystemTool.getDataTime("YYYYMMDD") + System.currentTimeMillis()
+        File file = FileUtils.getSaveFile(
+                "KJLog",
+                SystemTool.getDataTime("YYYYMMDD")
+                        + System.currentTimeMillis()
                         + FILE_NAME_SUFFIX);
         try {
-            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(
-                    file)));
+            PrintWriter pw = new PrintWriter(new BufferedWriter(
+                    new FileWriter(file)));
             // 导出发生异常的时间
             pw.println(SystemTool.getDataTime("YYYYMMDD_HH_mm"));
 
@@ -119,7 +122,8 @@ public class CrashHandler implements UncaughtExceptionHandler {
         }
     }
 
-    private void dumpPhoneInfo(PrintWriter pw) throws NameNotFoundException {
+    private void dumpPhoneInfo(PrintWriter pw)
+            throws NameNotFoundException {
         // 应用的版本名称和版本号
         PackageManager pm = mContext.getPackageManager();
         PackageInfo pi = pm.getPackageInfo(mContext.getPackageName(),

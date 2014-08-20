@@ -93,7 +93,7 @@ public class BitmapHelper {
         // 将bitmap放至数组中，意在获得bitmap的大小（与实际读取的原文件要大）
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         // 格式、质量、输出流
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 70, baos);
         byte[] b = baos.toByteArray();
         // 将字节换成KB
         double mid = b.length / 1024;
@@ -118,7 +118,8 @@ public class BitmapHelper {
      * @param newHeight
      *            ：缩放后高度
      */
-    public static Bitmap scale(Bitmap src, double newWidth, double newHeight) {
+    public static Bitmap scale(Bitmap src, double newWidth,
+            double newHeight) {
         // 记录src的宽高
         float width = src.getWidth();
         float height = src.getHeight();
@@ -130,8 +131,8 @@ public class BitmapHelper {
         // 开始缩放
         matrix.postScale(scaleWidth, scaleHeight);
         // 创建缩放后的图片
-        return Bitmap.createBitmap(src, 0, 0, (int) width, (int) height,
-                matrix, true);
+        return Bitmap.createBitmap(src, 0, 0, (int) width,
+                (int) height, matrix, true);
     }
 
     /**
@@ -143,8 +144,8 @@ public class BitmapHelper {
      *            ：缩放规则
      */
     public static Bitmap scale(Bitmap src, Matrix scaleMatrix) {
-        return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(),
-                scaleMatrix, true);
+        return Bitmap.createBitmap(src, 0, 0, src.getWidth(),
+                src.getHeight(), scaleMatrix, true);
     }
 
     /**
@@ -160,8 +161,8 @@ public class BitmapHelper {
     public static Bitmap scale(Bitmap src, float scaleX, float scaleY) {
         Matrix matrix = new Matrix();
         matrix.postScale(scaleX, scaleY);
-        return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(),
-                matrix, true);
+        return Bitmap.createBitmap(src, 0, 0, src.getWidth(),
+                src.getHeight(), matrix, true);
     }
 
     /**

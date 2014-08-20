@@ -32,5 +32,4 @@ public abstract class BitmapCallBack {
 
     /** bitmap载入失败将回调 */
     public void imgLoadFailure(final String url, String msg) {};
-
 }

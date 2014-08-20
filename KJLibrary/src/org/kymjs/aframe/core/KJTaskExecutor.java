@@ -68,7 +68,7 @@ public abstract class KJTaskExecutor<Params, Progress, Result> {
 
     // 工作线程
     private final WorkerRunnable<Params, Result> mWorker;
-    // 工作线程
+    // 待执行的runnable
     private final FutureTask<Result> mFuture;
     // 静态阻塞式队列，用来存放待执行的任务，初始容量：8个
     private static final BlockingQueue<Runnable> mPoolWorkQueue = new LinkedBlockingQueue<Runnable>(

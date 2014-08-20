@@ -65,8 +65,8 @@ public final class FileUtils {
     /**
      * 将文件保存到本地
      */
-    public static void saveFileCache(byte[] fileData, String folderPath,
-            String fileName) {
+    public static void saveFileCache(byte[] fileData,
+            String folderPath, String fileName) {
         File folder = new File(folderPath);
         folder.mkdirs();
         File file = new File(folderPath, fileName);
@@ -83,7 +83,8 @@ public final class FileUtils {
                 }
                 os.flush();
             } catch (Exception e) {
-                throw new KJException(FileUtils.class.getClass().getName(), e);
+                throw new KJException(FileUtils.class.getClass()
+                        .getName(), e);
             } finally {
                 closeIO(is, os);
             }
@@ -117,11 +118,9 @@ public final class FileUtils {
      * 获取文件夹对象
      */
     public static File getSaveFolder(String folderName) {
-        File file = new File(Environment.getExternalStorageDirectory()
-                .getAbsoluteFile()
-                + File.separator
-                + folderName
-                + File.separator);
+        File file = new File(Environment
+                .getExternalStorageDirectory().getAbsoluteFile()
+                + File.separator + folderName + File.separator);
         file.mkdirs();
         return file;
     }
@@ -154,8 +153,8 @@ public final class FileUtils {
             // 在API11以下可以使用：managedQuery
             String[] proj = { MediaStore.Images.Media.DATA };
             @SuppressWarnings("deprecation")
-            Cursor actualimagecursor = aty.managedQuery(uri, proj, null, null,
-                    null);
+            Cursor actualimagecursor = aty.managedQuery(uri, proj,
+                    null, null, null);
             int actual_image_column_index = actualimagecursor
                     .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             actualimagecursor.moveToFirst();
@@ -165,8 +164,8 @@ public final class FileUtils {
         } else {
             // 在API11以上：要转为使用CursorLoader,并使用loadInBackground来返回
             String[] projection = { MediaStore.Images.Media.DATA };
-            CursorLoader loader = new CursorLoader(aty, uri, projection, null,
-                    null, null);
+            CursorLoader loader = new CursorLoader(aty, uri,
+                    projection, null, null, null);
             Cursor cursor = loader.loadInBackground();
             int column_index = cursor
                     .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
@@ -198,7 +197,8 @@ public final class FileUtils {
             os = new FileOutputStream(to);
             copyFileFast(is, os);
         } catch (Exception e) {
-            throw new KJException(FileUtils.class.getClass().getName(), e);
+            throw new KJException(FileUtils.class.getClass()
+                    .getName(), e);
         } finally {
             closeIO(is, os);
         }
@@ -213,8 +213,8 @@ public final class FileUtils {
      *            数据目标
      * @throws IOException
      */
-    public static void copyFileFast(FileInputStream is, FileOutputStream os)
-            throws IOException {
+    public static void copyFileFast(FileInputStream is,
+            FileOutputStream os) throws IOException {
         FileChannel in = is.getChannel();
         FileChannel out = os.getChannel();
         in.transferTo(0, in.size(), out);
@@ -236,7 +236,8 @@ public final class FileUtils {
                 }
                 cb.close();
             } catch (IOException e) {
-                throw new KJException(FileUtils.class.getClass().getName(), e);
+                throw new KJException(FileUtils.class.getClass()
+                        .getName(), e);
             }
         }
     }
@@ -252,13 +253,14 @@ public final class FileUtils {
      */
     public static boolean bitmapToFile(Bitmap bitmap, String filePath) {
         boolean isSuccess = false;
-        if (bitmap == null)
+        if (bitmap == null) {
             return isSuccess;
+        }
         OutputStream out = null;
         try {
-            out = new BufferedOutputStream(new FileOutputStream(filePath),
-                    8 * 1024);
-            isSuccess = bitmap.compress(CompressFormat.JPEG, 70, out);
+            out = new BufferedOutputStream(new FileOutputStream(
+                    filePath), 8 * 1024);
+            isSuccess = bitmap.compress(CompressFormat.PNG, 70, out);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -278,8 +280,8 @@ public final class FileUtils {
         try {
             is = new FileInputStream(filePath);
         } catch (Exception e) {
-            throw new KJException(FileUtils.class.getName() + "readFile---->"
-                    + filePath + " not found");
+            throw new KJException(FileUtils.class.getName()
+                    + "readFile---->" + filePath + " not found");
         }
         return inputStream2String(is);
     }
@@ -290,13 +292,15 @@ public final class FileUtils {
      * @param name
      * @return
      */
-    public static String readFileFromAssets(Context context, String name) {
+    public static String readFileFromAssets(Context context,
+            String name) {
         InputStream is = null;
         try {
             is = context.getResources().getAssets().open(name);
         } catch (Exception e) {
             throw new KJException(FileUtils.class.getName()
-                    + ".readFileFromAssets---->" + name + " not found");
+                    + ".readFileFromAssets---->" + name
+                    + " not found");
         }
         return inputStream2String(is);
 
@@ -314,7 +318,8 @@ public final class FileUtils {
         }
         StringBuilder resultSb = null;
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(is));
             resultSb = new StringBuilder();
             String len;
             while (null != (len = br.readLine())) {

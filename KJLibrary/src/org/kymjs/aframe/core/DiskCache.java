@@ -85,7 +85,8 @@ public final class DiskCache {
         this(folderName, maxByteSize, false);
     }
 
-    public DiskCache(String folderName, long maxByteSize, boolean isDebug) {
+    public DiskCache(String folderName, long maxByteSize,
+            boolean isDebug) {
         mFileDir = FileUtils.getSaveFolder(folderName);
         maxSize = maxByteSize;
         debug = isDebug;
@@ -142,8 +143,8 @@ public final class DiskCache {
             cacheSize = mLinkedHashMap.size();
             cacheByteSize -= eldestFileSize;
             count++;
-            debug("flushCache - Removed cache file, " + eldestFile + ", "
-                    + eldestFileSize);
+            debug("flushCache - Removed cache file, " + eldestFile
+                    + ", " + eldestFileSize);
         }
     }
 
@@ -159,7 +160,8 @@ public final class DiskCache {
                 debug("Disk cache hit");
                 return BitmapFactory.decodeFile(file);
             } else {
-                final String existingFile = createFilePath(mFileDir, key);
+                final String existingFile = createFilePath(mFileDir,
+                        key);
                 if (new File(existingFile).exists()) {
                     put(key, existingFile);
                     debug("Disk cache hit (existing file)");
@@ -190,7 +192,8 @@ public final class DiskCache {
                 }
                 data = FileUtils.input2byte(fis);
             } else {
-                final String existingFile = createFilePath(mFileDir, key);
+                final String existingFile = createFilePath(mFileDir,
+                        key);
                 if (new File(existingFile).exists()) {
                     put(key, existingFile);
                     debug("Disk cache hit (existing file)");
@@ -276,10 +279,13 @@ public final class DiskCache {
      *            A unique directory name to append to the cache dir
      * @return The cache dir
      */
-    public static File getDiskCacheDir(Context context, String uniqueName) {
-        final String cachePath = Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
-                || !isExternalStorageRemovable() ? getExternalCacheDir(context)
-                .getPath() : context.getCacheDir().getPath();
+    public static File getDiskCacheDir(Context context,
+            String uniqueName) {
+        final String cachePath = Environment
+                .getExternalStorageState() == Environment.MEDIA_MOUNTED
+                || !isExternalStorageRemovable() ? getExternalCacheDir(
+                context).getPath()
+                : context.getCacheDir().getPath();
 
         return new File(cachePath + File.separator + uniqueName);
     }
@@ -295,9 +301,11 @@ public final class DiskCache {
      */
     public static String createFilePath(File cacheDir, String fileName) {
         try {
-            return cacheDir.getAbsolutePath() + File.separator
+            return cacheDir.getAbsolutePath()
+                    + File.separator
                     + CACHE_FILENAME_PREFIX
-                    + URLEncoder.encode(fileName.replace("*", ""), "UTF-8");
+                    + URLEncoder.encode(fileName.replace("*", ""),
+                            "UTF-8");
         } catch (final UnsupportedEncodingException e) {
             KJLoger.debug(e.getMessage());
         }
@@ -320,7 +328,8 @@ public final class DiskCache {
      * @param compressFormat
      * @param quality
      */
-    public void setCompressParams(CompressFormat compressFormat, int quality) {
+    public void setCompressParams(CompressFormat compressFormat,
+            int quality) {
         mCompressFormat = compressFormat;
         mCompressQuality = quality;
     }
@@ -334,9 +343,10 @@ public final class DiskCache {
             return false;
         OutputStream out = null;
         try {
-            out = new BufferedOutputStream(new FileOutputStream(file),
-                    IO_BUFFER_SIZE);
-            return bitmap.compress(mCompressFormat, mCompressQuality, out);
+            out = new BufferedOutputStream(
+                    new FileOutputStream(file), IO_BUFFER_SIZE);
+            return bitmap.compress(mCompressFormat, mCompressQuality,
+                    out);
         } finally {
             if (out != null) {
                 out.close();
@@ -353,7 +363,8 @@ public final class DiskCache {
          * return path.getUsableSpace(); }
          */
         final StatFs stats = new StatFs(path.getPath());
-        return (long) stats.getBlockSize() * (long) stats.getAvailableBlocks();
+        return (long) stats.getBlockSize()
+                * (long) stats.getAvailableBlocks();
     }
 
     private static boolean isExternalStorageRemovable() {
@@ -373,16 +384,17 @@ public final class DiskCache {
             return context.getExternalCacheDir();
         }
         // Before Froyo we need to construct the external cache dir ourselves
-        final String cacheDir = "/Android/data/" + context.getPackageName()
-                + "/cache/";
-        return new File(Environment.getExternalStorageDirectory().getPath()
-                + cacheDir);
+        final String cacheDir = "/Android/data/"
+                + context.getPackageName() + "/cache/";
+        return new File(Environment.getExternalStorageDirectory()
+                .getPath() + cacheDir);
     }
 
     /******************************* 辅助函数 ************************************/
 
     private void debug(String msg) {
-        if (debug)
+        if (debug) {
             KJLoger.debug(msg);
+        }
     }
 }

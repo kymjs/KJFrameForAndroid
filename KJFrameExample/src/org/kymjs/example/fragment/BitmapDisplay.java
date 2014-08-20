@@ -30,8 +30,8 @@ public class BitmapDisplay extends BaseFragment {
     private ImageView imageView;
 
     @Override
-    protected View inflaterView(LayoutInflater inflater, ViewGroup container,
-            Bundle bundle) {
+    protected View inflaterView(LayoutInflater inflater,
+            ViewGroup container, Bundle bundle) {
         View view = inflater.inflate(R.layout.example_layout, null);
         return view;
     }
@@ -56,8 +56,8 @@ public class BitmapDisplay extends BaseFragment {
             break;
         case R.id.button2:
             KJBitmap kjb = KJBitmap.create();
-            // 载入本地图片
-            // kjb.display(imageView, "/storage/sdcard0/1.png");
+            // // 载入本地图片
+            // kjb.display(imageView, "/storage/sdcard0/1.jpg");
             // 载入网络图片
             kjb.display(
                     imageView,

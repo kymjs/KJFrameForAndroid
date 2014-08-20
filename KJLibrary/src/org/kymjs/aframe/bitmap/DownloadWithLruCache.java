@@ -47,8 +47,8 @@ public class DownloadWithLruCache implements I_ImageLoder {
     public DownloadWithLruCache(KJBitmapConfig config) {
         super();
         this.config = config;
-        diskCache = new DiskCache(config.cachePath, config.diskCacheSize,
-                config.isDEBUG);
+        diskCache = new DiskCache(config.cachePath,
+                config.diskCacheSize, config.isDEBUG);
     }
 
     /**
@@ -63,8 +63,11 @@ public class DownloadWithLruCache implements I_ImageLoder {
         if (config.openDiskCache) { // 如果开启本地缓存，则调用lruCache查找
             img = diskCache.getByteArray(CipherUtils.md5(imagePath));
             if (config.isDEBUG && img != null) {
-                KJLoger.debugLog(getClass().getName(), "\n" + imagePath
-                        + "\ndownload success, from be disk LRU cache");
+                KJLoger.debugLog(
+                        getClass().getName(),
+                        "\n"
+                                + imagePath
+                                + "\ndownload success, from be disk LRU cache");
             }
         }
         if (img == null) { // 重新读取资源
@@ -97,18 +100,21 @@ public class DownloadWithLruCache implements I_ImageLoder {
             data = FileUtils.input2byte(con.getInputStream());
             // 建立diskLru缓存
             if (config.openDiskCache) {
-                diskCache.put(CipherUtils.md5(imagePath), BitmapCreate
-                        .bitmapFromByteArray(data, 0, data.length,
-                                config.width, config.height));
+                diskCache.put(CipherUtils.md5(imagePath),
+                        BitmapCreate.bitmapFromByteArray(data, 0,
+                                data.length, config.width,
+                                config.height));
             }
 
             if (config.isDEBUG) {
-                KJLoger.debugLog(getClass().getName(), "\n" + imagePath
+                KJLoger.debugLog(getClass().getName(), "\n"
+                        + imagePath
                         + "\ndownload success, from be net");
             }
         } catch (Exception e) {
             if (config.callBack != null) {
-                config.callBack.imgLoadFailure(imagePath, e.getMessage());
+                config.callBack.imgLoadFailure(imagePath,
+                        e.getMessage());
             }
             e.printStackTrace();
         } finally {
@@ -134,18 +140,23 @@ public class DownloadWithLruCache implements I_ImageLoder {
                 data = FileUtils.input2byte(fis);
                 // 建立diskLru缓存
                 if (config.openDiskCache) {
-                    diskCache.put(CipherUtils.md5(imagePath), BitmapCreate
-                            .bitmapFromByteArray(data, 0, data.length,
-                                    config.width, config.height));
+                    diskCache.put(CipherUtils.md5(imagePath),
+                            BitmapCreate.bitmapFromByteArray(data, 0,
+                                    data.length, config.width,
+                                    config.height));
                 }
                 if (config.isDEBUG) {
-                    KJLoger.debugLog(getClass().getName(), "\n" + imagePath
-                            + "\ndownload success, from be local disk file");
+                    KJLoger.debugLog(
+                            getClass().getName(),
+                            "\n"
+                                    + imagePath
+                                    + "\ndownload success, from be local disk file");
                 }
             }
         } catch (FileNotFoundException e) {
             if (config.callBack != null) {
-                config.callBack.imgLoadFailure(imagePath, e.getMessage());
+                config.callBack.imgLoadFailure(imagePath,
+                        e.getMessage());
             }
             e.printStackTrace();
         } finally {
