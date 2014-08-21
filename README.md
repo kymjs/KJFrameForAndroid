@@ -3,9 +3,10 @@
 
 # KJFrameForAndroid 交流平台
 * QQ群：[257053751](http://shang.qq.com/wpa/qunwpa?idkey=00d92c040e81d87ccd21f8d0fffb10640baaa66da45254c3bd329b6ff7d46fef)(开发者群1)
-* 第三方开发分支：[https://github.com/kuangsunny/KJFrameForAndroid](https://github.com/kuangsunny/KJFrameForAndroid)
 * 项目地址：[https://github.com/kymjs/KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid)
 * 项目备用地址（可能不是最新代码）：[http://git.oschina.net/kymjs/KJFrameForAndroid](http://git.oschina.net/kymjs/KJFrameForAndroid)
+* ask question to [https://github.com/kymjs/KJFrameForAndroid/issues](https://github.com/kymjs/KJFrameForAndroid/issues)
+* wiki for English skip to [https://github.com/kymjs/KJFrameForAndroid/wiki](https://github.com/kymjs/KJFrameForAndroid/wiki)
 
 **KJFrameForAndroid** 又叫KJLibrary，是一个android的orm 和 ioc 框架。同时封装了android中的Bitmap与Http操作的框架，使其更加简单易用；<br>
 KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复杂操作而达到简化Android应用级开发，最终实现快速而又安全的开发APP。我们提倡用最少的代码，完成最多的操作，用最高的效率，完成最复杂的功能。<br>
@@ -76,7 +77,7 @@ public class TabExample extends BaseActivity {
 Topology中回调函数调用顺序：
 setRootView();<br>
 @BindView<br>
-initThreadData();（异步，线程中调用）<br>
+initDataWithThread();（异步，线程中调用）<br>
 initData();<br>
 initWidget();<br>
 registerBroadcast();<br>

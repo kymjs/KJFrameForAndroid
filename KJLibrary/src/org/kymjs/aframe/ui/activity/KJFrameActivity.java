@@ -50,7 +50,7 @@ public abstract class KJFrameActivity extends Activity implements
      * initialization data. And this method run in background thread, so you
      * shouldn't change ui
      */
-    protected void initThreadData() {}
+    protected void initDataWithThread() {}
 
     /** initialization data */
     protected void initData() {}
@@ -61,7 +61,7 @@ public abstract class KJFrameActivity extends Activity implements
         new Thread(new Runnable() {
             @Override
             public void run() {
-                initThreadData();
+                initDataWithThread();
             }
         }).start();
         initData();
