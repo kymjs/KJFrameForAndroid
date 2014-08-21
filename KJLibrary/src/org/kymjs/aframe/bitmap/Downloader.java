@@ -65,11 +65,8 @@ public class Downloader implements I_ImageLoder {
                 try {
                     img = FileUtils.input2byte(new FileInputStream(
                             file));
-                    if (config.isDEBUG) {
-                        KJLoger.debugLog(getClass().getName(),
-                                "download success, from be disk cache\n"
-                                        + imagePath);
-                    }
+                    showLogIfOpen("download success, from be disk cache\n"
+                            + imagePath);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -103,15 +100,10 @@ public class Downloader implements I_ImageLoder {
                         FileUtils.getSavePath(config.cachePath),
                         CipherUtils.md5(imagePath));
             }
-            if (config.isDEBUG) {
-                KJLoger.debugLog(getClass().getName(),
-                        "download success, from be net\n" + imagePath);
-            }
+            showLogIfOpen("download success, from be net\n"
+                    + imagePath);
         } catch (Exception e) {
-            if (config.callBack != null) {
-                config.callBack.imgLoadFailure(imagePath,
-                        e.getMessage());
-            }
+            doFailureCallBack(imagePath, e);
             e.printStackTrace();
         } finally {
             if (con != null) {
@@ -135,17 +127,11 @@ public class Downloader implements I_ImageLoder {
             if (fis != null) {
                 // 本地图片就不加入本地缓存了
                 data = FileUtils.input2byte(fis);
-                if (config.isDEBUG) {
-                    KJLoger.debugLog(getClass().getName(),
-                            "download success, from be disk file\n"
-                                    + imagePath);
-                }
+                showLogIfOpen("download success, from be disk file\n"
+                        + imagePath);
             }
         } catch (FileNotFoundException e) {
-            if (config.callBack != null) {
-                config.callBack.imgLoadFailure(imagePath,
-                        e.getMessage());
-            }
+            doFailureCallBack(imagePath, e);
             e.printStackTrace();
         } finally {
             FileUtils.closeIO(fis);
@@ -168,6 +154,31 @@ public class Downloader implements I_ImageLoder {
                     config.height);
         } else {
             return null;
+        }
+    }
+
+    /**
+     * 如果设置了回调，调用加载失败回调
+     * 
+     * @param imagePath
+     *            加载失败的图片路径
+     * @param e
+     *            失败原因
+     */
+    private void doFailureCallBack(String imagePath, Exception e) {
+        if (config.callBack != null) {
+            config.callBack.imgLoadFailure(imagePath, e.getMessage());
+        }
+    }
+
+    /**
+     * 如果打开了log显示器，则显示log
+     * 
+     * @param imageUrl
+     */
+    private void showLogIfOpen(String log) {
+        if (config.isDEBUG) {
+            KJLoger.debugLog(getClass().getName(), log);
         }
     }
 }

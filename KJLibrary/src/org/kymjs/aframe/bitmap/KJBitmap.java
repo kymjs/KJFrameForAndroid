@@ -79,7 +79,7 @@ public class KJBitmap {
         if (config.openProgress) {
             loadImageWithProgress(imageView, imageUrl);
         } else {
-            loadImage(imageView, imageUrl);
+            doDisplay(imageView, imageUrl);
         }
     }
 
@@ -100,7 +100,7 @@ public class KJBitmap {
         if (config.openProgress) {
             loadImageWithProgress(imageView, imageUrl);
         } else {
-            loadImage(imageView, imageUrl);
+            doDisplay(imageView, imageUrl);
         }
         config.openProgress = temp;
     }
@@ -168,124 +168,134 @@ public class KJBitmap {
             }
         } catch (ClassCastException e) {
         }
-        loadImage(imageView, imageUrl);
+        doDisplay(imageView, imageUrl);
     }
 
     /**
-     * 加载图片（核心方法）
+     * 加载并显示图片（核心方法）
      * 
      * @param imageView
      *            要显示图片的控件(ImageView设置src，普通View设置bg)
      * @param imageUrl
      *            图片的URL
      */
-    private void loadImage(View imageView, String imageUrl) {
+    private void doDisplay(View imageView, String imageUrl) {
+        doLoadCallBack(imageView);
+        Bitmap bitmap = mMemoryCache.get(CipherUtils.md5(imageUrl)); // 从内存中读取
+        if (bitmap != null) {
+            // 内存缓存中已有图片
+            viewSetImage(imageView, bitmap); // 设置控件显示图片
+            doSuccessCallBack(imageView); // 图片加载成功时的回调
+            showLogIfOpen("download success, from memory cache\n"
+                    + imageUrl);
+            showProgressIfOpen(imageView, imageUrl);
+        } else {
+            // 在内存缓存中没有图片，去加载图片
+            viewSetImage(imageView, config.loadingBitmap);
+            BitmapWorkerTask task = new BitmapWorkerTask(imageView,
+                    imageUrl);
+            taskCollection.add(task);
+            task.execute();
+        }
+    }
+
+    /**
+     * 如果设置了回调,则会调用加载中的回调
+     * 
+     * @param imageView
+     */
+    private void doLoadCallBack(View imageView) {
         if (config.callBack != null) {
             config.callBack.imgLoading(imageView);
         }
-        Bitmap bitmap = mMemoryCache.get(CipherUtils.md5(imageUrl));
-        if (bitmap != null) {
-            // 对不同的控件调用不同的显示方式
-            if (imageView instanceof ImageView) {
-                ((ImageView) imageView).setImageBitmap(bitmap);
-            } else {
-                imageView.setBackgroundDrawable(new BitmapDrawable(
-                        bitmap));
+    }
+
+    /**
+     * 如果设置了回调,则会调用加载成功的回调
+     * 
+     * @param imageView
+     */
+    private void doSuccessCallBack(View imageView) {
+        if (config.callBack != null) {
+            config.callBack.imgLoadSuccess(imageView);
+        }
+    }
+
+    /**
+     * 如果打开了log显示器，则显示log
+     * 
+     * @param imageUrl
+     */
+    private void showLogIfOpen(String log) {
+        if (config.isDEBUG) {
+            KJLoger.debugLog(getClass().getName(), log);
+        }
+    }
+
+    /**
+     * 如果设置了显示环形等待条
+     * 
+     * @param imageView
+     * @param imageUrl
+     */
+    private void showProgressIfOpen(View imageView, String imageUrl) {
+        if (config.openProgress) {
+            try {
+                ViewGroup parent = ((ViewGroup) imageView.getParent());
+                parent.removeView(parent.findViewWithTag(imageUrl));
+            } catch (ClassCastException e) {
+            } finally {
+                imageView.setVisibility(View.VISIBLE);
             }
-            // 如果设置了回调,则会被调用
-            if (config.callBack != null) {
-                config.callBack.imgLoadSuccess(imageView);
-            }
-            // 如果打开了log，则显示log
-            if (config.isDEBUG) {
-                KJLoger.debugLog(getClass().getName(),
-                        "download success, from memory cache\n"
-                                + imageUrl);
-            }
-            // 如果设置了显示环形等待条
-            if (config.openProgress) {
-                try {
-                    ViewGroup parent = ((ViewGroup) imageView
-                            .getParent());
-                    parent.removeView(parent
-                            .findViewWithTag(imageUrl));
-                } catch (ClassCastException e) {
-                } finally {
-                    imageView.setVisibility(View.VISIBLE);
-                }
-            }
+        }
+    }
+
+    /**
+     * 对不同的控件调用不同的显示方式
+     * 
+     * @param view
+     * @param bitmap
+     */
+    private void viewSetImage(View view, Bitmap bitmap) {
+        if (view instanceof ImageView) {
+            ((ImageView) view).setImageBitmap(bitmap);
         } else {
-            if (imageView instanceof ImageView) {
-                ((ImageView) imageView)
-                        .setImageBitmap(config.loadingBitmap);
-            } else {
-                imageView.setBackgroundDrawable(new BitmapDrawable(
-                        config.loadingBitmap));
-            }
-            BitmapWorkerTask task = new BitmapWorkerTask(imageView);
-            taskCollection.add(task);
-            task.execute(imageUrl);
+            view.setBackgroundDrawable(new BitmapDrawable(bitmap));
         }
     }
 
     /********************* 异步获取Bitmap并设置image的任务类 *********************/
     private class BitmapWorkerTask extends
-            KJTaskExecutor<String, Void, Bitmap> {
-        private View imageView;
+            KJTaskExecutor<Void, Void, Bitmap> {
+        private View view;
         private String url;
 
-        public BitmapWorkerTask(View imageview) {
-            this.imageView = imageview;
+        public BitmapWorkerTask(View view, String url) {
+            this.view = view;
+            this.url = url;
         }
 
         @Override
-        protected Bitmap doInBackground(String... params) {
-            Bitmap bitmap = null;
-            url = params[0];
-            byte[] res = downloader.loadImage(url);
+        protected Bitmap doInBackground(Void... _void) {
+            Bitmap bmp = null;
+            byte[] res = downloader.loadImage(url); // 调用加载器加载url中的图片
             if (res != null) {
-                bitmap = BitmapCreate.bitmapFromByteArray(res, 0,
+                bmp = BitmapCreate.bitmapFromByteArray(res, 0,
                         res.length, config.width, config.height);
             }
-            if (bitmap != null && config.openMemoryCache) {
-                // 图片载入完成后缓存到LrcCache中
-                putBitmapToMemory(params[0], bitmap);
-                if (config.isDEBUG) {
-                    KJLoger.debugLog(getClass().getName(),
-                            "put to memory cache\n" + params[0]);
-                }
+            if (bmp != null && config.openMemoryCache) {
+                putBmpToMC(url, bmp); // 图片载入完成后缓存到LrcCache中
+                showLogIfOpen("put to memory cache\n" + url);
             }
-            return bitmap;
+            return bmp;
         }
 
         @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-            // 对不同的控件调用不同的显示方式
-            if (imageView instanceof ImageView) {
-                if (bitmap != null) {
-                    ((ImageView) imageView).setImageBitmap(bitmap);
-                }
-            } else {
-                imageView.setBackgroundDrawable(new BitmapDrawable(
-                        bitmap));
-            }
-            // 如果设置了回调接口，调用回调函数
-            if (config.callBack != null) {
-                config.callBack.imgLoadSuccess(imageView);
-            }
-
-            // 如果设置了显示环形等待条
-            if (config.openProgress) {
-                try {
-                    ViewGroup parent = ((ViewGroup) imageView
-                            .getParent());
-                    parent.removeView(parent.findViewWithTag(url));
-                } catch (ClassCastException e) {
-                } finally {
-                    imageView.setVisibility(View.VISIBLE);
-                }
-            }
+        protected void onPostExecute(Bitmap bmp) {
+            super.onPostExecute(bmp);
+            viewSetImage(view, bmp);
+            doSuccessCallBack(view);
+            showProgressIfOpen(view, url);
             taskCollection.remove(this);
         }
     }
@@ -300,7 +310,7 @@ public class KJBitmap {
      * @param v
      *            要添加的bitmap
      */
-    public void putBitmapToMemory(String k, Bitmap v) {
+    public void putBmpToMC(String k, Bitmap v) {
         mMemoryCache.put(CipherUtils.md5(k), v);
     }
 
@@ -311,7 +321,7 @@ public class KJBitmap {
      *            图片地址Url
      * @return 如果没有key对应的value返回null
      */
-    public Bitmap getBitmapFromMemory(String key) {
+    public Bitmap getBmpFromMC(String key) {
         return mMemoryCache.get(CipherUtils.md5(key));
     }
 
@@ -334,7 +344,7 @@ public class KJBitmap {
      * @return 如果没有key对应的value返回null
      */
     public Bitmap getBitmapFromCache(String key) {
-        Bitmap bitmap = getBitmapFromMemory(key);
+        Bitmap bitmap = getBmpFromMC(key);
         if (bitmap == null) {
             byte[] res = downloader.loadImage(key);
             if (res != null) {
@@ -343,10 +353,8 @@ public class KJBitmap {
             }
             if (bitmap != null && config.openMemoryCache) {
                 // 图片载入完成后缓存到LrcCache中
-                putBitmapToMemory(key, bitmap);
-                if (config.isDEBUG)
-                    KJLoger.debugLog(getClass().getName(),
-                            "put to memory cache\n" + key);
+                putBmpToMC(key, bitmap);
+                showLogIfOpen("put to memory cache\n" + key);
             }
         }
         return bitmap;
@@ -356,6 +364,9 @@ public class KJBitmap {
      * 取消正在下载的任务
      */
     public void destory() {
+        for (BitmapWorkerTask task : taskCollection) {
+            task.cancel(true);
+        }
         taskCollection.clear();
     }
 
@@ -420,7 +431,7 @@ public class KJBitmap {
     /**
      * 设置配置器
      */
-    public void setConfig(KJBitmapConfig config) {
-        this.config = config;
+    public void setConfig(KJBitmapConfig cfg) {
+        config = cfg;
     }
 }

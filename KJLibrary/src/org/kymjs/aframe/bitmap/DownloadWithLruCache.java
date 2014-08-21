@@ -38,7 +38,6 @@ import android.graphics.Bitmap;
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0 <br>
  */
-@SuppressLint("DefaultLocale")
 public class DownloadWithLruCache implements I_ImageLoder {
 
     private DiskCache diskCache;
@@ -55,6 +54,7 @@ public class DownloadWithLruCache implements I_ImageLoder {
      * 图片加载器协议的接口方法
      */
     @Override
+    @SuppressLint("DefaultLocale")
     public byte[] loadImage(String imagePath) {
         if (StringUtils.isEmpty(imagePath)) {
             return null;
@@ -62,19 +62,18 @@ public class DownloadWithLruCache implements I_ImageLoder {
         byte[] img = null;
         if (config.openDiskCache) { // 如果开启本地缓存，则调用lruCache查找
             img = diskCache.getByteArray(CipherUtils.md5(imagePath));
-            if (config.isDEBUG && img != null) {
-                KJLoger.debugLog(
-                        getClass().getName(),
-                        "\n"
-                                + imagePath
-                                + "\ndownload success, from be disk LRU cache");
+            if (img != null) {
+                showLogIfOpen(imagePath
+                        + "\ndownload success, from be disk LRU cache");
             }
         }
-        if (img == null) { // 重新读取资源
-            if (!imagePath.trim().toLowerCase().startsWith("http")) { // 如果不是网络图片
-                img = loadImgFromFile(imagePath);
-            } else { // 网络图片：首先从本地缓存读取，如果本地没有，则重新从网络加载
+        if (img == null) { // diskCache中没有，重新读取资源
+            if (imagePath.trim().toLowerCase().startsWith("http")) {
+                // 网络图片：首先从本地缓如果存读取，本地没有，则重新从网络加载
                 img = loadImgFromNet(imagePath);
+            } else {
+                // 如果是本地图片
+                img = loadImgFromFile(imagePath);
             }
         }
         return img;
@@ -98,24 +97,11 @@ public class DownloadWithLruCache implements I_ImageLoder {
             con.setDoInput(true);
             con.connect();
             data = FileUtils.input2byte(con.getInputStream());
-            // 建立diskLru缓存
-            if (config.openDiskCache) {
-                diskCache.put(CipherUtils.md5(imagePath),
-                        BitmapCreate.bitmapFromByteArray(data, 0,
-                                data.length, config.width,
-                                config.height));
-            }
-
-            if (config.isDEBUG) {
-                KJLoger.debugLog(getClass().getName(), "\n"
-                        + imagePath
-                        + "\ndownload success, from be net");
-            }
+            putBmpToDC(imagePath, data); // 建立diskLru缓存
+            showLogIfOpen(imagePath
+                    + "\ndownload success, from be net");
         } catch (Exception e) {
-            if (config.callBack != null) {
-                config.callBack.imgLoadFailure(imagePath,
-                        e.getMessage());
-            }
+            doFailureCallBack(imagePath, e);
             e.printStackTrace();
         } finally {
             if (con != null) {
@@ -138,26 +124,12 @@ public class DownloadWithLruCache implements I_ImageLoder {
             fis = new FileInputStream(imagePath);
             if (fis != null) {
                 data = FileUtils.input2byte(fis);
-                // 建立diskLru缓存
-                if (config.openDiskCache) {
-                    diskCache.put(CipherUtils.md5(imagePath),
-                            BitmapCreate.bitmapFromByteArray(data, 0,
-                                    data.length, config.width,
-                                    config.height));
-                }
-                if (config.isDEBUG) {
-                    KJLoger.debugLog(
-                            getClass().getName(),
-                            "\n"
-                                    + imagePath
-                                    + "\ndownload success, from be local disk file");
-                }
+                putBmpToDC(imagePath, data); // 建立diskLru缓存
+                showLogIfOpen(imagePath
+                        + "\ndownload success, from be local disk file");
             }
         } catch (FileNotFoundException e) {
-            if (config.callBack != null) {
-                config.callBack.imgLoadFailure(imagePath,
-                        e.getMessage());
-            }
+            doFailureCallBack(imagePath, e);
             e.printStackTrace();
         } finally {
             FileUtils.closeIO(fis);
@@ -173,5 +145,47 @@ public class DownloadWithLruCache implements I_ImageLoder {
     @Override
     public Bitmap getBitmapFromDisk(String key) {
         return diskCache.get(CipherUtils.md5(key));
+    }
+
+    /**
+     * 如果设置了回调，调用加载失败回调
+     * 
+     * @param imagePath
+     *            加载失败的图片路径
+     * @param e
+     *            失败原因
+     */
+    private void doFailureCallBack(String imagePath, Exception e) {
+        if (config.callBack != null) {
+            config.callBack.imgLoadFailure(imagePath, e.getMessage());
+        }
+    }
+
+    /**
+     * 加入磁盘缓存
+     * 
+     * @param imagePath
+     *            图片路径
+     * @param bmpByteArray
+     *            图片二进制数组数据
+     */
+    private void putBmpToDC(String imagePath, byte[] bmpByteArray) {
+        if (config.openDiskCache) {
+            diskCache.put(CipherUtils.md5(imagePath), BitmapCreate
+                    .bitmapFromByteArray(bmpByteArray, 0,
+                            bmpByteArray.length, config.width,
+                            config.height));
+        }
+    }
+
+    /**
+     * 如果打开了log显示器，则显示log
+     * 
+     * @param imageUrl
+     */
+    private void showLogIfOpen(String log) {
+        if (config.isDEBUG) {
+            KJLoger.debugLog(getClass().getName(), log);
+        }
     }
 }
