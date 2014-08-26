@@ -1,7 +1,8 @@
 ﻿## ![logo](https://github.com/kymjs/KJFrameForAndroid/blob/master/KJFrameExample/logo.jpg) KJFrameForAndroid简介
 =================
 [![Android Arsenal](http://img.shields.io/badge/Android%20Arsenal-KJFrameForAndroid-blue.svg?style=flat)](http://android-arsenal.com/details/1/836)
-[![Android Arsenal](https://www.openhub.net/p/KJFrameForAndroid/widgets/project_thin_badge.gif)](https://www.openhub.net/p/KJFrameForAndroid)
+[![Travis](https://travis-ci.org/kymjs/KJFrameForAndroid.svg)](https://travis-ci.org/kymjs/KJFrameForAndroid)
+[![BlackDuck OpenHUB](https://www.openhub.net/p/KJFrameForAndroid/widgets/project_thin_badge.gif)](https://www.openhub.net/p/KJFrameForAndroid)
 <br>**KJFrameForAndroid** 又叫KJLibrary，是一个android的orm 和 ioc 框架。同时封装了android中的Bitmap与Http操作的框架，使其更加简单易用；<br>
 KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复杂操作而达到简化Android应用级开发，最终实现快速而又安全的开发APP。我们提倡用最少的代码，完成最多的操作，用最高的效率，完成最复杂的功能。<br>
 同时，KJFrameForAndroid是免费的、开源的、简易的、遵循Apache Licence 2.0开源协议发布的android应用开发框架，总共分为五大模块：UILibrary，UtilsLibrary，HttpLibrary，BitmapLibrary，DBLibrary。<br>
