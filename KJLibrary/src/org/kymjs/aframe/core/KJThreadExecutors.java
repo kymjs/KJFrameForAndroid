@@ -93,7 +93,8 @@ public class KJThreadExecutors {
      */
     public static ExecutorService newFixedThreadPool(int nThreads) {
         return new ThreadPoolExecutor(nThreads, nThreads, 0L,
-                TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
+                TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>());
     }
 
     /**
@@ -120,8 +121,8 @@ public class KJThreadExecutors {
     public static ExecutorService newFixedThreadPool(int nThreads,
             ThreadFactory threadFactory) {
         return new ThreadPoolExecutor(nThreads, nThreads, 0L,
-                TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(),
-                threadFactory);
+                TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>(), threadFactory);
     }
 
     /**
@@ -137,9 +138,10 @@ public class KJThreadExecutors {
      * @return the newly created single-threaded Executor
      */
     public static ExecutorService newSingleThreadExecutor() {
-        return new FinalizableDelegatedExecutorService(new ThreadPoolExecutor(
-                1, 1, 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>()));
+        return new FinalizableDelegatedExecutorService(
+                new ThreadPoolExecutor(1, 1, 0L,
+                        TimeUnit.MILLISECONDS,
+                        new LinkedBlockingQueue<Runnable>()));
     }
 
     /**
@@ -158,9 +160,11 @@ public class KJThreadExecutors {
      */
     public static ExecutorService newSingleThreadExecutor(
             ThreadFactory threadFactory) {
-        return new FinalizableDelegatedExecutorService(new ThreadPoolExecutor(
-                1, 1, 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(), threadFactory));
+        return new FinalizableDelegatedExecutorService(
+                new ThreadPoolExecutor(1, 1, 0L,
+                        TimeUnit.MILLISECONDS,
+                        new LinkedBlockingQueue<Runnable>(),
+                        threadFactory));
     }
 
     /**
@@ -274,7 +278,8 @@ public class KJThreadExecutors {
      */
     public static ScheduledExecutorService newScheduledThreadPool(
             int corePoolSize, ThreadFactory threadFactory) {
-        return new ScheduledThreadPoolExecutor(corePoolSize, threadFactory);
+        return new ScheduledThreadPoolExecutor(corePoolSize,
+                threadFactory);
     }
 
     /**
@@ -292,8 +297,9 @@ public class KJThreadExecutors {
      */
     public static ExecutorService unconfigurableExecutorService(
             ExecutorService executor) {
-        if (executor == null)
+        if (executor == null) {
             throw new NullPointerException();
+        }
         return new DelegatedExecutorService(executor);
     }
 
@@ -312,8 +318,9 @@ public class KJThreadExecutors {
      */
     public static ScheduledExecutorService unconfigurableScheduledExecutorService(
             ScheduledExecutorService executor) {
-        if (executor == null)
+        if (executor == null) {
             throw new NullPointerException();
+        }
         return new DelegatedScheduledExecutorService(executor);
     }
 
@@ -354,8 +361,9 @@ public class KJThreadExecutors {
      *             if task null
      */
     public static <T> Callable<T> callable(Runnable task, T result) {
-        if (task == null)
+        if (task == null) {
             throw new NullPointerException();
+        }
         return new RunnableAdapter<T>(task, result);
     }
 
@@ -370,8 +378,9 @@ public class KJThreadExecutors {
      *             if task null
      */
     public static Callable<Object> callable(Runnable task) {
-        if (task == null)
+        if (task == null) {
             throw new NullPointerException();
+        }
         return new RunnableAdapter<Object>(task, null);
     }
 
@@ -385,9 +394,11 @@ public class KJThreadExecutors {
      * @throws NullPointerException
      *             if action null
      */
-    public static Callable<Object> callable(final PrivilegedAction<?> action) {
-        if (action == null)
+    public static Callable<Object> callable(
+            final PrivilegedAction<?> action) {
+        if (action == null) {
             throw new NullPointerException();
+        }
         return new Callable<Object>() {
             public Object call() {
                 return action.run();
@@ -407,8 +418,9 @@ public class KJThreadExecutors {
      */
     public static Callable<Object> callable(
             final PrivilegedExceptionAction<?> action) {
-        if (action == null)
+        if (action == null) {
             throw new NullPointerException();
+        }
         return new Callable<Object>() {
             public Object call() throws Exception {
                 return action.run();
@@ -419,9 +431,11 @@ public class KJThreadExecutors {
     /**
      * Legacy security code; do not use.
      */
-    public static <T> Callable<T> privilegedCallable(Callable<T> callable) {
-        if (callable == null)
+    public static <T> Callable<T> privilegedCallable(
+            Callable<T> callable) {
+        if (callable == null) {
             throw new NullPointerException();
+        }
         return new PrivilegedCallable<T>(callable);
     }
 
@@ -436,9 +450,11 @@ public class KJThreadExecutors {
      */
     public static <T> Callable<T> privilegedCallableUsingCurrentClassLoader(
             Callable<T> callable) {
-        if (callable == null)
+        if (callable == null) {
             throw new NullPointerException();
-        return new PrivilegedCallableUsingCurrentClassLoader<T>(callable);
+        }
+        return new PrivilegedCallableUsingCurrentClassLoader<T>(
+                callable);
     }
 
     // Non-public classes supporting the public methods
@@ -491,8 +507,8 @@ public class KJThreadExecutors {
      * A callable that runs under established access control settings and
      * current ClassLoader
      */
-    static final class PrivilegedCallableUsingCurrentClassLoader<T> implements
-            Callable<T> {
+    static final class PrivilegedCallableUsingCurrentClassLoader<T>
+            implements Callable<T> {
         private final Callable<T> task;
         private final AccessControlContext acc;
         private final ClassLoader ccl;
@@ -525,7 +541,8 @@ public class KJThreadExecutors {
                                 ClassLoader savedcl = null;
                                 Thread t = Thread.currentThread();
                                 try {
-                                    ClassLoader cl = t.getContextClassLoader();
+                                    ClassLoader cl = t
+                                            .getContextClassLoader();
                                     if (ccl != cl) {
                                         t.setContextClassLoader(ccl);
                                         savedcl = cl;
@@ -547,25 +564,30 @@ public class KJThreadExecutors {
      * The default thread factory
      */
     static class DefaultThreadFactory implements ThreadFactory {
-        private static final AtomicInteger poolNumber = new AtomicInteger(1);
+        private static final AtomicInteger poolNumber = new AtomicInteger(
+                1);
         private final ThreadGroup group;
-        private final AtomicInteger threadNumber = new AtomicInteger(1);
+        private final AtomicInteger threadNumber = new AtomicInteger(
+                1);
         private final String namePrefix;
 
         DefaultThreadFactory() {
             SecurityManager s = System.getSecurityManager();
-            group = (s != null) ? s.getThreadGroup() : Thread.currentThread()
-                    .getThreadGroup();
-            namePrefix = "pool-" + poolNumber.getAndIncrement() + "-thread-";
+            group = (s != null) ? s.getThreadGroup() : Thread
+                    .currentThread().getThreadGroup();
+            namePrefix = "pool-" + poolNumber.getAndIncrement()
+                    + "-thread-";
         }
 
         public Thread newThread(Runnable r) {
             Thread t = new Thread(group, r, namePrefix
                     + threadNumber.getAndIncrement(), 0);
-            if (t.isDaemon())
+            if (t.isDaemon()) {
                 t.setDaemon(false);
-            if (t.getPriority() != Thread.NORM_PRIORITY)
+            }
+            if (t.getPriority() != Thread.NORM_PRIORITY) {
                 t.setPriority(Thread.NORM_PRIORITY);
+            }
             return t;
         }
     }
@@ -599,13 +621,16 @@ public class KJThreadExecutors {
         public Thread newThread(final Runnable r) {
             return super.newThread(new Runnable() {
                 public void run() {
-                    AccessController.doPrivileged(new PrivilegedAction<Void>() {
-                        public Void run() {
-                            Thread.currentThread().setContextClassLoader(ccl);
-                            r.run();
-                            return null;
-                        }
-                    }, acc);
+                    AccessController.doPrivileged(
+                            new PrivilegedAction<Void>() {
+                                public Void run() {
+                                    Thread.currentThread()
+                                            .setContextClassLoader(
+                                                    ccl);
+                                    r.run();
+                                    return null;
+                                }
+                            }, acc);
                 }
             });
         }
@@ -615,7 +640,8 @@ public class KJThreadExecutors {
      * A wrapper class that exposes only the ExecutorService methods of an
      * ExecutorService implementation.
      */
-    static class DelegatedExecutorService extends AbstractExecutorService {
+    static class DelegatedExecutorService extends
+            AbstractExecutorService {
         private final ExecutorService e;
 
         DelegatedExecutorService(ExecutorService executor) {
@@ -666,8 +692,9 @@ public class KJThreadExecutors {
         }
 
         public <T> List<Future<T>> invokeAll(
-                Collection<? extends Callable<T>> tasks, long timeout,
-                TimeUnit unit) throws InterruptedException {
+                Collection<? extends Callable<T>> tasks,
+                long timeout, TimeUnit unit)
+                throws InterruptedException {
             return e.invokeAll(tasks, timeout, unit);
         }
 
@@ -676,9 +703,11 @@ public class KJThreadExecutors {
             return e.invokeAny(tasks);
         }
 
-        public <T> T invokeAny(Collection<? extends Callable<T>> tasks,
-                long timeout, TimeUnit unit) throws InterruptedException,
-                ExecutionException, TimeoutException {
+        public <T> T invokeAny(
+                Collection<? extends Callable<T>> tasks,
+                long timeout, TimeUnit unit)
+                throws InterruptedException, ExecutionException,
+                TimeoutException {
             return e.invokeAny(tasks, timeout, unit);
         }
     }
@@ -699,16 +728,18 @@ public class KJThreadExecutors {
      * a ScheduledExecutorService implementation.
      */
     static class DelegatedScheduledExecutorService extends
-            DelegatedExecutorService implements ScheduledExecutorService {
+            DelegatedExecutorService implements
+            ScheduledExecutorService {
         private final ScheduledExecutorService e;
 
-        DelegatedScheduledExecutorService(ScheduledExecutorService executor) {
+        DelegatedScheduledExecutorService(
+                ScheduledExecutorService executor) {
             super(executor);
             e = executor;
         }
 
-        public ScheduledFuture<?> schedule(Runnable command, long delay,
-                TimeUnit unit) {
+        public ScheduledFuture<?> schedule(Runnable command,
+                long delay, TimeUnit unit) {
             return e.schedule(command, delay, unit);
         }
 
@@ -717,14 +748,18 @@ public class KJThreadExecutors {
             return e.schedule(callable, delay, unit);
         }
 
-        public ScheduledFuture<?> scheduleAtFixedRate(Runnable command,
-                long initialDelay, long period, TimeUnit unit) {
-            return e.scheduleAtFixedRate(command, initialDelay, period, unit);
+        public ScheduledFuture<?> scheduleAtFixedRate(
+                Runnable command, long initialDelay, long period,
+                TimeUnit unit) {
+            return e.scheduleAtFixedRate(command, initialDelay,
+                    period, unit);
         }
 
-        public ScheduledFuture<?> scheduleWithFixedDelay(Runnable command,
-                long initialDelay, long delay, TimeUnit unit) {
-            return e.scheduleWithFixedDelay(command, initialDelay, delay, unit);
+        public ScheduledFuture<?> scheduleWithFixedDelay(
+                Runnable command, long initialDelay, long delay,
+                TimeUnit unit) {
+            return e.scheduleWithFixedDelay(command, initialDelay,
+                    delay, unit);
         }
     }
 
