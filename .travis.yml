@@ -1,2 +1,1 @@
 language: java
-script: ant -f KJFrameForAndroid test plugins
