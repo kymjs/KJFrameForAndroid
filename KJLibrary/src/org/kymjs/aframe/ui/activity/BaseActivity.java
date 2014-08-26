@@ -41,7 +41,7 @@ public abstract class BaseActivity extends KJFrameActivity {
      * 当前Activity状态
      */
     public static enum ActivityState {
-        RESUME, STOP, PAUSE, DESTORY
+        RESUME, STOP, PAUSE, DESTROY
     }
 
     /**
@@ -53,7 +53,7 @@ public abstract class BaseActivity extends KJFrameActivity {
 
     public Activity aty;
     /** Activity状态 */
-    public ActivityState activityState = ActivityState.DESTORY;
+    public ActivityState activityState = ActivityState.DESTROY;
     // 是否允许全屏
     private boolean mAllowFullScreen = false;
     // 是否隐藏ActionBar
@@ -235,7 +235,7 @@ public abstract class BaseActivity extends KJFrameActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        activityState = ActivityState.DESTORY;
+        activityState = ActivityState.DESTROY;
         KJLoger.state(this.getClass().getName(), "---------onDestroy ");
     }
 
