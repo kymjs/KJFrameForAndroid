@@ -24,6 +24,7 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.util.EntityUtils;
+import org.kymjs.aframe.utils.StringUtils;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -61,18 +62,21 @@ public abstract class HttpCallBack implements I_HttpRespond {
         switch (msg.what) {
         case MESSAGE_SUCCESS:
             response = (Object[]) msg.obj;
-            handleSuccessMessage((Header[]) response[1], (String) response[2]);
+            handleSuccessMessage((Header[]) response[1],
+                    (String) response[2]);
             break;
         case MESSAGE_FAILURE:
             response = (Object[]) msg.obj;
             handleFailureMessage((Throwable) response[0],
-                    ((Integer) response[0]).intValue(), (String) response[1]);
+                    StringUtils.toInt(response[2]),
+                    (String) response[1]);
             break;
         default:
         }
     }
 
-    protected void handleSuccessMessage(Header[] headers, String responseBody) {
+    protected void handleSuccessMessage(Header[] headers,
+            String responseBody) {
         onSuccess(responseBody);
     }
 
@@ -84,13 +88,22 @@ public abstract class HttpCallBack implements I_HttpRespond {
     // 在后台线程池中的线程中执行
     protected void sendSuccessMessage(int status, Header[] headers,
             String responseBody) {
-        sendMessage(obtainMessage(MESSAGE_SUCCESS,
-                new Object[] { Integer.valueOf(status), headers, responseBody }));
+        sendMessage(obtainMessage(MESSAGE_SUCCESS, new Object[] {
+                Integer.valueOf(status), headers, responseBody }));
+    }
+
+    protected void sendFailureMessage(int status, Throwable e) {
+        sendFailureMessage(e, e.getMessage(), status);
     }
 
     protected void sendFailureMessage(Throwable e, String responseBody) {
+        sendFailureMessage(e, responseBody, 203);
+    }
+
+    protected void sendFailureMessage(Throwable e,
+            String responseBody, int status) {
         sendMessage(obtainMessage(MESSAGE_FAILURE, new Object[] { e,
-                responseBody }));
+                responseBody, status }));
     }
 
     protected void sendMessage(Message msg) {
@@ -101,10 +114,12 @@ public abstract class HttpCallBack implements I_HttpRespond {
         }
     }
 
-    protected Message obtainMessage(int responseMessage, Object response) {
+    protected Message obtainMessage(int responseMessage,
+            Object response) {
         Message msg = null;
         if (handler != null) {
-            msg = this.handler.obtainMessage(responseMessage, response);
+            msg = this.handler.obtainMessage(responseMessage,
+                    response);
         } else {
             msg = Message.obtain();
             msg.what = responseMessage;
@@ -128,9 +143,9 @@ public abstract class HttpCallBack implements I_HttpRespond {
             sendFailureMessage(e, (String) null);
         }
         if (status.getStatusCode() >= 300) {
-            sendFailureMessage(new HttpResponseException(
-                    status.getStatusCode(), status.getReasonPhrase()),
-                    responseBody);
+            sendFailureMessage(
+                    new HttpResponseException(status.getStatusCode(),
+                            status.getReasonPhrase()), responseBody);
         } else {
             sendSuccessMessage(status.getStatusCode(),
                     response.getAllHeaders(), responseBody);

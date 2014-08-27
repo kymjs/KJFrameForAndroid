@@ -193,7 +193,8 @@ public abstract class BaseActivity extends KJFrameActivity {
             a.show();
         }
         if (mAllowFullScreen) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
         super.onCreate(savedInstanceState);
@@ -229,14 +230,16 @@ public abstract class BaseActivity extends KJFrameActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        KJLoger.state(this.getClass().getName(), "---------onRestart ");
+        KJLoger.state(this.getClass().getName(),
+                "---------onRestart ");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         activityState = ActivityState.DESTROY;
-        KJLoger.state(this.getClass().getName(), "---------onDestroy ");
+        KJLoger.state(this.getClass().getName(),
+                "---------onDestroy ");
     }
 
     @Override

@@ -48,6 +48,7 @@ import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpResponseInterceptor;
+import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -684,11 +685,10 @@ public class KJHttp {
     }
 
     /**
-     * 设置代理请求头，默认是
-     * "Android Asynchronous Http Client/VERSION (http://loopj.com/android-async-http/)"
+     * 设置代理请求头
      * 
      * @param userAgent
-     *            the string to use in the User-Agent header.
+     *            代理请求头
      */
     public void setUserAgent(String userAgent) {
         HttpProtocolParams.setUserAgent(this.httpClient.getParams(),
@@ -699,7 +699,6 @@ public class KJHttp {
      * 设置连接超时时间，默认为10s
      * 
      * @param timeout
-     *            the connect/socket timeout in milliseconds
      */
     public void setTimeout(int timeout) {
         config.setReadTimeout(timeout);
@@ -715,7 +714,6 @@ public class KJHttp {
      * 设置以https方式连接
      * 
      * @param sslSocketFactory
-     *            the socket factory to use for https requests.
      */
     public void setSSLSocketFactory(SSLSocketFactory sslSocketFactory) {
         this.httpClient.getConnectionManager().getSchemeRegistry()
@@ -726,9 +724,7 @@ public class KJHttp {
      * 添加http请求头
      * 
      * @param header
-     *            the name of the header
      * @param value
-     *            the contents of the header
      */
     public void addHeader(String header, String value) {
         clientHeaderMap.put(header, value);
@@ -970,9 +966,19 @@ public class KJHttp {
                 try {
                     HttpResponse response = client.execute(request,
                             context);
-                    if (!Thread.currentThread().isInterrupted()) {
-                        if (callback != null) {
+                    if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                        if (!Thread.currentThread().isInterrupted()
+                                && callback != null) {
                             callback.sendResponseMessage(response);
+                        }
+                    } else {
+                        if (callback != null) {
+                            callback.sendFailureMessage(
+                                    new IOException("server respond "
+                                            + response
+                                                    .getStatusLine()
+                                                    .getStatusCode()),
+                                    "http respond error");
                         }
                     }
                 } catch (IOException e) {

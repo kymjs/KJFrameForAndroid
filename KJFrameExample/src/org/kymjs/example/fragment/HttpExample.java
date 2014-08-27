@@ -26,8 +26,8 @@ public class HttpExample extends BaseFragment {
     Button btn2;
 
     @Override
-    protected View inflaterView(LayoutInflater inflater, ViewGroup container,
-            Bundle bundle) {
+    protected View inflaterView(LayoutInflater inflater,
+            ViewGroup container, Bundle bundle) {
         return inflater.inflate(R.layout.example_layout, null);
     }
 
@@ -64,7 +64,8 @@ public class HttpExample extends BaseFragment {
             }
 
             @Override
-            public void onFailure(Throwable t, int errorNo, String strMsg) {
+            public void onFailure(Throwable t, int errorNo,
+                    String strMsg) {
                 super.onFailure(t, errorNo, strMsg);
                 ViewInject.longToast(strMsg);
             }
@@ -83,12 +84,14 @@ public class HttpExample extends BaseFragment {
         } catch (FileNotFoundException e) {
             ViewInject.toast("图片没有找到");
         }
-        kjh.urlPost("http://l.tn10000.com/index.php/umessage/update_message",
+        kjh.urlPost(
+                "http://l.tn10000.com/index.php/umessage/update_message",
                 params, new StringCallBack() {
                     @Override
                     public void onSuccess(String json) {
                         ViewInject.longToast(json);
-                        KJLoger.debug(getClass().getName() + "网络信息：" + json);
+                        KJLoger.debug(getClass().getName() + "网络信息："
+                                + json);
                     }
 
                     @Override
@@ -108,12 +111,14 @@ public class HttpExample extends BaseFragment {
         KJStringParams params = new KJStringParams();
         params.put("user_id", "33");
         params.put("birthday", "2008-8-1");
-        kjh.post("http://l.tn10000.com/index.php/umessage/update_message",
+        kjh.post(
+                "http://l.tn10000.com/index.php/umessage/update_message",
                 params, new StringCallBack() {
                     @Override
                     public void onSuccess(String json) {
                         ViewInject.longToast(json);
-                        KJLoger.debug(getClass().getName() + "网络信息：" + json);
+                        KJLoger.debug(getClass().getName() + "网络信息："
+                                + json);
                     }
 
                     @Override

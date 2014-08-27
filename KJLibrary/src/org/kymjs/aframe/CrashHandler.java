@@ -19,13 +19,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.Thread.UncaughtExceptionHandler;
 
 import org.kymjs.aframe.http.KJFileParams;
 import org.kymjs.aframe.http.KJHttp;
 import org.kymjs.aframe.ui.KJActivityManager;
+import org.kymjs.aframe.ui.ViewInject;
 import org.kymjs.aframe.utils.FileUtils;
 import org.kymjs.aframe.utils.SystemTool;
 
@@ -82,44 +82,36 @@ public class CrashHandler implements UncaughtExceptionHandler {
         try {
             // 导出异常信息到SD卡中
             saveToSDCard(ex);
-            // 通过网络上传异常信息
-            if (openUpload && SystemTool.isCheckNet(mContext)) {
-                uploadLog();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // 打印出当前调用栈信息,用于开发阶段调试
-        ex.printStackTrace();
-        // 如果系统提供了默认的异常处理器，则交给系统去结束我们的程序，否则就由我们自己结束自己
-        if (mDefaultCrashHandler != null) {
-            mDefaultCrashHandler.uncaughtException(thread, ex);
-        } else {
+        } catch (Exception e) {
+        } finally {
+            // 如果系统提供了默认的异常处理器，则交给系统去结束我们的程序，否则就由我们自己结束自己
+            ViewInject.longToast(mContext, "您的手机可能不兼容该功能");
+            // if (mDefaultCrashHandler != null) {
+            // mDefaultCrashHandler.uncaughtException(thread, ex);
+            // } else {
+            // ex.printStackTrace();
+            // KJActivityManager.create().finishAllActivity();
+            // }
+            ex.printStackTrace();
             KJActivityManager.create().finishAllActivity();
         }
     }
 
-    private void saveToSDCard(Throwable ex) throws IOException {
-        File file = FileUtils.getSaveFile(
-                "KJLog",
-                SystemTool.getDataTime("YYYYMMDD")
-                        + System.currentTimeMillis()
+    private void saveToSDCard(Throwable ex) throws Exception {
+        File file = FileUtils.getSaveFile("KJLog",
+                SystemTool.getDataTime("yyyy-MM-dd-HH-mm-ss")
                         + FILE_NAME_SUFFIX);
-        try {
-            PrintWriter pw = new PrintWriter(new BufferedWriter(
-                    new FileWriter(file)));
-            // 导出发生异常的时间
-            pw.println(SystemTool.getDataTime("YYYYMMDD_HH_mm"));
+        PrintWriter pw = new PrintWriter(new BufferedWriter(
+                new FileWriter(file)));
+        // 导出发生异常的时间
+        pw.println(SystemTool.getDataTime("yyyy-MM-dd-HH-mm-ss"));
+        // 导出手机信息
+        dumpPhoneInfo(pw);
 
-            // 导出手机信息
-            dumpPhoneInfo(pw);
-
-            pw.println();
-            // 导出异常的调用栈信息
-            ex.printStackTrace(pw);
-            pw.close();
-        } catch (Exception e) {
-        }
+        pw.println();
+        // 导出异常的调用栈信息
+        ex.printStackTrace(pw);
+        pw.close();
     }
 
     private void dumpPhoneInfo(PrintWriter pw)
