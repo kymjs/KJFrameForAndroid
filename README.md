@@ -13,7 +13,7 @@ KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复�
 * 项目备用地址（可能不是最新代码）：[http://git.oschina.net/kymjs/KJFrameForAndroid](http://git.oschina.net/kymjs/KJFrameForAndroid)
 * ask question to [https://github.com/kymjs/KJFrameForAndroid/issues](https://github.com/kymjs/KJFrameForAndroid/issues)
 * wiki for English skip to [https://github.com/kymjs/KJFrameForAndroid/wiki](https://github.com/kymjs/KJFrameForAndroid/wiki)
-
+* 版本日志debug log [https://github.com/kymjs/KJFrameForAndroid/blob/master/debug_log.txt](https://github.com/kymjs/KJFrameForAndroid/blob/master/debug_log.txt)
 ---
 # 框架使用
 clone下KJFrameForAndroid最新源码后，导入eclipse中，若只想使用框架而不考虑源码查看与学习，可直接复制binrary目录下的kjlibrary.jar文件至自己项目的libs文件夹中。<br>
