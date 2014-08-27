@@ -1,9 +1,9 @@
-beta 1.3:
+beta 1.3版本更新内容:
 ===========================================================================================
-
-纠正org.kymjs.aframe.ui.activity.BaseActivity中单词拼写错误;	（来自 github 二胡 解决）
-修复在慢网速或无网络时kjh.post()崩溃问题;			（来自 QQ群 ↖从没、存在<jdp112233@qq.com> BUG提交）
+纠正org.kymjs.aframe.ui.activity.BaseActivity中单词拼写错误;	（来自github 二胡 解决）
+修复在慢网速或无网络时kjh.post()崩溃问题;			（来自QQ群 ↖从没、存在<jdp112233@qq.com> BUG提交）
 修复org.kymjs.aframe.CrashHandler类无法正常工作问题;
 
 目前已知BUG:
 org.kymjs.aframe.CrashHandler临退出时无法显示toast信息。
+===========================================================================================
