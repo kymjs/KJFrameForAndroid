@@ -197,6 +197,7 @@ public class KJBitmap {
             taskCollection.add(task);
             task.execute();
         }
+
     }
 
     /**
@@ -273,6 +274,7 @@ public class KJBitmap {
         public BitmapWorkerTask(View view, String url) {
             this.view = view;
             this.url = url;
+            this.view.setTag(url);
         }
 
         @Override
@@ -293,10 +295,12 @@ public class KJBitmap {
         @Override
         protected void onPostExecute(Bitmap bmp) {
             super.onPostExecute(bmp);
-            viewSetImage(view, bmp);
-            doSuccessCallBack(view);
-            showProgressIfOpen(view, url);
-            taskCollection.remove(this);
+            if (url.equals(view.getTag())) {
+                viewSetImage(view, bmp);
+                doSuccessCallBack(view);
+                showProgressIfOpen(view, url);
+                taskCollection.remove(this);
+            }
         }
     }
 
