@@ -21,7 +21,7 @@ import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.kymjs.aframe.KJLoger;
+import org.kymjs.aframe.utils.FileUtils;
 
 /**
  * 多线程下载中实现每个线程的下载任务的类<br>
@@ -40,6 +40,7 @@ public class DownloadThread extends Thread {
     private I_MulThreadLoader downloader; // 调用本线程的下载器类
 
     private boolean finish = false; // 是否已经下载完成
+    private boolean error = false; // 是否出错
 
     /**
      * 构造方法
@@ -57,8 +58,8 @@ public class DownloadThread extends Thread {
      * @param threadId
      *            当前线程id
      */
-    public DownloadThread(I_MulThreadLoader downloader, URL url, File saveFile,
-            int block, int downLength, int threadId) {
+    public DownloadThread(I_MulThreadLoader downloader, URL url,
+            File saveFile, int block, int downLength, int threadId) {
         this.url = url;
         this.saveFile = saveFile;
         this.block = block;
@@ -69,7 +70,10 @@ public class DownloadThread extends Thread {
 
     @Override
     public void run() {
-        if (downLength < block) {// 未下载完成
+        // 未下载完成
+        if (downLength < block) {
+            RandomAccessFile threadfile = null;
+            InputStream inStream = null;
             try {
                 // 使用Get方式下载
                 HttpURLConnection http = (HttpURLConnection) url
@@ -86,15 +90,15 @@ public class DownloadThread extends Thread {
 
                 int startPos = block * (threadId - 1) + downLength;// 开始位置
                 int endPos = block * threadId - 1;// 结束位置
-                http.setRequestProperty("Range", "bytes=" + startPos + "-"
-                        + endPos);// 设置获取实体数据的范围
+                http.setRequestProperty("Range", "bytes=" + startPos
+                        + "-" + endPos);// 设置获取实体数据的范围
                 http.setRequestProperty("Connection", "Keep-Alive");
 
-                InputStream inStream = http.getInputStream();
+                inStream = http.getInputStream();
                 byte[] buffer = new byte[1024];
                 int offset = 0;
-                RandomAccessFile threadfile = new RandomAccessFile(
-                        this.saveFile, "rwd");
+                threadfile = new RandomAccessFile(this.saveFile,
+                        "rwd");
                 threadfile.seek(startPos);
 
                 while ((offset = inStream.read(buffer, 0, 1024)) != -1) {
@@ -103,12 +107,12 @@ public class DownloadThread extends Thread {
                     downloader.update(this.threadId, downLength);
                     downloader.append(offset);
                 }
-                threadfile.close();
-                inStream.close();
                 this.finish = true;
             } catch (Exception e) {
-                this.downLength = -1;
-                KJLoger.debug("Thread " + this.threadId + ":" + e);
+                this.downLength = -3;
+                this.error = true;
+            } finally {
+                FileUtils.closeIO(threadfile, inStream);
             }
         }
     }
@@ -120,6 +124,15 @@ public class DownloadThread extends Thread {
      */
     public boolean isFinish() {
         return finish;
+    }
+
+    /**
+     * 下载是否出错
+     * 
+     * @return
+     */
+    public boolean isError() {
+        return error;
     }
 
     /**

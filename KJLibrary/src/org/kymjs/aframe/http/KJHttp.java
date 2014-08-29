@@ -556,7 +556,7 @@ public class KJHttp {
                 }
                 result.download(callback);
                 return result;
-            } catch (final KJException e) {
+            } catch (KJException e) {
                 return e;
             }
         }

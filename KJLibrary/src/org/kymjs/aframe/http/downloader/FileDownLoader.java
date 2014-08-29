@@ -48,7 +48,7 @@ public class FileDownLoader implements I_MulThreadLoader {
     private SparseIntArray data = new SparseIntArray();
 
     /**
-     * 构建文件下载器
+     * 构建文件下载器，首先会进行一次网络访问，得到文件的大小
      * 
      * @param _url
      *            下载路径
@@ -73,10 +73,17 @@ public class FileDownLoader implements I_MulThreadLoader {
             }
         }
         this.saveFile = saveFile; // 构建保存文件
+        initialize(_url);
+    }
 
+    /**
+     * 初始化断点下载模块
+     */
+    private void initialize(String _url) {
         try {
             URL url = new URL(this.loadUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            HttpURLConnection conn = (HttpURLConnection) url
+                    .openConnection();
             conn.setConnectTimeout(5 * 1000);
             conn.setRequestMethod("GET");
             conn.setRequestProperty(
@@ -108,7 +115,6 @@ public class FileDownLoader implements I_MulThreadLoader {
                         this.loadSize += this.data.get(i + 1);
                     }
                 }
-
                 // 计算每条线程应该下载数据长度
                 this.block = (this.fileSize % this.threads.length) == 0 ? this.fileSize
                         / this.threads.length
@@ -118,127 +124,10 @@ public class FileDownLoader implements I_MulThreadLoader {
                         + conn.getResponseCode());
             }
         } catch (MalformedURLException e) {
-            throw new KJException("don't connection this url", e);
+            throw new KJException("do not connection this url", e);
         } catch (IOException e) {
             throw new KJException("connection error", e);
         }
-    }
-
-    /**
-     * 开始下载文件, 监听下载数量的变化,不显示实时下载进度
-     * 
-     * @return 已下载文件大小
-     */
-    @Override
-    public int download() {
-        return download(null);
-    }
-
-    /**
-     * 初始化输出文件块位置
-     */
-    private URL initFile() {
-        URL url = null;
-        try {
-            RandomAccessFile randOut = new RandomAccessFile(this.saveFile, "rw");
-            if (this.fileSize > 0) {
-                randOut.setLength(this.fileSize);
-            }
-            randOut.close();
-        } catch (FileNotFoundException e) {
-            throw new KJException("file download fail :saveFile not found", e);
-        } catch (IOException e) {
-            throw new KJException(
-                    "file download fail :fileclose error,IOException", e);
-        }
-        try {
-            url = new URL(this.loadUrl);
-        } catch (MalformedURLException e) {
-            throw new KJException("file download fail :url error", e);
-        }
-        return url;
-    }
-
-    /**
-     * 初始化下载
-     * 
-     * @param url
-     */
-    private void initDownload(URL url) {
-        // 如果map集合中保存的线程数与程序的线程数不同，则重新初始化
-        if (this.data.size() != this.threads.length) {
-            this.data.clear();
-            for (int i = 0; i < this.threads.length; i++) {
-                // 初始化每条线程已经下载的数据长度为0
-                this.data.put(i + 1, 0);
-            }
-        }
-
-        // 开启线程进行下载
-        for (int i = 0; i < this.threads.length; i++) {
-            int downLength = this.data.get(i + 1);
-            // 判断线程是否已经完成下载,否则继续下载
-            if (downLength < this.block && this.loadSize < this.fileSize) {
-                this.threads[i] = new DownloadThread(this, url, this.saveFile,
-                        this.block, this.data.get(i + 1), i + 1);
-                this.threads[i].setPriority(Thread.MAX_PRIORITY);
-                this.threads[i].start();
-            } else {
-                this.threads[i] = null;
-            }
-        }
-
-        // 保存到数据库一次
-        this.fragmentFile.save(this.loadUrl, this.data);
-    }
-
-    /**
-     * 开始下载文件
-     * 
-     * @param callback
-     *            监听下载数量的变化,如果不需要了解实时下载的数量,可以设置为null
-     * @return 已下载文件大小
-     */
-    @Override
-    public int download(final I_HttpRespond callback) {
-        URL url = initFile(); // 初始化每个线程的下载文件块
-        initDownload(url); // 设置每个线程的下载任务
-
-        // 阻塞态，判断所有线程是否完成下载
-        for (boolean isFinish = false; !isFinish;) {
-            // 假定下载完成
-            isFinish = true;
-            // 遍历每个线程，检测是否真的下载完成
-            for (int i = 0; i < this.threads.length; i++) {
-
-                // 如果发现线程未完成下载
-                if (this.threads[i] != null && !this.threads[i].isFinish()) {
-                    isFinish = false;// 下载没有完成
-
-                    // 如果下载失败,再重新下载
-                    if (this.threads[i].getDownLength() == -1) {
-                        this.threads[i] = new DownloadThread(this, url,
-                                this.saveFile, this.block,
-                                this.data.get(i + 1), i + 1);
-                        this.threads[i].start();
-                    }
-                }
-
-            }
-
-            // 如果设置了进度监听器，则在UI线程中回调相应方法
-            if (callback != null && callback.isProgress()) {
-                KJActivityManager.create().topActivity()
-                        .runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                callback.onLoading(fileSize, loadSize);
-                            }
-                        });
-            }
-        }
-        fragmentFile.delete(this.loadUrl);
-        return this.loadSize;
     }
 
     /**
@@ -271,4 +160,145 @@ public class FileDownLoader implements I_MulThreadLoader {
         this.data.put(threadId, pos);
         this.fragmentFile.update(this.loadUrl, this.data);
     }
+
+    /**
+     * 开始下载文件, 监听下载数量的变化,不显示实时下载进度
+     * 
+     * @return 已下载文件大小
+     */
+    @Override
+    public int download() {
+        return download(null);
+    }
+
+    /***************************** 下载核心方法 *************************************/
+
+    /**
+     * 开始下载文件
+     * 
+     * @param callback
+     *            监听下载数量的变化,如果不需要了解实时下载的数量,可以设置为null
+     * @return 已下载文件大小
+     */
+    @Override
+    public int download(final I_HttpRespond callback) {
+        URL url = initFile(); // 初始化每个线程的下载文件块
+        initDownload(url); // 设置每个线程的下载任务
+
+        boolean isFinish = false;
+        while (!isFinish) { // 阻塞态，判断所有线程是否完成下载
+            // 假定下载完成
+            isFinish = true;
+            // 遍历每个线程，检测是否真的下载完成
+            for (int i = 0; i < this.threads.length; i++) {
+                respondFailIfError(threads[i]);
+                // 如果发现线程未完成下载
+                if (this.threads[i] != null
+                        && !this.threads[i].isFinish()) {
+                    isFinish = false;// 下载没有完成
+                    // 如果下载失败,再重新下载
+                    if (this.threads[i].getDownLength() == -1) {
+                        this.threads[i] = new DownloadThread(this,
+                                url, this.saveFile, this.block,
+                                this.data.get(i + 1), i + 1);
+                        this.threads[i].start();
+                    }
+                }
+            }
+            respondCallBackLoading(callback);
+        }
+        fragmentFile.delete(this.loadUrl);
+        return this.loadSize;
+    }
+
+    /**
+     * 初始化输出文件块位置
+     */
+    private URL initFile() {
+        URL url = null;
+        try {
+            RandomAccessFile randOut = new RandomAccessFile(
+                    this.saveFile, "rw");
+            if (this.fileSize > 0) {
+                randOut.setLength(this.fileSize);
+            }
+            randOut.close();
+        } catch (FileNotFoundException e) {
+            throw new KJException("fail :saveFile not found", e);
+        } catch (IOException e) {
+            throw new KJException(
+                    "fail :fileclose error,IOException", e);
+        }
+        try {
+            url = new URL(this.loadUrl);
+        } catch (MalformedURLException e) {
+            throw new KJException("fail :url error", e);
+        }
+        return url;
+    }
+
+    /**
+     * 初始化下载
+     * 
+     * @param url
+     */
+    private void initDownload(URL url) {
+        // 如果map集合中保存的线程数与程序的线程数不同，则重新初始化
+        if (this.data.size() != this.threads.length) {
+            this.data.clear();
+            for (int i = 0; i < this.threads.length; i++) {
+                // 初始化每条线程已经下载的数据长度为0
+                this.data.put(i + 1, 0);
+            }
+        }
+
+        // 开启线程进行下载
+        for (int i = 0; i < this.threads.length; i++) {
+            int downLength = this.data.get(i + 1);
+            respondFailIfError(threads[i]);
+            // 判断线程是否已经完成下载,否则继续下载
+            if (downLength < this.block
+                    && this.loadSize < this.fileSize) {
+                this.threads[i] = new DownloadThread(this, url,
+                        this.saveFile, this.block,
+                        this.data.get(i + 1), i + 1);
+                this.threads[i].setPriority(Thread.MAX_PRIORITY);
+                this.threads[i].start();
+            } else {
+                this.threads[i] = null;
+            }
+        }
+        // 保存到数据库一次
+        this.fragmentFile.save(this.loadUrl, this.data);
+    }
+
+    /**
+     * 响应监听器loading方法
+     * 
+     * @param callback
+     */
+    private void respondCallBackLoading(final I_HttpRespond callback) {
+        // 如果设置了进度监听器，则在UI线程中回调相应方法
+        if (callback != null && callback.isProgress()) {
+            KJActivityManager.create().topActivity()
+                    .runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onLoading(fileSize, loadSize);
+                        }
+                    });
+        }
+    }
+
+    /**
+     * 检测错误并响应监听器Failure方法
+     * 
+     * @param callback
+     */
+    private void respondFailIfError(DownloadThread thread) {
+        if (thread != null && thread.isError()) {
+            throw new KJException("download error: IOException");
+        }
+    }
+
 }

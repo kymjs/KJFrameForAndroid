@@ -29,8 +29,8 @@ public class DownloadExample extends BaseFragment {
     private boolean maxed = false;
 
     @Override
-    protected View inflaterView(LayoutInflater inflater, ViewGroup container,
-            Bundle bundle) {
+    protected View inflaterView(LayoutInflater inflater,
+            ViewGroup container, Bundle bundle) {
         return inflater.inflate(R.layout.example_download, null);
     }
 
@@ -63,14 +63,17 @@ public class DownloadExample extends BaseFragment {
                 }
 
                 @Override
-                public void onFailure(Throwable t, int errorNo, String strMsg) {
+                public void onFailure(Throwable t, int errorNo,
+                        String strMsg) {
                     super.onFailure(t, errorNo, strMsg);
                     ViewInject.toast("失败原因： " + strMsg);
+                    mProgress.setMax(100000);
+                    mProgress.setProgress(0);
                 }
             };
             file.setProgress(true); // 若要显示进度，必须设置为true
-            kjh.urlDownload(mEt.getText().toString(), "/storage/sdcard0/3.png",
-                    file);
+            kjh.urlDownload(mEt.getText().toString(),
+                    "/storage/sdcard0/3.png", file);
             break;
         }
     }
