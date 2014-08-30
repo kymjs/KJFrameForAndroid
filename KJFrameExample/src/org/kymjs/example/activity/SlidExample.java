@@ -40,30 +40,23 @@ public class SlidExample extends SlidTemplet {
     }
 
     @Override
-    protected void initSlidMenu() {
-        item1 = new ResideMenuItem(this, R.drawable.ic_launcher, "加载网络图");
-        item2 = new ResideMenuItem(this, R.drawable.ic_launcher, "模糊图片");
-        item3 = new ResideMenuItem(this, R.drawable.ic_launcher, "图片缩放");
-        item4 = new ResideMenuItem(this, R.drawable.ic_launcher, "多图选择");
-        item5 = new ResideMenuItem(this, R.drawable.ic_launcher, "立即退出");
-        item1.setOnClickListener(this);
-        item2.setOnClickListener(this);
-        item3.setOnClickListener(this);
-        item4.setOnClickListener(this);
-        item5.setOnClickListener(this);
-        resideMenu.addMenuItem(item1);
-        resideMenu.addMenuItem(item2);
-        resideMenu.addMenuItem(item3);
-        resideMenu.addMenuItem(item4);
-        resideMenu.addMenuItem(item5);
-    }
-
-    @Override
     protected void initWidget() {
         super.initWidget();
         actionBar.setTitle("侧滑效果演示");
         fragContent = new BitmapDisplay();
         changeFragment(fragContent);
+        item1 = new ResideMenuItem(this, R.drawable.ic_launcher,
+                "加载网络图");
+        item2 = new ResideMenuItem(this, R.drawable.ic_launcher,
+                "模糊图片");
+        item3 = new ResideMenuItem(this, R.drawable.ic_launcher,
+                "图片缩放");
+        item4 = new ResideMenuItem(this, R.drawable.ic_launcher,
+                "多图选择");
+        item5 = new ResideMenuItem(this, R.drawable.ic_launcher,
+                "立即退出");
+        // 必须调用initSlidMenu()才能初始化菜单项
+        initSlidMenus(item1, item2, item3, item4, item5);
     }
 
     /**

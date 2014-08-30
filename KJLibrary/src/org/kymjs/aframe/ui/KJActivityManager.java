@@ -153,7 +153,8 @@ final public class KJActivityManager {
             finishAllActivity();
             ActivityManager activityMgr = (ActivityManager) context
                     .getSystemService(Context.ACTIVITY_SERVICE);
-            activityMgr.killBackgroundProcesses(context.getPackageName());
+            activityMgr.killBackgroundProcesses(context
+                    .getPackageName());
             System.exit(0);
         } catch (Exception e) {
             System.exit(-1);

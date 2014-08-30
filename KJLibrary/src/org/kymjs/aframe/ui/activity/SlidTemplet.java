@@ -17,6 +17,7 @@ package org.kymjs.aframe.ui.activity;
 
 import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.aframe.ui.widget.ResideMenu;
+import org.kymjs.aframe.ui.widget.ResideMenuItem;
 import org.kymjs.aframe.ui.widget.ResideMenuItem.OnMenuClickListener;
 
 import android.view.MotionEvent;
@@ -29,15 +30,12 @@ import android.view.View;
  * 
  * @author kymjs(kymjs123@gmail.com)
  */
-public abstract class SlidTemplet extends KJFragmentActivity implements
-        OnMenuClickListener {
+public abstract class SlidTemplet extends KJFragmentActivity
+        implements OnMenuClickListener {
     protected ResideMenu resideMenu;
 
     /** 设置Activity布局 */
     protected abstract int setRootViewID();
-
-    /** 初始化侧滑菜单界面控件 */
-    protected abstract void initSlidMenu();
 
     @Override
     public void setRootView() {
@@ -48,10 +46,27 @@ public abstract class SlidTemplet extends KJFragmentActivity implements
         resideMenu.addIgnoredView(root);
     }
 
+    /**
+     * 过时方法：初始化侧滑菜单界面控件<br>
+     * 你应该使用initSlidMenus(ResideMenuItem...)来初始化每一个菜单项
+     */
+    @Deprecated
+    protected void initSlidMenu() {}
+
     @Override
     protected void initWidget() {
         initSlidMenu();
         super.initWidget();
+    }
+
+    /** 初始化侧滑菜单界面控件 */
+    protected void initSlidMenus(ResideMenuItem... items) {
+        if (items != null) {
+            for (ResideMenuItem item : items) {
+                item.setOnClickListener(this);
+                resideMenu.addMenuItem(item);
+            }
+        }
     }
 
     /**
