@@ -43,7 +43,9 @@ import android.widget.ImageView;
 public class BitmapOperateUtil {
 
     /**
-     * View的背景虚化方法（imageview则设置src，其他则设置bg）
+     * View的背景虚化方法（imageview则设置src，其他则设置bg）<br>
+     * 
+     * <b>注意</b> src将会被回收
      * 
      * @param imageview
      *            要显示虚化图片的控件（imageview则设置src，其他则设置bg）
@@ -53,14 +55,15 @@ public class BitmapOperateUtil {
     public static void SetMistyBitmap(View imageview, Bitmap src) {
         if (imageview == null || src == null)
             return;
+        BitmapHelper.doRecycledIfNot(src);
         if (SystemTool.getSDKVersion() >= 18) {
             src = blur(src, imageview, 12);
         } else {
             if (imageview instanceof ImageView) {
                 ((ImageView) imageview).setImageBitmap(blur(src, 12));
             } else {
-                imageview.setBackgroundDrawable(new BitmapDrawable(imageview
-                        .getResources(), blur(src, 12)));
+                imageview.setBackgroundDrawable(new BitmapDrawable(
+                        imageview.getResources(), blur(src, 12)));
             }
         }
     }
@@ -269,14 +272,19 @@ public class BitmapOperateUtil {
      *            虚化度Supported range 0 < radius <= 25
      */
     @SuppressLint("NewApi")
-    private static Bitmap blur(Bitmap bkg, View imageView, float radius) {
+    private static Bitmap blur(Bitmap bkg, View imageView,
+            float radius) {
         imageView.measure(0, 0);
-        Bitmap overlay = Bitmap.createBitmap(imageView.getMeasuredWidth(),
-                imageView.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap overlay = Bitmap.createBitmap(
+                imageView.getMeasuredWidth(),
+                imageView.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(overlay);
-        canvas.drawBitmap(bkg, -imageView.getLeft(), -imageView.getTop(), null);
+        canvas.drawBitmap(bkg, -imageView.getLeft(),
+                -imageView.getTop(), null);
         RenderScript rs = RenderScript.create(imageView.getContext());
-        Allocation overlayAlloc = Allocation.createFromBitmap(rs, overlay);
+        Allocation overlayAlloc = Allocation.createFromBitmap(rs,
+                overlay);
         ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(rs,
                 overlayAlloc.getElement());
         blur.setInput(overlayAlloc);
@@ -286,15 +294,17 @@ public class BitmapOperateUtil {
         if (imageView instanceof ImageView) {
             ((ImageView) imageView).setImageBitmap(overlay);
         } else {
-            imageView.setBackground(new BitmapDrawable(
-                    imageView.getResources(), overlay));
+            imageView.setBackground(new BitmapDrawable(imageView
+                    .getResources(), overlay));
         }
         rs.destroy();
         return overlay;
     }
 
     /**
-     * 更改图片色系，变亮或变暗
+     * 更改图片色系，变亮或变暗 <br>
+     * 
+     * <b>注意</b> src实际并没有被回收，如果你不需要，请手动置空
      * 
      * @param delta
      *            图片的亮暗程度值，越小图片会越亮，取值范围(0,24)
@@ -344,7 +354,8 @@ public class BitmapOperateUtil {
                 newR = Math.min(255, Math.max(0, newR));
                 newG = Math.min(255, Math.max(0, newG));
                 newB = Math.min(255, Math.max(0, newB));
-                pixels[i * width + k] = Color.argb(255, newR, newG, newB);
+                pixels[i * width + k] = Color.argb(255, newR, newG,
+                        newB);
                 newR = 0;
                 newG = 0;
                 newB = 0;
@@ -355,7 +366,9 @@ public class BitmapOperateUtil {
     }
 
     /**
-     * 将彩色图转换为黑白图
+     * 将彩色图转换为黑白图 <br>
+     * 
+     * <b>注意</b> bmp实际并没有被回收，如果你不需要，请手动置空
      * 
      * @param bmp
      *            位图
@@ -381,7 +394,8 @@ public class BitmapOperateUtil {
                 pixels[width * i + j] = grey;
             }
         }
-        Bitmap newBmp = Bitmap.createBitmap(width, height, Config.RGB_565);
+        Bitmap newBmp = Bitmap.createBitmap(width, height,
+                Config.RGB_565);
         newBmp.setPixels(pixels, 0, width, 0, 0, width, height);
         return newBmp;
     }

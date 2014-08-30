@@ -79,9 +79,9 @@ public class BitmapHelper {
     }
 
     /**
-     * 图片压缩方法：（使用compress的方法）
+     * 图片压缩方法：（使用compress的方法） <br>
      * 
-     * <br>
+     * <b>注意</b> bitmap实际并没有被回收，如果你不需要，请手动置空 <br>
      * <b>说明</b> 如果bitmap本身的大小小于maxSize，则不作处理
      * 
      * @param bitmap
@@ -100,6 +100,7 @@ public class BitmapHelper {
         // 获取bitmap大小 是允许最大大小的多少倍
         double i = mid / maxSize;
         // 判断bitmap占用空间是否大于允许最大空间 如果大于则压缩 小于则不压缩
+        doRecycledIfNot(bitmap);
         if (i > 1) {
             // 缩放图片 此处用到平方根 将宽带和高度压缩掉对应的平方根倍
             // （保持宽高不变，缩放后也达到了最大占用空间的大小）
@@ -109,7 +110,9 @@ public class BitmapHelper {
     }
 
     /***
-     * 图片的缩放方法
+     * 图片的缩放方法<br>
+     * 
+     * <b>注意</b> src实际并没有被回收，如果你不需要，请手动置空
      * 
      * @param src
      *            ：源图片资源
@@ -136,7 +139,9 @@ public class BitmapHelper {
     }
 
     /**
-     * 图片的缩放方法
+     * 图片的缩放方法<br>
+     * 
+     * <b>注意</b> src实际并没有被回收，如果你不需要，请手动置空
      * 
      * @param src
      *            ：源图片资源
@@ -149,7 +154,9 @@ public class BitmapHelper {
     }
 
     /**
-     * 图片的缩放方法
+     * 图片的缩放方法<br>
+     * 
+     * <b>注意</b> src实际并没有被回收，如果你不需要，请手动置空
      * 
      * @param src
      *            ：源图片资源
@@ -166,7 +173,9 @@ public class BitmapHelper {
     }
 
     /**
-     * 图片的缩放方法
+     * 图片的缩放方法<br>
+     * 
+     * <b>注意</b> src实际并没有被回收，如果你不需要，请手动置空
      * 
      * @param src
      *            ：源图片资源
@@ -178,7 +187,9 @@ public class BitmapHelper {
     }
 
     /**
-     * 旋转图片
+     * 旋转图片<br>
+     * 
+     * <b>注意</b> bitmap实际并没有被回收，如果你不需要，请手动置空
      * 
      * @param angle
      *            旋转角度
@@ -191,5 +202,16 @@ public class BitmapHelper {
         matrix.postRotate(angle);
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
                 bitmap.getHeight(), matrix, true);
+    }
+
+    /**
+     * 回收一个未被回收的Bitmap
+     * 
+     * @param bitmap
+     */
+    public static void doRecycledIfNot(Bitmap bitmap) {
+        if (!bitmap.isRecycled()) {
+            bitmap.recycle();
+        }
     }
 }
