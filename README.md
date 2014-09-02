@@ -18,7 +18,7 @@ KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复�
 ---
 # 框架使用
 clone下KJFrameForAndroid最新源码后，导入eclipse中，若只想使用框架而不考虑源码查看与学习，可直接复制binrary目录下的kjlibrary.jar文件至自己项目的libs文件夹中。<br>
-gradle？为什么要用AndroidStudio（或类似）我们不对做支持，当然你可以选择自行研究。<br>
+gradle？为什么要用AndroidStudio（或类似）我们不对其做支持，当然你可以选择自行研究。<br>
 若需要对源码改动或学习，可打开KJLibrary工程查看源码，同时结合KJFrameExample演示项目更好的学习，另外也可以自己新建工程，并右键工程->preference->Android->library->Add,选择KJLibrary工程加入后apply应用。
 
 *注：使用 KJFrameForAndroid 应用开发框架需要在你项目的AndroidManifest.xml文件中加入以下权限：*
