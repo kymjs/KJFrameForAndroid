@@ -15,3 +15,8 @@ beta 1.3.2版本更新内容:
 
 修复多线程下载在慢网速或无网络时无法停止问题;        
 ===========================================================================================
+beta 1.3.3版本更新内容:
+
+SlidTemplate类中：使用initSlidMenus(ResideMenuItem...)方法替换原initSlidMenu()方法，简化SlidMenu每一项的初始化。详细使用方法请看org.kymjs.example.activity.SlidExample类。
+完善org.kymjs.aframe.bitmap.utils.BitmapHelper类中的注释提示信息。
+===========================================================================================
