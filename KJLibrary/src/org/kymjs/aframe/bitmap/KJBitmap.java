@@ -19,9 +19,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.kymjs.aframe.KJLoger;
+import org.kymjs.aframe.bitmap.utils.BitmapMemoryCache;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
 import org.kymjs.aframe.core.KJTaskExecutor;
-import org.kymjs.aframe.core.MemoryCache;
 import org.kymjs.aframe.utils.CipherUtils;
 
 import android.graphics.Bitmap;
@@ -46,7 +46,7 @@ public class KJBitmap {
     /** 记录所有正在下载或等待下载的任务 */
     private Set<BitmapWorkerTask> taskCollection;
     /** LRU缓存器 */
-    private MemoryCache mMemoryCache;
+    private BitmapMemoryCache mMemoryCache;
     /** 图片加载器,若认为KJLibrary的加载器不好，也可自定义图片加载器 */
     private I_ImageLoder downloader;
     /** BitmapLabrary配置器 */
@@ -63,7 +63,7 @@ public class KJBitmap {
     private KJBitmap() {
         // downloader = new Downloader(config); // 配置图片加载器
         downloader = new DownloadWithLruCache(config); // 配置图片加载器
-        mMemoryCache = new MemoryCache(config.memoryCacheSize);
+        mMemoryCache = new BitmapMemoryCache(config.memoryCacheSize);
         taskCollection = new HashSet<BitmapWorkerTask>();
     }
 

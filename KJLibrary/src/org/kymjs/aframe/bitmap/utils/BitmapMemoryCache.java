@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kymjs.aframe.core;
+package org.kymjs.aframe.bitmap.utils;
 
+import org.kymjs.aframe.core.MemoryLruCache;
 import org.kymjs.aframe.utils.SystemTool;
 
 import android.annotation.SuppressLint;
@@ -28,12 +29,12 @@ import android.graphics.Bitmap;
  * @version 1.0
  * @author kymjs(kymjs123@gmail.com)
  */
-public final class MemoryCache {
+public final class BitmapMemoryCache {
 
     private MemoryLruCache<String, Bitmap> cache;
 
     @SuppressLint("NewApi")
-    public MemoryCache() {
+    public BitmapMemoryCache() {
         int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
         cache = new MemoryLruCache<String, Bitmap>(maxMemory / 8) {
             @Override
@@ -42,14 +43,19 @@ public final class MemoryCache {
                 if (SystemTool.getSDKVersion() >= 12) {
                     return value.getByteCount() / 1024;
                 } else {
-                    return value.getRowBytes() * value.getHeight();
+                    return value.getRowBytes() * value.getHeight()
+                            / 1024;
                 }
             }
         };
     }
 
+    /**
+     * @param maxSize
+     *            使用内存缓存的内存大小，单位：kb
+     */
     @SuppressLint("NewApi")
-    public MemoryCache(int maxSize) {
+    public BitmapMemoryCache(int maxSize) {
         cache = new MemoryLruCache<String, Bitmap>(maxSize) {
             @Override
             protected int sizeOf(String key, Bitmap value) {
