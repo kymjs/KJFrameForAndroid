@@ -80,6 +80,7 @@ import org.apache.http.protocol.SyncBasicHttpContext;
 import org.kymjs.aframe.core.KJException;
 import org.kymjs.aframe.core.KJTaskExecutor;
 import org.kymjs.aframe.core.KJThreadExecutors;
+import org.kymjs.aframe.http.cache.HttpCache;
 import org.kymjs.aframe.http.downloader.FileDownLoader;
 import org.kymjs.aframe.http.downloader.I_FileLoader;
 import org.kymjs.aframe.utils.FileUtils;
@@ -91,15 +92,17 @@ import android.content.Context;
  * 1.1 添加httpUrlConnection请求操作
  * 1.2 添加httpUrlConnection下载操作
  * 1.3 添加httpClient的post、get、put等方式请求
+ * 1.4 添加http请求中对json(应该是一切字符串)数据的缓存
  */
 
 /**
  * The HttpLibrary's core classes<br>
  * 
- * <b>创建时间</b> 2014-7-14
+ * <b>创建时间</b> 2014-7-14<br>
+ * <b>修改时间</b> 2014-9-3
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.3
+ * @version 1.4
  */
 public class KJHttp {
 
@@ -110,6 +113,10 @@ public class KJHttp {
      */
     public KJHttp(HttpConfig config) {
         this.config = config;
+        if (config.getCacher() == null) {
+            // json数据缓存器，也可以自己通过实现I_HttpCache接口协议定义
+            this.config.setCacher(HttpCache.create());
+        }
         // 如果使用httpClient必须初始化，如果不使用，则无需调用
         initHttpClient();
     }
@@ -152,59 +159,66 @@ public class KJHttp {
      *            请求中的回调方法，可选类型：FileCallBack、StringCallBack
      */
     public void urlGet(String url, I_HttpRespond callback) {
-        new HttpUrlGetTask(callback).execute(url);
+        new HttpUrlGetTask(callback, url).execute();
     }
 
     /**
      * 实现HttpUrlGet请求的任务
      */
     private class HttpUrlGetTask extends
-            KJTaskExecutor<Object, Object, Object> {
+            KJTaskExecutor<Void, Object, Object> {
         private I_HttpRespond callback;
+        private String _url;
 
-        public HttpUrlGetTask(I_HttpRespond callback) {
+        public HttpUrlGetTask(I_HttpRespond callback, String _url) {
             this.callback = callback;
+            this._url = _url;
         }
 
         @Override
-        protected Object doInBackground(Object... params) {
-            InputStream input = null;
-            BufferedReader reader = null;
-            StringBuilder respond = null;
-            try {
-                URL url = new URL(params[0].toString());
-                HttpURLConnection conn = (HttpURLConnection) url
-                        .openConnection();
-                conn.setUseCaches(config.isUseCache());
-                conn.setReadTimeout(config.getReadTimeout());
-                conn.setConnectTimeout(config.getConnectTimeOut());
-                conn.setRequestProperty("Charset",
-                        config.getCharSet());
-                conn.setRequestMethod("GET");
-                input = conn.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(
-                        input));
-                int i = 0, current = 0;
-                int count = conn.getContentLength();
-                char[] buf = new char[1024];
-                respond = new StringBuilder();
-                while ((i = reader.read(buf)) != -1) {
-                    respond.append(buf, 0, i);
-                    if (callback.isProgress()) {
-                        current += i;
-                        // 每次循环调用一次
-                        publishProgress(count, current);
+        protected Object doInBackground(Void... params) {
+            String res = config.getCacher().get(_url);
+            if (res != null && config.isUseCache()) { // 如果有缓存
+                return res;
+            } else {
+                InputStream input = null;
+                BufferedReader reader = null;
+                StringBuilder respond = null;
+                try {
+                    URL url = new URL(_url);
+                    HttpURLConnection conn = (HttpURLConnection) url
+                            .openConnection();
+                    conn.setUseCaches(config.isUseCache());
+                    conn.setReadTimeout(config.getReadTimeout());
+                    conn.setConnectTimeout(config.getConnectTimeOut());
+                    conn.setRequestProperty("Charset",
+                            config.getCharSet());
+                    conn.setRequestMethod("GET");
+                    input = conn.getInputStream();
+                    reader = new BufferedReader(
+                            new InputStreamReader(input));
+                    int i = 0, current = 0;
+                    int count = conn.getContentLength();
+                    char[] buf = new char[1024];
+                    respond = new StringBuilder();
+                    while ((i = reader.read(buf)) != -1) {
+                        respond.append(buf, 0, i);
+                        if (callback.isProgress()) {
+                            current += i;
+                            // 每次循环调用一次
+                            publishProgress(count, current);
+                        }
                     }
+                    conn.disconnect();
+                } catch (MalformedURLException e) {
+                    return e;
+                } catch (IOException e) {
+                    return e;
+                } finally {
+                    FileUtils.closeIO(input, reader);
                 }
-                conn.disconnect();
-            } catch (MalformedURLException e) {
-                return e;
-            } catch (IOException e) {
-                return e;
-            } finally {
-                FileUtils.closeIO(input, reader);
+                return respond;
             }
-            return respond;
         }
 
         @Override
@@ -222,6 +236,7 @@ public class KJHttp {
                 callback.onFailure((Throwable) result, 3722, "IO错误");
             } else {
                 callback.onSuccess(result);
+                config.getCacher().add(_url, result.toString());
             }
         }
     }
@@ -241,7 +256,7 @@ public class KJHttp {
     public void urlPost(String url, I_HttpParams params,
             I_HttpRespond callback) {
         if (params instanceof KJStringParams) {
-            new HttpUrlPostTask(params, callback).execute(url);
+            new HttpUrlPostTask(params, callback, url).execute();
         } else if (params instanceof KJFileParams) {
             new HttpUrlFileTask((KJFileParams) params, callback)
                     .execute(url);
@@ -362,71 +377,79 @@ public class KJHttp {
      * 实现HttpUrlPost请求的任务
      */
     private class HttpUrlPostTask extends
-            KJTaskExecutor<Object, Object, Object> {
+            KJTaskExecutor<Void, Object, Object> {
         private I_HttpRespond callback;
         private I_HttpParams params;
+        private String _url;
 
         public HttpUrlPostTask(I_HttpParams param,
-                I_HttpRespond callback) {
+                I_HttpRespond callback, String _url) {
             this.callback = callback;
             this.params = param;
+            this._url = _url;
         }
 
         @Override
-        protected Object doInBackground(Object... urls) {
-            DataOutputStream out = null;
-            InputStream input = null;
-            BufferedReader reader = null;
-            StringBuilder respond = null;
-            try {
-                URL url = new URL(urls[0].toString());
-                HttpURLConnection connection = (HttpURLConnection) url
-                        .openConnection();
-                connection.setReadTimeout(config.getReadTimeout());
-                connection.setConnectTimeout(config
-                        .getConnectTimeOut());
-                connection.setRequestProperty("Charset",
-                        config.getCharSet());
-                connection.setRequestProperty("Content-Type",
-                        config.getContentType());
-                connection.setInstanceFollowRedirects(true);
-                connection.setDoOutput(true);
-                connection.setDoInput(true);
-                connection.setRequestMethod("POST");
-                connection.setUseCaches(false);
-                connection.connect();
-                if (params != null) {
-                    out = new DataOutputStream(
-                            connection.getOutputStream());
-                    out.writeBytes(params.toString());
-                    out.flush();
-                }
-
-                input = connection.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(
-                        input));
-                respond = new StringBuilder();
-                int i = 0;
-                int current = 0;
-                int count = connection.getContentLength();
-                char[] buf = new char[1024];
-                while ((i = reader.read(buf)) != -1) {
-                    respond.append(buf, 0, i);
-                    if (callback.isProgress()) {
-                        current += i;
-                        // 每次循环调用一次
-                        publishProgress(count, current);
+        protected Object doInBackground(Void... _void) {
+            String res = config.getCacher().get(_url);
+            if (res != null && config.isUseCache()) { // 如果有缓存
+                return res;
+            } else {
+                DataOutputStream out = null;
+                InputStream input = null;
+                BufferedReader reader = null;
+                StringBuilder respond = null;
+                try {
+                    URL url = new URL(_url);
+                    HttpURLConnection connection = (HttpURLConnection) url
+                            .openConnection();
+                    connection
+                            .setReadTimeout(config.getReadTimeout());
+                    connection.setConnectTimeout(config
+                            .getConnectTimeOut());
+                    connection.setRequestProperty("Charset",
+                            config.getCharSet());
+                    connection.setRequestProperty("Content-Type",
+                            config.getContentType());
+                    connection.setInstanceFollowRedirects(true);
+                    connection.setDoOutput(true);
+                    connection.setDoInput(true);
+                    connection.setRequestMethod("POST");
+                    connection.setUseCaches(false);
+                    connection.connect();
+                    if (params != null) {
+                        out = new DataOutputStream(
+                                connection.getOutputStream());
+                        out.writeBytes(params.toString());
+                        out.flush();
                     }
+
+                    input = connection.getInputStream();
+                    reader = new BufferedReader(
+                            new InputStreamReader(input));
+                    respond = new StringBuilder();
+                    int i = 0;
+                    int current = 0;
+                    int count = connection.getContentLength();
+                    char[] buf = new char[1024];
+                    while ((i = reader.read(buf)) != -1) {
+                        respond.append(buf, 0, i);
+                        if (callback.isProgress()) {
+                            current += i;
+                            // 每次循环调用一次
+                            publishProgress(count, current);
+                        }
+                    }
+                    connection.disconnect();
+                } catch (MalformedURLException e) {
+                    return e;
+                } catch (IOException e) {
+                    return e;
+                } finally {
+                    FileUtils.closeIO(out, input, reader);
                 }
-                connection.disconnect();
-            } catch (MalformedURLException e) {
-                return e;
-            } catch (IOException e) {
-                return e;
-            } finally {
-                FileUtils.closeIO(out, input, reader);
+                return respond;
             }
-            return respond;
         }
 
         @Override
@@ -444,6 +467,7 @@ public class KJHttp {
                 callback.onFailure((Throwable) result, 3722, "IO错误");
             } else {
                 callback.onSuccess(result);
+                config.getCacher().add(_url, result.toString());
             }
         }
     }
@@ -813,8 +837,13 @@ public class KJHttp {
             str.append("?").append(params.toString());
             url = str.toString();
         }
-        sendRequest(httpClient, httpContext, new HttpGet(url), null,
-                callback, context);
+        String res = config.getCacher().get(url);
+        if (res != null && callback != null && config.isUseCache()) { // 如果有缓存
+            callback.onSuccess(res);
+        } else {
+            sendRequest(httpClient, httpContext, new HttpGet(url),
+                    null, callback, context);
+        }
     }
 
     /************************* HttpClient post请求 *************************/
@@ -834,9 +863,16 @@ public class KJHttp {
 
     public void post(Context context, String url, HttpEntity entity,
             String contentType, HttpCallBack callback) {
-        sendRequest(httpClient, httpContext,
-                addEntityToRequestBase(new HttpPost(url), entity),
-                contentType, callback, context);
+        String res = config.getCacher().get(url);
+        if (res != null && callback != null && config.isUseCache()) { // 如果有缓存
+            callback.onSuccess(res);
+        } else {
+            sendRequest(
+                    httpClient,
+                    httpContext,
+                    addEntityToRequestBase(new HttpPost(url), entity),
+                    contentType, callback, context);
+        }
     }
 
     /************************* HttpClient post请求 *************************/
@@ -856,9 +892,14 @@ public class KJHttp {
 
     public void put(Context context, String url, HttpEntity entity,
             String contentType, HttpCallBack callback) {
-        sendRequest(httpClient, httpContext,
-                addEntityToRequestBase(new HttpPut(url), entity),
-                contentType, callback, context);
+        String res = config.getCacher().get(url);
+        if (res != null && callback != null && config.isUseCache()) { // 如果有缓存
+            callback.onSuccess(res);
+        } else {
+            sendRequest(httpClient, httpContext,
+                    addEntityToRequestBase(new HttpPut(url), entity),
+                    contentType, callback, context);
+        }
     }
 
     /************************ httpClient core method *******************************/
@@ -969,7 +1010,9 @@ public class KJHttp {
                     if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                         if (!Thread.currentThread().isInterrupted()
                                 && callback != null) {
-                            callback.sendResponseMessage(response);
+                            callback.sendResponseMessage(request
+                                    .getRequestLine().getUri(),
+                                    config.getCacher(), response);
                         }
                     } else {
                         if (callback != null) {

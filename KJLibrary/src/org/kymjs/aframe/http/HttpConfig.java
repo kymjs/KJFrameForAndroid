@@ -15,6 +15,7 @@
  */
 package org.kymjs.aframe.http;
 
+import org.kymjs.aframe.http.cache.I_HttpCache;
 import org.kymjs.aframe.http.downloader.I_FileLoader;
 
 /**
@@ -50,6 +51,7 @@ public class HttpConfig {
     private int maxConnections; // http请求最大并发连接数
     private int downThreadCount;
     private I_FileLoader downloader; // 文件下载器
+    private I_HttpCache cacher; // http的json数据缓存器
 
     public HttpConfig() {
         socketBuffer = DEFAULT_SOCKET_BUFFER_SIZE;
@@ -215,4 +217,21 @@ public class HttpConfig {
         this.downloader = downloader;
     }
 
+    /**
+     * 获取当前KJHttp请求缓冲器
+     * 
+     * @return
+     */
+    public I_HttpCache getCacher() {
+        return cacher;
+    }
+
+    /**
+     * 设置KJHttp请求缓冲器，默认采用系统自带缓存器，你也可以使用自己的缓存器
+     * 
+     * @param downloader
+     */
+    public void setCacher(I_HttpCache cacher) {
+        this.cacher = cacher;
+    }
 }

@@ -24,6 +24,7 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.util.EntityUtils;
+import org.kymjs.aframe.http.cache.I_HttpCache;
 import org.kymjs.aframe.utils.StringUtils;
 
 import android.os.Handler;
@@ -129,7 +130,8 @@ public abstract class HttpCallBack implements I_HttpRespond {
     }
 
     // 异步HTTP请求的接口。
-    void sendResponseMessage(HttpResponse response) {
+    void sendResponseMessage(String uri, I_HttpCache cacher,
+            HttpResponse response) {
         StatusLine status = response.getStatusLine();
         String responseBody = null;
         try {
@@ -147,6 +149,7 @@ public abstract class HttpCallBack implements I_HttpRespond {
                     new HttpResponseException(status.getStatusCode(),
                             status.getReasonPhrase()), responseBody);
         } else {
+            cacher.add(uri, responseBody);
             sendSuccessMessage(status.getStatusCode(),
                     response.getAllHeaders(), responseBody);
         }
