@@ -20,7 +20,7 @@ beta 1.3.3版本更新内容:
 SlidTemplate类中：使用initSlidMenus(ResideMenuItem...)方法替换原initSlidMenu()方法，简化SlidMenu每一项的初始化。详细使用方法请看org.kymjs.example.activity.SlidExample类。
 完善org.kymjs.aframe.bitmap.utils.BitmapHelper类中的注释提示信息。
 ===========================================================================================
-beta 1.4版本更新内容:
+beta 1.4版本更新内容:				（再次感谢来自QQ群的：其实不熟悉、沂凡）
 
 更新HttpLibrary，添加对Http请求到的字符数据缓存处理，可自行设置是否开启，默认缓存有效时间为5分钟。
 ===========================================================================================
