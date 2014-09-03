@@ -6,6 +6,7 @@ org.kymjs.aframe.database
 org.kymjs.aframe.database.annotate
 org.kymjs.aframe.database.utils
 org.kymjs.aframe.http
+org.kymjs.aframe.http.cache
 org.kymjs.aframe.http.downloader
 org.kymjs.aframe.ui
 org.kymjs.aframe.ui.activity

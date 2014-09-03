@@ -229,7 +229,7 @@ public class HttpConfig {
     /**
      * 设置KJHttp请求缓冲器，默认采用系统自带缓存器，你也可以使用自己的缓存器
      * 
-     * @param downloader
+     * @param cacher
      */
     public void setCacher(I_HttpCache cacher) {
         this.cacher = cacher;
