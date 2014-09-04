@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -108,7 +108,9 @@ public final class FileUtils {
     }
 
     /**
-     * 获取文件夹路径
+     * 获取SD卡下指定文件夹的绝对路径
+     * 
+     * @return 返回SD卡下的指定文件夹的绝对路径
      */
     public static String getSavePath(String folderName) {
         return getSaveFolder(folderName).getAbsolutePath();
@@ -116,6 +118,8 @@ public final class FileUtils {
 
     /**
      * 获取文件夹对象
+     * 
+     * @return 返回SD卡下的指定文件夹对象，若文件夹不存在则创建
      */
     public static File getSaveFolder(String folderName) {
         File file = new File(Environment
@@ -126,11 +130,15 @@ public final class FileUtils {
     }
 
     /**
-     * 输入流转byte[]
+     * 输入流转byte[]<br>
+     * 
+     * <b>注意</b> 你必须手动关闭参数inStream
      */
     public static final byte[] input2byte(InputStream inStream) {
-        if (inStream == null)
+        if (inStream == null) {
             return null;
+        }
+        byte[] in2b = null;
         ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
         byte[] buff = new byte[100];
         int rc = 0;
@@ -138,10 +146,12 @@ public final class FileUtils {
             while ((rc = inStream.read(buff, 0, 100)) > 0) {
                 swapStream.write(buff, 0, rc);
             }
+            in2b = swapStream.toByteArray();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            closeIO(swapStream);
         }
-        byte[] in2b = swapStream.toByteArray();
         return in2b;
     }
 
@@ -303,7 +313,6 @@ public final class FileUtils {
                     + " not found");
         }
         return inputStream2String(is);
-
     }
 
     /**
