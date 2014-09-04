@@ -107,7 +107,7 @@ public final class SystemTool {
     /**
      * 判断网络是否连接
      */
-    public static boolean isCheckNet(Context context) {
+    public static boolean checkNet(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = cm.getActiveNetworkInfo();
@@ -118,8 +118,8 @@ public final class SystemTool {
      * 仅wifi联网功能是否开启
      */
     public static boolean checkOnlyWifi(Context context) {
-        if (PreferenceHelper.readBoolean(context, KJConfig.SETTING_FILE,
-                KJConfig.ONLY_WIFI)) {
+        if (PreferenceHelper.readBoolean(context,
+                KJConfig.SETTING_FILE, KJConfig.ONLY_WIFI)) {
             return isWiFi(context);
         } else {
             return true;
@@ -134,7 +134,8 @@ public final class SystemTool {
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         // wifi的状态：ConnectivityManager.TYPE_WIFI
         // 3G的状态：ConnectivityManager.TYPE_MOBILE
-        State state = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+        State state = cm
+                .getNetworkInfo(ConnectivityManager.TYPE_WIFI)
                 .getState();
         return State.CONNECTED == state;
     }
@@ -148,8 +149,8 @@ public final class SystemTool {
     public static void hideKeyBoard(Activity aty) {
         ((InputMethodManager) aty
                 .getSystemService(Context.INPUT_METHOD_SERVICE))
-                .hideSoftInputFromWindow(
-                        aty.getCurrentFocus().getWindowToken(),
+                .hideSoftInputFromWindow(aty.getCurrentFocus()
+                        .getWindowToken(),
                         InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
@@ -162,7 +163,8 @@ public final class SystemTool {
         List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
                 .getRunningAppProcesses();
         for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
-            if (appProcess.processName.equals(context.getPackageName())) {
+            if (appProcess.processName.equals(context
+                    .getPackageName())) {
                 if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND) {
                     // 后台运行
                     return true;
@@ -237,12 +239,13 @@ public final class SystemTool {
      */
     public static String getSign(Context context, String pkgName) {
         try {
-            PackageInfo pis = context.getPackageManager().getPackageInfo(
-                    pkgName, PackageManager.GET_SIGNATURES);
+            PackageInfo pis = context.getPackageManager()
+                    .getPackageInfo(pkgName,
+                            PackageManager.GET_SIGNATURES);
             return hexdigest(pis.signatures[0].toByteArray());
         } catch (NameNotFoundException e) {
-            throw new KJException(SystemTool.class.getName() + "the " + pkgName
-                    + "'s application not found");
+            throw new KJException(SystemTool.class.getName() + "the "
+                    + pkgName + "'s application not found");
         }
     }
 
@@ -250,10 +253,11 @@ public final class SystemTool {
      * 将签名字符串转换成需要的32位签名
      */
     private static String hexdigest(byte[] paramArrayOfByte) {
-        final char[] hexDigits = { 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 97,
-                98, 99, 100, 101, 102 };
+        final char[] hexDigits = { 48, 49, 50, 51, 52, 53, 54, 55,
+                                  56, 57, 97, 98, 99, 100, 101, 102 };
         try {
-            MessageDigest localMessageDigest = MessageDigest.getInstance("MD5");
+            MessageDigest localMessageDigest = MessageDigest
+                    .getInstance("MD5");
             localMessageDigest.update(paramArrayOfByte);
             byte[] arrayOfByte = localMessageDigest.digest();
             char[] arrayOfChar = new char[32];
@@ -299,7 +303,8 @@ public final class SystemTool {
         ActivityManager am = (ActivityManager) cxt
                 .getSystemService(Context.ACTIVITY_SERVICE);
         // 获取正在运行的service列表
-        List<RunningServiceInfo> serviceList = am.getRunningServices(100);
+        List<RunningServiceInfo> serviceList = am
+                .getRunningServices(100);
         if (serviceList != null)
             for (RunningServiceInfo service : serviceList) {
                 if (service.pid == android.os.Process.myPid())
@@ -314,7 +319,8 @@ public final class SystemTool {
             }
 
         // 获取正在运行的进程列表
-        List<RunningAppProcessInfo> processList = am.getRunningAppProcesses();
+        List<RunningAppProcessInfo> processList = am
+                .getRunningAppProcesses();
         if (processList != null)
             for (RunningAppProcessInfo process : processList) {
                 // 一般数值大于RunningAppProcessInfo.IMPORTANCE_SERVICE的进程都长时间没用或者空进程了
@@ -334,7 +340,8 @@ public final class SystemTool {
                     }
                 }
             }
-        KJLoger.debug("清理了" + (getDeviceUsableMemory(cxt) - i) + "M内存");
+        KJLoger.debug("清理了" + (getDeviceUsableMemory(cxt) - i)
+                + "M内存");
         return count;
     }
 }

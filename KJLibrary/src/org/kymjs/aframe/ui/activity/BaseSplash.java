@@ -58,7 +58,8 @@ public abstract class BaseSplash extends BaseActivity {
     @Override
     protected void initWidget() {
         super.initWidget();
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.alpha);
+        Animation animation = AnimationUtils.loadAnimation(this,
+                R.anim.alpha);
         // 监听动画过程
         animation.setAnimationListener(new AnimationListener() {
             @Override
