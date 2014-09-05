@@ -37,10 +37,10 @@ gradle？为什么要用AndroidStudio（或类似）我们不对其做支持，�
 ## =======各模块使用介绍=======
 
 ## UILibrary模块
-
 UILibrary包含两个部分Widget、Topology  [详细介绍...](http://my.oschina.net/kymjs/blog/284897)<br>
 
 **UILibrary -> Widget控件部分**
+*注：如果你使用widget部分，请尽量使用包含源码的方式而不是引用jar的方式，因为jar包无法调用R文件，会造成自定义控件无法调用资源*<br>
 主要封装了常用的UI控件，为了不让项目jar包过大，我们只引入了开发中一定会用到的控件，例如：可上下拉的KJListView、可上下拉的KJScrollView、可以双指缩放双击缩放双指旋转的ScaleImageView、等等......更多内容请自行查看项目文件中org.kymjs.aframe.widget包下的内容<br>
 
 **UILibrary -> Topology拓扑部分**
@@ -106,7 +106,8 @@ kjb.display(textView, "http://www.eoeandroid.com/data/attachment/forum/201107/18
 ```
 
 ## HttpLibrary模块
-使用HttpClient与HttpUrlConnection两种实现方式实现网络通信、数据上传、多线程断点下载。根据Google建议：在2.3系统之前由于HttpUrlConnection不稳定且有一定的BUG，应该尽量使用HttpClient；在2.3以后的系统，若只是简单的数据交互，应该使用更加轻量级、易扩展的HttpUrlConnection。对于实现的方式，KJLibrary将交由开发者来选择。<br>
+KJLibrary默认对所有Http通信的数据做了缓存处理，缓存时间为5分钟。这么做的目的不仅是为了节省用户手机流量，同时是为了减少服务器压力<br>
+HttpLibrary模块使用HttpClient与HttpUrlConnection两种实现方式实现网络通信、数据上传、多线程断点下载。根据Google建议：在2.3系统之前由于HttpUrlConnection不稳定且有一定的BUG，应该尽量使用HttpClient；在2.3以后的系统，若只是简单的数据交互，应该使用更加轻量级、易扩展的HttpUrlConnection。对于实现的方式，KJLibrary将交由开发者来选择。<br>
 
 ###普通get方法示例：
 ```java
@@ -211,7 +212,7 @@ kjh.urlDownload(mEt.getText().toString(), "/storage/sdcard0/3.png",file);
 ```
 ## DBLibrary模块
 包含了android中的orm框架，使用了线程池对sqlite进行操作，一行代码就可以进行增删改查。支持一对多，多对一等查询。<br>
-有关DB模块，要在此感谢开源社区，很大程度上参考了(finalDB模块)[https://github.com/kymjs/afinal]<br>
+有关DB模块，要在此感谢开源社区，很大程度上参考了[finalDB](https://github.com/kymjs/afinal)框架<br>
 ```java
 //普通数据存储
 KJDB db = KJDB.create(this);
@@ -237,15 +238,14 @@ public class Child{ //JavaBean
     /*....*/
 }
 List<Parent> all = db.findAll(Parent.class);
-        for( Parent  item : all){
-            if(item.getChildren ().getList().size()>0)
-                Toast.makeText(this,item.getText() + item.getChildren().getList().get(0).getText(),Toast.LENGTH_LONG).show();
-        }
+    for( Parent  item : all){
+        if(item.getChildren ().getList().size()>0)
+            Toast.makeText(this,item.getText() + item.getChildren().getList().get(0).getText(),Toast.LENGTH_LONG).show();
+    }
 
 ```
 ## UtilsLibrary模块
 包含了应用开发中的常用工具类，例如系统级别的Log管理、网络状态监测、Bitmap压缩工具类、获取屏幕宽高以及单位转换的工具类、错误信息处理与文件处理工具类、preference工具类、字符串操作与常用正则判断等。详细内容请自行查看项目文件中org.kymjs.aframe.utils包下的内容[更多介绍...](http://my.oschina.net/kymjs/blog)<br><br>
-
 
 ## 许可
 ********本项目采用 Apache Licence 2.0 授权协议:<br>
