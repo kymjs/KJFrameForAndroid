@@ -66,7 +66,8 @@ public class KJScrollView extends ScrollView {
     }
 
     @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    protected void onLayout(boolean changed, int l, int t, int r,
+            int b) {
         super.onLayout(changed, l, t, r, b);
         if (contentView == null)
             return;
@@ -84,11 +85,12 @@ public class KJScrollView extends ScrollView {
             return super.dispatchTouchEvent(ev);
         }
         // 手指是否移动到了当前ScrollView控件之外
-        boolean isTouchOutOfScrollView = ev.getY() >= this.getHeight()
-                || ev.getY() <= 0;
+        boolean isTouchOutOfScrollView = ev.getY() >= this
+                .getHeight() || ev.getY() <= 0;
         if (isTouchOutOfScrollView) { // 如果移动到了当前ScrollView控件之外
-            if (isMoved) // 如果当前contentView已经被移动, 首先把布局移到原位置, 然后消费点这个事件
+            if (isMoved) {// 如果当前contentView已经被移动, 首先把布局移到原位置
                 boundBack();
+            }
             return true;
         }
         int action = ev.getAction();
@@ -124,8 +126,9 @@ public class KJScrollView extends ScrollView {
                 int offset = (int) (deltaY * MOVE_FACTOR);
                 // 随着手指的移动而移动布局
                 contentView.layout(originalRect.left,
-                        originalRect.top + offset, originalRect.right,
-                        originalRect.bottom + offset);
+                        originalRect.top + offset,
+                        originalRect.right, originalRect.bottom
+                                + offset);
                 isMoved = true; // 记录移动了布局
             }
             break;
@@ -158,7 +161,8 @@ public class KJScrollView extends ScrollView {
      */
     private boolean isCanPullDown() {
         return getScrollY() == 0
-                || contentView.getHeight() < getHeight() + getScrollY();
+                || contentView.getHeight() < getHeight()
+                        + getScrollY();
     }
 
     /**
