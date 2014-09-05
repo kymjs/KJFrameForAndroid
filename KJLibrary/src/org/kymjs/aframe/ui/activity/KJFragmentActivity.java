@@ -18,7 +18,6 @@ package org.kymjs.aframe.ui.activity;
 import org.kymjs.aframe.ui.KJActivityManager;
 import org.kymjs.aframe.ui.ViewInject;
 import org.kymjs.aframe.ui.fragment.BaseFragment;
-import org.kymjs.kjlibrary.R;
 
 import android.app.FragmentTransaction;
 import android.view.KeyEvent;
@@ -55,13 +54,12 @@ public abstract class KJFragmentActivity extends BaseActivity {
     }
 
     /** 改变界面的fragment */
-    protected void changeFragment(int resView, BaseFragment targetFragment) {
+    protected void changeFragment(int resView,
+            BaseFragment targetFragment) {
         FragmentTransaction transaction = getFragmentManager()
                 .beginTransaction();
-        transaction.replace(resView, targetFragment, targetFragment.getClass()
-                .getName());
-        transaction.setCustomAnimations(R.anim.in_from_right,
-                R.anim.out_to_left);
+        transaction.replace(resView, targetFragment, targetFragment
+                .getClass().getName());
         transaction.commit();
     }
 

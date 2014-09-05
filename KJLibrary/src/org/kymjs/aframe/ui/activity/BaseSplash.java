@@ -15,12 +15,11 @@
  */
 package org.kymjs.aframe.ui.activity;
 
-import org.kymjs.kjlibrary.R;
-
 import android.view.KeyEvent;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
+import android.view.animation.AnimationSet;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
@@ -58,10 +57,12 @@ public abstract class BaseSplash extends BaseActivity {
     @Override
     protected void initWidget() {
         super.initWidget();
-        Animation animation = AnimationUtils.loadAnimation(this,
-                R.anim.alpha);
+        AnimationSet animationSet = new AnimationSet(true);
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0.2F, 0.9F);
+        alphaAnimation.setDuration(1000);
+        animationSet.addAnimation(alphaAnimation);
         // 监听动画过程
-        animation.setAnimationListener(new AnimationListener() {
+        animationSet.setAnimationListener(new AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 checkVersion();
@@ -76,7 +77,7 @@ public abstract class BaseSplash extends BaseActivity {
                 finish();
             }
         });
-        mImageView.setAnimation(animation);
+        mImageView.startAnimation(animationSet);
     }
 
     @Override

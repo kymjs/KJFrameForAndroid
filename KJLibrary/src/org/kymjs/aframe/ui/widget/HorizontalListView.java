@@ -26,12 +26,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import org.kymjs.kjlibrary.R;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -202,7 +199,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
         super(context, attrs);
         mEdgeGlowLeft = new EdgeEffectCompat(context);
         mEdgeGlowRight = new EdgeEffectCompat(context);
-        mGestureDetector = new GestureDetector(context, mGestureListener);
+        mGestureDetector = new GestureDetector(context,
+                mGestureListener);
         bindGestureDetector();
         initView();
         retrieveXmlConfiguration(context, attrs);
@@ -223,7 +221,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
         // process gestures
         final View.OnTouchListener gestureListenerHandler = new View.OnTouchListener() {
             @Override
-            public boolean onTouch(final View v, final MotionEvent event) {
+            public boolean onTouch(final View v,
+                    final MotionEvent event) {
                 // Delegate the touch event to our gesture detector
                 return mGestureDetector.onTouchEvent(event);
             }
@@ -245,8 +244,9 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
             while (view.getParent() instanceof View) {
                 if (view.getParent() instanceof ListView
                         || view.getParent() instanceof ScrollView) {
-                    view.getParent().requestDisallowInterceptTouchEvent(
-                            disallowIntercept);
+                    view.getParent()
+                            .requestDisallowInterceptTouchEvent(
+                                    disallowIntercept);
                     mIsParentVerticalScroll = disallowIntercept;
                     return;
                 }
@@ -255,26 +255,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
         }
     }
 
-    private void retrieveXmlConfiguration(Context context, AttributeSet attrs) {
-        if (attrs != null) {
-            TypedArray a = context.obtainStyledAttributes(attrs,
-                    R.styleable.HorizontalListView);
-
-            final Drawable d = a
-                    .getDrawable(R.styleable.HorizontalListView_android_divider);
-            if (d != null) {
-                setDivider(d);
-            }
-
-            final int dividerWidth = a.getDimensionPixelSize(
-                    R.styleable.HorizontalListView_dividerWidth, 0);
-            if (dividerWidth != 0) {
-                setDividerWidth(dividerWidth);
-            }
-
-            a.recycle();
-        }
-    }
+    private void retrieveXmlConfiguration(Context context,
+            AttributeSet attrs) {}
 
     @Override
     public Parcelable onSaveInstanceState() {
@@ -296,7 +278,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
             Bundle bundle = (Bundle) state;
 
             // Restore our state from the bundle
-            mRestoreX = Integer.valueOf((bundle.getInt(BUNDLE_ID_CURRENT_X)));
+            mRestoreX = Integer.valueOf((bundle
+                    .getInt(BUNDLE_ID_CURRENT_X)));
 
             // Restore out parent's state from the bundle
             super.onRestoreInstanceState(bundle
@@ -445,12 +428,13 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 
     private void measureChild(View child) {
         ViewGroup.LayoutParams childParams = getLayoutParams(child);
-        int childHeightSpec = ViewGroup.getChildMeasureSpec(mHeightMeasureSpec,
-                getPaddingTop() + getPaddingBottom(), childParams.height);
+        int childHeightSpec = ViewGroup.getChildMeasureSpec(
+                mHeightMeasureSpec, getPaddingTop()
+                        + getPaddingBottom(), childParams.height);
         int childWidthSpec;
         if (childParams.width > 0) {
-            childWidthSpec = MeasureSpec.makeMeasureSpec(childParams.width,
-                    MeasureSpec.EXACTLY);
+            childWidthSpec = MeasureSpec.makeMeasureSpec(
+                    childParams.width, MeasureSpec.EXACTLY);
         } else {
             childWidthSpec = MeasureSpec.makeMeasureSpec(0,
                     MeasureSpec.UNSPECIFIED);
@@ -471,8 +455,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 
     @SuppressLint("WrongCall")
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right,
-            int bottom) {
+    protected void onLayout(boolean changed, int left, int top,
+            int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (mAdapter == null) {
             return;
@@ -502,7 +486,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
             mNextX = 0;
             // 显示一个边缘效应吸收流速
             if (mEdgeGlowLeft.isFinished()) {
-                mEdgeGlowLeft.onAbsorb((int) determineFlingAbsorbVelocity());
+                mEdgeGlowLeft
+                        .onAbsorb((int) determineFlingAbsorbVelocity());
             }
 
             mFlingTracker.forceFinished(true);
@@ -511,7 +496,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
             mNextX = mMaxX;
             // 显示一个边缘效应吸收流速
             if (mEdgeGlowRight.isFinished()) {
-                mEdgeGlowRight.onAbsorb((int) determineFlingAbsorbVelocity());
+                mEdgeGlowRight
+                        .onAbsorb((int) determineFlingAbsorbVelocity());
             }
             mFlingTracker.forceFinished(true);
             setCurrentScrollState(OnScrollStateChangedListener.ScrollState.SCROLL_STATE_IDLE);
@@ -572,7 +558,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
             // We are very close to the edge, so enable the fading edge
             // proportional to the distance from the ednge, and the width of the
             // edge effect
-            return (float) (mMaxX - mCurrentX) / horizontalFadingEdgeLength;
+            return (float) (mMaxX - mCurrentX)
+                    / horizontalFadingEdgeLength;
         } else {
             // The distance from the maximum x position is more then the width
             // of the fading edge so enable it fully.
@@ -584,7 +571,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
     private float determineFlingAbsorbVelocity() {
         // 如果操作系统版本足够高得到真正的速度
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            return IceCreamSandwichPlus.getCurrVelocity(mFlingTracker);
+            return IceCreamSandwichPlus
+                    .getCurrVelocity(mFlingTracker);
         } else {
             // 无法获取速度，所以返回一个默认值
             // In actuality this is never used since EdgeEffectCompat does not
@@ -603,7 +591,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
     };
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    protected void onMeasure(int widthMeasureSpec,
+            int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         mHeightMeasureSpec = heightMeasureSpec;
     };
@@ -622,7 +611,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
             if (rightView != null) {
                 int oldMaxX = mMaxX;
                 // Determine the maximum x position
-                mMaxX = mCurrentX + (rightView.getRight() - getPaddingLeft())
+                mMaxX = mCurrentX
+                        + (rightView.getRight() - getPaddingLeft())
                         - getRenderWidth();
                 // Handle the case where the views do not fill at least 1 screen
                 if (mMaxX < 0) {
@@ -707,8 +697,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
             addAndMeasureChild(child, INSERT_AT_END_OF_LIST);
 
             // 第一个item是没有Divider的
-            rightEdge += (mRightViewAdapterIndex == 0 ? 0 : mDividerWidth)
-                    + child.getMeasuredWidth();
+            rightEdge += (mRightViewAdapterIndex == 0 ? 0
+                    : mDividerWidth) + child.getMeasuredWidth();
 
             // 检测我们是否正在运行low数据，通知监听器去获取更多
             determineIfLowOnData();
@@ -717,18 +707,21 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 
     private void fillListLeft(int leftEdge, final int dx) {
         // Loop adding views to the left until the screen is filled
-        while (leftEdge + dx - mDividerWidth > 0 && mLeftViewAdapterIndex >= 1) {
+        while (leftEdge + dx - mDividerWidth > 0
+                && mLeftViewAdapterIndex >= 1) {
             mLeftViewAdapterIndex--;
             View child = mAdapter.getView(mLeftViewAdapterIndex,
                     getRecycledView(mLeftViewAdapterIndex), this);
             addAndMeasureChild(child, INSERT_AT_START_OF_LIST);
             // 第一个item是没有Divider的
-            leftEdge -= mLeftViewAdapterIndex == 0 ? child.getMeasuredWidth()
-                    : mDividerWidth + child.getMeasuredWidth();
+            leftEdge -= mLeftViewAdapterIndex == 0 ? child
+                    .getMeasuredWidth() : mDividerWidth
+                    + child.getMeasuredWidth();
             // If on a clean edge then just remove the child, otherwise remove
             // the divider as well
-            mDisplayOffset -= leftEdge + dx == 0 ? child.getMeasuredWidth()
-                    : mDividerWidth + child.getMeasuredWidth();
+            mDisplayOffset -= leftEdge + dx == 0 ? child
+                    .getMeasuredWidth() : mDividerWidth
+                    + child.getMeasuredWidth();
         }
     }
 
@@ -753,7 +746,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
                 child.layout(left, top, right, bottom);
 
                 // Increment our offset by added child's size and divider width
-                leftOffset += child.getMeasuredWidth() + mDividerWidth;
+                leftOffset += child.getMeasuredWidth()
+                        + mDividerWidth;
             }
         }
     }
@@ -858,13 +852,15 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
             canvas.rotate(-90, 0, 0);
             canvas.translate(-height + getPaddingBottom(), 0);
 
-            mEdgeGlowLeft.setSize(getRenderHeight(), getRenderWidth());
+            mEdgeGlowLeft
+                    .setSize(getRenderHeight(), getRenderWidth());
             if (mEdgeGlowLeft.draw(canvas)) {
                 invalidate();
             }
 
             canvas.restoreToCount(restoreCount);
-        } else if (mEdgeGlowRight != null && !mEdgeGlowRight.isFinished()
+        } else if (mEdgeGlowRight != null
+                && !mEdgeGlowRight.isFinished()
                 && isEdgeGlowEnabled()) {
             // The Edge glow is meant to come from the top of the screen, so
             // rotate it to draw on the right side.
@@ -873,7 +869,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 
             canvas.rotate(90, 0, 0);
             canvas.translate(getPaddingTop(), -width);
-            mEdgeGlowRight.setSize(getRenderHeight(), getRenderWidth());
+            mEdgeGlowRight.setSize(getRenderHeight(),
+                    getRenderWidth());
             if (mEdgeGlowRight.draw(canvas)) {
                 invalidate();
             }
@@ -962,9 +959,10 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
         // child.
     }
 
-    protected boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-            float velocityY) {
-        mFlingTracker.fling(mNextX, 0, (int) -velocityX, 0, 0, mMaxX, 0, 0);
+    protected boolean onFling(MotionEvent e1, MotionEvent e2,
+            float velocityX, float velocityY) {
+        mFlingTracker.fling(mNextX, 0, (int) -velocityX, 0, 0, mMaxX,
+                0, 0);
         setCurrentScrollState(OnScrollStateChangedListener.ScrollState.SCROLL_STATE_FLING);
         requestLayout();
         return true;
@@ -983,7 +981,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 
         if (!mBlockTouchAction) {
             // Find the child that was pressed
-            final int index = getChildIndex((int) e.getX(), (int) e.getY());
+            final int index = getChildIndex((int) e.getX(),
+                    (int) e.getY());
             if (index >= 0) {
                 // Save off view being touched so it can later be released
                 mViewBeingTouched = getChildAt(index);
@@ -1019,10 +1018,10 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
         }
 
         @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                float velocityY) {
-            return HorizontalListView.this
-                    .onFling(e1, e2, velocityX, velocityY);
+        public boolean onFling(MotionEvent e1, MotionEvent e2,
+                float velocityX, float velocityY) {
+            return HorizontalListView.this.onFling(e1, e2, velocityX,
+                    velocityY);
         }
 
         @Override
@@ -1045,7 +1044,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
             unpressTouchedChild();
             OnItemClickListener onItemClickListener = getOnItemClickListener();
 
-            final int index = getChildIndex((int) e.getX(), (int) e.getY());
+            final int index = getChildIndex((int) e.getX(),
+                    (int) e.getY());
 
             // If the tap is inside one of the child views, and we are not
             // blocking touches
@@ -1054,8 +1054,9 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
                 int adapterIndex = mLeftViewAdapterIndex + index;
 
                 if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(HorizontalListView.this,
-                            child, adapterIndex,
+                    onItemClickListener.onItemClick(
+                            HorizontalListView.this, child,
+                            adapterIndex,
                             mAdapter.getItemId(adapterIndex));
                     return true;
                 }
@@ -1072,15 +1073,17 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
         public void onLongPress(MotionEvent e) {
             unpressTouchedChild();
 
-            final int index = getChildIndex((int) e.getX(), (int) e.getY());
+            final int index = getChildIndex((int) e.getX(),
+                    (int) e.getY());
             if (index >= 0 && !mBlockTouchAction) {
                 View child = getChildAt(index);
                 OnItemLongClickListener onItemLongClickListener = getOnItemLongClickListener();
                 if (onItemLongClickListener != null) {
                     int adapterIndex = mLeftViewAdapterIndex + index;
-                    boolean handled = onItemLongClickListener.onItemLongClick(
-                            HorizontalListView.this, child, adapterIndex,
-                            mAdapter.getItemId(adapterIndex));
+                    boolean handled = onItemLongClickListener
+                            .onItemLongClick(HorizontalListView.this,
+                                    child, adapterIndex,
+                                    mAdapter.getItemId(adapterIndex));
 
                     if (handled) {
                         // BZZZTT!!1!
@@ -1147,7 +1150,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
      *            The number of array adapter items that have not yet been
      *            displayed that is considered too low.
      */
-    public void setRunningOutOfDataListener(RunningOutOfDataListener listener,
+    public void setRunningOutOfDataListener(
+            RunningOutOfDataListener listener,
             int numberOfItemsLeftConsideredLow) {
         mRunningOutOfDataListener = listener;
         mRunningOutOfDataThreshold = numberOfItemsLeftConsideredLow;
@@ -1250,7 +1254,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
         // If the state actually changed then notify listener if there is one
         if (mCurrentScrollState != newScrollState
                 && mOnScrollStateChangedListener != null) {
-            mOnScrollStateChangedListener.onScrollStateChanged(newScrollState);
+            mOnScrollStateChangedListener
+                    .onScrollStateChanged(newScrollState);
         }
 
         mCurrentScrollState = newScrollState;
@@ -1280,7 +1285,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
                 int overscroll = Math.abs(scrolledOffset);
 
                 // Tell the edge glow to redraw itself at the new offset
-                mEdgeGlowLeft.onPull((float) overscroll / getRenderWidth());
+                mEdgeGlowLeft.onPull((float) overscroll
+                        / getRenderWidth());
 
                 // Cancel animating right glow
                 if (!mEdgeGlowRight.isFinished()) {
@@ -1293,7 +1299,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
                 int overscroll = Math.abs(scrolledOffset);
 
                 // Tell the edge glow to redraw itself at the new offset
-                mEdgeGlowRight.onPull((float) overscroll / getRenderWidth());
+                mEdgeGlowRight.onPull((float) overscroll
+                        / getRenderWidth());
 
                 // Cancel animating left glow
                 if (!mEdgeGlowLeft.isFinished()) {
@@ -1327,7 +1334,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
         }
 
         /** Sets the friction for the provided scroller */
-        public static void setFriction(Scroller scroller, float friction) {
+        public static void setFriction(Scroller scroller,
+                float friction) {
             if (scroller != null) {
                 scroller.setFriction(friction);
             }
