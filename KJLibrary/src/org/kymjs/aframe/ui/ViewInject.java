@@ -124,6 +124,18 @@ public class ViewInject {
     }
 
     /**
+     * 返回一个自定义View对话框
+     */
+    public AlertDialog getDialogView(Context cxt, String title,
+            View view) {
+        AlertDialog dialog = new AlertDialog.Builder(cxt).create();
+        dialog.setMessage(title);
+        dialog.setView(view);
+        dialog.show();
+        return dialog;
+    }
+
+    /**
      * 用于创建PopupWindow封装一些公用属性
      */
     private PopupWindow createWindow(View view, int w, int h, int argb) {
@@ -138,16 +150,18 @@ public class ViewInject {
      * 返回一个日期对话框
      */
     public void getDateDialog(String title, final TextView textView) {
-        final String[] time = SystemTool.getDataTime("yyyy-MM-dd").split("-");
+        final String[] time = SystemTool.getDataTime("yyyy-MM-dd")
+                .split("-");
         final int year = StringUtils.toInt(time[0], 0);
         final int month = StringUtils.toInt(time[1], 1);
         final int day = StringUtils.toInt(time[2], 0);
-        DatePickerDialog dialog = new DatePickerDialog(textView.getContext(),
-                new OnDateSetListener() {
+        DatePickerDialog dialog = new DatePickerDialog(
+                textView.getContext(), new OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year,
                             int monthOfYear, int dayOfMonth) {
-                        textView.setText(year + "-" + (monthOfYear + 1) + "-"
+                        textView.setText(year + "-"
+                                + (monthOfYear + 1) + "-"
                                 + dayOfMonth);
                     }
                 }, year, month - 1, day);
@@ -165,12 +179,13 @@ public class ViewInject {
      * @param cancel
      *            dialog是否可以被取消
      */
-    public static ProgressDialog getprogress(Activity aty, String msg,
-            boolean cancel) {
+    public static ProgressDialog getprogress(Activity aty,
+            String msg, boolean cancel) {
         // 实例化一个ProgressBarDialog
         ProgressDialog progressDialog = new ProgressDialog(aty);
         progressDialog.setMessage(msg);
-        progressDialog.getWindow().setLayout(DensityUtils.getScreenW(aty),
+        progressDialog.getWindow().setLayout(
+                DensityUtils.getScreenW(aty),
                 DensityUtils.getScreenH(aty));
         progressDialog.setCancelable(cancel);
         // 设置ProgressBarDialog的显示样式
