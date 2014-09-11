@@ -15,16 +15,14 @@
  */
 package org.kymjs.aframe.ui.widget;
 
-import org.kymjs.kjlibrary.R;
-
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -47,10 +45,10 @@ public class KJListViewHeader extends LinearLayout {
     private RefreshState mState = RefreshState.STATE_NORMAL;
 
     // widget
-    private LinearLayout layout; // 头部layout
-    private ImageView arrowImageView; // 指示箭头图片
     private ProgressBar progressBar; // 刷新中的环形等待条
     private TextView hintTextView; // 刷新提示文字（上拉刷新、下拉刷新、正在刷新）
+    RelativeLayout layout; // 头部layout
+    TextView timeTextView; // 刷新时间
 
     // anim
     private Animation rotateUpAnim;
@@ -69,25 +67,44 @@ public class KJListViewHeader extends LinearLayout {
      */
     private void initView(Context context) {
         // 初始情况，设置下拉刷新view高度为0
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT, 0);
-        layout = (LinearLayout) View.inflate(context,
-                R.layout.pagination_listview_header, null);
+        layout = new RelativeLayout(context);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        LinearLayout l = new LinearLayout(context);
+        l.setGravity(Gravity.CENTER);
+        l.setOrientation(LinearLayout.VERTICAL);
+        l.setLayoutParams(params);
+        hintTextView = new TextView(context);
+        hintTextView.setGravity(Gravity.CENTER);
+        timeTextView = new TextView(context);
+        timeTextView.setGravity(Gravity.CENTER);
+        l.addView(hintTextView);
+        l.addView(timeTextView);
+        layout.addView(l);
+        RelativeLayout.LayoutParams progressParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        progressParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        progressBar = new ProgressBar(context);
+        progressBar.setLayoutParams(progressParams);
+        progressBar.setPadding(20, 0, 0, 0);
+        layout.addView(progressBar);
         addView(layout, lp);
         setGravity(Gravity.BOTTOM);
-        arrowImageView = (ImageView) findViewById(R.id.pagination_header_arrow);
-        hintTextView = (TextView) findViewById(R.id.pagination_header_hint_textview);
-        progressBar = (ProgressBar) findViewById(R.id.pagination_header_progressbar);
 
         // 初始化箭头方向
         rotateUpAnim = new RotateAnimation(0.0f, -180.0f,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                0.5f);
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
         rotateUpAnim.setDuration(ROTATE_ANIM_DURATION);
         rotateUpAnim.setFillAfter(true);
         rotateDownAnim = new RotateAnimation(-180.0f, 0.0f,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-                0.5f);
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
         rotateDownAnim.setDuration(ROTATE_ANIM_DURATION);
         rotateDownAnim.setFillAfter(true);
     }
@@ -103,29 +120,17 @@ public class KJListViewHeader extends LinearLayout {
             return;
         // 刷新状态
         if (state == RefreshState.STATE_REFRESHING) {
-            arrowImageView.clearAnimation();
-            arrowImageView.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
         } else {
-            // 显示箭头图片
-            arrowImageView.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
         }
 
         switch (state) {
         case STATE_NORMAL:
-            if (mState == RefreshState.STATE_READY) {
-                arrowImageView.startAnimation(rotateDownAnim);
-            }
-            if (mState == RefreshState.STATE_REFRESHING) {
-                arrowImageView.clearAnimation();
-            }
             hintTextView.setText("有一种下拉可以刷新");
             break;
         case STATE_READY:
             if (mState != RefreshState.STATE_READY) {
-                arrowImageView.clearAnimation();
-                arrowImageView.startAnimation(rotateUpAnim);
                 hintTextView.setText("有一种刷新叫做放手");
             }
             break;

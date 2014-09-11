@@ -32,7 +32,7 @@ import android.view.View;
  */
 public abstract class SlidTemplet extends KJFragmentActivity
         implements OnMenuClickListener {
-    protected ResideMenu resideMenu;
+    public ResideMenu resideMenu;
 
     /** 设置Activity布局 */
     protected abstract int setRootViewID();

@@ -15,12 +15,12 @@
  */
 package org.kymjs.aframe.ui.widget;
 
-import org.kymjs.kjlibrary.R;
-
 import android.content.Context;
-import android.view.LayoutInflater;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -39,7 +39,7 @@ public class KJListViewFooter extends LinearLayout {
         STATE_LOADING // 正在刷新
     }
 
-    private View contentView;
+    private RelativeLayout contentView;
     private View progressBar;
     private TextView hintView;
 
@@ -52,16 +52,24 @@ public class KJListViewFooter extends LinearLayout {
      * 初始化底部组件
      */
     private void initView(Context context) {
-        LinearLayout moreView = (LinearLayout) LayoutInflater.from(context)
-                .inflate(R.layout.pagination_listview_footer, null);
-        addView(moreView);
-        moreView.setLayoutParams(new LinearLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-
-        contentView = moreView.findViewById(R.id.pagination_footer_content);
-        progressBar = moreView.findViewById(R.id.pagination_footer_progressbar);
-        hintView = (TextView) moreView
-                .findViewById(R.id.pagination_footer_hint_textview);
+        contentView = new RelativeLayout(context);
+        contentView.setPadding(10, 10, 10, 10);
+        contentView
+                .setLayoutParams(new RelativeLayout.LayoutParams(
+                        LayoutParams.MATCH_PARENT,
+                        LayoutParams.WRAP_CONTENT));
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        progressBar = new ProgressBar(context);
+        progressBar.setLayoutParams(params);
+        hintView = new TextView(context);
+        hintView.setLayoutParams(params);
+        hintView.setText("上拉查看更多");
+        hintView.setGravity(Gravity.CENTER);
+        contentView.addView(progressBar);
+        contentView.addView(hintView);
+        addView(contentView);
     }
 
     /**

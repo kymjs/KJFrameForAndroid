@@ -26,15 +26,15 @@ public class ListBitmapExample extends BaseFragment {
     private int count = 20;
 
     @Override
-    protected View inflaterView(LayoutInflater inflater, ViewGroup container,
-            Bundle bundle) {
+    protected View inflaterView(LayoutInflater inflater,
+            ViewGroup container, Bundle bundle) {
         aty = getActivity();
         kjb = KJBitmap.create();
         kjb.config.width = 520;
         kjb.config.height = (int) (520 * 0.45);
         kjb.config.loadingBitmap = BitmapCreate.bitmapFromResource(
-                getResources(), R.drawable.ic_launcher, kjb.config.width,
-                kjb.config.height);
+                getResources(), R.drawable.ic_launcher,
+                kjb.config.width, kjb.config.height);
         return inflater.inflate(R.layout.listview, null);
     }
 
@@ -87,7 +87,8 @@ public class ListBitmapExample extends BaseFragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView,
+                ViewGroup parent) {
             if (convertView == null) {
                 convertView = image = new ImageView(aty);
                 AbsListView.LayoutParams params = new AbsListView.LayoutParams(

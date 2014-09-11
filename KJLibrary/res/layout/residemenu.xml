@@ -19,7 +19,7 @@
         android:contentDescription="@null"
         android:scaleType="fitXY" />
 
-    <ScrollView
+    <org.kymjs.aframe.ui.widget.KJScrollView
         android:id="@+id/menu_scroll"
         android:layout_width="150dp"
         android:layout_height="fill_parent"
@@ -33,6 +33,6 @@
             android:layout_gravity="center_vertical"
             android:orientation="vertical" >
         </LinearLayout>
-    </ScrollView>
+    </org.kymjs.aframe.ui.widget.KJScrollView>
 
 </FrameLayout>

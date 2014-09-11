@@ -38,7 +38,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 /**
  * 本类是对菜单界面设置动画与样式<br>
@@ -55,7 +54,7 @@ public class ResideMenu extends FrameLayout implements
     private ImageView mImgShadow;
     private ImageView mImgBg;
     private LinearLayout mLayoutMenu;
-    private ScrollView mScrollMenu;
+    private KJScrollView mScrollMenu;
 
     // 动画效果
     private AnimatorSet animCloseForShadow;
@@ -91,7 +90,7 @@ public class ResideMenu extends FrameLayout implements
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.residemenu, this);
-        mScrollMenu = (ScrollView) findViewById(R.id.menu_scroll);
+        mScrollMenu = (KJScrollView) findViewById(R.id.menu_scroll);
         mImgShadow = (ImageView) findViewById(R.id.img_shadow);
         mLayoutMenu = (LinearLayout) findViewById(R.id.menu_layout);
         mImgBg = (ImageView) findViewById(R.id.img_bg);
@@ -139,10 +138,12 @@ public class ResideMenu extends FrameLayout implements
      */
     private void buildAnimationSet() {
         AnimListener animationListener = new AnimListener();
-        animCloseForAty = getCloseAnimation(menuParentView, 1.0f, 1.0f);
+        animCloseForAty = getCloseAnimation(menuParentView, 1.0f,
+                1.0f);
         animCloseForShadow = getCloseAnimation(mImgShadow, 1.0f, 1.0f);
         animOpenForAty = getOpenAnimation(menuParentView, 0.5f, 0.5f);
-        animOpenForShadow = getOpenAnimation(mImgShadow, shadowScaleX, 0.59f);
+        animOpenForShadow = getOpenAnimation(mImgShadow,
+                shadowScaleX, 0.59f);
         animCloseForAty.addListener(animationListener);
         animCloseForAty.playTogether(animCloseForShadow);
         animOpenForShadow.addListener(animationListener);
@@ -156,20 +157,20 @@ public class ResideMenu extends FrameLayout implements
      * @param targetScaleX
      * @param targetScaleY
      */
-    private AnimatorSet getOpenAnimation(View target, float targetScaleX,
-            float targetScaleY) {
+    private AnimatorSet getOpenAnimation(View target,
+            float targetScaleX, float targetScaleY) {
         int pivotX = (int) (DensityUtils.getScreenW(aty) * 1.5);
         int pivotY = (int) (DensityUtils.getScreenH(aty) * 0.5);
 
         target.setPivotX(pivotX);
         target.setPivotY(pivotY);
         AnimatorSet scaleDown = new AnimatorSet();
-        scaleDown.playTogether(
-                ObjectAnimator.ofFloat(target, "scaleX", targetScaleX),
-                ObjectAnimator.ofFloat(target, "scaleY", targetScaleY));
+        scaleDown.playTogether(ObjectAnimator.ofFloat(target,
+                "scaleX", targetScaleX), ObjectAnimator.ofFloat(
+                target, "scaleY", targetScaleY));
 
-        scaleDown.setInterpolator(AnimationUtils.loadInterpolator(aty,
-                android.R.anim.decelerate_interpolator));
+        scaleDown.setInterpolator(AnimationUtils.loadInterpolator(
+                aty, android.R.anim.decelerate_interpolator));
         scaleDown.setDuration(250);
         return scaleDown;
     }
@@ -181,12 +182,12 @@ public class ResideMenu extends FrameLayout implements
      * @param targetScaleX
      * @param targetScaleY
      */
-    private AnimatorSet getCloseAnimation(View target, float targetScaleX,
-            float targetScaleY) {
+    private AnimatorSet getCloseAnimation(View target,
+            float targetScaleX, float targetScaleY) {
         AnimatorSet scaleUp = new AnimatorSet();
-        scaleUp.playTogether(
-                ObjectAnimator.ofFloat(target, "scaleX", targetScaleX),
-                ObjectAnimator.ofFloat(target, "scaleY", targetScaleY));
+        scaleUp.playTogether(ObjectAnimator.ofFloat(target, "scaleX",
+                targetScaleX), ObjectAnimator.ofFloat(target,
+                "scaleY", targetScaleY));
         scaleUp.setDuration(250);
         return scaleUp;
     }
@@ -317,9 +318,9 @@ public class ResideMenu extends FrameLayout implements
         mLayoutMenu.addView(menuItem);
         menuItem.setAlpha(0.5F);
         AnimatorSet anim = new AnimatorSet();
-        anim.playTogether(
-                ObjectAnimator.ofFloat(menuItem, "translationX", -100.f, 0.0f),
-                ObjectAnimator.ofFloat(menuItem, "alpha", 0.0f, 1.0f));
+        anim.playTogether(ObjectAnimator.ofFloat(menuItem,
+                "translationX", -100.f, 0.0f), ObjectAnimator
+                .ofFloat(menuItem, "alpha", 0.0f, 1.0f));
 
         anim.setInterpolator(AnimationUtils.loadInterpolator(aty,
                 android.R.anim.anticipate_overshoot_interpolator));
@@ -355,12 +356,15 @@ public class ResideMenu extends FrameLayout implements
     }
 
     @Override
-    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent2,
-            float v, float v2) {
-        if (isInIgnoredView(motionEvent) || isInIgnoredView(motionEvent2))
+    public boolean onFling(MotionEvent motionEvent,
+            MotionEvent motionEvent2, float v, float v2) {
+        if (isInIgnoredView(motionEvent)
+                || isInIgnoredView(motionEvent2))
             return false;
-        int distanceX = (int) (motionEvent2.getX() - motionEvent.getX());
-        int distanceY = (int) (motionEvent2.getY() - motionEvent.getY());
+        int distanceX = (int) (motionEvent2.getX() - motionEvent
+                .getX());
+        int distanceY = (int) (motionEvent2.getY() - motionEvent
+                .getY());
         int screenWidth = (int) DensityUtils.getScreenW(aty);
         if (Math.abs(distanceY) > screenWidth * 0.3)
             return false;
@@ -390,8 +394,8 @@ public class ResideMenu extends FrameLayout implements
     }
 
     @Override
-    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2,
-            float v, float v2) {
+    public boolean onScroll(MotionEvent motionEvent,
+            MotionEvent motionEvent2, float v, float v2) {
         return false;
     }
 

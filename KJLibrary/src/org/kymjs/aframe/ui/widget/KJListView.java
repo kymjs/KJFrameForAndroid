@@ -17,7 +17,6 @@ package org.kymjs.aframe.ui.widget;
 
 import org.kymjs.aframe.ui.widget.KJListViewFooter.LoadMoreState;
 import org.kymjs.aframe.ui.widget.KJListViewHeader.RefreshState;
-import org.kymjs.kjlibrary.R;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -86,7 +85,8 @@ public class KJListView extends ListView implements OnScrollListener {
         initWithContext(context);
     }
 
-    public KJListView(Context context, AttributeSet attrs, int defStyle) {
+    public KJListView(Context context, AttributeSet attrs,
+            int defStyle) {
         super(context, attrs, defStyle);
         initWithContext(context);
     }
@@ -95,23 +95,24 @@ public class KJListView extends ListView implements OnScrollListener {
      * 初始化listview
      */
     private void initWithContext(Context context) {
-        mScroller = new Scroller(context, new DecelerateInterpolator());
+        mScroller = new Scroller(context,
+                new DecelerateInterpolator());
         // 绑定监听
         super.setOnScrollListener(this);
 
         // 初始化头部
         mHeaderView = new KJListViewHeader(context);
-        mHeaderViewContent = (RelativeLayout) mHeaderView
-                .findViewById(R.id.pagination_header_content);
-        mHeaderTimeView = (TextView) mHeaderView
-                .findViewById(R.id.pagination_header_time);
+        mHeaderViewContent = mHeaderView.layout;
+        mHeaderTimeView = mHeaderView.timeTextView;
+
         addHeaderView(mHeaderView);
         // 初始化头部高度
         mHeaderView.getViewTreeObserver().addOnGlobalLayoutListener(
                 new OnGlobalLayoutListener() {
                     @SuppressWarnings("deprecation")
                     public void onGlobalLayout() {
-                        mHeaderViewHeight = mHeaderViewContent.getHeight();
+                        mHeaderViewHeight = mHeaderViewContent
+                                .getHeight();
                         getViewTreeObserver()
                                 .removeGlobalOnLayoutListener(this);
                     }
@@ -322,7 +323,8 @@ public class KJListView extends ListView implements OnScrollListener {
                 if (mEnablePullRefresh
                         && mHeaderView.getVisibleHeight() > mHeaderViewHeight) {
                     mPullRefreshing = true;
-                    mHeaderView.setState(RefreshState.STATE_REFRESHING);
+                    mHeaderView
+                            .setState(RefreshState.STATE_REFRESHING);
                     if (mListViewListener != null) {
                         mListViewListener.onRefresh();
                     }
@@ -374,8 +376,8 @@ public class KJListView extends ListView implements OnScrollListener {
         // 发送给自己的监听器
         mTotalItemCount = totalItemCount;
         if (mScrollListener != null) {
-            mScrollListener.onScroll(view, firstVisibleItem, visibleItemCount,
-                    totalItemCount);
+            mScrollListener.onScroll(view, firstVisibleItem,
+                    visibleItemCount, totalItemCount);
         }
     }
 
