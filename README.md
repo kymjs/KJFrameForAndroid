@@ -1,16 +1,18 @@
 ﻿## ![logo](https://github.com/kymjs/KJFrameForAndroid/blob/master/KJFrameExample/logo.jpg) KJFrameForAndroid简介
 =================
-感谢支持KJFrameForAndroid的组织：[![Android Arsenal](http://img.shields.io/badge/Android%20Arsenal-KJFrameForAndroid-blue.svg?style=flat)](http://android-arsenal.com/details/1/836)
+感谢支持KJFrameForAndroid的社区与组织：<br>
+[![Android Arsenal](http://img.shields.io/badge/Android%20Arsenal-KJFrameForAndroid-blue.svg?style=flat)](http://android-arsenal.com/details/1/836)
 [![Travis CI](https://travis-ci.org/kymjs/KJFrameForAndroid.svg?)](https://travis-ci.org/kymjs/KJFrameForAndroid)
 [![BlackDuck OpenHUB](https://www.openhub.net/p/KJFrameForAndroid/widgets/project_thin_badge.gif)](https://www.openhub.net/p/KJFrameForAndroid)
-<br>   **KJFrameForAndroid** 又叫KJLibrary，是一个android的orm 和 ioc 框架。同时封装了android中的Bitmap与Http操作的框架，使其更加简单易用；<br>
-   KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复杂操作而达到简化Android应用级开发，最终实现快速而又安全的开发APP。我们提倡用最少的代码，完成最多的操作，用最高的效率，完成最复杂的功能。<br>
+[![OSChina](https://www.oschina.net/img/logo_s2.gif)](https://www.oschina.net/)
+<br>--- **KJFrameForAndroid** 又叫KJLibrary，是一个android的orm 和 ioc 框架。同时封装了android中的Bitmap与Http操作的框架，使其更加简单易用；<br>
+--- KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复杂操作而达到简化Android应用级开发，最终实现快速而又安全的开发APP。我们提倡用最少的代码，完成最多的操作，用最高的效率，完成最复杂的功能。<br>
 
 ## KJFrameForAndroid 相关链接
 * QQ群：[257053751](http://shang.qq.com/wpa/qunwpa?idkey=00d92c040e81d87ccd21f8d0fffb10640baaa66da45254c3bd329b6ff7d46fef)(开发者群1)
 * 项目地址：[https://github.com/kymjs/KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid)
 * 项目备用地址（可能不是最新代码）：[http://git.oschina.net/kymjs/KJFrameForAndroid](http://git.oschina.net/kymjs/KJFrameForAndroid)
-
+* 
 * ask question to [https://github.com/kymjs/KJFrameForAndroid/issues](https://github.com/kymjs/KJFrameForAndroid/issues)
 * wiki for English skip to [https://github.com/kymjs/KJFrameForAndroid/wiki](https://github.com/kymjs/KJFrameForAndroid/wiki)
 * 版本日志debug log [https://github.com/kymjs/KJFrameForAndroid/blob/master/debug_log.txt](https://github.com/kymjs/KJFrameForAndroid/blob/master/debug_log.txt)
@@ -239,7 +241,7 @@ public class Child{ //JavaBean
 List<Parent> all = db.findAll(Parent.class);
     for( Parent  item : all){
         if(item.getChildren ().getList().size()>0)
-            Toast.makeText(this,item.getText() + item.getChildren().getList().get(0).getText(),Toast.LENGTH_LONG).show();
+            ViewInject.toast(item.getText() + item.getChildren().getList().get(0).getText());
     }
 
 ```
@@ -248,16 +250,15 @@ List<Parent> all = db.findAll(Parent.class);
 
 ## 许可
 **本项目采用 Apache Licence 2.0 授权协议:<br>
-Apache Licence是著名的非盈利开源组织Apache采用的协议。该协议和BSD类似，同样鼓励代码共享和尊重原作者的著作权，同样允许代码修改，再发布（作为开源或商业软件）<br>
-[更多...](http://www.oschina.net/question/12_2828)<br>
+Apache Licence是著名的非盈利开源组织Apache采用的协议。该协议和BSD类似，同样鼓励代码共享和尊重原作者的著作权，同样允许代码修改，再发布（作为开源或商业软件）[更多...](http://www.oschina.net/question/12_2828)<br>
   Copyright (c) 2014, KJFrameForAndroid Open Source Project, Zhang Tao.
  
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
- 
-       [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
- 
+  
+       http://www.apache.org/licenses/LICENSE-2.0
+	   
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
