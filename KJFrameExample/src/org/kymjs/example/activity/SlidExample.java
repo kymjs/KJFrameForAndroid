@@ -57,6 +57,7 @@ public class SlidExample extends SlidTemplet {
                 "立即退出");
         // 必须调用initSlidMenu()才能初始化菜单项
         initSlidMenus(item1, item2, item3, item4, item5);
+        resideMenu.setShadowImg(R.drawable.shadow);
     }
 
     /**

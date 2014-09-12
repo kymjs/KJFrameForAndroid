@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kymjs.aframe.utils.DensityUtils;
-import org.kymjs.kjlibrary.R;
 
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
@@ -30,14 +29,16 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.view.GestureDetector;
-import android.view.LayoutInflater;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 /**
  * 本类是对菜单界面设置动画与样式<br>
@@ -87,13 +88,38 @@ public class ResideMenu extends FrameLayout implements
 
     public ResideMenu(Context context) {
         super(context);
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.residemenu, this);
-        mScrollMenu = (KJScrollView) findViewById(R.id.menu_scroll);
-        mImgShadow = (ImageView) findViewById(R.id.img_shadow);
-        mLayoutMenu = (LinearLayout) findViewById(R.id.menu_layout);
-        mImgBg = (ImageView) findViewById(R.id.img_bg);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT);
+
+        mImgBg = new ImageView(context);
+        mImgBg.setAdjustViewBounds(true);
+        mImgBg.setScaleType(ScaleType.CENTER_CROP);
+        mImgBg.setLayoutParams(params);
+        this.addView(mImgBg);
+
+        mImgShadow = new ImageView(context);
+        mImgShadow.setScaleType(ScaleType.FIT_XY);
+        mImgShadow.setLayoutParams(params);
+        this.addView(mImgShadow);
+
+        FrameLayout.LayoutParams scrollParams = new FrameLayout.LayoutParams(
+                DensityUtils.getScreenW((Activity) context) / 2 + 40,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
+        scrollParams.gravity = Gravity.CENTER_VERTICAL;
+        mScrollMenu = new KJScrollView(context);
+        mScrollMenu.setPadding(40, 0, 0, 0);
+        mScrollMenu.setVerticalScrollBarEnabled(false);
+        mScrollMenu.setLayoutParams(scrollParams);
+        ScrollView.LayoutParams menuParams = new ScrollView.LayoutParams(
+                ScrollView.LayoutParams.WRAP_CONTENT,
+                ScrollView.LayoutParams.WRAP_CONTENT);
+        mLayoutMenu = new LinearLayout(context);
+        mLayoutMenu.setGravity(Gravity.CENTER_VERTICAL);
+        mLayoutMenu.setOrientation(LinearLayout.VERTICAL);
+        mLayoutMenu.setLayoutParams(menuParams);
+        mScrollMenu.addView(mLayoutMenu);
+        this.addView(mScrollMenu);
     }
 
     /******************************* 初始化 ***********************************/
@@ -205,10 +231,21 @@ public class ResideMenu extends FrameLayout implements
      * 在activity下面显示阴影
      */
     public void setShadowVisible(boolean isVisible) {
-        if (isVisible)
-            mImgShadow.setImageResource(R.drawable.shadow);
-        else
-            mImgShadow.setImageBitmap(null);
+        if (isVisible) {
+            mImgShadow.setVisibility(View.VISIBLE);
+        } else {
+            mImgShadow.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 设置在activity下面显示的阴影图片
+     * 
+     * @param resId
+     *            图片的资源ID
+     */
+    public void setShadowImg(int resId) {
+        mImgShadow.setImageResource(resId);
     }
 
     public boolean isOpened() {
