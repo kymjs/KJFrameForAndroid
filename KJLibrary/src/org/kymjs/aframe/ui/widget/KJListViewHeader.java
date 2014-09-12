@@ -17,11 +17,7 @@ package org.kymjs.aframe.ui.widget;
 
 import android.content.Context;
 import android.view.Gravity;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -44,18 +40,14 @@ public class KJListViewHeader extends LinearLayout {
     // flag
     private RefreshState mState = RefreshState.STATE_NORMAL;
 
+    private String normal = "有一种下拉可以刷新";
+    private String ready = "有一种刷新叫做放手";
+    private String refreshing = "正在刷新…";
+
     // widget
-    private ProgressBar progressBar; // 刷新中的环形等待条
     private TextView hintTextView; // 刷新提示文字（上拉刷新、下拉刷新、正在刷新）
     RelativeLayout layout; // 头部layout
     TextView timeTextView; // 刷新时间
-
-    // anim
-    private Animation rotateUpAnim;
-    private Animation rotateDownAnim;
-
-    // data
-    private final int ROTATE_ANIM_DURATION = 180;
 
     public KJListViewHeader(Context context) {
         super(context);
@@ -85,28 +77,8 @@ public class KJListViewHeader extends LinearLayout {
         l.addView(hintTextView);
         l.addView(timeTextView);
         layout.addView(l);
-        RelativeLayout.LayoutParams progressParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        progressParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        progressBar = new ProgressBar(context);
-        progressBar.setLayoutParams(progressParams);
-        progressBar.setPadding(20, 0, 0, 0);
-        layout.addView(progressBar);
         addView(layout, lp);
         setGravity(Gravity.BOTTOM);
-
-        // 初始化箭头方向
-        rotateUpAnim = new RotateAnimation(0.0f, -180.0f,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f);
-        rotateUpAnim.setDuration(ROTATE_ANIM_DURATION);
-        rotateUpAnim.setFillAfter(true);
-        rotateDownAnim = new RotateAnimation(-180.0f, 0.0f,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f);
-        rotateDownAnim.setDuration(ROTATE_ANIM_DURATION);
-        rotateDownAnim.setFillAfter(true);
     }
 
     /**
@@ -118,24 +90,17 @@ public class KJListViewHeader extends LinearLayout {
     public void setState(RefreshState state) {
         if (state == mState)
             return;
-        // 刷新状态
-        if (state == RefreshState.STATE_REFRESHING) {
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            progressBar.setVisibility(View.INVISIBLE);
-        }
-
         switch (state) {
         case STATE_NORMAL:
-            hintTextView.setText("有一种下拉可以刷新");
+            hintTextView.setText(normal);
             break;
         case STATE_READY:
             if (mState != RefreshState.STATE_READY) {
-                hintTextView.setText("有一种刷新叫做放手");
+                hintTextView.setText(ready);
             }
             break;
         case STATE_REFRESHING:
-            hintTextView.setText("正在刷新…");
+            hintTextView.setText(refreshing);
             break;
         default:
         }
@@ -160,5 +125,35 @@ public class KJListViewHeader extends LinearLayout {
      */
     public int getVisibleHeight() {
         return layout.getHeight();
+    }
+
+    /**
+     * 设置下拉时的显示文字
+     * 
+     * @param normal
+     *            刚开始下拉，还没有到放手的状态
+     */
+    public void setNormal(String normal) {
+        this.normal = normal;
+    }
+
+    /**
+     * 设置下拉回放时的显示文字
+     * 
+     * @param ready
+     *            下拉完成后向上收缩，准备刷新时的状态
+     */
+    public void setReady(String ready) {
+        this.ready = ready;
+    }
+
+    /**
+     * 设置刷新时的文字
+     * 
+     * @param refreshing
+     *            正在刷新的状态
+     */
+    public void setRefreshing(String refreshing) {
+        this.refreshing = refreshing;
     }
 }

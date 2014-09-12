@@ -46,10 +46,11 @@ public class KJListView extends ListView implements OnScrollListener {
     private KJListViewListener mListViewListener;
 
     // widget
-    public KJListViewHeader mHeaderView; // 头部控件
+    private KJListViewHeader mHeaderView; // 头部控件
     private TextView mHeaderTimeView; // 头部显示上次刷新时间的控件
     private RelativeLayout mHeaderViewContent;// 头部控件的layout（依靠它计算头部的显示高度）
     private KJListViewFooter mFooterView; // 底部控件
+    private RelativeLayout mFooterViewContent; // 底部内容View
 
     // data
     private float mLastY = -1;
@@ -119,6 +120,7 @@ public class KJListView extends ListView implements OnScrollListener {
                 });
         // 初始化底部
         mFooterView = new KJListViewFooter(context);
+        mFooterViewContent = mFooterView.contentView;
     }
 
     @Override
@@ -130,85 +132,103 @@ public class KJListView extends ListView implements OnScrollListener {
         super.setAdapter(adapter);
     }
 
-    /**
-     * 是否开启下拉刷新功能
-     */
-    public void setPullRefreshEnable(boolean enable) {
-        mEnablePullRefresh = enable;
-        if (!mEnablePullRefresh) {
-            // 不允许
-            mHeaderViewContent.setVisibility(View.INVISIBLE);
-        } else {
-            mHeaderViewContent.setVisibility(View.VISIBLE);
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        if (mLastY == -1) {
+            mLastY = ev.getRawY();
         }
-    }
 
-    /**
-     * 是否开启上拉加载更多数据功能
-     */
-    public void setPullLoadEnable(boolean enable) {
-        mEnablePullLoad = enable;
-        if (!mEnablePullLoad) {
-            // 不允许
-            mFooterView.hide();
-            mFooterView.setOnClickListener(null);
-        } else {
-            mPullLoading = false;
-            mFooterView.show();
-            mFooterView.setState(LoadMoreState.STATE_NORMAL);
-            // 上拉或点击最后一行 都可以加载更多
-            mFooterView.setOnClickListener(new OnClickListener() {
-                public void onClick(View v) {
+        switch (ev.getAction()) {
+        case MotionEvent.ACTION_DOWN:
+            mLastY = ev.getRawY();
+            break;
+        case MotionEvent.ACTION_MOVE:
+            final float deltaY = ev.getRawY() - mLastY;
+            mLastY = ev.getRawY();
+            if (getFirstVisiblePosition() == 0
+                    && (mHeaderView.getVisibleHeight() > 0 || deltaY > 0)) {
+                // 第一项正在显示，标题显示或拉下来。
+                updateHeaderHeight(deltaY / OFFSET_RADIO);
+                invokeOnScrolling();
+            } else if (getLastVisiblePosition() == mTotalItemCount - 1
+                    && (mFooterView.getBottomMargin() > 0 || deltaY < 0)) {
+                // 最后一项，已经拉起或想拉起来。
+                updateFooterHeight(-deltaY / OFFSET_RADIO);
+            }
+            break;
+        default:
+            mLastY = -1; // reset
+            if (getFirstVisiblePosition() == 0) {
+                // 调用刷新
+                if (mEnablePullRefresh
+                        && mHeaderView.getVisibleHeight() > mHeaderViewHeight) {
+                    mPullRefreshing = true;
+                    mHeaderView
+                            .setState(RefreshState.STATE_REFRESHING);
+                    if (mListViewListener != null) {
+                        mListViewListener.onRefresh();
+                    }
+                }
+                resetHeaderHeight();
+            } else if (getLastVisiblePosition() <= mTotalItemCount) {
+                // 调用加载更多
+                if (mEnablePullLoad
+                        && mFooterView.getBottomMargin() > PULL_LOAD_MORE_DELTA) {
                     startLoadMore();
                 }
-            });
+                resetFooterHeight();
+            }
+            break;
+        }
+        return super.onTouchEvent(ev);
+    }
+
+    @Override
+    public void computeScroll() {
+        if (mScroller.computeScrollOffset()) {
+            if (mScrollBack == ScrollBackEnum.SCROLLBACK_HEADER) {
+                mHeaderView.setVisibleHeight(mScroller.getCurrY());
+            } else {
+                mFooterView.setBottomMargin(mScroller.getCurrY());
+            }
+            postInvalidate();
+            invokeOnScrolling();
+        }
+        super.computeScroll();
+    }
+
+    /**
+     * 滚动状态改变
+     */
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (mScrollListener != null) {
+            mScrollListener.onScrollStateChanged(view, scrollState);
         }
     }
 
-    /**
-     * 停止刷新，重置头部
-     */
-    public void stopPullRefresh() {
-        if (mPullRefreshing == true) {
-            mPullRefreshing = false;
-            resetHeaderHeight();
+    public void onScroll(AbsListView view, int firstVisibleItem,
+            int visibleItemCount, int totalItemCount) {
+        // 发送给自己的监听器
+        mTotalItemCount = totalItemCount;
+        if (mScrollListener != null) {
+            mScrollListener.onScroll(view, firstVisibleItem,
+                    visibleItemCount, totalItemCount);
         }
     }
 
-    /**
-     * 停止加载更多，重置底部
-     */
-    public void stopLoadMore() {
-        if (mPullLoading == true) {
-            mPullLoading = false;
-            mFooterView.setState(LoadMoreState.STATE_NORMAL);
-        }
+    @Override
+    public void setOnScrollListener(OnScrollListener l) {
+        mScrollListener = l;
     }
 
-    /**
-     * 停止刷新（方便外界调用，做一次封装）
-     */
-    public void stopRefreshData() {
-        stopPullRefresh();
-        stopLoadMore();
-    }
-
-    /**
-     * 设置刷新时间
-     * 
-     * @param time
-     */
-    public void setRefreshTime(String time) {
-        mHeaderTimeView.setText(time);
-    }
-
+    /************************ private config method ***************************/
     /**
      * 当头部或底部拉起后，调用它返回重置
      */
     private void invokeOnScrolling() {
-        if (mScrollListener instanceof OnXScrollListener) {
-            OnXScrollListener l = (OnXScrollListener) mScrollListener;
-            l.onXScrolling(this);
+        if (mScrollListener instanceof OnKJScrollListener) {
+            OnKJScrollListener l = (OnKJScrollListener) mScrollListener;
+            l.onKJScrolling(this);
         }
     }
 
@@ -292,93 +312,24 @@ public class KJListView extends ListView implements OnScrollListener {
         }
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        if (mLastY == -1) {
-            mLastY = ev.getRawY();
-        }
+    /************************ public config method ****************************/
 
-        switch (ev.getAction()) {
-        case MotionEvent.ACTION_DOWN:
-            mLastY = ev.getRawY();
-            break;
-        case MotionEvent.ACTION_MOVE:
-            final float deltaY = ev.getRawY() - mLastY;
-            mLastY = ev.getRawY();
-            if (getFirstVisiblePosition() == 0
-                    && (mHeaderView.getVisibleHeight() > 0 || deltaY > 0)) {
-                // 第一项正在显示，标题显示或拉下来。
-                updateHeaderHeight(deltaY / OFFSET_RADIO);
-                invokeOnScrolling();
-            } else if (getLastVisiblePosition() == mTotalItemCount - 1
-                    && (mFooterView.getBottomMargin() > 0 || deltaY < 0)) {
-                // 最后一项，已经拉起或想拉起来。
-                updateFooterHeight(-deltaY / OFFSET_RADIO);
-            }
-            break;
-        default:
-            mLastY = -1; // reset
-            if (getFirstVisiblePosition() == 0) {
-                // 调用刷新
-                if (mEnablePullRefresh
-                        && mHeaderView.getVisibleHeight() > mHeaderViewHeight) {
-                    mPullRefreshing = true;
-                    mHeaderView
-                            .setState(RefreshState.STATE_REFRESHING);
-                    if (mListViewListener != null) {
-                        mListViewListener.onRefresh();
-                    }
-                }
-                resetHeaderHeight();
-            } else if (getLastVisiblePosition() <= mTotalItemCount) {
-                // 调用加载更多
-                if (mEnablePullLoad
-                        && mFooterView.getBottomMargin() > PULL_LOAD_MORE_DELTA) {
-                    startLoadMore();
-                }
-                resetFooterHeight();
-            }
-            break;
-        }
-        return super.onTouchEvent(ev);
-    }
-
-    @Override
-    public void computeScroll() {
-        if (mScroller.computeScrollOffset()) {
-            if (mScrollBack == ScrollBackEnum.SCROLLBACK_HEADER) {
-                mHeaderView.setVisibleHeight(mScroller.getCurrY());
-            } else {
-                mFooterView.setBottomMargin(mScroller.getCurrY());
-            }
-            postInvalidate();
-            invokeOnScrolling();
-        }
-        super.computeScroll();
-    }
-
-    @Override
-    public void setOnScrollListener(OnScrollListener l) {
-        mScrollListener = l;
+    /**
+     * 返回头控件布局
+     * 
+     * @return 返回一个相对布局，开发者可自定义布局内容
+     */
+    public RelativeLayout getHeadView() {
+        return mHeaderViewContent;
     }
 
     /**
-     * 滚动状态改变
+     * 返回尾控件布局
+     * 
+     * @return 返回一个相对布局，开发者可自定义布局内容
      */
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (mScrollListener != null) {
-            mScrollListener.onScrollStateChanged(view, scrollState);
-        }
-    }
-
-    public void onScroll(AbsListView view, int firstVisibleItem,
-            int visibleItemCount, int totalItemCount) {
-        // 发送给自己的监听器
-        mTotalItemCount = totalItemCount;
-        if (mScrollListener != null) {
-            mScrollListener.onScroll(view, firstVisibleItem,
-                    visibleItemCount, totalItemCount);
-        }
+    public RelativeLayout getFooterView() {
+        return mFooterViewContent;
     }
 
     /**
@@ -389,10 +340,124 @@ public class KJListView extends ListView implements OnScrollListener {
     }
 
     /**
+     * 设置下拉时的显示文字
+     * 
+     * @param normal
+     *            刚开始下拉，还没有到放手的状态
+     */
+    public void setNormalText(String normal) {
+        mHeaderView.setNormal(normal);
+    }
+
+    /**
+     * 设置下拉回放时的显示文字
+     * 
+     * @param ready
+     *            下拉完成后向上收缩，准备刷新时的状态
+     */
+    public void setReady(String ready) {
+        mHeaderView.setReady(ready);
+    }
+
+    /**
+     * 设置下拉刷新时的文字
+     * 
+     * @param refreshing
+     *            正在刷新的状态
+     */
+    public void setRefreshing(String refreshing) {
+        mHeaderView.setRefreshing(refreshing);
+    }
+
+    /**
+     * 设置上拉刷新时的文字
+     * 
+     * @param refreshing
+     *            正在刷新的状态
+     */
+    public void setLoadMoreText(String refreshing) {
+        mFooterView.setRefreshing(refreshing);
+    }
+
+    /**
+     * 设置刷新时间
+     * 
+     * @param time
+     */
+    public void setRefreshTime(String time) {
+        mHeaderTimeView.setText(time);
+    }
+
+    /**
+     * 是否开启下拉刷新功能
+     */
+    public void setPullRefreshEnable(boolean enable) {
+        mEnablePullRefresh = enable;
+        if (!mEnablePullRefresh) {
+            // 不允许
+            mHeaderViewContent.setVisibility(View.INVISIBLE);
+        } else {
+            mHeaderViewContent.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * 是否开启上拉加载更多数据功能
+     */
+    public void setPullLoadEnable(boolean enable) {
+        mEnablePullLoad = enable;
+        if (!mEnablePullLoad) {
+            // 不允许
+            mFooterView.hide();
+            mFooterView.setOnClickListener(null);
+        } else {
+            mPullLoading = false;
+            mFooterView.show();
+            mFooterView.setState(LoadMoreState.STATE_NORMAL);
+            // 上拉或点击最后一行 都可以加载更多
+            mFooterView.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {
+                    startLoadMore();
+                }
+            });
+        }
+    }
+
+    /**
+     * 停止刷新（方便外界调用，做一次封装）
+     */
+    public void stopRefreshData() {
+        stopPullRefresh();
+        stopLoadMore();
+    }
+
+    /**
+     * 停止刷新，重置头部
+     */
+    public void stopPullRefresh() {
+        if (mPullRefreshing == true) {
+            mPullRefreshing = false;
+            resetHeaderHeight();
+        }
+    }
+
+    /**
+     * 停止加载更多，重置底部
+     */
+    public void stopLoadMore() {
+        if (mPullLoading == true) {
+            mPullLoading = false;
+            mFooterView.setState(LoadMoreState.STATE_NORMAL);
+        }
+    }
+
+    /************************* interface call back ****************************/
+
+    /**
      * 它将调用onxscrolling当页眉/页脚退回。
      */
-    public interface OnXScrollListener extends OnScrollListener {
-        public void onXScrolling(View view);
+    public interface OnKJScrollListener extends OnScrollListener {
+        public void onKJScrolling(View view);
     }
 
     /**

@@ -43,6 +43,7 @@ public class ListBitmapExample extends BaseFragment {
         super.initWidget(parentView);
         final ListviewAdapter adapter = new ListviewAdapter();
         listview.setAdapter(adapter);
+        listview.getHeadView().setBackgroundResource(R.drawable.bg);
         // 上拉刷新需要手动开启，下拉刷新默认开启
         listview.setPullLoadEnable(true);
         listview.setKJListViewListener(new KJListViewListener() {

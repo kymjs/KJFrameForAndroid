@@ -39,7 +39,9 @@ public class KJListViewFooter extends LinearLayout {
         STATE_LOADING // 正在刷新
     }
 
-    private RelativeLayout contentView;
+    private String refreshing = "上拉查看更多";
+
+    RelativeLayout contentView;
     private View progressBar;
     private TextView hintView;
 
@@ -65,7 +67,7 @@ public class KJListViewFooter extends LinearLayout {
         progressBar.setLayoutParams(params);
         hintView = new TextView(context);
         hintView.setLayoutParams(params);
-        hintView.setText("上拉查看更多");
+        hintView.setText(refreshing);
         hintView.setGravity(Gravity.CENTER);
         contentView.addView(progressBar);
         contentView.addView(hintView);
@@ -150,5 +152,15 @@ public class KJListViewFooter extends LinearLayout {
                 .getLayoutParams();
         params.height = LayoutParams.WRAP_CONTENT;
         contentView.setLayoutParams(params);
+    }
+
+    /**
+     * 设置上拉刷新时的文字
+     * 
+     * @param refreshing
+     *            正在刷新的状态
+     */
+    public void setRefreshing(String refreshing) {
+        this.refreshing = refreshing;
     }
 }
