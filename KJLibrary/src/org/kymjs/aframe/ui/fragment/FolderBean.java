@@ -44,5 +44,4 @@ final class FolderBean {
     public void setFilePath(List<String> filePath) {
         this.filePath = filePath;
     }
-
 }

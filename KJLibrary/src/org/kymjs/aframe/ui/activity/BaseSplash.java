@@ -74,7 +74,6 @@ public abstract class BaseSplash extends BaseActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 redirectTo();
-                finish();
             }
         });
         mImageView.startAnimation(animationSet);

@@ -41,7 +41,7 @@ public abstract class BaseActivity extends KJFrameActivity {
      * 当前Activity状态
      */
     public static enum ActivityState {
-        RESUME, STOP, PAUSE, DESTROY
+        RESUME, PAUSE, STOP, DESTROY
     }
 
     /**
@@ -245,7 +245,7 @@ public abstract class BaseActivity extends KJFrameActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (mOpenBackListener && keyCode == KeyEvent.KEYCODE_BACK
-                && KJActivityManager.create().getCount() < 2) {
+                && KJActivityManager.create().getCount() < 1) {
             ViewInject.create().getExitDialog(this);
         }
         return super.onKeyDown(keyCode, event);
