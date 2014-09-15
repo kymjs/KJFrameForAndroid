@@ -68,7 +68,8 @@ public class Downloader implements I_ImageLoder {
                     showLogIfOpen("download success, from be disk cache\n"
                             + imagePath);
                 } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                    KJLoger.debug(getClass().getName()
+                            + "file not found exception", e);
                 }
             }
             file = null;
@@ -104,7 +105,8 @@ public class Downloader implements I_ImageLoder {
                     + imagePath);
         } catch (Exception e) {
             doFailureCallBack(imagePath, e);
-            e.printStackTrace();
+            KJLoger.debug(getClass().getName()
+                    + ".loadImgFromNet() error", e);
         } finally {
             if (con != null) {
                 con.disconnect();
@@ -132,7 +134,8 @@ public class Downloader implements I_ImageLoder {
             }
         } catch (FileNotFoundException e) {
             doFailureCallBack(imagePath, e);
-            e.printStackTrace();
+            KJLoger.debug(getClass().getName()
+                    + ".loadImgFromFile() error", e);
         } finally {
             FileUtils.closeIO(fis);
         }

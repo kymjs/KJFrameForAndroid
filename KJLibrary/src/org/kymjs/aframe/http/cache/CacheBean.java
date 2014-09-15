@@ -28,10 +28,10 @@ import org.kymjs.aframe.database.annotate.Table;
  * @version 1.0
  */
 @Table(name = "kj_http_cache")
-final class CacheBean {
+public final class CacheBean {
 
     @Id(column = "id")
-    private int id;
+    int id;
     long createTime; // 创建时间
     long effectiveTime; // 有效期
     long overdueTime; // 过期时间
