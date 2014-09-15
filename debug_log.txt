@@ -28,4 +28,7 @@ KJFrameForAndroid正式版发布:
 
 完美解决通过jar引用框架和通过源码引用框架造成的冲突问题。
 重构KJHttpLibrary，优化代码可读性与并发线程执行效率。
+解决使用KJHTTP报access to class not allowed错误		（来自github rzyloveldm 提交BUG）
+解决使用KJbitmap.display(w,h)无效的问题			（来自QQ群 Sunday 提交BUG）
 ===========================================================================================
+

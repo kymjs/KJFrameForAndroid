@@ -19,8 +19,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.kymjs.aframe.KJLoger;
-import org.kymjs.aframe.bitmap.utils.BitmapMemoryCache;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
+import org.kymjs.aframe.bitmap.utils.BitmapMemoryCache;
 import org.kymjs.aframe.core.KJTaskExecutor;
 import org.kymjs.aframe.utils.CipherUtils;
 
@@ -195,7 +195,7 @@ public class KJBitmap {
             BitmapWorkerTask task = new BitmapWorkerTask(imageView,
                     imageUrl);
             taskCollection.add(task);
-            task.execute();
+            task.execute(config.width, config.height);
         }
 
     }
@@ -267,7 +267,7 @@ public class KJBitmap {
 
     /********************* 异步获取Bitmap并设置image的任务类 *********************/
     private class BitmapWorkerTask extends
-            KJTaskExecutor<Void, Void, Bitmap> {
+            KJTaskExecutor<Integer, Void, Bitmap> {
         private View view;
         private String url;
 
@@ -278,12 +278,12 @@ public class KJBitmap {
         }
 
         @Override
-        protected Bitmap doInBackground(Void... _void) {
+        protected Bitmap doInBackground(Integer... wandh) {
             Bitmap bmp = null;
             byte[] res = downloader.loadImage(url); // 调用加载器加载url中的图片
             if (res != null) {
                 bmp = BitmapCreate.bitmapFromByteArray(res, 0,
-                        res.length, config.width, config.height);
+                        res.length, wandh[0], wandh[1]);
             }
             if (bmp != null && config.openMemoryCache) {
                 putBmpToMC(url, bmp); // 图片载入完成后缓存到LrcCache中
