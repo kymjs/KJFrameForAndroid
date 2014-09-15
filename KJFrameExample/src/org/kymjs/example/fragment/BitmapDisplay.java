@@ -61,7 +61,8 @@ public class BitmapDisplay extends BaseFragment {
             // 载入网络图片
             kjb.display(
                     imageView,
-                    "http://imgsrc.baidu.com/forum/w%3D580/sign=b16bfbd859b5c9ea62f303ebe53bb622/588e5ece36d3d53933f0c2103887e950372ab0fd.jpg");
+                    "http://imgsrc.baidu.com/forum/w%3D580/sign=b16bfbd859b5c9ea62f303ebe53bb622/588e5ece36d3d53933f0c2103887e950372ab0fd.jpg",
+                    50, 50);
             break;
         case R.id.button3:
             KJBitmap kjbitmap = KJBitmap.create();

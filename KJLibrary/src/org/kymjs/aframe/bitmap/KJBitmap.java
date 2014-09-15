@@ -20,6 +20,7 @@ import java.util.Set;
 
 import org.kymjs.aframe.KJLoger;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
+import org.kymjs.aframe.bitmap.utils.BitmapHelper;
 import org.kymjs.aframe.bitmap.utils.BitmapMemoryCache;
 import org.kymjs.aframe.core.KJTaskExecutor;
 import org.kymjs.aframe.utils.CipherUtils;
@@ -190,14 +191,37 @@ public class KJBitmap {
                     + imageUrl);
             showProgressIfOpen(imageView, imageUrl);
         } else {
-            // 在内存缓存中没有图片，去加载图片
-            viewSetImage(imageView, config.loadingBitmap);
-            BitmapWorkerTask task = new BitmapWorkerTask(imageView,
-                    imageUrl);
-            taskCollection.add(task);
-            task.execute(config.width, config.height);
+            disPlayFromNet(imageView, imageUrl);
         }
+    }
 
+    /**
+     * 启动网络加载图片任务
+     * 
+     * @param imageView
+     * @param imageUrl
+     */
+    private void disPlayFromNet(View imageView, String imageUrl) {
+        // 开启task的时候先检查传进来的这个view是否已经有一个task是为它执行
+        for (BitmapWorkerTask task : taskCollection) {
+            if (task.getView().equals(imageView)) {
+                // 是同一个url的话就不用开新的task，不一样就取消掉之前开新的
+                if (!task.getUrl().equals(imageUrl)) {
+                    task.cancelTask();
+                    task.reExecute(imageView, imageUrl, config.width,
+                            config.height);
+                    return;
+                } else {
+                    return;
+                }
+            }
+        }
+        // 在内存缓存中没有图片，去加载图片
+        viewSetImage(imageView, config.loadingBitmap);
+        BitmapWorkerTask task = new BitmapWorkerTask(imageView,
+                imageUrl);
+        taskCollection.add(task);
+        task.execute(config.width, config.height);
     }
 
     /**
@@ -277,13 +301,37 @@ public class KJBitmap {
             this.view.setTag(url);
         }
 
+        public View getView() {
+            return view;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        // 重新加载任务
+        public void reExecute(View view, String url,
+                Integer... params) {
+            this.view = view;
+            this.url = url;
+            this.view.setTag(url);
+            this.execute(params);
+        }
+
+        // 取消当前正在进行的任务
+        public boolean cancelTask() {
+            showLogIfOpen("task->" + this.url + "has been canceled");
+            return this.cancel(true);
+        }
+
         @Override
-        protected Bitmap doInBackground(Integer... wandh) {
+        protected Bitmap doInBackground(Integer... wAndh) {
             Bitmap bmp = null;
             byte[] res = downloader.loadImage(url); // 调用加载器加载url中的图片
             if (res != null) {
                 bmp = BitmapCreate.bitmapFromByteArray(res, 0,
-                        res.length, wandh[0], wandh[1]);
+                        res.length, wAndh[0], wAndh[1]);
+                bmp = BitmapHelper.scale(bmp, wAndh[0], wAndh[1]);
             }
             if (bmp != null && config.openMemoryCache) {
                 putBmpToMC(url, bmp); // 图片载入完成后缓存到LrcCache中
