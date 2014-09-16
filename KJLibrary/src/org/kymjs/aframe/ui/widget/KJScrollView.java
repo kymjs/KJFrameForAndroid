@@ -52,11 +52,20 @@ public class KJScrollView extends ScrollView {
 
     public KJScrollView(Context context) {
         super(context);
+        init(context);
     }
 
     public KJScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init(context);
     }
+
+    /**
+     * 初始化上下拉的控件布局
+     * 
+     * @param context
+     */
+    private void init(Context context) {}
 
     @Override
     protected void onFinishInflate() {
@@ -140,8 +149,9 @@ public class KJScrollView extends ScrollView {
      * 将内容布局移动到原位置 可以在UP事件中调用, 也可以在其他需要的地方调用, 如手指移动到当前ScrollView外时
      */
     private void boundBack() {
-        if (!isMoved)
+        if (!isMoved) {
             return; // 如果没有移动布局， 则跳过执行
+        }
         // 开启动画
         TranslateAnimation anim = new TranslateAnimation(0, 0,
                 contentView.getTop(), originalRect.top);
@@ -171,4 +181,14 @@ public class KJScrollView extends ScrollView {
     private boolean isCanPullUp() {
         return contentView.getHeight() <= getHeight() + getScrollY();
     }
+
+    /**
+     * 设置上下拉刷新的监听器(本功能暂未完成，不对外开放本方法)
+     */
+    private void setOnRefreshListener(KJRefreshListener l) {}
+
+    /**
+     * 设置头控件
+     */
+    private void setHeadView() {}
 }

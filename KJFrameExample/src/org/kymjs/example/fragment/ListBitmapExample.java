@@ -5,7 +5,7 @@ import org.kymjs.aframe.bitmap.utils.BitmapCreate;
 import org.kymjs.aframe.ui.BindView;
 import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.aframe.ui.widget.KJListView;
-import org.kymjs.aframe.ui.widget.KJListView.KJListViewListener;
+import org.kymjs.aframe.ui.widget.KJRefreshListener;
 import org.kymjs.example.R;
 
 import android.app.Activity;
@@ -30,11 +30,12 @@ public class ListBitmapExample extends BaseFragment {
             ViewGroup container, Bundle bundle) {
         aty = getActivity();
         kjb = KJBitmap.create();
-        kjb.config.width = 520;
-        kjb.config.height = (int) (520 * 0.45);
-        kjb.config.loadingBitmap = BitmapCreate.bitmapFromResource(
-                getResources(), R.drawable.ic_launcher,
-                kjb.config.width, kjb.config.height);
+        KJBitmap.config.width = 520;
+        KJBitmap.config.height = (int) (520 * 0.45);
+        KJBitmap.config.loadingBitmap = BitmapCreate
+                .bitmapFromResource(getResources(),
+                        R.drawable.ic_launcher,
+                        KJBitmap.config.width, KJBitmap.config.height);
         return inflater.inflate(R.layout.listview, null);
     }
 
@@ -46,7 +47,7 @@ public class ListBitmapExample extends BaseFragment {
         listview.getHeadView().setBackgroundResource(R.drawable.bg);
         // 上拉刷新需要手动开启，下拉刷新默认开启
         listview.setPullLoadEnable(true);
-        listview.setKJListViewListener(new KJListViewListener() {
+        listview.setOnRefreshListener(new KJRefreshListener() {
             @Override
             public void onRefresh() { // 下拉刷新完成
                 count += 5;
@@ -95,8 +96,8 @@ public class ListBitmapExample extends BaseFragment {
                 AbsListView.LayoutParams params = new AbsListView.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.width = kjb.config.width;
-                params.height = kjb.config.height;
+                params.width = KJBitmap.config.width;
+                params.height = KJBitmap.config.height;
                 image.setLayoutParams(params);
             } else {
                 image = (ImageView) convertView;

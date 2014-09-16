@@ -43,7 +43,7 @@ import android.widget.TextView;
 public class KJListView extends ListView implements OnScrollListener {
     // listener
     private OnScrollListener mScrollListener;
-    private KJListViewListener mListViewListener;
+    private KJRefreshListener mListViewListener;
 
     // widget
     private KJListViewHeader mHeaderView; // 头部控件
@@ -335,7 +335,7 @@ public class KJListView extends ListView implements OnScrollListener {
     /**
      * 设置自己的监听器
      */
-    public void setKJListViewListener(KJListViewListener l) {
+    public void setOnRefreshListener(KJRefreshListener l) {
         mListViewListener = l;
     }
 
@@ -365,7 +365,7 @@ public class KJListView extends ListView implements OnScrollListener {
      * @param refreshing
      *            正在刷新的状态
      */
-    public void setRefreshing(String refreshing) {
+    public void setRefreshingText(String refreshing) {
         mHeaderView.setRefreshing(refreshing);
     }
 
@@ -458,14 +458,5 @@ public class KJListView extends ListView implements OnScrollListener {
      */
     public interface OnKJScrollListener extends OnScrollListener {
         public void onKJScrolling(View view);
-    }
-
-    /**
-     * 包含刷新和加载更多地接口方法
-     */
-    public interface KJListViewListener {
-        public void onRefresh();
-
-        public void onLoadMore();
     }
 }
