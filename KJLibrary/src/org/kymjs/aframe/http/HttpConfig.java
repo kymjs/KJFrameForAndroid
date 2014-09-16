@@ -15,8 +15,13 @@
  */
 package org.kymjs.aframe.http;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.kymjs.aframe.core.KJException;
 import org.kymjs.aframe.http.cache.I_HttpCache;
 import org.kymjs.aframe.http.downloader.I_FileLoader;
+import org.kymjs.aframe.utils.StringUtils;
 
 /**
  * HttpClient请求的配置类<br>
@@ -52,6 +57,8 @@ public class HttpConfig {
     private int downThreadCount;
     private I_FileLoader downloader; // 文件下载器
     private I_HttpCache cacher; // http的json数据缓存器
+    private String cookie;
+    private Map<String, String> header;
 
     public HttpConfig() {
         socketBuffer = DEFAULT_SOCKET_BUFFER_SIZE;
@@ -63,6 +70,7 @@ public class HttpConfig {
         contentType = TYPE;
         maxConnections = MAX_CONNECTION;
         downThreadCount = THREAD_COUNT;
+        header = new HashMap<String, String>();
     }
 
     /**
@@ -79,12 +87,43 @@ public class HttpConfig {
         this.useCache = useCache;
     }
 
+    /**
+     * 设置cookie
+     * 
+     * @param cookie
+     */
+    public void setCookie(String cookie) {
+        this.cookie = cookie;
+    }
+
+    public String getCookie() {
+        return cookie;
+    }
+
     public String getContentType() {
         return contentType;
     }
 
     public void setContentType(String contentType) {
         this.contentType = contentType;
+    }
+
+    /**
+     * 设置httpUrlConnection请求头
+     * 
+     * @param k
+     * @param v
+     */
+    public void putHeader(String k, String v) {
+        if (StringUtils.isEmpty(k) || StringUtils.isEmpty(v)) {
+            throw new KJException(
+                    "http request header key or value is empty");
+        }
+        header.put(k, v);
+    }
+
+    public Map<String, String> getHeader() {
+        return header;
     }
 
     /**

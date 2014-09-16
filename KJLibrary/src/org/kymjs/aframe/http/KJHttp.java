@@ -31,7 +31,6 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +83,7 @@ import org.kymjs.aframe.http.cache.HttpCache;
 import org.kymjs.aframe.http.downloader.FileDownLoader;
 import org.kymjs.aframe.http.downloader.I_FileLoader;
 import org.kymjs.aframe.utils.FileUtils;
+import org.kymjs.aframe.utils.StringUtils;
 
 import android.content.Context;
 
@@ -93,6 +93,7 @@ import android.content.Context;
  * 1.2 添加httpUrlConnection下载操作
  * 1.3 添加httpClient的post、get、put等方式请求
  * 1.4 添加http请求中对json(应该是一切字符串)数据的缓存
+ * 1.5 添加Http请求中对请求头的自定义以及cookie的定义
  */
 
 /**
@@ -194,6 +195,15 @@ public class KJHttp {
                     conn.setRequestProperty("Charset",
                             config.getCharSet());
                     conn.setRequestMethod("GET");
+                    String cookie = config.getCookie();
+                    if (!StringUtils.isEmpty(cookie)) {
+                        conn.setRequestProperty("Cookie", cookie);
+                    }
+                    for (Map.Entry<String, String> entry : config
+                            .getHeader().entrySet()) {
+                        conn.setRequestProperty(entry.getKey(),
+                                entry.getValue());
+                    }
                     input = conn.getInputStream();
                     reader = new BufferedReader(
                             new InputStreamReader(input));
@@ -301,6 +311,15 @@ public class KJHttp {
                 conn.setRequestProperty("connection", "Keep-Alive");
                 conn.setRequestProperty("Content-Type",
                         "multipart/form-data; boundary=" + BOUNDARY);
+                String cookie = config.getCookie();
+                if (!StringUtils.isEmpty(cookie)) {
+                    conn.setRequestProperty("Cookie", cookie);
+                }
+                for (Map.Entry<String, String> entry : config
+                        .getHeader().entrySet()) {
+                    conn.setRequestProperty(entry.getKey(),
+                            entry.getValue());
+                }
                 out = new DataOutputStream(conn.getOutputStream());
                 byte[] end_data = ("\r\n--" + BOUNDARY + "--\r\n")
                         .getBytes();// 定义最后数据分隔线
@@ -401,36 +420,43 @@ public class KJHttp {
                 StringBuilder respond = null;
                 try {
                     URL url = new URL(_url);
-                    HttpURLConnection connection = (HttpURLConnection) url
+                    HttpURLConnection conn = (HttpURLConnection) url
                             .openConnection();
-                    connection
-                            .setReadTimeout(config.getReadTimeout());
-                    connection.setConnectTimeout(config
-                            .getConnectTimeOut());
-                    connection.setRequestProperty("Charset",
+                    conn.setReadTimeout(config.getReadTimeout());
+                    conn.setConnectTimeout(config.getConnectTimeOut());
+                    conn.setRequestProperty("Charset",
                             config.getCharSet());
-                    connection.setRequestProperty("Content-Type",
+                    conn.setRequestProperty("Content-Type",
                             config.getContentType());
-                    connection.setInstanceFollowRedirects(true);
-                    connection.setDoOutput(true);
-                    connection.setDoInput(true);
-                    connection.setRequestMethod("POST");
-                    connection.setUseCaches(false);
-                    connection.connect();
+                    conn.setInstanceFollowRedirects(true);
+                    conn.setDoOutput(true);
+                    conn.setDoInput(true);
+                    conn.setRequestMethod("POST");
+                    conn.setUseCaches(false);
+                    String cookie = config.getCookie();
+                    if (!StringUtils.isEmpty(cookie)) {
+                        conn.setRequestProperty("Cookie", cookie);
+                    }
+                    for (Map.Entry<String, String> entry : config
+                            .getHeader().entrySet()) {
+                        conn.setRequestProperty(entry.getKey(),
+                                entry.getValue());
+                    }
+                    conn.connect();
                     if (params != null) {
                         out = new DataOutputStream(
-                                connection.getOutputStream());
+                                conn.getOutputStream());
                         out.writeBytes(params.toString());
                         out.flush();
                     }
 
-                    input = connection.getInputStream();
+                    input = conn.getInputStream();
                     reader = new BufferedReader(
                             new InputStreamReader(input));
                     respond = new StringBuilder();
                     int i = 0;
                     int current = 0;
-                    int count = connection.getContentLength();
+                    int count = conn.getContentLength();
                     char[] buf = new char[1024];
                     while ((i = reader.read(buf)) != -1) {
                         respond.append(buf, 0, i);
@@ -440,7 +466,7 @@ public class KJHttp {
                             publishProgress(count, current);
                         }
                     }
-                    connection.disconnect();
+                    conn.disconnect();
                 } catch (MalformedURLException e) {
                     return e;
                 } catch (IOException e) {
@@ -604,7 +630,6 @@ public class KJHttp {
     private DefaultHttpClient httpClient;
     private ThreadPoolExecutor threadPool;
     private HttpContext httpContext;
-    private Map<String, String> clientHeaderMap;
     private Map<Context, List<WeakReference<Future<?>>>> requestMap;
 
     /**
@@ -653,8 +678,8 @@ public class KJHttp {
                                     "gzip");
                         }
 
-                        for (Entry<String, String> entry : clientHeaderMap
-                                .entrySet()) {
+                        for (Entry<String, String> entry : config
+                                .getHeader().entrySet()) {
                             request.addHeader(entry.getKey(),
                                     entry.getValue());
                         }
@@ -691,7 +716,6 @@ public class KJHttp {
         httpClient.setHttpRequestRetryHandler(new RetryHandler(config
                 .getReadTimeout()));
         requestMap = new WeakHashMap<Context, List<WeakReference<Future<?>>>>();
-        clientHeaderMap = new HashMap<String, String>();
     }
 
     /************************* HttpClient config method *************************/
@@ -751,7 +775,7 @@ public class KJHttp {
      * @param value
      */
     public void addHeader(String header, String value) {
-        clientHeaderMap.put(header, value);
+        config.getHeader().put(header, value);
     }
 
     /**
