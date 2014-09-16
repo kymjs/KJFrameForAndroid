@@ -147,6 +147,10 @@ final public class KJActivityManager {
 
     /**
      * 应用程序退出
+     * 
+     * <b>注意</b>You must hold the permission
+     * {@link android.Manifest.permission#KILL_BACKGROUND_PROCESSES} to be able
+     * to call this method.
      */
     public void AppExit(Context context) {
         try {
@@ -155,9 +159,9 @@ final public class KJActivityManager {
                     .getSystemService(Context.ACTIVITY_SERVICE);
             activityMgr.killBackgroundProcesses(context
                     .getPackageName());
-            System.exit(0);
+            Runtime.getRuntime().exit(0);
         } catch (Exception e) {
-            System.exit(-1);
+            Runtime.getRuntime().exit(-1);
         }
     }
 }
