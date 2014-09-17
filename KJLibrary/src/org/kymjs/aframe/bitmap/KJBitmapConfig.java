@@ -31,10 +31,10 @@ public final class KJBitmapConfig {
     /** 网络连接等待时间 */
     public int timeOut = 5000;
 
-    /** 图片的宽度 */
-    public int width = 300; // 不足290则显示图片默认大小
-    /** 图片的高度 */
-    public int height = 290; // 不足290则显示图片默认大小
+    /** 图片的宽度,为0则显示图片默认大小 */
+    public int width = 0;
+    /** 图片的高度,为0则显示图片默认大小 */
+    public int height = 0;
 
     /** 载入时的图片 */
     public Bitmap loadingBitmap;

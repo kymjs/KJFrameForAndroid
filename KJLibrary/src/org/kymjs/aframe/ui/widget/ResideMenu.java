@@ -110,6 +110,8 @@ public class ResideMenu extends FrameLayout implements
         mScrollMenu = new KJScrollView(context);
         mScrollMenu.setPadding(40, 0, 0, 0);
         mScrollMenu.setVerticalScrollBarEnabled(false);
+        mScrollMenu.setFocusable(true);
+        mScrollMenu.setEnabled(true);
         mScrollMenu.setLayoutParams(scrollParams);
         ScrollView.LayoutParams menuParams = new ScrollView.LayoutParams(
                 ScrollView.LayoutParams.WRAP_CONTENT,

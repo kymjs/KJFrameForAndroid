@@ -26,8 +26,6 @@ public class DownloadExample extends BaseFragment {
     @BindView(id = R.id.progress)
     private ProgressBar mProgress;
 
-    private boolean maxed = false;
-
     @Override
     protected View inflaterView(LayoutInflater inflater,
             ViewGroup container, Bundle bundle) {
@@ -55,10 +53,7 @@ public class DownloadExample extends BaseFragment {
                 @Override
                 public void onLoading(long count, long current) {
                     super.onLoading(count, current);
-                    if (!maxed) {
-                        mProgress.setMax((int) count);
-                        maxed = true;
-                    }
+                    mProgress.setMax((int) count);
                     mProgress.setProgress((int) current);
                 }
 

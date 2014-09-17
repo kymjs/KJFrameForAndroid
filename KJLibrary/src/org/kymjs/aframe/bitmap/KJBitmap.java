@@ -206,22 +206,21 @@ public class KJBitmap {
         for (BitmapWorkerTask task : taskCollection) {
             if (task.getView().equals(imageView)) {
                 // 是同一个url的话就不用开新的task，不一样就取消掉之前开新的
-                if (!task.getUrl().equals(imageUrl)) {
-                    task.cancelTask();
-                    task.reExecute(imageView, imageUrl, config.width,
-                            config.height);
+                if (task.getUrl().equals(imageUrl)) {
                     return;
                 } else {
-                    return;
+                    task.cancelTask();
+                    taskCollection.remove(task);
+                    break;
                 }
             }
         }
         // 在内存缓存中没有图片，去加载图片
         viewSetImage(imageView, config.loadingBitmap);
         BitmapWorkerTask task = new BitmapWorkerTask(imageView,
-                imageUrl);
+                imageUrl, config.width, config.height);
         taskCollection.add(task);
-        task.execute(config.width, config.height);
+        task.execute();
     }
 
     /**
@@ -291,13 +290,17 @@ public class KJBitmap {
 
     /********************* 异步获取Bitmap并设置image的任务类 *********************/
     private class BitmapWorkerTask extends
-            KJTaskExecutor<Integer, Void, Bitmap> {
+            KJTaskExecutor<Void, Void, Bitmap> {
         private View view;
         private String url;
+        private int width, height;
 
-        public BitmapWorkerTask(View view, String url) {
+        public BitmapWorkerTask(View view, String url, int width,
+                int height) {
             this.view = view;
             this.url = url;
+            this.width = width;
+            this.height = height;
             this.view.setTag(url);
         }
 
@@ -309,15 +312,6 @@ public class KJBitmap {
             return url;
         }
 
-        // 重新加载任务
-        public void reExecute(View view, String url,
-                Integer... params) {
-            this.view = view;
-            this.url = url;
-            this.view.setTag(url);
-            this.execute(params);
-        }
-
         // 取消当前正在进行的任务
         public boolean cancelTask() {
             showLogIfOpen("task->" + this.url + "has been canceled");
@@ -325,13 +319,12 @@ public class KJBitmap {
         }
 
         @Override
-        protected Bitmap doInBackground(Integer... wAndh) {
+        protected Bitmap doInBackground(Void... _void) {
             Bitmap bmp = null;
             byte[] res = downloader.loadImage(url); // 调用加载器加载url中的图片
             if (res != null) {
                 bmp = BitmapCreate.bitmapFromByteArray(res, 0,
-                        res.length, wAndh[0], wAndh[1]);
-                bmp = BitmapHelper.scale(bmp, wAndh[0], wAndh[1]);
+                        res.length, width, height);
             }
             if (bmp != null && config.openMemoryCache) {
                 putBmpToMC(url, bmp); // 图片载入完成后缓存到LrcCache中
@@ -344,6 +337,7 @@ public class KJBitmap {
         protected void onPostExecute(Bitmap bmp) {
             super.onPostExecute(bmp);
             if (url.equals(view.getTag())) {
+                bmp = BitmapHelper.scaleWithWH(bmp, width, height);
                 viewSetImage(view, bmp);
                 doSuccessCallBack(view);
                 showProgressIfOpen(view, url);

@@ -49,14 +49,14 @@ public class ListBitmapExample extends BaseFragment {
         listview.setPullLoadEnable(true);
         listview.setOnRefreshListener(new KJRefreshListener() {
             @Override
-            public void onRefresh() { // 下拉刷新完成
+            public void onRefresh() { // 下拉刷新
                 count += 5;
                 listview.stopRefreshData();
                 adapter.refresh();
             }
 
             @Override
-            public void onLoadMore() { // 上拉刷新完成
+            public void onLoadMore() { // 上拉刷新
                 count += 5;
                 listview.stopRefreshData();
                 adapter.refresh();

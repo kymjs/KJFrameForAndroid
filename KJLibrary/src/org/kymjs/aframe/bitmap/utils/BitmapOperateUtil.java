@@ -55,7 +55,6 @@ public class BitmapOperateUtil {
     public static void SetMistyBitmap(View imageview, Bitmap src) {
         if (imageview == null || src == null)
             return;
-        BitmapHelper.doRecycledIfNot(src);
         if (SystemTool.getSDKVersion() >= 18) {
             src = blur(src, imageview, 12);
         } else {
