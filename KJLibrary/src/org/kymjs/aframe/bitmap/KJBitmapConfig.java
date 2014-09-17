@@ -19,7 +19,8 @@ import android.graphics.Bitmap;
 
 /**
  * bitmapLibrary的配置器<br>
- * <b>创建时间</b> 2014-7-11
+ * <b>注意</b> 如果你将width和height设置为0，此时图片将显示默认大小，但同时有可能会发生OOM问题 <b>创建时间</b>
+ * 2014-7-11
  * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
@@ -32,9 +33,9 @@ public final class KJBitmapConfig {
     public int timeOut = 5000;
 
     /** 图片的宽度,为0则显示图片默认大小 */
-    public int width = 0;
+    public int width = 300;
     /** 图片的高度,为0则显示图片默认大小 */
-    public int height = 0;
+    public int height = 200;
 
     /** 载入时的图片 */
     public Bitmap loadingBitmap;

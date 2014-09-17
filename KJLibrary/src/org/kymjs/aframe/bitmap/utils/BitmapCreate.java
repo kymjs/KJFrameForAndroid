@@ -97,13 +97,19 @@ public class BitmapCreate {
      */
     public static Bitmap bitmapFromByteArray(byte[] data, int offset,
             int length, int reqWidth, int reqHeight) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeByteArray(data, offset, length, options);
-        options = BitmapHelper.calculateInSampleSize(options,
-                reqWidth, reqHeight);
-        return BitmapFactory.decodeByteArray(data, offset, length,
-                options);
+        if (reqHeight == 0 || reqWidth == 0) {
+            return BitmapFactory
+                    .decodeByteArray(data, offset, length);
+        } else {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeByteArray(data, offset, length,
+                    options);
+            options = BitmapHelper.calculateInSampleSize(options,
+                    reqWidth, reqHeight);
+            return BitmapFactory.decodeByteArray(data, offset,
+                    length, options);
+        }
     }
 
     /**
