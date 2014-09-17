@@ -115,9 +115,9 @@ public class BitmapHelper {
      * 
      * @param src
      *            ：源图片资源
-     * @param newWidth
+     * @param w
      *            ：缩放后宽度
-     * @param newHeight
+     * @param h
      *            ：缩放后高度
      */
     public static Bitmap scaleWithWH(Bitmap src, double w, double h) {
