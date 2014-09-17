@@ -23,7 +23,7 @@
 
     <org.kymjs.aframe.ui.widget.ScaleImageView
         android:id="@+id/imageview"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ff000000"
         android:src="@drawable/bg" />
