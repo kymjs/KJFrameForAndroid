@@ -40,6 +40,8 @@ public class ScaleImageExample extends BaseFragment {
         back.setText("点击或侧滑返回,图片还可以双指拉伸");
         rotate.setText("可以旋转" + imageview.canRotate());
         doubleClick.setText("双击缩放开关" + imageview.canDoubleClick());
+        ((SlidExample) getActivity()).resideMenu
+                .addIgnoredView(imageview);
     }
 
     @Override
