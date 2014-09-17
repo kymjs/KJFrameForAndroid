@@ -35,6 +35,7 @@ public class DownloadExample extends BaseFragment {
     @Override
     protected void initWidget(View parentView) {
         super.initWidget(parentView);
+        // 一张5M图片的下载地址
         mEt.setText("https://raw.githubusercontent.com/kymjs/KJFrameForAndroid/master/KJFrameExample/big_image2.jpg");
     }
 
@@ -45,11 +46,17 @@ public class DownloadExample extends BaseFragment {
         case R.id.button:
             KJHttp kjh = new KJHttp();
             FileCallBack file = new FileCallBack() {
+                /**
+                 * 下载成功时回调
+                 */
                 @Override
                 public void onSuccess(File f) {
                     ViewInject.toast("下载成功");
                 }
 
+                /**
+                 * 下载过程中循环回调，必须设置file.setProgress(true);
+                 */
                 @Override
                 public void onLoading(long count, long current) {
                     super.onLoading(count, current);
@@ -57,6 +64,9 @@ public class DownloadExample extends BaseFragment {
                     mProgress.setProgress((int) current);
                 }
 
+                /**
+                 * 下载失败回调
+                 */
                 @Override
                 public void onFailure(Throwable t, int errorNo,
                         String strMsg) {
@@ -66,7 +76,8 @@ public class DownloadExample extends BaseFragment {
                     mProgress.setProgress(0);
                 }
             };
-            file.setProgress(true); // 若要显示进度，必须设置为true
+            // 若要显示进度，必须设置为true
+            file.setProgress(true);
             kjh.urlDownload(mEt.getText().toString(),
                     "/storage/sdcard0/3.png", file);
             break;

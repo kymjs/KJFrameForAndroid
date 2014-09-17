@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
@@ -64,9 +63,9 @@ public class ListBitmapExample extends BaseFragment {
         });
     }
 
-    private class ListviewAdapter extends BaseAdapter {
+    /***************************** adapter *****************************/
 
-        private ImageView image;
+    private class ListviewAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -89,32 +88,35 @@ public class ListBitmapExample extends BaseFragment {
         }
 
         @Override
-        public View getView(int position, View convertView,
-                ViewGroup parent) {
-            if (convertView == null) {
-                convertView = image = new ImageView(aty);
-                AbsListView.LayoutParams params = new AbsListView.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.width = KJBitmap.config.width;
-                params.height = KJBitmap.config.height;
-                image.setLayoutParams(params);
+        public View getView(int position, View v, ViewGroup parent) {
+            ViewHolder holder = null;
+            if (v == null) {
+                v = View.inflate(aty, R.layout.item_image, null);
+                holder = new ViewHolder();
+                holder.image = (ImageView) v
+                        .findViewById(R.id.item_imageview);
+                v.setTag(holder);
             } else {
-                image = (ImageView) convertView;
+                holder = (ViewHolder) v.getTag();
             }
             // kjb.display(image, "/storage/sdcard0/1.png");
             if (position % 2 == 0) {
                 // 5M的图片
                 kjb.display(
-                        image,
-                        "https://raw.githubusercontent.com/kymjs/KJFrameForAndroid/master/KJFrameExample/big_image.png");
+                        holder.image,
+                        "https://raw.githubusercontent.com/kymjs/KJFrameForAndroid/master/KJFrameExample/big_image.png",
+                        100, 100);
             } else {
                 // 2M的图片
                 kjb.display(
-                        image,
+                        holder.image,
                         "https://raw.githubusercontent.com/kymjs/KJFrameForAndroid/master/KJFrameExample/big_image2.jpg");
             }
-            return convertView;
+            return v;
         }
+    }
+
+    static class ViewHolder {
+        ImageView image;
     }
 }

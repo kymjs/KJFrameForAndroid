@@ -184,12 +184,13 @@ public class KJBitmap {
         doLoadCallBack(imageView);
         Bitmap bitmap = mMemoryCache.get(CipherUtils.md5(imageUrl)); // 从内存中读取
         if (bitmap != null) {
+            bitmap = BitmapHelper.scaleWithWH(bitmap, config.width,
+                    config.height);
             // 内存缓存中已有图片
             viewSetImage(imageView, bitmap); // 设置控件显示图片
             doSuccessCallBack(imageView); // 图片加载成功时的回调
             showLogIfOpen("download success, from memory cache\n"
                     + imageUrl);
-            showProgressIfOpen(imageView, imageUrl);
         } else {
             disPlayFromNet(imageView, imageUrl);
         }

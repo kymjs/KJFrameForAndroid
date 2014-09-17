@@ -31,8 +31,8 @@ public class BitmapMistyExample extends BaseFragment {
     ImageView image;
 
     @Override
-    protected View inflaterView(LayoutInflater inflater, ViewGroup container,
-            Bundle bundle) {
+    protected View inflaterView(LayoutInflater inflater,
+            ViewGroup container, Bundle bundle) {
         return inflater.inflate(R.layout.imageview, null);
     }
 
@@ -48,17 +48,20 @@ public class BitmapMistyExample extends BaseFragment {
     @Override
     protected void widgetClick(View v) {
         super.widgetClick(v);
-        Bitmap src = BitmapFactory
-                .decodeResource(getResources(), R.drawable.bg);
+        Bitmap src = BitmapFactory.decodeResource(getResources(),
+                R.drawable.bg);
         switch (v.getId()) {
         case R.id.img_button1:
+            // 黑白效果
             src = BitmapOperateUtil.convertToBlackWhite(src);
             image.setImageBitmap(src);
             break;
         case R.id.img_button2:
+            // 虚化效果
             BitmapOperateUtil.SetMistyBitmap(image, src);
             break;
         case R.id.img_button3:
+            // 负片效果
             src = BitmapOperateUtil.tone(src, 10);
             image.setImageBitmap(src);
             break;

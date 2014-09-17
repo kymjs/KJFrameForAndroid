@@ -136,8 +136,8 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
                     int position, long id) {
                 mListView.setVisibility(View.GONE);
                 mFileLayout.setVisibility(View.VISIBLE);
-                mGridView.setAdapter(new FileGridAdapter(datas.get(position)
-                        .getFilePath()));
+                mGridView.setAdapter(new FileGridAdapter(datas.get(
+                        position).getFilePath()));
             }
         });
         mGridView.setNumColumns(3);
@@ -158,7 +158,7 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
             mListView.setVisibility(View.VISIBLE);
         } else if (v == mBtnOk) {
             if (checkFile != null) {
-                OnClickCommitEvent(v);
+                OnClickCommitEvent(v, checkFile);
             }
         }
     }
@@ -167,8 +167,11 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
      * 用户选中图片点击确定后将会回调
      * 
      * @param v
+     * @param datas
+     *            用户选择的图片地址集
      */
-    abstract protected void OnClickCommitEvent(View v);
+    abstract protected void OnClickCommitEvent(View v,
+            List<String> datas);
 
     /*********************** ListView（文件夹）适配器部分 ***********************/
 
@@ -201,7 +204,8 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView,
+                ViewGroup parent) {
             ListViewHolder holder = null;
             if (convertView == null) {
                 initItemLayout();
@@ -214,11 +218,13 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
             } else {
                 holder = (ListViewHolder) convertView.getTag();
             }
-            kjb.display(holder.img, datas.get(position).getFilePath().get(0),
-                    80, 80);
+            kjb.display(holder.img, datas.get(position).getFilePath()
+                    .get(0), 80, 80);
             holder.tv_count.setText("共有"
-                    + datas.get(position).getFilePath().size() + "张图片");
-            holder.tv_folder.setText(datas.get(position).getFolderName());
+                    + datas.get(position).getFilePath().size()
+                    + "张图片");
+            holder.tv_folder.setText(datas.get(position)
+                    .getFolderName());
             return convertView;
         }
 
