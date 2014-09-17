@@ -4,6 +4,7 @@ import org.kymjs.aframe.ui.BindView;
 import org.kymjs.aframe.ui.activity.KJFragmentActivity;
 import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.example.R;
+import org.kymjs.example.fragment.DBExample;
 import org.kymjs.example.fragment.DownloadExample;
 import org.kymjs.example.fragment.HorizontalListDemo;
 
@@ -22,6 +23,7 @@ public class TabExampleTwo extends KJFragmentActivity {
     @BindView(id = R.id.bottombar_content4, click = true)
     private RadioButton mRbtn4;
 
+    BaseFragment content2 = new DBExample(); // 第二个界面
     BaseFragment content3 = new HorizontalListDemo(); // 第三个界面
     BaseFragment content4 = new DownloadExample(); // 第四个界面
 
@@ -41,7 +43,7 @@ public class TabExampleTwo extends KJFragmentActivity {
         super.initWidget();
         actionBar = getActionBar();
         mRbtn1.setText("没东西");
-        mRbtn2.setText("没东西");
+        mRbtn2.setText("数据库");
         mRbtn3.setText("控件展示");
         mRbtn4.setText("下载");
     }
@@ -53,6 +55,8 @@ public class TabExampleTwo extends KJFragmentActivity {
         case R.id.bottombar_content1:
             break;
         case R.id.bottombar_content2:
+            actionBar.setTitle("数据库基本操作");
+            changeFragment(content2);
             break;
         case R.id.bottombar_content3:
             actionBar.setTitle("横向ListView与圆形ImageView");
