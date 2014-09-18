@@ -213,7 +213,7 @@ kjh.urlDownload(mEt.getText().toString(), "/storage/sdcard0/3.png",file);
 ```
 ## DBLibrary模块
 包含了android中的orm框架，使用了线程池对sqlite进行操作，一行代码就可以进行增删改查。支持一对多，多对一等查询。<br>
-有关DB模块，要在此感谢开源社区，很大程度上参考了[finalDB](https://github.com/kymjs/afinal)框架<br>
+有关DB模块，要在此感谢afinal框架，很大程度上参考了[finalDB](https://github.com/kymjs/afinal)的设计<br>
 ```java
 //普通数据存储
 KJDB db = KJDB.create(this);
