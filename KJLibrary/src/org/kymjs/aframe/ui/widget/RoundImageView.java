@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2014, KJFrameForAndroid 张涛 (kymjs123@gmail.com).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kymjs.aframe.ui.widget;
 
 import android.content.Context;
@@ -33,7 +48,8 @@ public class RoundImageView extends ImageView {
         super(context, attrs);
     }
 
-    public RoundImageView(Context context, AttributeSet attrs, int defStyle) {
+    public RoundImageView(Context context, AttributeSet attrs,
+            int defStyle) {
         super(context, attrs, defStyle);
     }
 
@@ -51,7 +67,8 @@ public class RoundImageView extends ImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         initCurrentBitmap();
-        if (currentBitmap == null || getWidth() == 0 || getHeight() == 0) {
+        if (currentBitmap == null || getWidth() == 0
+                || getHeight() == 0) {
             return;
         }
         this.measure(0, 0);
@@ -62,25 +79,31 @@ public class RoundImageView extends ImageView {
             radius = (width < height ? width : height) / 2 - 2
                     * mBorderThickness;
             // 画内圆
-            drawCircleBorder(canvas, radius + mBorderThickness / 2, width,
-                    height, mBorderInsideColor);
+            drawCircleBorder(canvas, radius + mBorderThickness / 2,
+                    width, height, mBorderInsideColor);
             // 画外圆
             drawCircleBorder(canvas, radius + mBorderThickness
-                    + mBorderThickness / 2, width, height, mBorderOutsideColor);
-        } else if (mBorderInsideColor != 0 && mBorderOutsideColor == 0) { // 画一个边框
-            radius = (width < height ? width : height) / 2 - mBorderThickness;
-            drawCircleBorder(canvas, radius + mBorderThickness / 2, width,
-                    height, mBorderInsideColor);
-        } else if (mBorderInsideColor == 0 && mBorderOutsideColor != 0) {// 画一个边框
-            radius = (width < height ? width : height) / 2 - mBorderThickness;
-            drawCircleBorder(canvas, radius + mBorderThickness / 2, width,
-                    height, mBorderOutsideColor);
+                    + mBorderThickness / 2, width, height,
+                    mBorderOutsideColor);
+        } else if (mBorderInsideColor != 0
+                && mBorderOutsideColor == 0) { // 画一个边框
+            radius = (width < height ? width : height) / 2
+                    - mBorderThickness;
+            drawCircleBorder(canvas, radius + mBorderThickness / 2,
+                    width, height, mBorderInsideColor);
+        } else if (mBorderInsideColor == 0
+                && mBorderOutsideColor != 0) {// 画一个边框
+            radius = (width < height ? width : height) / 2
+                    - mBorderThickness;
+            drawCircleBorder(canvas, radius + mBorderThickness / 2,
+                    width, height, mBorderOutsideColor);
         } else { // 没有边框
             radius = (width < height ? width : height) / 2;
         }
-        Bitmap roundBitmap = getCroppedRoundBitmap(currentBitmap, radius);
-        canvas.drawBitmap(roundBitmap, width / 2 - radius, height / 2 - radius,
-                null);
+        Bitmap roundBitmap = getCroppedRoundBitmap(currentBitmap,
+                radius);
+        canvas.drawBitmap(roundBitmap, width / 2 - radius, height / 2
+                - radius, null);
     }
 
     /**
@@ -105,22 +128,22 @@ public class RoundImageView extends ImageView {
             x = 0;
             y = (bmpHeight - bmpWidth) / 2;
             // 截取正方形图片
-            squareBitmap = Bitmap.createBitmap(bmp, x, y, squareWidth,
-                    squareHeight);
+            squareBitmap = Bitmap.createBitmap(bmp, x, y,
+                    squareWidth, squareHeight);
         } else if (bmpHeight < bmpWidth) {// 宽大于高
             squareWidth = squareHeight = bmpHeight;
             x = (bmpWidth - bmpHeight) / 2;
             y = 0;
-            squareBitmap = Bitmap.createBitmap(bmp, x, y, squareWidth,
-                    squareHeight);
+            squareBitmap = Bitmap.createBitmap(bmp, x, y,
+                    squareWidth, squareHeight);
         } else {
             squareBitmap = bmp;
         }
 
         if (squareBitmap.getWidth() != diameter
                 || squareBitmap.getHeight() != diameter) {
-            scaledSrcBmp = Bitmap.createScaledBitmap(squareBitmap, diameter,
-                    diameter, true);
+            scaledSrcBmp = Bitmap.createScaledBitmap(squareBitmap,
+                    diameter, diameter, true);
 
         } else {
             scaledSrcBmp = squareBitmap;
@@ -138,8 +161,8 @@ public class RoundImageView extends ImageView {
         paint.setDither(true);
         canvas.drawARGB(0, 0, 0, 0);
         canvas.drawCircle(scaledSrcBmp.getWidth() / 2,
-                scaledSrcBmp.getHeight() / 2, scaledSrcBmp.getWidth() / 2,
-                paint);
+                scaledSrcBmp.getHeight() / 2,
+                scaledSrcBmp.getWidth() / 2, paint);
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(scaledSrcBmp, rect, rect, paint);
         // 回收资源
@@ -155,8 +178,8 @@ public class RoundImageView extends ImageView {
     /**
      * 边缘画圆
      */
-    private void drawCircleBorder(Canvas canvas, int radius, int w, int h,
-            int color) {
+    private void drawCircleBorder(Canvas canvas, int radius, int w,
+            int h, int color) {
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setFilterBitmap(true);
@@ -187,7 +210,8 @@ public class RoundImageView extends ImageView {
     @Override
     public void setImageResource(int resId) {
         super.setImageResource(resId);
-        setBitmapRes(BitmapFactory.decodeResource(getResources(), resId));
+        setBitmapRes(BitmapFactory.decodeResource(getResources(),
+                resId));
     }
 
     /**
