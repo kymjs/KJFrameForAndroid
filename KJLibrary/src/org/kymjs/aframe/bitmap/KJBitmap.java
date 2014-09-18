@@ -54,8 +54,8 @@ public class KJBitmap {
     public static KJBitmapConfig config;
 
     public synchronized static KJBitmap create() {
-        config = new KJBitmapConfig();
         if (instance == null) {
+            config = new KJBitmapConfig();
             instance = new KJBitmap();
         }
         return instance;
@@ -69,7 +69,68 @@ public class KJBitmap {
     }
 
     /**
-     * 加载网络图片
+     * 从指定链接获取一张图片<br>
+     * 
+     * <b>注意：</b>这里有网络访问，应该放在线程中调用<br>
+     * <b>注意：</b>如果宽高参数为0，显示图片默认大小，此时有可能会造成OOM<br>
+     * 
+     * @param imageUrl
+     *            图片对应的Url
+     * @param reqW
+     *            图片期望宽度，0为图片默认大小
+     * @param reqH
+     *            图片期望高度，0为图片默认大小
+     * 
+     * @return bitmap
+     */
+    private Bitmap loadBmpWithWH(String imageUrl, int reqW, int reqH) {
+        Bitmap bmp = getBitmapFromMC(imageUrl);
+        if (bmp == null) {
+            bmp = getBitmapFromDisk(imageUrl);
+            if (bmp == null) {
+                bmp = getBitmapFromNet(imageUrl, reqW, reqH);
+            }
+        }
+        // KJHttp kjh = new KJHttp();
+        // kjh.urlDownload(imageUrl, config.cachePath, callback);
+        return bmp;
+    }
+
+    /**
+     * 使用默认bitmap配置器的设置，从指定链接获取一张图片<br>
+     * 
+     * <b>注意：</b>这里有网络访问，应该放在线程中调用<br>
+     * <b>注意：</b>如果宽高参数为0，显示图片默认大小，此时有可能会造成OOM<br>
+     * 
+     * @param imageUrl
+     *            图片对应的Url
+     * 
+     * @return bitmap
+     */
+    private Bitmap loadBmpWithConfig(String imageUrl) {
+        return loadBmpWithConfig(imageUrl, config);
+    }
+
+    /**
+     * 使用参数bitmap配置器的设置，从指定链接获取一张图片<br>
+     * 
+     * <b>注意：</b>这里有网络访问，应该放在线程中调用<br>
+     * <b>注意：</b>如果宽高参数为0，显示图片默认大小，此时有可能会造成OOM<br>
+     * 
+     * @param imageUrl
+     *            图片对应的Url
+     * @param config
+     *            bitmap大小的配置器
+     * 
+     * @return bitmap
+     */
+    private Bitmap loadBmpWithConfig(String imageUrl,
+            KJBitmapConfig config) {
+        return loadBmpWithWH(imageUrl, config.width, config.height);
+    }
+
+    /**
+     * 使用默认配置加载网络图片
      * 
      * @param imageView
      *            要显示图片的控件(ImageView设置src，普通View设置bg)
@@ -77,11 +138,7 @@ public class KJBitmap {
      *            图片的URL
      */
     public void display(View imageView, String imageUrl) {
-        if (config.openProgress) {
-            loadImageWithProgress(imageView, imageUrl);
-        } else {
-            doDisplay(imageView, imageUrl);
-        }
+        display(imageView, imageUrl, config.openProgress);
     }
 
     /**
@@ -96,14 +153,13 @@ public class KJBitmap {
      */
     public void display(View imageView, String imageUrl,
             boolean openProgress) {
-        boolean temp = config.openProgress;
-        config.openProgress = openProgress;
-        if (config.openProgress) {
-            loadImageWithProgress(imageView, imageUrl);
+        if (openProgress) {
+            loadImageWithProgress(imageView, imageUrl,
+                    config.loadingBitmap, config.width, config.height);
         } else {
-            doDisplay(imageView, imageUrl);
+            doDisplay(imageView, imageUrl, config.loadingBitmap,
+                    config.width, config.height);
         }
-        config.openProgress = temp;
     }
 
     /**
@@ -114,19 +170,13 @@ public class KJBitmap {
      * @param imageUrl
      *            图片的URL
      * @param imgW
-     *            图片显示宽度。若大于图片本身大小，则只显示图片大小
+     *            图片显示的宽度，0为默认大小，但可能出现OOM
      * @param imgH
-     *            图片显示高度。若大于图片本身大小，则只显示图片大小
+     *            图片显示的高度，0为默认大小，但可能出现OOM
      */
     public void display(View imageView, String imageUrl, int imgW,
             int imgH) {
-        int tempW = config.width;
-        int tempH = config.height;
-        config.width = imgW;
-        config.height = imgH;
-        display(imageView, imageUrl);
-        config.width = tempW;
-        config.height = tempH;
+        display(imageView, imageUrl, config.loadingBitmap, imgW, imgH);
     }
 
     /**
@@ -141,20 +191,56 @@ public class KJBitmap {
      */
     public void display(View imageView, String imageUrl,
             Bitmap loadingBitmap) {
-        Bitmap tempLoadBitmap = config.loadingBitmap;
-        config.loadingBitmap = loadingBitmap;
-        display(imageView, imageUrl);
-        config.loadingBitmap = tempLoadBitmap;
-        tempLoadBitmap = null;
+        display(imageView, imageUrl, loadingBitmap, config.width,
+                config.height);
+    }
+
+    /**
+     * 加载网络图片
+     * 
+     * @param imageView
+     *            要显示图片的控件(ImageView设置src，普通View设置bg)
+     * @param imageUrl
+     *            图片的Url
+     * @param loadingBitmap
+     *            加载中显示的bitmap，没有可以传null
+     * @param width
+     *            图片显示的宽度，0为默认大小，但可能出现OOM
+     * @param height
+     *            图片显示的高度，0为默认大小，但可能出现OOM
+     */
+    public void display(View imageView, String imageUrl,
+            Bitmap loadingBitmap, int width, int height) {
+        if (config.openProgress) {
+            loadImageWithProgress(imageView, imageUrl, loadingBitmap,
+                    width, height);
+        } else {
+            doDisplay(imageView, imageUrl, loadingBitmap, width,
+                    height);
+        }
     }
 
     /**
      * 显示加载中的环形等待条
+     * 
+     * @param imageView
+     *            要显示图片的控件(ImageView设置src，普通View设置bg)
+     * @param imageUrl
+     *            图片的Url
+     * @param loadingBitmap
+     *            加载中显示的bitmap，没有可以传null
+     * @param width
+     *            图片显示的宽度，0为默认大小，但可能出现OOM
+     * @param height
+     *            图片显示的高度，0为默认大小，但可能出现OOM
      */
-    private void loadImageWithProgress(View imageView, String imageUrl) {
+    private void loadImageWithProgress(View imageView,
+            String imageUrl, Bitmap loadingBitmap, int width,
+            int height) {
         ProgressBar bar = new ProgressBar(imageView.getContext());
         try {
             ViewGroup parent = ((ViewGroup) imageView.getParent());
+            // 如果这个控件还没有显示过菊花轮
             if (parent.findViewWithTag(imageUrl) == null) {
                 for (int i = 0; i < parent.getChildCount(); i++) {
                     if (imageView.equals(parent.getChildAt(i))) {
@@ -164,12 +250,10 @@ public class KJBitmap {
                 }
                 bar.setTag(imageUrl);
                 imageView.setVisibility(View.GONE);
-            } else {
-                return;
             }
         } catch (ClassCastException e) {
         }
-        doDisplay(imageView, imageUrl);
+        doDisplay(imageView, imageUrl, loadingBitmap, width, height);
     }
 
     /**
@@ -178,21 +262,29 @@ public class KJBitmap {
      * @param imageView
      *            要显示图片的控件(ImageView设置src，普通View设置bg)
      * @param imageUrl
-     *            图片的URL
+     *            图片的Url
+     * @param loadingBitmap
+     *            加载中显示的bitmap，没有可以传null
+     * @param width
+     *            图片显示的宽度，0为默认大小，但可能出现OOM
+     * @param height
+     *            图片显示的高度，0为默认大小，但可能出现OOM
      */
-    private void doDisplay(View imageView, String imageUrl) {
+    private void doDisplay(View imageView, String imageUrl,
+            Bitmap loadingBitmap, int width, int height) {
         doLoadCallBack(imageView);
-        Bitmap bitmap = mMemoryCache.get(CipherUtils.md5(imageUrl)); // 从内存中读取
-        if (bitmap != null) {
-            bitmap = BitmapHelper.scaleWithWH(bitmap, config.width,
-                    config.height);
+        Bitmap cacheBmp = getBitmapFromCache(imageUrl);
+        if (cacheBmp != null) {
+            cacheBmp = BitmapHelper.scaleWithWH(cacheBmp, width,
+                    height);
             // 内存缓存中已有图片
-            viewSetImage(imageView, bitmap); // 设置控件显示图片
+            viewSetImage(imageView, cacheBmp); // 设置控件显示图片
             doSuccessCallBack(imageView); // 图片加载成功时的回调
             showLogIfOpen("download success, from memory cache\n"
                     + imageUrl);
         } else {
-            disPlayFromNet(imageView, imageUrl);
+            disPlayFromNet(imageView, imageUrl, loadingBitmap, width,
+                    height);
         }
     }
 
@@ -200,9 +292,18 @@ public class KJBitmap {
      * 启动网络加载图片任务
      * 
      * @param imageView
+     *            要显示图片的控件(ImageView设置src，普通View设置bg)
      * @param imageUrl
+     *            图片的Url
+     * @param loadingBitmap
+     *            加载中显示的bitmap，没有可以传null
+     * @param width
+     *            图片显示的宽度，0为默认大小，但可能出现OOM
+     * @param height
+     *            图片显示的高度，0为默认大小，但可能出现OOM
      */
-    private void disPlayFromNet(View imageView, String imageUrl) {
+    private void disPlayFromNet(View imageView, String imageUrl,
+            Bitmap loadingBitmap, int width, int height) {
         // 开启task的时候先检查传进来的这个view是否已经有一个task是为它执行
         for (BitmapWorkerTask task : taskCollection) {
             if (task.getView().equals(imageView)) {
@@ -217,76 +318,11 @@ public class KJBitmap {
             }
         }
         // 在内存缓存中没有图片，去加载图片
-        viewSetImage(imageView, config.loadingBitmap);
+        viewSetImage(imageView, loadingBitmap);
         BitmapWorkerTask task = new BitmapWorkerTask(imageView,
-                imageUrl, config.width, config.height);
+                imageUrl, width, height);
         taskCollection.add(task);
         task.execute();
-    }
-
-    /**
-     * 如果设置了回调,则会调用加载中的回调
-     * 
-     * @param imageView
-     */
-    private void doLoadCallBack(View imageView) {
-        if (config.callBack != null) {
-            config.callBack.imgLoading(imageView);
-        }
-    }
-
-    /**
-     * 如果设置了回调,则会调用加载成功的回调
-     * 
-     * @param imageView
-     */
-    private void doSuccessCallBack(View imageView) {
-        if (config.callBack != null) {
-            config.callBack.imgLoadSuccess(imageView);
-        }
-    }
-
-    /**
-     * 如果打开了log显示器，则显示log
-     * 
-     * @param imageUrl
-     */
-    private void showLogIfOpen(String log) {
-        if (config.isDEBUG) {
-            KJLoger.debugLog(getClass().getName(), log);
-        }
-    }
-
-    /**
-     * 如果设置了显示环形等待条
-     * 
-     * @param imageView
-     * @param imageUrl
-     */
-    private void showProgressIfOpen(View imageView, String imageUrl) {
-        if (config.openProgress) {
-            try {
-                ViewGroup parent = ((ViewGroup) imageView.getParent());
-                parent.removeView(parent.findViewWithTag(imageUrl));
-            } catch (ClassCastException e) {
-            } finally {
-                imageView.setVisibility(View.VISIBLE);
-            }
-        }
-    }
-
-    /**
-     * 对不同的控件调用不同的显示方式
-     * 
-     * @param view
-     * @param bitmap
-     */
-    private void viewSetImage(View view, Bitmap bitmap) {
-        if (view instanceof ImageView) {
-            ((ImageView) view).setImageBitmap(bitmap);
-        } else {
-            view.setBackgroundDrawable(new BitmapDrawable(bitmap));
-        }
     }
 
     /********************* 异步获取Bitmap并设置image的任务类 *********************/
@@ -321,22 +357,17 @@ public class KJBitmap {
 
         @Override
         protected Bitmap doInBackground(Void... _void) {
-            Bitmap bmp = null;
-            byte[] res = downloader.loadImage(url); // 调用加载器加载url中的图片
-            if (res != null) {
-                bmp = BitmapCreate.bitmapFromByteArray(res, 0,
-                        res.length, width, height);
-            }
-            if (bmp != null && config.openMemoryCache) {
-                putBmpToMC(url, bmp); // 图片载入完成后缓存到LrcCache中
-                showLogIfOpen("put to memory cache\n" + url);
-            }
+            Bitmap bmp = getBitmapFromNet(url, width, height);
             return bmp;
         }
 
         @Override
         protected void onPostExecute(Bitmap bmp) {
             super.onPostExecute(bmp);
+            if (bmp != null && config.openMemoryCache) {
+                putBitmapToMC(url, bmp); // 图片载入完成后缓存到LrcCache中
+                showLogIfOpen("put to memory cache\n" + url);
+            }
             if (url.equals(view.getTag())) {
                 bmp = BitmapHelper.scaleWithWH(bmp, width, height);
                 viewSetImage(view, bmp);
@@ -357,7 +388,7 @@ public class KJBitmap {
      * @param v
      *            要添加的bitmap
      */
-    public void putBmpToMC(String k, Bitmap v) {
+    public void putBitmapToMC(String k, Bitmap v) {
         mMemoryCache.put(CipherUtils.md5(k), v);
     }
 
@@ -368,8 +399,32 @@ public class KJBitmap {
      *            图片地址Url
      * @return 如果没有key对应的value返回null
      */
-    public Bitmap getBmpFromMC(String key) {
+    public Bitmap getBitmapFromMC(String key) {
         return mMemoryCache.get(CipherUtils.md5(key));
+    }
+
+    /**
+     * 从网络读取Bitmap<br>
+     * 
+     * <b>注意：</b>这里有网络访问，应该放在线程中调用<br>
+     * <b>注意：</b>如果宽高参数为0，显示图片默认大小，此时有可能会造成OOM<br>
+     * 
+     * @param key
+     *            图片地址Url
+     * @param reqW
+     *            图片期望宽度，0为默认大小
+     * @param reqH
+     *            图片期望高度，0为默认大小
+     * @return
+     */
+    public Bitmap getBitmapFromNet(String url, int reqW, int reqH) {
+        Bitmap bmp = null;
+        byte[] res = downloader.loadImage(url); // 调用加载器加载url中的图片
+        if (res != null) {
+            bmp = BitmapCreate.bitmapFromByteArray(res, 0,
+                    res.length, reqW, reqH);
+        }
+        return bmp;
     }
 
     /**
@@ -391,7 +446,7 @@ public class KJBitmap {
      * @return 如果没有key对应的value返回null
      */
     public Bitmap getBitmapFromCache(String key) {
-        Bitmap bitmap = getBmpFromMC(key);
+        Bitmap bitmap = getBitmapFromMC(key);
         if (bitmap == null) {
             byte[] res = downloader.loadImage(key);
             if (res != null) {
@@ -400,7 +455,7 @@ public class KJBitmap {
             }
             if (bitmap != null && config.openMemoryCache) {
                 // 图片载入完成后缓存到LrcCache中
-                putBmpToMC(key, bitmap);
+                putBitmapToMC(key, bitmap);
                 showLogIfOpen("put to memory cache\n" + key);
             }
         }
@@ -480,5 +535,71 @@ public class KJBitmap {
      */
     public void setConfig(KJBitmapConfig cfg) {
         config = cfg;
+    }
+
+    /********************************* 私有方法 *********************************/
+    /**
+     * 如果设置了回调,则会调用加载中的回调
+     * 
+     * @param imageView
+     */
+    private void doLoadCallBack(View imageView) {
+        if (config.callBack != null) {
+            config.callBack.imgLoading(imageView);
+        }
+    }
+
+    /**
+     * 如果设置了回调,则会调用加载成功的回调
+     * 
+     * @param imageView
+     */
+    private void doSuccessCallBack(View imageView) {
+        if (config.callBack != null) {
+            config.callBack.imgLoadSuccess(imageView);
+        }
+    }
+
+    /**
+     * 如果打开了log显示器，则显示log
+     * 
+     * @param imageUrl
+     */
+    private void showLogIfOpen(String log) {
+        if (config.isDEBUG) {
+            KJLoger.debugLog(getClass().getName(), log);
+        }
+    }
+
+    /**
+     * 如果设置了显示环形等待条
+     * 
+     * @param imageView
+     * @param imageUrl
+     */
+    private void showProgressIfOpen(View imageView, String imageUrl) {
+        if (config.openProgress) {
+            try {
+                ViewGroup parent = ((ViewGroup) imageView.getParent());
+                parent.removeView(parent.findViewWithTag(imageUrl));
+            } catch (ClassCastException e) {
+            } finally {
+                imageView.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    /**
+     * 对不同的控件调用不同的显示方式
+     * 
+     * @param view
+     * @param bitmap
+     */
+    private void viewSetImage(View view, Bitmap bitmap) {
+        if (view instanceof ImageView) {
+            ((ImageView) view).setImageBitmap(bitmap);
+        } else {
+            view.setBackgroundDrawable(new BitmapDrawable(bitmap));
+        }
     }
 }
