@@ -37,9 +37,6 @@ public abstract class SimpleBrowserTemplet extends BaseActivity {
     /** 浏览器的webview，你可以在子类中使用 */
     protected WebView mWebView;
 
-    @Override
-    public void setRootView() {}
-
     abstract protected WebView initWebVie(WebView mWebView);
 
     @Override
@@ -63,7 +60,8 @@ public abstract class SimpleBrowserTemplet extends BaseActivity {
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && mWebView.canGoBack()) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)
+                && mWebView.canGoBack()) {
             mWebView.goBack();
             return true;
         }
