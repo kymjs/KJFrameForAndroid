@@ -69,9 +69,40 @@ public class KJBitmap {
     }
 
     /**
+     * 使用默认bitmap配置器的设置，从指定链接获取一张图片<br>
+     * 
+     * <b>注意：</b>如果宽高参数为0，显示图片默认大小，此时有可能会造成OOM<br>
+     * 
+     * @param imageUrl
+     *            图片对应的Url
+     * @param callback
+     *            当图片加载成功后调用接口方法
+     */
+    public void loadBmpWithConfig(String imageUrl,
+            LoadBitmapCallback callback) {
+        loadBmpWithConfig(imageUrl, config, callback);
+    }
+
+    /**
+     * 使用参数bitmap配置器的设置，从指定链接获取一张图片<br>
+     * 
+     * <b>注意：</b>如果宽高参数为0，显示图片默认大小，此时有可能会造成OOM<br>
+     * 
+     * @param imageUrl
+     *            图片对应的Url
+     * @param config
+     *            bitmap大小的配置器
+     * @param callback
+     *            当图片加载成功后调用接口方法
+     */
+    public void loadBmpWithConfig(String imageUrl,
+            KJBitmapConfig config, LoadBitmapCallback callback) {
+        loadBmpWithWH(imageUrl, config.width, config.height, callback);
+    }
+
+    /**
      * 从指定链接获取一张图片<br>
      * 
-     * <b>注意：</b>这里有网络访问，应该放在线程中调用<br>
      * <b>注意：</b>如果宽高参数为0，显示图片默认大小，此时有可能会造成OOM<br>
      * 
      * @param imageUrl
@@ -80,53 +111,102 @@ public class KJBitmap {
      *            图片期望宽度，0为图片默认大小
      * @param reqH
      *            图片期望高度，0为图片默认大小
-     * 
-     * @return bitmap
+     * @param callback
+     *            当图片加载成功后调用接口方法
      */
-    private Bitmap loadBmpWithWH(String imageUrl, int reqW, int reqH) {
+    public void loadBmpWithWH(String imageUrl, int reqW, int reqH,
+            LoadBitmapCallback callback) {
         Bitmap bmp = getBitmapFromMC(imageUrl);
         if (bmp == null) {
-            bmp = getBitmapFromDisk(imageUrl);
-            if (bmp == null) {
-                bmp = getBitmapFromNet(imageUrl, reqW, reqH);
-            }
+            new LoadBmpWorkerTask(imageUrl, reqW, reqH, callback)
+                    .execute();
+        } else {
+            callback.doSomething(bmp);
         }
-        // KJHttp kjh = new KJHttp();
-        // kjh.urlDownload(imageUrl, config.cachePath, callback);
-        return bmp;
     }
 
     /**
-     * 使用默认bitmap配置器的设置，从指定链接获取一张图片<br>
+     * 使用默认bitmap配置器的设置，从指定链接获取一张图片，必须放在线程中执行<br>
      * 
-     * <b>注意：</b>这里有网络访问，应该放在线程中调用<br>
+     * <b>注意：</b>这里有访问网络的请求，必须放在线程中执行<br>
      * <b>注意：</b>如果宽高参数为0，显示图片默认大小，此时有可能会造成OOM<br>
      * 
      * @param imageUrl
      *            图片对应的Url
-     * 
-     * @return bitmap
      */
-    private Bitmap loadBmpWithConfig(String imageUrl) {
-        return loadBmpWithConfig(imageUrl, config);
+    public Bitmap loadBmpMustInThread(String imageUrl) {
+        return loadBmpMustInThread(imageUrl, config);
     }
 
     /**
-     * 使用参数bitmap配置器的设置，从指定链接获取一张图片<br>
+     * 使用参数bitmap配置器的设置，从指定链接获取一张图片，必须放在线程中执行<br>
      * 
-     * <b>注意：</b>这里有网络访问，应该放在线程中调用<br>
+     * <b>注意：</b>这里有访问网络的请求，必须放在线程中执行<br>
      * <b>注意：</b>如果宽高参数为0，显示图片默认大小，此时有可能会造成OOM<br>
      * 
      * @param imageUrl
      *            图片对应的Url
      * @param config
      *            bitmap大小的配置器
-     * 
-     * @return bitmap
      */
-    private Bitmap loadBmpWithConfig(String imageUrl,
+    public Bitmap loadBmpMustInThread(String imageUrl,
             KJBitmapConfig config) {
-        return loadBmpWithWH(imageUrl, config.width, config.height);
+        return loadBmpMustInThread(imageUrl, config.width,
+                config.height);
+    }
+
+    /**
+     * 从指定链接获取一张图片，必须放在线程中执行<br>
+     * 
+     * <b>注意：</b>这里有访问网络的请求，必须放在线程中执行<br>
+     * <b>注意：</b>如果宽高参数为0，显示图片默认大小，此时有可能会造成OOM<br>
+     * 
+     * @param imageUrl
+     *            图片对应的Url
+     * @param reqW
+     *            图片期望宽度，0为图片默认大小
+     * @param reqH
+     *            图片期望高度，0为图片默认大小
+     */
+    public Bitmap loadBmpMustInThread(String imageUrl, int reqW,
+            int reqH) {
+        Bitmap bmp = getBitmapFromCache(imageUrl);
+        if (bmp == null) {
+            bmp = getBitmapFromNet(imageUrl, reqW, reqH);
+        } else {
+            bmp = BitmapHelper.scaleWithWH(bmp, reqW, reqH);
+        }
+        if (bmp != null) {
+            putBitmapToMC(imageUrl, bmp);
+        }
+        return bmp;
+    }
+
+    private class LoadBmpWorkerTask extends
+            KJTaskExecutor<Void, Void, Bitmap> {
+        private LoadBitmapCallback callback;
+        private String url;
+        private int width, height;
+
+        public LoadBmpWorkerTask(String url, int width, int height,
+                LoadBitmapCallback callback) {
+            this.callback = callback;
+            this.url = url;
+            this.width = width;
+            this.height = height;
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            // 再次检查内存是否由于多线程关系出现了Bitmap
+            return loadBmpMustInThread(url, width, height);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            super.onPostExecute(result);
+            callback.doSomething(result);
+        }
     }
 
     /**
