@@ -13,3 +13,4 @@ org.kymjs.aframe.ui.activity
 org.kymjs.aframe.ui.fragment
 org.kymjs.aframe.ui.widget
 org.kymjs.aframe.utils
+org.kymjs.kjlibrary
