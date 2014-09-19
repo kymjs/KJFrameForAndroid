@@ -489,7 +489,7 @@ public class KJBitmap {
      * <b>注意：</b>这里有网络访问，应该放在线程中调用<br>
      * <b>注意：</b>如果宽高参数为0，显示图片默认大小，此时有可能会造成OOM<br>
      * 
-     * @param key
+     * @param url
      *            图片地址Url
      * @param reqW
      *            图片期望宽度，0为默认大小
