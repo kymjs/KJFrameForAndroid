@@ -24,10 +24,11 @@ import android.graphics.Matrix;
 /**
  * Bitmap操作助手，包含了图片大小压缩、缩放<br>
  * 
- * <b>创建时间</b> 2014-6-30
+ * <b>创建时间</b> 2014-6-30<br>
+ * <b>最后修改</b> 2014-9-19<br>
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
+ * @version 1.1
  */
 public class BitmapHelper {
 

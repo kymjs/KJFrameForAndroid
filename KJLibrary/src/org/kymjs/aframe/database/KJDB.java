@@ -39,9 +39,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * The DBLibrary's core classes<br>
  * 
- * <b>创建时间</b> 2014-8-15
+ * <b>创建时间</b> 2014-8-15<br>
  * 
- * @version 1.0
+ * @version 1.1
  */
 public class KJDB {
 
@@ -60,12 +60,13 @@ public class KJDB {
         }
         if (config.getTargetDirectory() != null
                 && config.getTargetDirectory().trim().length() > 0) {
-            this.db = createDbFileOnSDCard(config.getTargetDirectory(),
-                    config.getDbName());
+            this.db = createDbFileOnSDCard(
+                    config.getTargetDirectory(), config.getDbName());
         } else {
             this.db = new SqliteDbHelper(config.getContext()
                     .getApplicationContext(), config.getDbName(),
-                    config.getDbVersion(), config.getDbUpdateListener())
+                    config.getDbVersion(),
+                    config.getDbUpdateListener())
                     .getWritableDatabase();
         }
         this.config = config;
@@ -128,7 +129,8 @@ public class KJDB {
      * @param isDebug
      *            是否为debug模式（debug模式进行数据库操作的时候将会打印sql语句）
      */
-    public static KJDB create(Context context, String dbName, boolean isDebug) {
+    public static KJDB create(Context context, String dbName,
+            boolean isDebug) {
         DaoConfig config = new DaoConfig();
         config.setContext(context);
         config.setDbName(dbName);
@@ -143,8 +145,8 @@ public class KJDB {
      * @param dbName
      *            数据库名称
      */
-    public static KJDB create(Context context, String targetDirectory,
-            String dbName) {
+    public static KJDB create(Context context,
+            String targetDirectory, String dbName) {
         DaoConfig config = new DaoConfig();
         config.setContext(context);
         config.setDbName(dbName);
@@ -161,8 +163,8 @@ public class KJDB {
      * @param isDebug
      *            是否为debug模式（debug模式进行数据库操作的时候将会打印sql语句）
      */
-    public static KJDB create(Context context, String targetDirectory,
-            String dbName, boolean isDebug) {
+    public static KJDB create(Context context,
+            String targetDirectory, String dbName, boolean isDebug) {
         DaoConfig config = new DaoConfig();
         config.setContext(context);
         config.setTargetDirectory(targetDirectory);
@@ -186,8 +188,9 @@ public class KJDB {
      *            数据库升级监听器：如果监听器为null，升级的时候将会清空所所有的数据
      * @return
      */
-    public static KJDB create(Context context, String dbName, boolean isDebug,
-            int dbVersion, DbUpdateListener dbUpdateListener) {
+    public static KJDB create(Context context, String dbName,
+            boolean isDebug, int dbVersion,
+            DbUpdateListener dbUpdateListener) {
         DaoConfig config = new DaoConfig();
         config.setContext(context);
         config.setDbName(dbName);
@@ -214,9 +217,9 @@ public class KJDB {
      *            数据库升级监听器,如果监听器为null，升级的时候将会清空所所有的数据
      * @return
      */
-    public static KJDB create(Context context, String targetDirectory,
-            String dbName, boolean isDebug, int dbVersion,
-            DbUpdateListener dbUpdateListener) {
+    public static KJDB create(Context context,
+            String targetDirectory, String dbName, boolean isDebug,
+            int dbVersion, DbUpdateListener dbUpdateListener) {
         DaoConfig config = new DaoConfig();
         config.setContext(context);
         config.setTargetDirectory(targetDirectory);
@@ -279,7 +282,8 @@ public class KJDB {
      * @param list
      * @param cv
      */
-    private void insertContentValues(List<KeyValue> list, ContentValues cv) {
+    private void insertContentValues(List<KeyValue> list,
+            ContentValues cv) {
         if (list != null && cv != null) {
             for (KeyValue kv : list) {
                 cv.put(kv.getKey(), kv.getValue().toString());
@@ -306,6 +310,7 @@ public class KJDB {
      * 
      * @param entity
      * @param strWhere
+     *            :strWhere表示sql语句update xxx from xxx where后的语句，
      *            条件为空的时候，将会更新所有的数据
      */
     public void update(Object entity, String strWhere) {
@@ -342,7 +347,8 @@ public class KJDB {
      * 
      * @param clazz
      * @param strWhere
-     *            条件为空的时候 将会删除所有的数据
+     *            ：strWhere表示sql语句后delete xxx from xxx where的语句，条件为空的时候
+     *            将会删除所有的数据
      */
     public void deleteByWhere(Class<?> clazz, String strWhere) {
         checkTableExist(clazz);
@@ -356,7 +362,8 @@ public class KJDB {
      */
     public void dropDb() {
         Cursor cursor = db.rawQuery(
-                "SELECT name FROM sqlite_master WHERE type ='table'", null);
+                "SELECT name FROM sqlite_master WHERE type ='table'",
+                null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 // 添加异常捕获.忽略删除所有表时出现的异常:
@@ -364,7 +371,8 @@ public class KJDB {
                 try {
                     db.execSQL("DROP TABLE " + cursor.getString(0));
                 } catch (SQLException e) {
-                    KJLoger.debug(getClass().getName() + e.getMessage());
+                    KJLoger.debug(getClass().getName()
+                            + e.getMessage());
                 }
             }
         }
@@ -379,7 +387,8 @@ public class KJDB {
             debugSql(sqlInfo.getSql());
             db.execSQL(sqlInfo.getSql(), sqlInfo.getBindArgsAsArray());
         } else {
-            KJLoger.debug(getClass().getName() + "sava error:sqlInfo is null");
+            KJLoger.debug(getClass().getName()
+                    + "sava error:sqlInfo is null");
         }
     }
 
@@ -398,7 +407,8 @@ public class KJDB {
                     sqlInfo.getBindArgsAsStringArray());
             try {
                 if (cursor.moveToNext()) {
-                    return CursorHelper.getEntity(cursor, clazz, this);
+                    return CursorHelper
+                            .getEntity(cursor, clazz, this);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -457,7 +467,8 @@ public class KJDB {
      * @param <T>
      * @return
      */
-    public <T> T loadManyToOne(T entity, Class<T> clazz, Class<?>... findClass) {
+    public <T> T loadManyToOne(T entity, Class<T> clazz,
+            Class<?>... findClass) {
         if (entity != null) {
             try {
                 Collection<ManyToOne> manys = TableInfo.get(clazz).manyToOneMap
@@ -466,7 +477,8 @@ public class KJDB {
                     Object id = many.getValue(entity);
                     if (id != null) {
                         boolean isFind = false;
-                        if (findClass == null || findClass.length == 0) {
+                        if (findClass == null
+                                || findClass.length == 0) {
                             isFind = true;
                         }
                         for (Class<?> mClass : findClass) {
@@ -541,12 +553,14 @@ public class KJDB {
      * @param <T>
      * @return
      */
-    public <T> T loadOneToMany(T entity, Class<T> clazz, Class<?>... findClass) {
+    public <T> T loadOneToMany(T entity, Class<T> clazz,
+            Class<?>... findClass) {
         if (entity != null) {
             try {
                 Collection<OneToMany> ones = TableInfo.get(clazz).oneToManyMap
                         .values();
-                Object id = TableInfo.get(clazz).getId().getValue(entity);
+                Object id = TableInfo.get(clazz).getId()
+                        .getValue(entity);
                 for (OneToMany one : ones) {
                     boolean isFind = false;
                     if (findClass == null || findClass.length == 0) {
@@ -560,8 +574,9 @@ public class KJDB {
                     }
 
                     if (isFind) {
-                        List<?> list = findAllByWhere(one.getOneClass(),
-                                one.getColumn() + "=" + id);
+                        List<?> list = findAllByWhere(
+                                one.getOneClass(), one.getColumn()
+                                        + "=" + id);
                         if (list != null) {
                             /* 如果是OneToManyLazyLoader泛型，则执行灌入懒加载数据 */
                             if (one.getDataType() == OneToManyLazyLoader.class) {
@@ -609,7 +624,7 @@ public class KJDB {
      * 
      * @param clazz
      * @param strWhere
-     *            条件为空的时候查找所有数据
+     *            ：strWhere表示sql语句select xxx from xxx where后的语句， 条件为空的时候查找所有数据
      */
     public <T> List<T> findAllByWhere(Class<T> clazz, String strWhere) {
         checkTableExist(clazz);
@@ -622,16 +637,16 @@ public class KJDB {
      * 
      * @param clazz
      * @param strWhere
-     *            条件为空的时候查找所有数据
+     *            :strWhere表示sql语句select xxx from xxx where后的语句，条件为空的时候查找所有数据
      * @param orderBy
      *            排序字段
      */
-    public <T> List<T> findAllByWhere(Class<T> clazz, String strWhere,
-            String orderBy) {
+    public <T> List<T> findAllByWhere(Class<T> clazz,
+            String strWhere, String orderBy) {
         checkTableExist(clazz);
         return findAllBySql(clazz,
-                SqlBuilder.getSelectSQLByWhere(clazz, strWhere) + " ORDER BY "
-                        + orderBy);
+                SqlBuilder.getSelectSQLByWhere(clazz, strWhere)
+                        + " ORDER BY " + orderBy);
     }
 
     /**
@@ -752,7 +767,8 @@ public class KJDB {
         if (!dbf.exists()) {
             try {
                 if (dbf.createNewFile()) {
-                    return SQLiteDatabase.openOrCreateDatabase(dbf, null);
+                    return SQLiteDatabase.openOrCreateDatabase(dbf,
+                            null);
                 }
             } catch (IOException ioex) {
                 throw new KJException("数据库文件创建失败", ioex);
@@ -767,17 +783,19 @@ public class KJDB {
 
         private DbUpdateListener mDbUpdateListener;
 
-        public SqliteDbHelper(Context context, String name, int version,
-                DbUpdateListener dbUpdateListener) {
+        public SqliteDbHelper(Context context, String name,
+                int version, DbUpdateListener dbUpdateListener) {
             super(context, name, null, version);
             this.mDbUpdateListener = dbUpdateListener;
         }
 
         public void onCreate(SQLiteDatabase db) {}
 
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        public void onUpgrade(SQLiteDatabase db, int oldVersion,
+                int newVersion) {
             if (mDbUpdateListener != null) {
-                mDbUpdateListener.onUpgrade(db, oldVersion, newVersion);
+                mDbUpdateListener.onUpgrade(db, oldVersion,
+                        newVersion);
             } else { // 清空所有的数据信息
                 dropDb();
             }
@@ -797,7 +815,8 @@ public class KJDB {
          * @param newVersion
          *            新版本
          */
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion);
+        public void onUpgrade(SQLiteDatabase db, int oldVersion,
+                int newVersion);
     }
 
 }

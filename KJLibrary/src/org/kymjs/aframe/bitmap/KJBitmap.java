@@ -34,10 +34,11 @@ import android.widget.ProgressBar;
 
 /**
  * The BitmapLibrary's core classes<br>
- * <b>创建时间</b> 2014-7-11
+ * <b>创建时间</b> 2014-7-11<br>
+ * <b>最后修改</b> 2014-9-19<br>
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
+ * @version 2.1
  */
 public class KJBitmap {
     /**

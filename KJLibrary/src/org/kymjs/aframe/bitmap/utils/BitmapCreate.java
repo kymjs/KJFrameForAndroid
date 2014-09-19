@@ -30,7 +30,7 @@ import android.graphics.Rect;
  * <b>创建时间</b> 2014-7-11
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
+ * @version 1.1
  */
 public class BitmapCreate {
     /**

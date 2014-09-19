@@ -21,7 +21,7 @@ import org.kymjs.aframe.database.annotate.Table;
 /**
  * 一个Cache的JavaBean类<br>
  * 
- * <b>说明</b> 这是一个私有类，开发者无法访问.为了API使用方便，对Field使用默认访问权限<br>
+ * <b>说明</b> 这是一个私有类，开发者不应该访问.<br>
  * <b>创建时间</b> 2014-9-3
  * 
  * @author kymjs(kymjs123@gmail.com)

@@ -100,10 +100,10 @@ import android.content.Context;
  * The HttpLibrary's core classes<br>
  * 
  * <b>创建时间</b> 2014-7-14<br>
- * <b>修改时间</b> 2014-9-3
+ * <b>修改时间</b> 2014-9-19
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.4
+ * @version 1.5
  */
 public class KJHttp {
 

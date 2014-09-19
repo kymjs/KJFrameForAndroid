@@ -18,7 +18,8 @@ package org.kymjs.aframe.bitmap;
 import android.graphics.Bitmap;
 
 /**
- * 用作KJBitmap.loadBmp参数，从网络获取一个Bitmap的回调方法
+ * 用作KJBitmap.loadBmp参数，从网络获取一个Bitmap的回调方法<br>
+ * <b>创建时间：</b> 2014-9-19<br>
  * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0

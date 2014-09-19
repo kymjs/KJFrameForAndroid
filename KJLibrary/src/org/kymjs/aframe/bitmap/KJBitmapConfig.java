@@ -19,11 +19,11 @@ import android.graphics.Bitmap;
 
 /**
  * bitmapLibrary的配置器<br>
- * <b>注意</b> 如果你将width和height设置为0，此时图片将显示默认大小，但同时有可能会发生OOM问题 <b>创建时间</b>
- * 2014-7-11
+ * <b>注意</b> 如果你将width和height设置为0，此时图片将显示默认大小，但同时有可能会发生OOM问题<br>
+ * <b>创建时间</b> 2014-7-11<br>
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.0
+ * @version 1.2
  */
 public final class KJBitmapConfig {
     public static final int DEFAULT = Integer.MAX_VALUE;
