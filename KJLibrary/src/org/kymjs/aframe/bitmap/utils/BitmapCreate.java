@@ -73,12 +73,16 @@ public class BitmapCreate {
      */
     public static Bitmap bitmapFromFile(String pathName,
             int reqWidth, int reqHeight) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(pathName, options);
-        options = BitmapHelper.calculateInSampleSize(options,
-                reqWidth, reqHeight);
-        return BitmapFactory.decodeFile(pathName, options);
+        if (reqHeight == 0 || reqWidth == 0) {
+            return BitmapFactory.decodeFile(pathName);
+        } else {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(pathName, options);
+            options = BitmapHelper.calculateInSampleSize(options,
+                    reqWidth, reqHeight);
+            return BitmapFactory.decodeFile(pathName, options);
+        }
     }
 
     /**
@@ -125,9 +129,13 @@ public class BitmapCreate {
      */
     public static Bitmap bitmapFromStream(InputStream is,
             int reqWidth, int reqHeight) {
-        byte[] data = FileUtils.input2byte(is);
-        return bitmapFromByteArray(data, 0, data.length, reqWidth,
-                reqHeight);
+        if (reqHeight == 0 || reqWidth == 0) {
+            return BitmapFactory.decodeStream(is);
+        } else {
+            byte[] data = FileUtils.input2byte(is);
+            return bitmapFromByteArray(data, 0, data.length,
+                    reqWidth, reqHeight);
+        }
     }
 
     /**
@@ -146,11 +154,16 @@ public class BitmapCreate {
      */
     public static Bitmap bitmapFromStream(InputStream is,
             Rect outPadding, int reqWidth, int reqHeight) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(is, outPadding, options);
-        options = BitmapHelper.calculateInSampleSize(options,
-                reqWidth, reqHeight);
-        return BitmapFactory.decodeStream(is, outPadding, options);
+        if (reqHeight == 0 || reqWidth == 0) {
+            return BitmapFactory.decodeStream(is);
+        } else {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(is, outPadding, options);
+            options = BitmapHelper.calculateInSampleSize(options,
+                    reqWidth, reqHeight);
+            return BitmapFactory
+                    .decodeStream(is, outPadding, options);
+        }
     }
 }

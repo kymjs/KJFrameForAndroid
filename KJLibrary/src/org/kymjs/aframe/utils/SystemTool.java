@@ -70,9 +70,9 @@ public final class SystemTool {
     /**
      * 获取手机IMEI码
      */
-    public static String getPhoneIMEI(Activity aty) {
-        TelephonyManager tm = (TelephonyManager) aty
-                .getSystemService(Activity.TELEPHONY_SERVICE);
+    public static String getPhoneIMEI(Context cxt) {
+        TelephonyManager tm = (TelephonyManager) cxt
+                .getSystemService(Context.TELEPHONY_SERVICE);
         return tm.getDeviceId();
     }
 
