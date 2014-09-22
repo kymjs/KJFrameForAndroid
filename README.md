@@ -20,7 +20,6 @@
 ---
 # 框架使用
 clone下KJFrameForAndroid最新源码后，导入eclipse中，若只想使用框架而不考虑源码查看与学习，可直接复制binrary目录下的kjlibrary.jar文件至自己项目的libs文件夹中。<br>
-gradle？为什么要用AndroidStudio（或类似）我们不对其做支持，当然你可以选择自行研究。<br>
 若需要对源码改动或学习，可打开KJLibrary工程查看源码，同时结合KJFrameExample演示项目更好的学习，另外也可以自己新建工程，并右键工程->preference->Android->library->Add,选择KJLibrary工程加入后apply应用。<br>
 由于使用了最新的部分API函数，以及3.0版Fragment。KJFrameForAndroid框架最低支持Android3.0版本，本框架可以作代码混淆<br>
 
@@ -212,8 +211,8 @@ kjh.urlDownload(mEt.getText().toString(), "/storage/sdcard0/3.png",file);
 
 ```
 ## DBLibrary模块
-包含了android中的orm框架，使用了线程池对sqlite进行操作，一行代码就可以进行增删改查。支持一对多，多对一等查询。<br>
-有关DB模块，要在此感谢afinal框架，很大程度上参考了[finalDB](https://github.com/kymjs/afinal)的设计<br>
+包含了android中的orm框架，一行代码就可以进行增删改查。支持一对多，多对一等查询。<br>
+有关DB模块，要在此感谢afinal框架，很大程度上参考了[finalDB](https://github.com/kymjs/afinal)的设计，并在此基础上完善了几乎全部的API注释，与更多可定制的DB操作<br>
 ```java
 //普通数据存储
 KJDB db = KJDB.create(this);
