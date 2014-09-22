@@ -42,7 +42,7 @@ public class TabExampleTwo extends KJFragmentActivity {
     protected void initWidget() {
         super.initWidget();
         actionBar = getActionBar();
-        mRbtn1.setText("没东西");
+        mRbtn1.setText("浏览器");
         mRbtn2.setText("数据库");
         mRbtn3.setText("控件展示");
         mRbtn4.setText("下载");
@@ -53,6 +53,7 @@ public class TabExampleTwo extends KJFragmentActivity {
         super.widgetClick(v);
         switch (v.getId()) {
         case R.id.bottombar_content1:
+            showActivity(aty, WebViewExample.class);
             break;
         case R.id.bottombar_content2:
             actionBar.setTitle("数据库基本操作");
