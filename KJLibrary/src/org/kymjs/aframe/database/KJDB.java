@@ -253,7 +253,7 @@ public class KJDB {
     /**
      * 保存入数据库
      * 
-     * @param entity
+     * @param entities
      */
     public void save(List<Object> entities) {
         if (entities != null) {
