@@ -73,7 +73,7 @@ public class WebViewExample extends SimpleBrowserTemplet {
     }
 
     /**
-     * 链接载入完成会被调用（此时我们可以把显示的进度条什么的隐藏掉）
+     * 获取到当前网页的title
      */
     @Override
     protected void getWebTitle(WebView view, String title) {

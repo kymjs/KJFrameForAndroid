@@ -99,7 +99,7 @@ public abstract class SimpleBrowserTemplet extends BaseActivity {
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         mWebView.setWebViewClient(new KJWebViewClient());
-        mWebView.setWebChromeClient(new WebChromeClient());
+        mWebView.setWebChromeClient(new KJWebChromeClient());
     }
 
     /**
@@ -125,6 +125,7 @@ public abstract class SimpleBrowserTemplet extends BaseActivity {
         @Override
         public void onReceivedIcon(WebView view, Bitmap icon) {
             super.onReceivedIcon(view, icon);
+            getWebIcon(view, icon);
         }
     }
 

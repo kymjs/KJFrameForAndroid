@@ -241,13 +241,26 @@ public class KJDB {
     }
 
     /**
-     * 保存数据库，速度要比save快
+     * 保存入数据库
      * 
      * @param entity
      */
     public void save(Object entity) {
         checkTableExist(entity.getClass());
         exeSqlInfo(SqlBuilder.buildInsertSql(entity));
+    }
+
+    /**
+     * 保存入数据库
+     * 
+     * @param entity
+     */
+    public void save(List<Object> entities) {
+        if (entities != null) {
+            for (Object t : entities) {
+                save(t);
+            }
+        }
     }
 
     /**
