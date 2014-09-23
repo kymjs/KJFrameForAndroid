@@ -18,7 +18,6 @@ package org.kymjs.aframe.ui;
 import java.util.Stack;
 
 import org.kymjs.aframe.ui.activity.I_KJActivity;
-import org.kymjs.aframe.ui.activity.KJFrameActivity;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -55,7 +54,7 @@ final public class KJActivityManager {
     /**
      * 添加Activity到栈
      */
-    public void addActivity(KJFrameActivity activity) {
+    public void addActivity(I_KJActivity activity) {
         if (activityStack == null) {
             activityStack = new Stack<I_KJActivity>();
         }
