@@ -20,7 +20,6 @@ import java.util.Stack;
 import org.kymjs.aframe.ui.activity.I_KJActivity;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 
 /**
@@ -147,17 +146,10 @@ final public class KJActivityManager {
     /**
      * 应用程序退出
      * 
-     * <b>注意</b>You must hold the permission
-     * {@link android.Manifest.permission#KILL_BACKGROUND_PROCESSES} to be able
-     * to call this method.
      */
     public void AppExit(Context context) {
         try {
             finishAllActivity();
-            ActivityManager activityMgr = (ActivityManager) context
-                    .getSystemService(Context.ACTIVITY_SERVICE);
-            activityMgr.killBackgroundProcesses(context
-                    .getPackageName());
             Runtime.getRuntime().exit(0);
         } catch (Exception e) {
             Runtime.getRuntime().exit(-1);
