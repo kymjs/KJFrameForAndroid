@@ -223,7 +223,7 @@ public class KJBitmap {
     }
 
     /**
-     * 加载网络图片
+     * 加载网络图片,默认使用view的宽高作为图片的宽高
      * 
      * @param imageView
      *            要显示图片的控件(ImageView设置src，普通View设置bg)
@@ -234,6 +234,9 @@ public class KJBitmap {
      */
     public void display(View imageView, String imageUrl,
             boolean openProgress) {
+        imageView.measure(0, 0);
+        config.width = imageView.getMeasuredWidth();
+        config.height = imageView.getMeasuredHeight();
         if (openProgress) {
             loadImageWithProgress(imageView, imageUrl,
                     config.loadingBitmap, config.width, config.height);
@@ -261,7 +264,7 @@ public class KJBitmap {
     }
 
     /**
-     * 加载网络图片
+     * 加载网络图片,默认使用view的宽高作为图片的宽高
      * 
      * @param imageView
      *            要显示图片的控件(ImageView设置src，普通View设置bg)
@@ -272,6 +275,9 @@ public class KJBitmap {
      */
     public void display(View imageView, String imageUrl,
             Bitmap loadingBitmap) {
+        imageView.measure(0, 0);
+        config.width = imageView.getMeasuredWidth();
+        config.height = imageView.getMeasuredHeight();
         display(imageView, imageUrl, loadingBitmap, config.width,
                 config.height);
     }
