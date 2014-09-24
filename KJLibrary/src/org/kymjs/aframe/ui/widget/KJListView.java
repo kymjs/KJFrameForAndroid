@@ -137,7 +137,6 @@ public class KJListView extends ListView implements OnScrollListener {
         if (mLastY == -1) {
             mLastY = ev.getRawY();
         }
-
         switch (ev.getAction()) {
         case MotionEvent.ACTION_DOWN:
             mLastY = ev.getRawY();
