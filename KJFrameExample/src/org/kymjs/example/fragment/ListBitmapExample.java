@@ -73,7 +73,7 @@ public class ListBitmapExample extends BaseFragment {
         }
 
         public void refresh() {
-            // notifyDataSetChanged();
+            notifyDataSetChanged();
             notifyDataSetInvalidated();
         }
 

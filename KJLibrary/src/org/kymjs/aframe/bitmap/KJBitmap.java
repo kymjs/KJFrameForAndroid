@@ -223,7 +223,23 @@ public class KJBitmap {
     }
 
     /**
-     * 加载网络图片,默认使用view的宽高作为图片的宽高
+     * 加载网络图片,以图片的宽高作为图片的宽高<br>
+     * <b>注：</b>不要在absListView中使用该方法，由于item重用可能会造成图片不是当前想要的大小
+     * 
+     * @param imageView
+     *            要显示图片的控件(ImageView设置src，普通View设置bg)
+     * @param imageUrl
+     *            图片的URL
+     */
+    public void displayWithViewWH(View imageView, String imageUrl) {
+        imageView.measure(0, 0);
+        display(imageView, imageUrl, config.loadingBitmap,
+                imageView.getMeasuredWidth(),
+                imageView.getMeasuredHeight());
+    }
+
+    /**
+     * 加载网络图片
      * 
      * @param imageView
      *            要显示图片的控件(ImageView设置src，普通View设置bg)
@@ -234,9 +250,6 @@ public class KJBitmap {
      */
     public void display(View imageView, String imageUrl,
             boolean openProgress) {
-        imageView.measure(0, 0);
-        config.width = imageView.getMeasuredWidth();
-        config.height = imageView.getMeasuredHeight();
         if (openProgress) {
             loadImageWithProgress(imageView, imageUrl,
                     config.loadingBitmap, config.width, config.height);
@@ -264,7 +277,7 @@ public class KJBitmap {
     }
 
     /**
-     * 加载网络图片,默认使用view的宽高作为图片的宽高
+     * 加载网络图片
      * 
      * @param imageView
      *            要显示图片的控件(ImageView设置src，普通View设置bg)
@@ -275,9 +288,6 @@ public class KJBitmap {
      */
     public void display(View imageView, String imageUrl,
             Bitmap loadingBitmap) {
-        imageView.measure(0, 0);
-        config.width = imageView.getMeasuredWidth();
-        config.height = imageView.getMeasuredHeight();
         display(imageView, imageUrl, loadingBitmap, config.width,
                 config.height);
     }
