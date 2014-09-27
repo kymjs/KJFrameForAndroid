@@ -170,6 +170,7 @@ public class KJHttp {
             KJTaskExecutor<Void, Object, Object> {
         private I_HttpRespond callback;
         private String _url;
+        private int code;
 
         public HttpUrlGetTask(I_HttpRespond callback, String _url) {
             this.callback = callback;
@@ -195,6 +196,7 @@ public class KJHttp {
                     conn.setRequestProperty("Charset",
                             config.getCharSet());
                     conn.setRequestMethod("GET");
+                    code = conn.getResponseCode();
                     String cookie = config.getCookie();
                     if (!StringUtils.isEmpty(cookie)) {
                         conn.setRequestProperty("Cookie", cookie);
@@ -243,7 +245,7 @@ public class KJHttp {
             if (result instanceof MalformedURLException) {
                 callback.onFailure((Throwable) result, 3721, "URL错误");
             } else if (result instanceof IOException) {
-                callback.onFailure((Throwable) result, 3722, "IO错误");
+                callback.onFailure((Throwable) result, code, "IO错误");
             } else {
                 callback.onSuccess(result);
                 config.getCacher().add(_url, result.toString());
@@ -280,6 +282,7 @@ public class KJHttp {
             KJTaskExecutor<Object, Object, Object> {
         private I_HttpRespond callback;
         private KJFileParams params;
+        private int code;
 
         public HttpUrlFileTask(KJFileParams param,
                 I_HttpRespond callback) {
@@ -308,6 +311,7 @@ public class KJHttp {
                 conn.setRequestProperty("Charset",
                         config.getCharSet());
                 conn.setInstanceFollowRedirects(true);
+                code = conn.getResponseCode();
                 conn.setRequestProperty("connection", "Keep-Alive");
                 conn.setRequestProperty("Content-Type",
                         "multipart/form-data; boundary=" + BOUNDARY);
@@ -385,7 +389,7 @@ public class KJHttp {
             if (result instanceof MalformedURLException) {
                 callback.onFailure((Throwable) result, 3721, "URL错误");
             } else if (result instanceof IOException) {
-                callback.onFailure((Throwable) result, 3722, "IO错误");
+                callback.onFailure((Throwable) result, code, "IO错误");
             } else {
                 callback.onSuccess(result);
             }
@@ -400,6 +404,7 @@ public class KJHttp {
         private I_HttpRespond callback;
         private I_HttpParams params;
         private String _url;
+        private int code;
 
         public HttpUrlPostTask(I_HttpParams param,
                 I_HttpRespond callback, String _url) {
@@ -433,6 +438,7 @@ public class KJHttp {
                     conn.setDoInput(true);
                     conn.setRequestMethod("POST");
                     conn.setUseCaches(false);
+                    code = conn.getResponseCode();
                     String cookie = config.getCookie();
                     if (!StringUtils.isEmpty(cookie)) {
                         conn.setRequestProperty("Cookie", cookie);
@@ -490,7 +496,7 @@ public class KJHttp {
             if (result instanceof MalformedURLException) {
                 callback.onFailure((Throwable) result, 3721, "URL错误");
             } else if (result instanceof IOException) {
-                callback.onFailure((Throwable) result, 3722, "IO错误");
+                callback.onFailure((Throwable) result, code, "IO错误");
             } else {
                 callback.onSuccess(result);
                 config.getCacher().add(_url, result.toString());
