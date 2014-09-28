@@ -94,6 +94,7 @@ import android.content.Context;
  * 1.3 添加httpClient的post、get、put等方式请求
  * 1.4 添加http请求中对json(应该是一切字符串)数据的缓存
  * 1.5 添加Http请求中对请求头的自定义以及cookie的定义
+ * 1.6 优化cache的存储与读取策略
  */
 
 /**
@@ -179,8 +180,11 @@ public class KJHttp {
 
         @Override
         protected Object doInBackground(Void... params) {
-            String res = config.getCacher().get(_url);
-            if (res != null && config.isUseCache()) { // 如果有缓存
+            String res = null;
+            if (config.isUseCache()) {
+                res = config.getCacher().get(_url);
+            }
+            if (res != null) { // 如果有缓存
                 return res;
             } else {
                 InputStream input = null;
@@ -248,7 +252,9 @@ public class KJHttp {
                 callback.onFailure((Throwable) result, code, "IO错误");
             } else {
                 callback.onSuccess(result);
-                config.getCacher().add(_url, result.toString());
+                if (config.isUseCache()) {
+                    config.getCacher().add(_url, result.toString());
+                }
             }
         }
     }
@@ -415,8 +421,11 @@ public class KJHttp {
 
         @Override
         protected Object doInBackground(Void... _void) {
-            String res = config.getCacher().get(_url);
-            if (res != null && config.isUseCache()) { // 如果有缓存
+            String res = null;
+            if (config.isUseCache()) {
+                res = config.getCacher().get(_url);
+            }
+            if (res != null) { // 如果有缓存
                 return res;
             } else {
                 DataOutputStream out = null;
@@ -499,7 +508,9 @@ public class KJHttp {
                 callback.onFailure((Throwable) result, code, "IO错误");
             } else {
                 callback.onSuccess(result);
-                config.getCacher().add(_url, result.toString());
+                if (config.isUseCache()) {
+                    config.getCacher().add(_url, result.toString());
+                }
             }
         }
     }
@@ -867,8 +878,12 @@ public class KJHttp {
             str.append("?").append(params.toString());
             url = str.toString();
         }
-        String res = config.getCacher().get(url);
-        if (res != null && callback != null && config.isUseCache()) { // 如果有缓存
+
+        String res = null;
+        if (config.isUseCache()) {
+            res = config.getCacher().get(url);
+        }
+        if (res != null && callback != null) { // 如果有缓存
             callback.onSuccess(res);
         } else {
             sendRequest(httpClient, httpContext, new HttpGet(url),
@@ -893,8 +908,11 @@ public class KJHttp {
 
     public void post(Context context, String url, HttpEntity entity,
             String contentType, HttpCallBack callback) {
-        String res = config.getCacher().get(url);
-        if (res != null && callback != null && config.isUseCache()) { // 如果有缓存
+        String res = null;
+        if (config.isUseCache()) {
+            res = config.getCacher().get(url);
+        }
+        if (res != null && callback != null) { // 如果有缓存
             callback.onSuccess(res);
         } else {
             sendRequest(
@@ -922,8 +940,11 @@ public class KJHttp {
 
     public void put(Context context, String url, HttpEntity entity,
             String contentType, HttpCallBack callback) {
-        String res = config.getCacher().get(url);
-        if (res != null && callback != null && config.isUseCache()) { // 如果有缓存
+        String res = null;
+        if (config.isUseCache()) {
+            res = config.getCacher().get(url);
+        }
+        if (res != null && callback != null) { // 如果有缓存
             callback.onSuccess(res);
         } else {
             sendRequest(httpClient, httpContext,
@@ -1042,7 +1063,7 @@ public class KJHttp {
                                 && callback != null) {
                             callback.sendResponseMessage(request
                                     .getRequestLine().getUri(),
-                                    config.getCacher(), response);
+                                    config, response);
                         }
                     } else {
                         if (callback != null) {

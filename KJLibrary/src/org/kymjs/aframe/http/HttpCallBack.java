@@ -24,7 +24,6 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.util.EntityUtils;
-import org.kymjs.aframe.http.cache.I_HttpCache;
 import org.kymjs.aframe.utils.StringUtils;
 
 import android.os.Handler;
@@ -89,8 +88,9 @@ public abstract class HttpCallBack implements I_HttpRespond {
     // 在后台线程池中的线程中执行
     protected void sendSuccessMessage(int status, Header[] headers,
             String responseBody) {
-        sendMessage(obtainMessage(MESSAGE_SUCCESS, new Object[] {
-                Integer.valueOf(status), headers, responseBody }));
+        sendMessage(obtainMessage(MESSAGE_SUCCESS,
+                new Object[] { Integer.valueOf(status), headers,
+                              responseBody }));
     }
 
     protected void sendFailureMessage(int status, Throwable e) {
@@ -103,8 +103,8 @@ public abstract class HttpCallBack implements I_HttpRespond {
 
     protected void sendFailureMessage(Throwable e,
             String responseBody, int status) {
-        sendMessage(obtainMessage(MESSAGE_FAILURE, new Object[] { e,
-                responseBody, status }));
+        sendMessage(obtainMessage(MESSAGE_FAILURE,
+                new Object[] { e, responseBody, status }));
     }
 
     protected void sendMessage(Message msg) {
@@ -130,7 +130,7 @@ public abstract class HttpCallBack implements I_HttpRespond {
     }
 
     // 异步HTTP请求的接口。
-    void sendResponseMessage(String uri, I_HttpCache cacher,
+    void sendResponseMessage(String uri, HttpConfig config,
             HttpResponse response) {
         StatusLine status = response.getStatusLine();
         String responseBody = null;
@@ -149,7 +149,9 @@ public abstract class HttpCallBack implements I_HttpRespond {
                     new HttpResponseException(status.getStatusCode(),
                             status.getReasonPhrase()), responseBody);
         } else {
-            cacher.add(uri, responseBody);
+            if (config.isUseCache()) {
+                config.getCacher().add(uri, responseBody);
+            }
             sendSuccessMessage(status.getStatusCode(),
                     response.getAllHeaders(), responseBody);
         }
