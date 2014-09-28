@@ -29,7 +29,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 /**
  * 本类是对菜单界面设置动画与样式<br>
@@ -103,24 +101,21 @@ public class ResideMenu extends FrameLayout implements
         mImgShadow.setLayoutParams(params);
         this.addView(mImgShadow);
 
-        FrameLayout.LayoutParams scrollParams = new FrameLayout.LayoutParams(
-                DensityUtils.getScreenW((Activity) context) / 2 + 40,
-                FrameLayout.LayoutParams.WRAP_CONTENT);
-        scrollParams.gravity = Gravity.CENTER_VERTICAL;
+        mLayoutMenu = new LinearLayout(context);
+        mLayoutMenu.setOrientation(LinearLayout.VERTICAL);
+        KJScrollView.LayoutParams menuParams = new KJScrollView.LayoutParams(
+                KJScrollView.LayoutParams.WRAP_CONTENT,
+                KJScrollView.LayoutParams.MATCH_PARENT);
+        mLayoutMenu.setLayoutParams(menuParams);
+
         mScrollMenu = new KJScrollView(context);
         mScrollMenu.setPadding(40, 0, 0, 0);
         mScrollMenu.setVerticalScrollBarEnabled(false);
-        mScrollMenu.setFocusable(true);
-        mScrollMenu.setEnabled(true);
+        mScrollMenu.addView(mLayoutMenu, 0);
+        FrameLayout.LayoutParams scrollParams = new FrameLayout.LayoutParams(
+                DensityUtils.getScreenW((Activity) context) / 2 + 40,
+                FrameLayout.LayoutParams.MATCH_PARENT);
         mScrollMenu.setLayoutParams(scrollParams);
-        ScrollView.LayoutParams menuParams = new ScrollView.LayoutParams(
-                ScrollView.LayoutParams.WRAP_CONTENT,
-                ScrollView.LayoutParams.WRAP_CONTENT);
-        mLayoutMenu = new LinearLayout(context);
-        mLayoutMenu.setGravity(Gravity.CENTER_VERTICAL);
-        mLayoutMenu.setOrientation(LinearLayout.VERTICAL);
-        mLayoutMenu.setLayoutParams(menuParams);
-        mScrollMenu.addView(mLayoutMenu);
         this.addView(mScrollMenu);
     }
 
@@ -354,12 +349,21 @@ public class ResideMenu extends FrameLayout implements
      * 显示某一个菜单项的显示
      */
     private void showMenuItem(ResideMenuItem menuItem, int index) {
+        if (index == 0 && menuItems.size() != 0) {
+            android.widget.LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT);
+            menuItem.measure(0, 0);
+            int h = menuItem.getMeasuredHeight() * menuItems.size();
+            params.topMargin = (DensityUtils.getScreenH(aty) - h) / 2;
+            menuItem.setLayoutParams(params);
+        }
         mLayoutMenu.addView(menuItem);
         menuItem.setAlpha(0.5F);
         AnimatorSet anim = new AnimatorSet();
         anim.playTogether(ObjectAnimator.ofFloat(menuItem,
-                "translationX", -100.f, 0.0f), ObjectAnimator
-                .ofFloat(menuItem, "alpha", 0.0f, 1.0f));
+                "translationX", -150f, 0f), ObjectAnimator.ofFloat(
+                menuItem, "alpha", 0f, 1f));
 
         anim.setInterpolator(AnimationUtils.loadInterpolator(aty,
                 android.R.anim.anticipate_overshoot_interpolator));

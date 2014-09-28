@@ -52,26 +52,42 @@ public class KJScrollView extends ScrollView {
 
     public KJScrollView(Context context) {
         super(context);
-        init(context);
     }
 
     public KJScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
     }
-
-    /**
-     * 初始化上下拉的控件布局
-     * 
-     * @param context
-     */
-    private void init(Context context) {}
 
     @Override
     protected void onFinishInflate() {
         if (getChildCount() > 0) {
             contentView = getChildAt(0);
         }
+    }
+
+    @Override
+    public void addView(View child) {
+        super.addView(child);
+        onFinishInflate();
+    }
+
+    @Override
+    public void addView(View child, int index) {
+        super.addView(child, index);
+        onFinishInflate();
+    }
+
+    @Override
+    public void addView(View child, int width, int height) {
+        super.addView(child, width, height);
+        onFinishInflate();
+    }
+
+    @Override
+    public void addView(View child, int index,
+            android.view.ViewGroup.LayoutParams params) {
+        super.addView(child, index, params);
+        onFinishInflate();
     }
 
     @Override
