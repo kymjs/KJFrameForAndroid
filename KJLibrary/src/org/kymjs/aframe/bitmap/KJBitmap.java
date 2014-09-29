@@ -55,10 +55,15 @@ public class KJBitmap {
     public static KJBitmapConfig config;
 
     public static KJBitmap create() {
-        config = new KJBitmapConfig();
-        return create(config);
+        return create(new KJBitmapConfig());
     }
 
+    /**
+     * 使用配置器创建KJBitmap
+     * 
+     * @param bitmapConfig
+     * @return
+     */
     public synchronized static KJBitmap create(
             KJBitmapConfig bitmapConfig) {
         config = bitmapConfig;
