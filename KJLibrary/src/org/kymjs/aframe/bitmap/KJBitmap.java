@@ -54,18 +54,24 @@ public class KJBitmap {
     /** BitmapLabrary配置器 */
     public static KJBitmapConfig config;
 
-    public synchronized static KJBitmap create() {
+    public static KJBitmap create() {
+        config = new KJBitmapConfig();
+        return create(config);
+    }
+
+    public synchronized static KJBitmap create(
+            KJBitmapConfig bitmapConfig) {
+        config = bitmapConfig;
         if (instance == null) {
-            config = new KJBitmapConfig();
-            instance = new KJBitmap();
+            instance = new KJBitmap(bitmapConfig);
         }
         return instance;
     }
 
-    private KJBitmap() {
-        // downloader = new Downloader(config); // 配置图片加载器
-        downloader = new DownloadWithLruCache(config); // 配置图片加载器
-        mMemoryCache = new BitmapMemoryCache(config.memoryCacheSize);
+    private KJBitmap(KJBitmapConfig bitmapConfig) {
+        downloader = new DownloadWithLruCache(bitmapConfig); // 配置图片加载器
+        mMemoryCache = new BitmapMemoryCache(
+                bitmapConfig.memoryCacheSize);
         taskCollection = new HashSet<BitmapWorkerTask>();
     }
 
@@ -464,12 +470,12 @@ public class KJBitmap {
             if (bmp != null && config.openMemoryCache) {
                 putBitmapToMC(url, bmp); // 图片载入完成后缓存到LrcCache中
                 showLogIfOpen("put to memory cache\n" + url);
-            }
-            if (url.equals(view.getTag())) {
-                bmp = BitmapHelper.scaleWithWH(bmp, width, height);
-                viewSetImage(view, bmp);
-                doSuccessCallBack(view);
-                showProgressIfOpen(view, url);
+                if (url.equals(view.getTag())) {
+                    bmp = BitmapHelper
+                            .scaleWithWH(bmp, width, height);
+                    viewSetImage(view, bmp);
+                    showProgressIfOpen(view, url);
+                }
                 taskCollection.remove(this);
             }
         }
@@ -693,6 +699,9 @@ public class KJBitmap {
      * @param bitmap
      */
     private void viewSetImage(View view, Bitmap bitmap) {
+        if (bitmap == null || view == null) {
+            return;
+        }
         if (view instanceof ImageView) {
             ((ImageView) view).setImageBitmap(bitmap);
         } else {

@@ -102,7 +102,6 @@ public class DownloadWithLruCache implements I_ImageLoder {
                     + "\ndownload success, from be net");
         } catch (Exception e) {
             doFailureCallBack(imagePath, e);
-            e.printStackTrace();
         } finally {
             if (con != null) {
                 con.disconnect();
