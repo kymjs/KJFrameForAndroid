@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/main_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:text="KJViewPager演示" />
+
+    <org.kymjs.aframe.ui.widget.KJViewPager
+        android:id="@+id/main_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:contentDescription="@null" >
+
+        <ImageView
+            android:id="@+id/main_img_pager1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:padding="10dp"
+            android:src="@drawable/ic_touch_mode" />
+
+        <ImageView
+            android:id="@+id/main_img_pager2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:padding="10dp"
+            android:src="@drawable/ic_gamepad_mode" />
+
+        <ImageView
+            android:id="@+id/main_img_pager3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:padding="10dp"
+            android:src="@drawable/ic_gamepad" />
+
+        <ImageView
+            android:id="@+id/main_img_pager4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:padding="10dp"
+            android:src="@drawable/ic_carmode" />
+    </org.kymjs.aframe.ui.widget.KJViewPager>
+
+</LinearLayout>

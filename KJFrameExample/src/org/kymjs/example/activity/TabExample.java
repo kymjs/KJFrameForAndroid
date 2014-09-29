@@ -8,6 +8,7 @@ import org.kymjs.example.R;
 import org.kymjs.example.fragment.DownloadExample;
 import org.kymjs.example.fragment.HttpExample;
 import org.kymjs.example.fragment.ListBitmapExample;
+import org.kymjs.example.fragment.MainFragment;
 
 import android.app.ActionBar;
 import android.content.Intent;
@@ -49,6 +50,7 @@ public class TabExample extends KJFragmentActivity {
     protected void initWidget() {
         super.initWidget();
         actionBar = getActionBar();
+        changeFragment(new MainFragment());
         mRbtn1.setText("侧滑");
         mRbtn2.setText("网络请求");
         mRbtn3.setText("列表图片");
