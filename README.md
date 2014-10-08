@@ -9,7 +9,7 @@
 --- KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复杂操作而达到简化Android应用级开发，最终实现快速而又安全的开发APP。我们提倡用最少的代码，完成最多的操作，用最高的效率，完成最复杂的功能。<br>
 
 ## KJFrameForAndroid 相关链接
-* QQ群：[257053751](http://shang.qq.com/wpa/qunwpa?idkey=00d92c040e81d87ccd21f8d0fffb10640baaa66da45254c3bd329b6ff7d46fef)(开发者群1)
+* QQ群：[257053751](http://shang.qq.com/wpa/qunwpa?idkey=00d92c040e81d87ccd21f8d0fffb10640baaa66da45254c3bd329b6ff7d46fef)(开发者群1)，[201055521](http://jq.qq.com/?_wv=1027&k=MBVdpK)(开发者群2)
 * 项目地址：[https://github.com/kymjs/KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid)
 * 项目备用地址（可能不是最新代码）：[http://git.oschina.net/kymjs/KJFrameForAndroid](http://git.oschina.net/kymjs/KJFrameForAndroid)
 * 
@@ -19,7 +19,7 @@
 
 ---
 # 框架使用
-clone下KJFrameForAndroid最新源码后，导入eclipse中，若只想使用框架而不考虑源码查看与学习，可直接复制binrary目录下最新的jar包至自己项目的libs文件夹中。<br>
+clone下KJFrameForAndroid最新源码后，导入eclipse中，若只想使用框架而不考虑源码查看与学习，可直接复制binrary目录下的kjlibrary.jar文件至自己项目的libs文件夹中。<br>
 若需要对源码改动或学习，可打开KJLibrary工程查看源码，同时结合KJFrameExample演示项目更好的学习，另外也可以自己新建工程，并右键工程->preference->Android->library->Add,选择KJLibrary工程加入后apply应用。<br>
 由于使用了最新的部分API函数，以及3.0版Fragment。KJFrameForAndroid框架最低支持Android3.0版本，本框架可以作代码混淆<br>
 
@@ -117,15 +117,15 @@ kjh.get(String url,I_HttpParams params, HttpCallback callback);
 
 // 使用HttpUrlConnection
 KJHttp kjh = new KJHttp();
-kjh.urlGet("http://my.oschina.net/kymjs/blog", new StringRespond(){
+kjh.urlGet("http://my.oschina.net/kymjs/blog", new StringCallBack(){
 
 	@Override
-	public void success(String t) {
+	public void onSuccess(String t) {
 			ViewInject.toast("显示JSON信息：" + t);
 	}
 
 	@Override
-	public void failure(Throwable t, int errorNo, String strMsg) {
+	public void onFailure(Throwable t, int errorNo, String strMsg) {
 		ViewInject.toast("网络加载失败，请检查您的网络");
 	}
 });
@@ -143,14 +143,14 @@ KJHttp kjh = new KJHttp();
 KJStringParams params = new KJStringParams();
 params.put("user_id", "33");
 params.put("birthday", "2008-8-1");
-kjh.urlPost("http://my.oschina.net/kymjs/blog", params, new StringRespond(){
+kjh.urlPost("http://my.oschina.net/kymjs/blog", params, new StringCallBack(){
 	@Override
-	public void success(String t) {
+	public void onSuccess(String t) {
 			ViewInject.toast("显示JSON信息：" + t);
 	}
 
 	@Override
-	public void failure(Throwable t, int errorNo, String strMsg) {
+	public void onFailure(Throwable t, int errorNo, String strMsg) {
 		ViewInject.toast("网络加载失败，请检查您的网络");
 	}
 });
@@ -169,15 +169,15 @@ params.put(new File("/storage/sdcard0/1.jpg"));//传file对象
 params.put(inputstream);//传文件输入流
 params.put(byteArray);//传文件byte数组
 //以上三种方法任选其一即可
-kjh.urlPost("http://my.oschina.net/kymjs/blog", params, new StringRespond(){
+kjh.urlPost("http://my.oschina.net/kymjs/blog", params, new StringCallBack(){
 
 	@Override
-	public void success(String t) {
+	public void onSuccess(String t) {
 			ViewInject.toast("显示JSON信息：" + t);
 	}
 
 	@Override
-	public void failure(Throwable t, int errorNo, String strMsg) {
+	public void onFailure(Throwable t, int errorNo, String strMsg) {
 		ViewInject.toast("网络加载失败，请检查您的网络");
 	}
 });

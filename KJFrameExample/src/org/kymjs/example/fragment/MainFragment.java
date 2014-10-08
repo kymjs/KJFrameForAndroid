@@ -32,8 +32,8 @@ public class MainFragment extends BaseFragment {
         mContentPager
                 .setOnViewChangeListener(new OnViewChangeListener() {
                     @Override
-                    public void OnViewChange(int view) {
-                        ViewInject.toast("这是第" + view + "个界面");
+                    public void OnViewChange(int page) {
+                        ViewInject.toast("这是第" + page + "个界面");
                     }
                 });
     }
