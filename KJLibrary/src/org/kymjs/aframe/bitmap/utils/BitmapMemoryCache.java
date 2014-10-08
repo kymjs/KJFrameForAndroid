@@ -35,7 +35,7 @@ public final class BitmapMemoryCache {
 
     public BitmapMemoryCache() {
         int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        init(maxMemory);
+        init(maxMemory / 8);
     }
 
     /**
@@ -59,8 +59,7 @@ public final class BitmapMemoryCache {
                 if (SystemTool.getSDKVersion() >= 12) {
                     return value.getByteCount() / 1024;
                 } else {
-                    return value.getRowBytes() * value.getHeight()
-                            / 1024;
+                    return value.getRowBytes() * value.getHeight() / 1024;
                 }
             }
         };
