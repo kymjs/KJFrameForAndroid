@@ -68,7 +68,7 @@ public class KJBitmap {
             KJBitmapConfig bitmapConfig) {
         config = bitmapConfig;
         if (instance == null) {
-            instance = new KJBitmap(bitmapConfig);
+            instance = new KJBitmap(config);
         }
         return instance;
     }
