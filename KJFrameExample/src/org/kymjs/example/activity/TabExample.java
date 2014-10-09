@@ -74,7 +74,7 @@ public class TabExample extends KJFragmentActivity {
             changeFragment(content3);
             break;
         case R.id.bottombar_content4:
-            showActivity(aty, TabExampleTwo.class);
+            showActivity(aty, More.class);
             break;
         }
     }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/more1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="简易浏览器" />
+
+    <Button
+        android:id="@+id/more2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="数据库简单操作" />
+
+    <Button
+        android:id="@+id/more3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="横向ListView与圆形ImageView" />
+
+    <Button
+        android:id="@+id/more4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="简单下载演示" />
+
+</LinearLayout>

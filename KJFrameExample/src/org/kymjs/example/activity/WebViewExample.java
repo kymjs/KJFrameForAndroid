@@ -1,6 +1,7 @@
 package org.kymjs.example.activity;
 
 import org.kymjs.aframe.ui.BindView;
+import org.kymjs.aframe.ui.ViewInject;
 import org.kymjs.aframe.ui.activity.SimpleBrowserTemplet;
 import org.kymjs.example.R;
 
@@ -38,8 +39,8 @@ public class WebViewExample extends SimpleBrowserTemplet {
     @Override
     protected WebView initWebVie(WebView webview) {
         webview = (WebView) findViewById(R.id.webview);
-        webview.loadUrl("http://heka.tn10000.com");
-        mEtText.setText(webview.getUrl());
+        webview.loadUrl("http://www.baidu.com");
+        mEtText.setText("稍等，正在加载");
         return webview;
     }
 
@@ -61,6 +62,7 @@ public class WebViewExample extends SimpleBrowserTemplet {
         super.onUrlLoading(view, url);
         // 偷个懒，就改一下文字（图片）
         mRbtn3.setText("停止");
+        ViewInject.toast("稍等，正在加载");
     }
 
     /**

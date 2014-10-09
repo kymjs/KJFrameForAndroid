@@ -28,7 +28,8 @@
         </activity>
         <activity android:name="org.kymjs.example.activity.WebViewExample" />
         <activity android:name="org.kymjs.example.activity.TabExample" />
-        <activity android:name="org.kymjs.example.activity.TabExampleTwo" />
+        <activity android:name="org.kymjs.example.activity.More" />
+        <activity android:name="org.kymjs.example.activity.ShowDemo" />
         <activity android:name="org.kymjs.example.activity.SlidExample" />
     </application>
 
