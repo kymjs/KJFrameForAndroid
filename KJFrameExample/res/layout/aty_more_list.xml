@@ -28,4 +28,16 @@
         android:layout_height="wrap_content"
         android:text="简单下载演示" />
 
+    <Button
+        android:id="@+id/more5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="KJViewPager演示" />
+
+    <Button
+        android:id="@+id/more6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="网络数据请求" />
+
 </LinearLayout>

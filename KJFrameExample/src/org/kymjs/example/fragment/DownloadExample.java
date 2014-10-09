@@ -6,7 +6,6 @@ import org.kymjs.aframe.http.FileCallBack;
 import org.kymjs.aframe.http.KJHttp;
 import org.kymjs.aframe.ui.BindView;
 import org.kymjs.aframe.ui.ViewInject;
-import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.example.R;
 
 import android.os.Bundle;

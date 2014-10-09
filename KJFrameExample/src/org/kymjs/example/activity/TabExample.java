@@ -1,14 +1,15 @@
 package org.kymjs.example.activity;
 
+import net.youmi.android.diy.DiyManager;
+import net.youmi.android.spot.SpotManager;
+
 import org.kymjs.aframe.ui.BindView;
 import org.kymjs.aframe.ui.ViewInject;
 import org.kymjs.aframe.ui.activity.KJFragmentActivity;
 import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.example.R;
-import org.kymjs.example.fragment.DownloadExample;
-import org.kymjs.example.fragment.HttpExample;
+import org.kymjs.example.fragment.Explain;
 import org.kymjs.example.fragment.ListBitmapExample;
-import org.kymjs.example.fragment.MainFragment;
 
 import android.app.ActionBar;
 import android.content.Intent;
@@ -31,9 +32,8 @@ public class TabExample extends KJFragmentActivity {
     @BindView(id = R.id.bottombar_content4, click = true)
     private RadioButton mRbtn4;
 
-    BaseFragment content2 = new HttpExample(); // 第二个界面
-    BaseFragment content3 = new ListBitmapExample(); // 第三个界面
-    BaseFragment content4 = new DownloadExample(); // 第四个界面
+    private BaseFragment content2 = new ListBitmapExample();
+    private BaseFragment content3 = new ListBitmapExample(); // 第三个界面
 
     public ActionBar actionBar;
 
@@ -50,9 +50,9 @@ public class TabExample extends KJFragmentActivity {
     protected void initWidget() {
         super.initWidget();
         actionBar = getActionBar();
-        changeFragment(new MainFragment());
+        changeFragment(new Explain());
         mRbtn1.setText("侧滑");
-        mRbtn2.setText("网络请求");
+        mRbtn2.setText("应用推荐");
         mRbtn3.setText("列表图片");
         mRbtn4.setText("更多");
     }
@@ -66,8 +66,7 @@ public class TabExample extends KJFragmentActivity {
             ViewInject.toast("侧滑试试");
             break;
         case R.id.bottombar_content2:
-            actionBar.setTitle("网络请求");
-            changeFragment(content2);
+            DiyManager.showRecommendAppWall(this);
             break;
         case R.id.bottombar_content3:
             actionBar.setTitle("listview网络图片加载");
@@ -82,5 +81,19 @@ public class TabExample extends KJFragmentActivity {
     @Override
     public void changeFragment(BaseFragment targetFragment) {
         changeFragment(R.id.content, targetFragment);
+    }
+
+    /*************** 以下方法为广告sdk使用，您无需关注 ****************/
+    @Override
+    public void onBackPressed() {
+        if (!SpotManager.getInstance(aty).disMiss(true)) {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        SpotManager.getInstance(aty).unregisterSceenReceiver();
+        super.onDestroy();
     }
 }
