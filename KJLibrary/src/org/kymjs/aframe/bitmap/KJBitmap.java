@@ -474,6 +474,7 @@ public class KJBitmap {
             super.onPostExecute(bmp);
             if (bmp != null && config.openMemoryCache) {
                 putBitmapToMC(url, bmp); // 图片载入完成后缓存到LrcCache中
+                doSuccessCallBack(view); // 图片加载成功时的回调
                 showLogIfOpen("put to memory cache\n" + url);
                 if (url.equals(view.getTag())) {
                     bmp = BitmapHelper
