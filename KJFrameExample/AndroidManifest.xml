@@ -1,35 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.kymjs.example"
-    android:versionCode="1"
-    android:versionName="1.0" >
+	package="org.kymjs.example" android:versionCode="1"
+	android:versionName="1.0">
 
-    <uses-sdk
-        android:minSdkVersion="11"
-        android:targetSdkVersion="18" />
-    
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-sdk android:minSdkVersion="11" android:targetSdkVersion="18" />
 
-    <application
-        android:name="org.kymjs.example.AppContext"
-        android:allowBackup="true"
-        android:icon="@drawable/logo"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <activity
-            android:name="org.kymjs.example.MainActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<!-- 以下是广告相关的权限 -->
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+	<uses-permission android:name="android.permission.GET_TASKS" />
+	<uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+	<application android:name="org.kymjs.example.AppContext"
+		android:allowBackup="true" android:icon="@drawable/logo"
+		android:label="@string/app_name" android:theme="@style/AppTheme">
+		<activity android:name="org.kymjs.example.MainActivity"
+			android:label="@string/app_name">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name="org.kymjs.example.activity.WebViewExample" />
-        <activity android:name="org.kymjs.example.activity.TabExample" />
-        <activity android:name="org.kymjs.example.activity.TabExampleTwo" />
-        <activity android:name="org.kymjs.example.activity.SlidExample" />
-    </application>
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name="org.kymjs.example.activity.WebViewExample" />
+		<activity android:name="org.kymjs.example.activity.TabExample" />
+		<activity android:name="org.kymjs.example.activity.More" />
+		<activity android:name="org.kymjs.example.activity.ShowDemo" />
+		<activity android:name="org.kymjs.example.activity.SlidExample" />
 
+		<!-- 以下是广告相关的组件 -->
+		<activity android:name="net.youmi.android.AdBrowser"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+			android:theme="@android:style/Theme.Light.NoTitleBar" />
+
+		<service android:name="net.youmi.android.AdService"
+			android:exported="false" />
+
+		<receiver android:name="net.youmi.android.AdReceiver">
+			<intent-filter>
+				<action android:name="android.intent.action.PACKAGE_ADDED" />
+
+				<data android:scheme="package" />
+			</intent-filter>
+		</receiver>
+
+		<provider android:name="net.youmi.android.spot.SpotAdContentProvider"
+			android:authorities="org.kymjs.example" />
+
+		<meta-data android:name="YOUMI_CHANNEL" android:value="0" />
+	</application>
 </manifest>

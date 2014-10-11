@@ -28,6 +28,7 @@ import org.kymjs.aframe.database.utils.KeyValue;
 import org.kymjs.aframe.database.utils.ManyToOne;
 import org.kymjs.aframe.database.utils.OneToMany;
 import org.kymjs.aframe.database.utils.TableInfo;
+import org.kymjs.aframe.ui.KJActivityManager;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -79,6 +80,28 @@ public class KJDB {
             daoMap.put(daoConfig.getDbName(), dao);
         }
         return dao;
+    }
+
+    /**
+     * 创建DBLibrary
+     */
+    public static KJDB create() {
+        return create(false);
+    }
+
+    /**
+     * 创建DBLibrary
+     * 
+     * @param isDebug
+     *            是否是debug模式（debug模式进行数据库操作的时候将会打印sql语句）
+     */
+    public static KJDB create(boolean isDebug) {
+        Context cxt = KJActivityManager.create().topActivity();
+        if (cxt == null) {
+            throw new NullPointerException(
+                    "you have to extends BaseActivity");
+        }
+        return create(cxt, isDebug);
     }
 
     /**

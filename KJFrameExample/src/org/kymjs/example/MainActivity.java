@@ -18,5 +18,4 @@ public class MainActivity extends BaseSplash {
     protected void redirectTo() {
         skipActivity(this, TabExample.class);
     }
-
 }

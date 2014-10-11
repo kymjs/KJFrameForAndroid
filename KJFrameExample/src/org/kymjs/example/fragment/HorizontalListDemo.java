@@ -2,7 +2,6 @@ package org.kymjs.example.fragment;
 
 import org.kymjs.aframe.ui.BindView;
 import org.kymjs.aframe.ui.ViewInject;
-import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.aframe.ui.widget.HorizontalListView;
 import org.kymjs.aframe.ui.widget.RoundImageView;
 import org.kymjs.example.R;
