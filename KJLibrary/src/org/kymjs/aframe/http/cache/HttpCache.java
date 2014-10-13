@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.kymjs.aframe.KJLoger;
 import org.kymjs.aframe.database.KJDB;
-import org.kymjs.aframe.ui.KJActivityManager;
 
 /**
  * Http请求中对字符串信息的缓存类，通过Lru算法，对数据做两级缓存（内存缓存、数据库缓存）<br>
@@ -40,8 +39,7 @@ public class HttpCache implements I_HttpCache {
     private HttpCache(HttpMemoryCache cache) {
         this.cache = cache;
         config = new KJCacheConfig();
-        db = KJDB.create(KJActivityManager.create().topActivity(),
-                config.isDebug());
+        db = KJDB.create(config.isDebug());
     }
 
     /**

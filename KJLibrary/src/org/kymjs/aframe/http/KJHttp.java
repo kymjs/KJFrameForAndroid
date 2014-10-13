@@ -115,7 +115,7 @@ public class KJHttp {
      */
     public KJHttp(HttpConfig config) {
         this.config = config;
-        if (config.getCacher() == null) {
+        if (config.isUseCache() && config.getCacher() == null) {
             // json数据缓存器，也可以自己通过实现I_HttpCache接口协议定义
             this.config.setCacher(HttpCache.create());
         }

@@ -65,7 +65,8 @@ final public class KJActivityManager {
      */
     public Activity topActivity() {
         if (activityStack == null) {
-            throw new NullPointerException("Activity stack is Null");
+            throw new NullPointerException(
+                    "Activity stack is Null,your Activity must extend BaseActivity");
         }
         if (activityStack.isEmpty()) {
             return null;
