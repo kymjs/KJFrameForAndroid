@@ -20,11 +20,11 @@
 
 ---
 # 框架使用
-clone下KJFrameForAndroid最新源码后，导入eclipse中，若只想使用框架而不考虑源码查看与学习，可直接复制binrary目录下的kjlibrary.jar文件至自己项目的libs文件夹中。<br>
+Demo工程运行：[下载](https://codeload.github.com/kymjs/KJFrameForAndroid/zip/master)框架最新源码，选择KJFrameExample工程导入Eclipse，并将/binrary目录最新的项目jar包复制至demo的libs目录即可<br>
 若需要对源码改动或学习，可打开KJLibrary工程查看源码，同时结合KJFrameExample演示项目更好的学习，另外也可以自己新建工程，并右键工程->preference->Android->library->Add,选择KJLibrary工程加入后apply应用。<br>
-由于使用了最新的部分API函数，以及3.0版Fragment。KJFrameForAndroid框架最低支持Android3.0版本，本框架可以作代码混淆<br>
+由于使用了SDK最新的API函数，以及3.0版Fragment。KJFrameForAndroid框架最低支持Android3.0版本，本框架可以作代码混淆，混淆时请保留包含注解部分的类的完整性。<br>
 
-*注：使用 KJFrameForAndroid 应用开发框架需要在你项目的AndroidManifest.xml文件中加入以下权限：*
+*注：使用 KJFrameForAndroid 应用开发框架需要在你项目的AndroidManifest.xml文件中加入以下基本权限：*
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -35,7 +35,6 @@ clone下KJFrameForAndroid最新源码后，导入eclipse中，若只想使用框
 
 ----
 
-
 ## =======各模块使用介绍=======
 
 ## UILibrary模块
@@ -45,7 +44,7 @@ UILibrary包含两个部分Widget(控件)、Topology(Android框架结构继承�
 主要封装了常用的UI控件，为了不让项目jar包过大，我们只引入了开发中一定会用到的控件，例如：可上下拉的KJListView、可上下拉的KJScrollView、可以双指缩放双击缩放双指旋转的ScaleImageView、等等......更多内容请自行查看项目文件中org.kymjs.aframe.widget包下的内容<br>
 
 **UILibrary -> Topology拓扑部分**
-包含一个使用IOC设计思想的控件初始化方式：可通过注解的方式进行UI绑定，与设置监听，在Activity和Fragment中均可以通过一行代码绑定控件并实现点击监听；还包含了在目前应用开发中常见的布局界面，如侧滑效果，高效的底部TAB导航，3D效果的切换。同时UILibrary为开发者定义了完善的BaseActivity和BaseFragment，开发者只需手动继承就可以获得Topology部分的全部功能。<br>
+规范了Activity中数据及控件的初始化，并包含一个使用IOC设计思想的控件初始化方式：可通过注解的方式进行UI绑定，与设置监听，在Activity和Fragment中均可以通过一行代码绑定控件并实现点击监听；还包含了在目前应用开发中常见的布局界面，如侧滑效果，高效的底部TAB导航，3D效果的切换。同时UILibrary为开发者定义了完善的BaseActivity和BaseFragment，开发者只需手动继承就可以获得Topology部分的全部功能。<br>
 ```java
 
 public class TabExample extends BaseActivity {
@@ -80,7 +79,7 @@ public class TabExample extends BaseActivity {
     }
 }
 ```
-Topology中回调函数调用顺序：
+Topology中各函数调用顺序：
 setRootView();<br>
 @BindView<br>
 initDataWithThread();（异步，线程中调用）<br>
