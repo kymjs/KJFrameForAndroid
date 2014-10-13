@@ -56,7 +56,7 @@ public class ClassUtils {
     }
 
     /**
-     * 根据实体类 获得 实体类对应的表名
+     * 根据实体类 获得 主键的列名
      * 
      * @param clazz
      * @return
@@ -98,7 +98,7 @@ public class ClassUtils {
     }
 
     /**
-     * 根据实体类 获得 实体类对应的表名
+     * 根据实体类 获得 主键
      * 
      * @param clazz
      * @return
@@ -140,7 +140,7 @@ public class ClassUtils {
     }
 
     /**
-     * 根据实体类 获得 实体类对应的表名
+     * 根据实体类 获得主键名
      * 
      * @param clazz
      * @return
