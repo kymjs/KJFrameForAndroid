@@ -15,6 +15,8 @@
  */
 package org.kymjs.aframe.http.cache;
 
+import org.kymjs.aframe.KJLoger;
+
 /**
  * Http请求中缓存池的配置器<br>
  * 
@@ -27,7 +29,7 @@ public class KJCacheConfig {
     private static final long EFFECTIVE_TIME = 50 * 60 * 1000; // 默认十分钟
     /** Cache有效期,实际单位：毫秒；对外单位：秒 */
     private long effectiveTime;
-    private boolean isDebug;
+    private boolean isDebug = KJLoger.IS_DEBUG;
 
     public KJCacheConfig() {
         effectiveTime = EFFECTIVE_TIME;

@@ -3,6 +3,7 @@ package org.kymjs.example.fragment;
 import org.kymjs.aframe.bitmap.KJBitmap;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
 import org.kymjs.aframe.ui.BindView;
+import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.aframe.ui.widget.KJListView;
 import org.kymjs.aframe.ui.widget.KJRefreshListener;
 import org.kymjs.example.R;

@@ -21,6 +21,7 @@ import org.kymjs.aframe.ui.KJActivityManager;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -29,25 +30,54 @@ import android.view.View.OnClickListener;
  * @1.5 abstract protocol: I_KJActivity
  * @1.6 add method initThreadData()
  * @1.7 add abstract protocol:I_SkipActivity
+ * @1.8 add thread data callback
  */
 
 /**
  * Activity's framework,the developer shouldn't extends it<br>
  * 
  * <b>创建时间</b> 2014-3-1 <br>
- * <b>最后修改时间</b> 2014-5-30<br>
+ * <b>最后修改时间</b> 2014-10-17<br>
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.7
+ * @version 1.8
  */
 public abstract class KJFrameActivity extends Activity implements
         OnClickListener, I_BroadcastReg, I_KJActivity, I_SkipActivity {
 
+    private interface ThreadDataCallBack {
+        void onSuccess();
+    }
+
+    // 当线程中初始化的数据初始化完成后，调用回调方法
+    private static Handler threadHandle = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            if (msg.what == 0x37213722) {
+                callback.onSuccess();
+            }
+        };
+    };
+
+    private static ThreadDataCallBack callback;
+
     /**
      * initialization data. And this method run in background thread, so you
-     * shouldn't change ui
+     * shouldn't change ui<br>
+     * on initializated, will call threadDataInited();
      */
-    protected void initDataFromThread() {}
+    protected void initDataFromThread() {
+        callback = new ThreadDataCallBack() {
+            @Override
+            public void onSuccess() {
+                threadDataInited();
+            }
+        };
+    }
+
+    /**
+     * 如果调用了initDataFromThread()，则当数据初始化完成后将回调该方法。
+     */
+    protected void threadDataInited() {}
 
     /** initialization data */
     protected void initData() {}
@@ -58,14 +88,17 @@ public abstract class KJFrameActivity extends Activity implements
     /** initialization */
     @Override
     public void initialize() {
+        initData();
+        initWidget();
         new Thread(new Runnable() {
             @Override
             public void run() {
+                // 在线程中执行初始化数据
                 initDataFromThread();
+                // 初始化完成发送一条message
+                threadHandle.sendEmptyMessage(0x37213722);
             }
         }).start();
-        initData();
-        initWidget();
     }
 
     /** listened widget's click method */

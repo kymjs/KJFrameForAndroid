@@ -15,6 +15,7 @@
  */
 package org.kymjs.aframe.database;
 
+import org.kymjs.aframe.KJLoger;
 import org.kymjs.aframe.database.KJDB.DbUpdateListener;
 
 import android.content.Context;
@@ -31,7 +32,7 @@ final public class DaoConfig {
     private Context mContext = null; // android上下文
     private String mDbName = "KJLibrary.db"; // 数据库名字
     private int dbVersion = 1; // 数据库版本
-    private boolean debug = true; // 是否是调试模式（调试模式 增删改查的时候显示SQL语句）
+    private boolean debug = KJLoger.DEBUG_LOG; // 是否是调试模式（调试模式 增删改查的时候显示SQL语句）
     private DbUpdateListener dbUpdateListener;
     // private boolean saveOnSDCard = false;//是否保存到SD卡
     private String targetDirectory;// 数据库文件在sd卡中的目录

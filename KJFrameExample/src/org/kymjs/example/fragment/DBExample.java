@@ -5,6 +5,7 @@ import java.util.List;
 import org.kymjs.aframe.database.KJDB;
 import org.kymjs.aframe.ui.BindView;
 import org.kymjs.aframe.ui.ViewInject;
+import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.aframe.utils.StringUtils;
 import org.kymjs.example.R;
 import org.kymjs.example.bean.User;

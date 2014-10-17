@@ -2,6 +2,7 @@ package org.kymjs.example.fragment;
 
 import org.kymjs.aframe.bitmap.utils.BitmapOperateUtil;
 import org.kymjs.aframe.ui.BindView;
+import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.example.R;
 
 import android.graphics.Bitmap;

@@ -121,14 +121,18 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
     }
 
     @Override
-    protected void initData() {
-        super.initData();
+    protected void initDataFromThread() {
+        super.initDataFromThread();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        }
         datas = ChoiceImageUtil.LocalImgFileList(getActivity());
     }
 
     @Override
-    protected void initWidget(View parentView) {
-        super.initWidget(parentView);
+    protected void threadDataInited() {
+        super.threadDataInited();
         mListView.setAdapter(new FolderListAdapter());
         mListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -140,6 +144,11 @@ public abstract class ChoiceImageTemplate extends BaseFragment {
                         position).getFilePath()));
             }
         });
+    }
+
+    @Override
+    protected void initWidget(View parentView) {
+        super.initWidget(parentView);
         mGridView.setNumColumns(3);
         mGridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
         mGridView.setVerticalSpacing(15);

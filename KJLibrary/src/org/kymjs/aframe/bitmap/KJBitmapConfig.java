@@ -15,6 +15,8 @@
  */
 package org.kymjs.aframe.bitmap;
 
+import org.kymjs.aframe.KJLoger;
+
 import android.graphics.Bitmap;
 
 /**
@@ -27,7 +29,7 @@ import android.graphics.Bitmap;
  */
 public final class KJBitmapConfig {
     public static final int DEFAULT = Integer.MAX_VALUE;
-    public final boolean isDEBUG = true;
+    public boolean isDEBUG = KJLoger.IS_DEBUG;
 
     /** 网络连接等待时间 */
     public int timeOut = 5000;

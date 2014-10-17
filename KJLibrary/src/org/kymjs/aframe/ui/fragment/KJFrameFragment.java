@@ -19,6 +19,7 @@ import org.kymjs.aframe.ui.AnnotateUtil;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,10 +32,25 @@ import android.view.ViewGroup;
  * <b>最后修改时间</b> 2014-5-30<br>
  * 
  * @author kymjs(kymjs123@gmail.com)
- * @version 1.5
+ * @version 1.6
  */
 public abstract class KJFrameFragment extends Fragment implements
         OnClickListener {
+
+    private interface ThreadDataCallBack {
+        void onSuccess();
+    }
+
+    // 当线程中初始化的数据初始化完成后，调用回调方法
+    private static Handler threadHandle = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            if (msg.what == 0x37213721) {
+                callback.onSuccess();
+            }
+        };
+    };
+
+    private static ThreadDataCallBack callback;
 
     protected abstract View inflaterView(LayoutInflater inflater,
             ViewGroup container, Bundle bundle);
@@ -52,9 +68,22 @@ public abstract class KJFrameFragment extends Fragment implements
 
     /**
      * initialization data. And this method run in background thread, so you
-     * shouldn't change ui
+     * shouldn't change ui<br>
+     * on initializated, will call threadDataInited();
      */
-    protected void initThreadData() {}
+    protected void initDataFromThread() {
+        callback = new ThreadDataCallBack() {
+            @Override
+            public void onSuccess() {
+                threadDataInited();
+            }
+        };
+    }
+
+    /**
+     * 如果调用了initDataFromThread()，则当数据初始化完成后将回调该方法。
+     */
+    protected void threadDataInited() {}
 
     /** widget click method */
     protected void widgetClick(View v) {}
@@ -65,18 +94,22 @@ public abstract class KJFrameFragment extends Fragment implements
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        View view = inflaterView(inflater, container, savedInstanceState);
+    public View onCreateView(LayoutInflater inflater,
+            ViewGroup container, Bundle savedInstanceState) {
+        View view = inflaterView(inflater, container,
+                savedInstanceState);
         AnnotateUtil.initBindView(this, view);
+        initData();
+        initWidget(view);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                initThreadData();
+                // 在线程中执行初始化数据
+                initDataFromThread();
+                // 初始化完成发送一条message
+                threadHandle.sendEmptyMessage(0x37213721);
             }
         }).start();
-        initData();
-        initWidget(view);
         return view;
     }
 }

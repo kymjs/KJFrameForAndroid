@@ -1,5 +1,6 @@
 package org.kymjs.example.fragment;
 
+import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.example.R;
 
 import android.os.Bundle;

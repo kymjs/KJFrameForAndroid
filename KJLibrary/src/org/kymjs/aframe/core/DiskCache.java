@@ -51,7 +51,7 @@ import android.os.StatFs;
  * @author kymjs(kymjs123@gmail.com)
  */
 public final class DiskCache {
-    private boolean debug = false;
+    private boolean debug = KJLoger.IS_DEBUG;
     private static long maxSize;
     // constant
     private static final String CACHE_FILENAME_PREFIX = "KJLibrary_";

@@ -7,6 +7,7 @@ import org.kymjs.aframe.bitmap.KJBitmapConfig;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
 import org.kymjs.aframe.ui.BindView;
 import org.kymjs.aframe.ui.ViewInject;
+import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.example.R;
 import org.kymjs.example.activity.SlidExample;
 

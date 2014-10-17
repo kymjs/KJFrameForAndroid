@@ -1,8 +1,5 @@
 package org.kymjs.example.activity;
 
-import net.youmi.android.diy.DiyManager;
-import net.youmi.android.spot.SpotManager;
-
 import org.kymjs.aframe.ui.BindView;
 import org.kymjs.aframe.ui.ViewInject;
 import org.kymjs.aframe.ui.activity.KJFragmentActivity;
@@ -52,7 +49,7 @@ public class TabExample extends KJFragmentActivity {
         actionBar = getActionBar();
         changeFragment(new Explain());
         mRbtn1.setText("侧滑");
-        mRbtn2.setText("应用推荐");
+        mRbtn2.setText("空白");
         mRbtn3.setText("列表图片");
         mRbtn4.setText("更多");
     }
@@ -66,7 +63,6 @@ public class TabExample extends KJFragmentActivity {
             ViewInject.toast("侧滑试试");
             break;
         case R.id.bottombar_content2:
-            DiyManager.showRecommendAppWall(this);
             break;
         case R.id.bottombar_content3:
             actionBar.setTitle("listview网络图片加载");
@@ -81,19 +77,5 @@ public class TabExample extends KJFragmentActivity {
     @Override
     public void changeFragment(BaseFragment targetFragment) {
         changeFragment(R.id.content, targetFragment);
-    }
-
-    /*************** 以下方法为广告sdk使用，您无需关注 ****************/
-    @Override
-    public void onBackPressed() {
-        if (!SpotManager.getInstance(aty).disMiss(true)) {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        SpotManager.getInstance(aty).unregisterSceenReceiver();
-        super.onDestroy();
     }
 }
