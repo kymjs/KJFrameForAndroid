@@ -17,7 +17,7 @@ package org.kymjs.aframe;
 
 public final class KJConfig {
 
-    public static final double VERSION = 1.20;
+    public static final double VERSION = 1.21;
 
     /** 声音改变的广播 */
     public static final String RECEIVER_MUSIC_CHANGE = KJConfig.class
