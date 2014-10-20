@@ -23,5 +23,6 @@
 		<activity android:name="org.kymjs.example.activity.More" />
 		<activity android:name="org.kymjs.example.activity.ShowDemo" />
 		<activity android:name="org.kymjs.example.activity.SlidExample" />
+		<activity android:name="org.kymjs.aframe.plugin.activity.CJProxyActivity" />
 	</application>
 </manifest>

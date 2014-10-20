@@ -8,5 +8,6 @@
     <string name="explain">"您好：
           感谢您对开源框架KJFrameForAndroid项目的关注。
           作为一名个人开发者维护这个免费的开源项目，希望您能支持一下，在您浏览本示例代码的过程中，可能会出现弹出式广告，希望您能点击几次，这是您对我也是对整个项目最大的支持。"</string>
+    <string name="plugin_not_found">没有找到插件，请将插件工程apk放入sd卡根目录，并改名PluginExample.apk</string>
 
 </resources>
