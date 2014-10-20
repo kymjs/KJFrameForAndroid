@@ -26,7 +26,7 @@ import org.kymjs.aframe.KJLoger;
  * @version 1.0
  */
 public class KJCacheConfig {
-    private static final long EFFECTIVE_TIME = 50 * 60 * 1000; // 默认十分钟
+    private static final long EFFECTIVE_TIME = 5 * 60 * 1000; // 默认时间
     /** Cache有效期,实际单位：毫秒；对外单位：秒 */
     private long effectiveTime;
     private boolean isDebug = KJLoger.IS_DEBUG;
@@ -51,6 +51,6 @@ public class KJCacheConfig {
 
     /** Cache有效期，单位:秒 */
     public void setEffectiveTime(long effectiveTime) {
-        this.effectiveTime = effectiveTime;
+        this.effectiveTime = effectiveTime * 1000;
     }
 }
