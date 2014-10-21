@@ -1,11 +1,11 @@
-## ![logo](https://github.com/kymjs/KJFrameForAndroid/blob/master/KJFrameExample/logo.jpg) KJFrameForAndroid->Plugin模块简介
-**Plugin模块** 是一个实现android插件化开发的框架。使用KJFrameForAndroid->Plugin，apk动态加载不再是难题，更重要的是可以轻松实现插件与APP项目之间的解耦。<br>
+## ![logo](https://github.com/kymjs/KJFrameForAndroid/blob/master/KJFrameExample/logo.jpg) KJFrameForAndroid---Plugin模块简介
+**Plugin模块** 是一个实现android插件化开发的框架。使用KJFrameForAndroid-->Plugin，apk动态加载不再是难题，更重要的是可以轻松实现插件与APP项目之间的解耦。<br>
 
 # 写在前面
-** 介绍 ** <br>
+**介绍** <br>
   Plugin模块最初是作为一个独立的框架[CJFrameForAndroid](https://github.com/kymjs/CJFrameForAndroid/)存在，后并入[KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin)框架中，Plugin模块的设计之初在很大程度上参考了：[Android动态加载库DL](https://github.com/singwhatiwanna/dynamic-load-apk)的设计<br>
   如果看完本介绍后对插件化开发还是不太明白，你可以看看这几篇博客：[CJFrameForAndroid原理介绍](http://my.oschina.net/kymjs/blog/331997)，[DL原理介绍](http://blog.csdn.net/singwhatiwanna/article/details/39937639)<br>
-** 原理 ** <br>
+**原理** <br>
   CJFrameForAndroid的实现原理是通过类加载器，动态加载存在于SD卡上的apk包中的Activity。通过使用一个托管所，插件Activity全部事务(包括声明周期与交互事件)将交由托管所来处理，间接实现插件的运行。<br>
   一句话描述：CJFrameForAndroid中的托管所，复制了插件中的Activity，来替代插件中的Activity与用户交互。<br>
 
@@ -39,9 +39,9 @@
 ```
 
 # jar包调用
-** 使用场景一 ** 通常情况：在主APP工程中使用KJFrameForAndroid的完整版jar包[下载](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin/binrary)；考虑到插件的大小应该越小越好，我们特意制作了精简版的jar包，仅包含插件所比需功能与注解式绑定控件的功能。在插件工程中使用精简版jar包[下载]()；<br>
-** 使用场景二 ** 适合插件工程较庞大时使用：在APP工程和插件工程中都使用KJFrameForAndroid的完整版jar包[下载](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin/binrary)；好处在于开发插件工程时也可以得到KJFrameForAndroid完整版的全部功能支持。<br>
-** 使用场景三 ** 只使用插件化模块：你可以在在APP工程和插件工程中都使用精简版jar包。
+**使用场景一** 通常情况：在主APP工程中使用KJFrameForAndroid的完整版jar包[下载](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin/binrary)；考虑到插件的大小应该越小越好，我们特意制作了精简版的jar包，仅包含插件所比需功能与注解式绑定控件的功能。在插件工程中使用精简版jar包[下载]()；<br>
+**使用场景二** 适合插件工程较庞大时使用：在APP工程和插件工程中都使用KJFrameForAndroid的完整版jar包[下载](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin/binrary)；好处在于开发插件工程时也可以得到KJFrameForAndroid完整版的全部功能支持。<br>
+**使用场景三** 只使用插件化模块：你可以在在APP工程和插件工程中都使用精简版jar包。
 
 # 注意事项
 ●APP项目和插件项目中，都需要使用到插件化的jar包。<br>

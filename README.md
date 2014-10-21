@@ -39,7 +39,7 @@ Demo工程运行：[下载](https://codeload.github.com/kymjs/KJFrameForAndroid/
 
 ## Plugin模块
 **Android插件化开发：**在你的应用中动态调用未安装的APK文件，实现高自由度的定制化应用开发，更重要的是可以轻松实现插件与APP项目之间的解耦<br>
-[完整介绍与使用方式](https://github.com/kymjs/CJFrameForAndroid/)<br>
+[完整介绍与使用方法](https://github.com/kymjs/KJFrameForAndroid/blob/Plugin/PluginLibraryExplain.md)<br>
 **目前支持：**<br>
 * Activity的动态加载，包括生命周期和交互事件、插件与APP之间的数据通信<br>
 * Fragment的动态加载，Activity都可以正常加载，Fragment作为Activity的一部分，自然是没有问题的。<br>
