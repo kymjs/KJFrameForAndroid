@@ -22,8 +22,8 @@ import java.lang.reflect.Method;
 import org.kymjs.aframe.plugin.CJClassLoader;
 import org.kymjs.aframe.plugin.CJConfig;
 import org.kymjs.aframe.plugin.CJTool;
+import org.kymjs.aframe.ui.BaseActivity;
 import org.kymjs.aframe.ui.BindView;
-import org.kymjs.aframe.ui.activity.BaseActivity;
 import org.kymjs.aframe.ui.activity.I_KJActivity;
 
 import android.content.Intent;
@@ -82,7 +82,6 @@ public class CJProxyActivity extends BaseActivity {
             // 若已经指定要启动的插件Activity完整类名，则直接调用
             launchPluginActivity(mClass);
         }
-        setHiddenActionBar(false);
         super.onCreate(savedInstanceState);
     }
 
@@ -183,7 +182,6 @@ public class CJProxyActivity extends BaseActivity {
     private void initAnnotate(Object currentClass) {
         if (mPluginKJAty != null) {
             mPluginKJAty.setRootView();
-            View rootView = this.getWindow().getDecorView();
             // 通过反射获取到全部属性，反射的字段可能是一个类（静态）字段或实例字段
             Field[] fields = currentClass.getClass()
                     .getDeclaredFields();
@@ -195,6 +193,9 @@ public class CJProxyActivity extends BaseActivity {
                     if (bindView != null) {
                         int viewId = bindView.id();
                         boolean clickLis = bindView.click();
+
+                        View rootView = this.getWindow()
+                                .getDecorView();
                         try {
                             field.setAccessible(true);
                             if (clickLis) {

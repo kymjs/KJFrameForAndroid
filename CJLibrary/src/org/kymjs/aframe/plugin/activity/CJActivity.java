@@ -73,6 +73,7 @@ public abstract class CJActivity extends Activity implements
             super.onCreate(savedInstanceState);
             that = this;
         }
+        // setRootView();// 其实这里重复调用了，目的主要是用于插件调试时使用
         initialize();
         registerBroadcast();
     }

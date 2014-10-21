@@ -17,8 +17,6 @@ package org.kymjs.aframe.ui;
 
 import java.lang.reflect.Field;
 
-import org.kymjs.aframe.core.KJException;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -91,7 +89,8 @@ public class AnnotateUtil {
         if (cxt instanceof Activity) {
             initBindView((Activity) cxt);
         } else {
-            throw new KJException("the view don't have root view");
+            throw new NullPointerException(
+                    "the view don't have root view");
         }
     }
 
