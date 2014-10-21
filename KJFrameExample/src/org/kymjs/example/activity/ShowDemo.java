@@ -17,6 +17,12 @@ public class ShowDemo extends KJFragmentActivity {
     }
 
     @Override
+    protected void initData() {
+        super.initData();
+        setBackListener(false);
+    }
+
+    @Override
     public void changeFragment(BaseFragment targetFragment) {
         changeFragment(R.id.content, targetFragment);
     }

@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 import org.kymjs.aframe.plugin.CJTool;
 import org.kymjs.aframe.ui.BindView;
-import org.kymjs.aframe.ui.ViewInject;
 import org.kymjs.aframe.ui.fragment.BaseFragment;
 import org.kymjs.aframe.utils.FileUtils;
+import org.kymjs.aframe.utils.SystemTool;
 import org.kymjs.example.R;
 import org.kymjs.example.bean.PluginBean;
 
@@ -83,11 +83,9 @@ public class PluginSkinExample extends BaseFragment {
                             aty, "com.example.hello").getDrawable(
                             R.drawable.bg));
                 } catch (NameNotFoundException e) {
-                    e.printStackTrace();
-                    ViewInject.toast("出错啦，找不到皮肤");
-                    // 还原为默认皮肤
-                    skin.setImageDrawable(getResources().getDrawable(
-                            R.drawable.bg));
+                    // 先安装皮肤插件
+                    SystemTool.installApk(aty,
+                            new File(datas.get(position).getPath()));
                 }
             }
         });
