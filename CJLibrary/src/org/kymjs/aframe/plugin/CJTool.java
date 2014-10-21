@@ -15,15 +15,13 @@
  */
 package org.kymjs.aframe.plugin;
 
-import org.kymjs.aframe.plugin.CJConfig.ActivityType;
-import org.kymjs.aframe.plugin.activity.CJActivity;
-
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 
@@ -156,100 +154,60 @@ public class CJTool {
     }
 
     /**
-     * 返回指定Activity的类型：<br>
-     * ActivityType.UNKNOWN 未知类型<br>
-     * ActivityType.NORMAL Activity<br>
-     * ActivityType.FRAGMENT Fragment<br>
-     * ActivityType.ACTIONBAR ActionBar<br>
+     * 获取到指定包名的插件的资源属性
      * 
-     * @param cls
-     *            Activity对应的clazz
+     * @param cxt
+     *            当前Context
+     * @param pkgName
+     *            要打开的资源所在的包名
      * @return
      */
-    private static ActivityType getActivityType(Class<?> cls) {
-        ActivityType type = ActivityType.UNKNOWN;
-        try {
-            // 类型降级（父类转为子类）
-            if (cls.asSubclass(CJActivity.class) != null) {
-                type = ActivityType.NORMAL;
-                return type;
-            }
-        } catch (ClassCastException e) {
-        }
-        return type;
+    public static Resources getAppResFromPkgName(Context cxt,
+            String pkgName) throws NameNotFoundException {
+        return getAppCxtFromPkgName(cxt, pkgName).getResources();
     }
 
     /**
-     * 返回指定Activity的类型：<br>
-     * ActivityType.UNKNOWN 未知类型<br>
-     * ActivityType.NORMAL Activity<br>
-     * ActivityType.FRAGMENT Fragment<br>
-     * ActivityType.ACTIONBAR ActionBar<br>
+     * 获取到指定包名的插件的资源属性
      * 
-     * @param className
-     *            clazz完整名
-     * @param classLoader
-     *            类加载器
+     * @param cxt
+     *            当前Context
+     * @param apkPath
+     *            要打开的apk所在的路径
      * @return
      */
-    private static ActivityType getActivityType(String className,
-            ClassLoader classLoader) {
-        Class<?> cls = null;
-        try {
-            cls = Class.forName(className, false, classLoader);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return getActivityType(cls);
+    public static Resources getAppResFromApkPath(Context cxt,
+            String apkPath) throws NameNotFoundException {
+        return getAppgetAppFromApkPath(cxt, apkPath).getResources();
     }
 
     /**
+     * 获取指定APP包名的Context对象
      * 
-     * @param className
-     *            clazz完整名
-     * @param classLoader
-     *            类加载器
+     * @param cxt
+     *            当前Context
+     * @param pkgName
+     *            要打开的资源所在的包名
      * @return
      */
-    public static String getProxyViewAction(String className,
-            ClassLoader classLoader) {
-        ActivityType type = getActivityType(className, classLoader);
-        return getProxyByActivityType(type);
+    public static Context getAppCxtFromPkgName(Context cxt,
+            String pkgName) throws NameNotFoundException {
+        return cxt.createPackageContext(pkgName,
+                Context.CONTEXT_IGNORE_SECURITY);
     }
 
     /**
+     * 获取指定APP包名的Context对象
      * 
-     * @param cls
-     *            Activity对应的clazz
+     * @param cxt
+     *            当前Context
+     * @param apkPath
+     *            要打开的apk所在的路径
      * @return
      */
-    public static String getProxyViewAction(Class<?> cls) {
-        ActivityType type = getActivityType(cls);
-        return getProxyByActivityType(type);
-    }
-
-    /**
-     * 获取插件界面的类型（Activity? Fragment? ...）
-     * 
-     * @param type
-     *            ActivityType.UNKNOWN, ActivityType.NORMAL,
-     *            ActivityType.FRAGMENT, ActivityType.ACTIONBAR
-     * @return
-     */
-    private static String getProxyByActivityType(ActivityType type) {
-        String proxyViewAction = null;
-        switch (type) {
-        case NORMAL: {
-            proxyViewAction = CJConfig.PROXY_ACTIVITY;
-            break;
-        }
-        case FRAGMENT: {
-            proxyViewAction = CJConfig.PROXY_FRAGMENT;
-            break;
-        }
-        case ACTIONBAR:
-        case UNKNOWN:
-        }
-        return proxyViewAction;
+    public static Context getAppgetAppFromApkPath(Context cxt,
+            String apkPath) throws NameNotFoundException {
+        return getAppCxtFromPkgName(cxt,
+                getAppInfo(cxt, apkPath).packageName);
     }
 }

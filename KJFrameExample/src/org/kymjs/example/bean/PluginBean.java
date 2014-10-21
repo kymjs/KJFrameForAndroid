@@ -6,6 +6,7 @@ public class PluginBean {
 
     private String name;
     private Drawable icon;
+    private String path;
 
     public String getName() {
         return name;
@@ -23,4 +24,11 @@ public class PluginBean {
         this.icon = icon;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 }

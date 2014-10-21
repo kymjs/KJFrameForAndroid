@@ -8,6 +8,7 @@ import org.kymjs.example.fragment.DownloadExample;
 import org.kymjs.example.fragment.HorizontalListDemo;
 import org.kymjs.example.fragment.HttpExample;
 import org.kymjs.example.fragment.MainFragment;
+import org.kymjs.example.fragment.PluginSkinExample;
 
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,8 @@ public class More extends BaseActivity {
     private Button btn5;
     @BindView(id = R.id.more6, click = true)
     private Button btn6;
+    @BindView(id = R.id.more7, click = true)
+    private Button btn7;
 
     @Override
     public void setRootView() {
@@ -56,6 +59,10 @@ public class More extends BaseActivity {
             break;
         case R.id.more6:
             ShowDemo.content = new HttpExample();
+            showActivity(aty, ShowDemo.class);
+            break;
+        case R.id.more7:
+            ShowDemo.content = new PluginSkinExample();
             showActivity(aty, ShowDemo.class);
             break;
         }

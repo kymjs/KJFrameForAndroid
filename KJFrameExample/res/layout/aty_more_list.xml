@@ -40,4 +40,10 @@
         android:layout_height="wrap_content"
         android:text="网络数据请求" />
 
+    <Button
+        android:id="@+id/more7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="使用CJFrame做的换肤应用" />
+
 </LinearLayout>
