@@ -12,7 +12,7 @@
 * QQ群：[257053751](http://shang.qq.com/wpa/qunwpa?idkey=00d92c040e81d87ccd21f8d0fffb10640baaa66da45254c3bd329b6ff7d46fef)(开发者群1)，[201055521](http://jq.qq.com/?_wv=1027&k=MBVdpK)(开发者群2)
 * 项目地址：[https://github.com/kymjs/KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid)
 * 项目备用地址（可能不是最新代码）：[http://git.oschina.net/kymjs/KJFrameForAndroid](http://git.oschina.net/kymjs/KJFrameForAndroid)
-* 相关框架：[Android插件开发框架](https://github.com/kymjs/CJFrameForAndroid)
+* 相关框架：[Android插件开发框架DL](https://github.com/singwhatiwanna/dynamic-load-apk)
 * 
 * ask question to [https://github.com/kymjs/KJFrameForAndroid/issues](https://github.com/kymjs/KJFrameForAndroid/issues)
 * wiki for English skip to [https://github.com/kymjs/KJFrameForAndroid/wiki](https://github.com/kymjs/KJFrameForAndroid/wiki)
@@ -36,6 +36,17 @@ Demo工程运行：[下载](https://codeload.github.com/kymjs/KJFrameForAndroid/
 ----
 
 ## =======各模块使用介绍=======
+
+## Plugin模块
+*Android插件化开发：*在你的应用中动态调用未安装的APK文件，实现高自由度的定制化应用开发，更重要的是可以轻松实现插件与APP项目之间的解耦<br>
+[完整介绍与使用方式]()<br>
+*目前支持：*<br>
+使用Plugin模块，在开发插件时同样可以完美使用UiLibrary的全部功能，其中就包括最受欢迎的注解式绑定控件。<br>
+Activity的动态加载，包括生命周期和交互事件、插件与APP之间的数据通信<br>
+Fragment的动态加载，Activity都可以正常加载，Fragment作为Activity的一部分，自然是没有问题的。<br>
+动态注册的BroadcastReceiver。<br>
+绑定式、启动式Service均可正常使用。<br>
+已成功模拟出launchMode的效果。(launchModer实际上是一个虚拟的，生命周期的调用还是一样的，仅仅模拟出了系统的BackStack)<br>
 
 ## UILibrary模块
 UILibrary包含两个部分Widget(控件)、Topology(Android框架结构继承链)  [详细介绍...](http://my.oschina.net/kymjs/blog/284897)<br>
