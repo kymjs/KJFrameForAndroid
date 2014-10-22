@@ -3,16 +3,15 @@
 感谢支持KJFrameForAndroid的社区与组织：<br>
 [![Android Arsenal](http://img.shields.io/badge/Android%20Arsenal-KJFrameForAndroid-blue.svg?style=flat)](http://android-arsenal.com/details/1/836)
 [![Travis CI](https://travis-ci.org/kymjs/KJFrameForAndroid.svg?)](https://travis-ci.org/kymjs/KJFrameForAndroid)
-[![BlackDuck OpenHUB](https://www.openhub.net/p/KJFrameForAndroid/widgets/project_thin_badge.gif)](https://www.openhub.net/p/KJFrameForAndroid)
-[![OSChina](https://www.oschina.net/img/logo_s2.gif)](https://www.oschina.net/)
-<br>--- **KJFrameForAndroid** 又叫KJLibrary，是一个android的orm 和 ioc 框架。同时封装了android中的Bitmap与Http操作的框架，使其更加简单易用；<br>
---- KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复杂操作而达到简化Android应用级开发，最终实现快速而又安全的开发APP。我们提倡用最少的代码，完成最多的操作，用最高的效率，完成最复杂的功能。<br>
+[![OSChina](https://www.oschina.net/img/logo_s2.gif)](https://www.oschina.net/)<br>
+**KJFrameForAndroid** 又叫KJLibrary，是一个android的orm 和 ioc 框架。同时封装了android中的Bitmap与Http操作的框架，使其更加简单易用；<br>
+KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复杂操作而达到简化Android应用级开发，最终实现快速而又安全的开发APP。我们提倡用最少的代码，完成最多的操作，用最高的效率，完成最复杂的功能。<br>
 
 ## KJFrameForAndroid 相关链接
 * QQ群：[257053751](http://shang.qq.com/wpa/qunwpa?idkey=00d92c040e81d87ccd21f8d0fffb10640baaa66da45254c3bd329b6ff7d46fef)(开发者群1)，[201055521](http://jq.qq.com/?_wv=1027&k=MBVdpK)(开发者群2)
 * 项目地址：[https://github.com/kymjs/KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid)
 * 项目备用地址（可能不是最新代码）：[http://git.oschina.net/kymjs/KJFrameForAndroid](http://git.oschina.net/kymjs/KJFrameForAndroid)
-* 相关框架：[Android插件开发框架](https://github.com/kymjs/CJFrameForAndroid)
+* 集成插件化开发功能的分支版本：[KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin)
 * 
 * ask question to [https://github.com/kymjs/KJFrameForAndroid/issues](https://github.com/kymjs/KJFrameForAndroid/issues)
 * wiki for English skip to [https://github.com/kymjs/KJFrameForAndroid/wiki](https://github.com/kymjs/KJFrameForAndroid/wiki)
@@ -36,6 +35,9 @@ Demo工程运行：[下载](https://codeload.github.com/kymjs/KJFrameForAndroid/
 ----
 
 ## =======各模块使用介绍=======
+
+## Plugin模块
+如你需要使用插件化模块，请访问：集成插件化开发功能的分支版本[KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin)
 
 ## UILibrary模块
 UILibrary包含两个部分Widget(控件)、Topology(Android框架结构继承链)  [详细介绍...](http://my.oschina.net/kymjs/blog/284897)<br>
@@ -82,7 +84,8 @@ public class TabExample extends BaseActivity {
 Topology中各函数调用顺序：
 setRootView();<br>
 @BindView<br>
-initDataWithThread();（异步，线程中调用）<br>
+initDataFromThread();（异步，线程中调用）<br>
+threadDataInited();（initDataFromThread执行完成后将会回调）<br>
 initData();<br>
 initWidget();<br>
 registerBroadcast();<br>
