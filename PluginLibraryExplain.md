@@ -39,9 +39,9 @@
 ```
 
 # jar包调用
-**使用场景一** >通常情况：在主APP工程中使用KJFrameForAndroid的完整版jar包（请选择最新版的CJFrameForAndroid）[下载](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin/binrary)；考虑到插件的大小应该越小越好，我们特意制作了精简版的jar包，仅包含插件所比需功能与注解式绑定控件的功能。在插件工程中使用精简版jar包（请选择最新版本的CJPlugin.jar）[下载](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin/binrary)；<br>
-**使用场景二** >适合插件工程较庞大时使用：在APP工程和插件工程中都使用KJFrameForAndroid的完整版jar包（请选择最新版的CJFrameForAndroid）[下载](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin/binrary)；好处在于开发插件工程时也可以得到KJFrameForAndroid完整版的全部功能支持。<br>
-**使用场景三** >只使用插件化模块：你可以在在APP工程和插件工程中都使用精简版jar包。
+**使用场景一** 通常情况：在主APP工程中使用KJFrameForAndroid的完整版jar包[选择CJFrameForAndroid.jar下载](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin/binrary)；考虑到插件的大小应该越小越好，我们特意制作了精简版的jar包，仅包含插件所比需功能与注解式绑定控件的功能。在插件工程中使用精简版jar包[选择CJPlugin.jar下载](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin/binrary)；<br>
+**使用场景二** 适合插件工程较庞大时使用：在APP工程和插件工程中都使用KJFrameForAndroid的完整版jar包[选择CJFrameForAndroid下载](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin/binrary)；好处在于开发插件工程时也可以得到KJFrameForAndroid完整版的全部功能支持。<br>
+**使用场景三** 只使用插件化模块：你可以在在APP工程和插件工程中都使用精简版jar包。
 
 # 注意事项
 ●APP项目和插件项目中，都需要使用到插件化的jar包。<br>
