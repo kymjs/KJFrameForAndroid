@@ -2,7 +2,7 @@
 =================
 感谢支持KJFrameForAndroid的社区与组织：<br>
 [![Android Arsenal](http://img.shields.io/badge/Android%20Arsenal-KJFrameForAndroid-blue.svg?style=flat)](http://android-arsenal.com/details/1/836)
-[![Travis CI](https://travis-ci.org/kymjs/KJFrameForAndroid.svg?)](https://travis-ci.org/kymjs/KJFrameForAndroid)
+[![BlackDuck OpenHUB](https://www.openhub.net/p/KJFrameForAndroid/widgets/project_thin_badge.gif)](https://www.openhub.net/p/KJFrameForAndroid)
 [![OSChina](https://www.oschina.net/img/logo_s2.gif)](https://www.oschina.net/)<br>
 **KJFrameForAndroid** 又叫KJLibrary，是一个android的orm 和 ioc 框架。同时封装了android中的Bitmap与Http操作的框架，使其更加简单易用；<br>
 KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复杂操作而达到简化Android应用级开发，最终实现快速而又安全的开发APP。我们提倡用最少的代码，完成最多的操作，用最高的效率，完成最复杂的功能。<br>
@@ -215,7 +215,7 @@ kjh.urlDownload(mEt.getText().toString(), "/storage/sdcard0/3.png",file);
 ```
 ## DBLibrary模块
 包含了android中的orm框架，一行代码就可以进行增删改查。支持一对多，多对一等查询。<br>
-有关DB模块，要在此感谢afinal框架，很大程度上参考了[finalDB](https://github.com/kymjs/afinal)的设计，并在此基础上完善了几乎全部的API注释，与更多可定制的DB操作<br>
+有关DB模块，很大程度上参考了[finalDB](https://github.com/kymjs/afinal)的设计，并在此基础上完善了几乎全部的API注释，与更多可定制的DB操作<br>
 ```java
 //普通数据存储
 KJDB db = KJDB.create(this);
