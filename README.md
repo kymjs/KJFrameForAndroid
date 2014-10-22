@@ -14,7 +14,7 @@ KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复�
 * 集成插件化开发功能的分支版本：[KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin)
 * Apk动态加载框架:[DL](https://github.com/singwhatiwanna/dynamic-load-apk)
 * 
-* ask question to [https://github.com/kymjs/KJFrameForAndroid/issues](https://github.com/kymjs/KJFrameForAndroid/issues)
+* 留言板 [https://github.com/kymjs/KJFrameForAndroid/issues](https://github.com/kymjs/KJFrameForAndroid/issues)
 * wiki for English skip to [https://github.com/kymjs/KJFrameForAndroid/wiki](https://github.com/kymjs/KJFrameForAndroid/wiki)
 * 版本日志debug log [https://github.com/kymjs/KJFrameForAndroid/blob/master/debug_log.txt](https://github.com/kymjs/KJFrameForAndroid/blob/master/debug_log.txt)
 
