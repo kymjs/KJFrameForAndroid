@@ -3,8 +3,8 @@
 
 # 写在前面
 **介绍** <br>
-  Plugin模块最初是作为一个独立的框架[CJFrameForAndroid](https://github.com/kymjs/CJFrameForAndroid/)存在，后并入[KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin)框架中。<br>
-  如果看完本介绍后对插件化开发还是不太明白，你可以看看这几篇博客：[CJFrameForAndroid原理介绍](http://my.oschina.net/kymjs/blog/331997)。<br>
+  Plugin模块最初是作为一个独立的框架[CJFrameForAndroid](https://github.com/kymjs/CJFrameForAndroid/)存在，后并入[KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin)框架中，Plugin模块的设计思想参考了：[Android动态加载库DL](https://github.com/singwhatiwanna/dynamic-load-apk)的设计，并做了更多功能上与稳定性上的测试<br>
+  如果看完本介绍后对插件化开发还是不太明白，你可以看看这几篇博客：[CJFrameForAndroid原理介绍](http://my.oschina.net/kymjs/blog/331997)，[DL原理介绍](http://blog.csdn.net/singwhatiwanna/article/details/39937639)<br>
 **原理** <br>
   CJFrameForAndroid的实现原理是通过类加载器，动态加载存在于SD卡上的apk包中的Activity。通过使用一个托管所，插件Activity全部事务(包括声明周期与交互事件)将交由托管所来处理，间接实现插件的运行。<br>
   一句话描述：CJFrameForAndroid中的托管所，复制了插件中的Activity，来替代插件中的Activity与用户交互。<br>
