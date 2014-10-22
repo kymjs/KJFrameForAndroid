@@ -1,4 +1,4 @@
-﻿## ![logo](https://github.com/kymjs/KJFrameForAndroid/blob/master/KJFrameExample/logo.jpg) KJFrameForAndroid简介
+## ![logo](https://github.com/kymjs/KJFrameForAndroid/blob/master/KJFrameExample/logo.jpg) KJFrameForAndroid简介
 =================
 感谢支持KJFrameForAndroid的社区与组织：<br>
 [![Android Arsenal](http://img.shields.io/badge/Android%20Arsenal-KJFrameForAndroid-blue.svg?style=flat)](http://android-arsenal.com/details/1/836)
@@ -12,6 +12,7 @@ KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复�
 * 项目地址：[https://github.com/kymjs/KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid)
 * 项目备用地址（可能不是最新代码）：[http://git.oschina.net/kymjs/KJFrameForAndroid](http://git.oschina.net/kymjs/KJFrameForAndroid)
 * 集成插件化开发功能的分支版本：[KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin)
+* Apk动态加载框架:[DL](https://github.com/singwhatiwanna/dynamic-load-apk)
 * 
 * ask question to [https://github.com/kymjs/KJFrameForAndroid/issues](https://github.com/kymjs/KJFrameForAndroid/issues)
 * wiki for English skip to [https://github.com/kymjs/KJFrameForAndroid/wiki](https://github.com/kymjs/KJFrameForAndroid/wiki)
