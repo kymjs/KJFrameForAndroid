@@ -25,9 +25,9 @@ KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复�
 ③将/binrary目录最新的项目jar包复制至demo的libs目录。
 ④删除[project.properties](https://github.com/kymjs/KJFrameForAndroid/blob/master/KJFrameExample/project.properties)文件的最后一行<br>
 **在项目中使用** ：将KJFrameForAndroid的[最新jar包](https://github.com/kymjs/KJFrameForAndroid/tree/master/binrary)添加到你工程/libs目录中并引用。<br>
-KJFrameForAndroid默认已集成了android-support-v4.jar，你无需再次添加。<br>
-由于使用了SDK最新的API函数，以及3.0版Fragment。KJFrameForAndroid框架最低支持Android3.0版本，本框架可以作代码混淆，混淆时请保留包含注解部分的类的完整性。<br>
 
+* KJFrameForAndroid默认已集成了android-support-v4.jar，你无需再次添加。<br>
+* 由于使用了SDK最新的API函数，以及3.0版Fragment。KJFrameForAndroid框架最低支持Android3.0版本，本框架可以作代码混淆，混淆时请保留包含注解部分的类的完整性。<br>
 *注：使用 KJFrameForAndroid 应用开发框架需要在你项目的AndroidManifest.xml文件中加入以下基本权限：*
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
@@ -42,8 +42,8 @@ KJFrameForAndroid默认已集成了android-support-v4.jar，你无需再次添�
 ## =======各模块使用介绍=======
 
 ## Plugin模块
-使用Plugin模块可以让你的插件apk不用安装便直接被运行，极大的方便了APP动态更新，且可以轻松实现插件与APP项目之间的解耦。<br>
-Plugin模块 **现支持以下功能** 更多介绍请看[Plugin模块详细介绍](https://github.com/kymjs/KJFrameForAndroid/blob/master/PluginLibraryExplain.md)
+使用Plugin模块可以让你的插件apk不用安装便直接被运行，极大的方便了APP动态更新，且可以轻松实现插件与APP项目之间的解耦。更多介绍请看[Plugin模块详细介绍](https://github.com/kymjs/KJFrameForAndroid/blob/master/PluginLibraryExplain.md)<br>
+**现支持以下功能** 
 * apk无需安装即可被应用调用<br>
 * Activity的动态加载：包括生命周期和交互事件、R文件资源引用、插件与APP之间的数据通信<br>
 * Fragment的完美加载使用<br>
@@ -97,7 +97,7 @@ public class TabExample extends BaseActivity {
 Topology中各函数调用顺序：
 setRootView();<br>
 @BindView<br>
-initDataFromThread();（异步，线程中调用，可做耗时操作）<br>
+initDataFromThread();（异步调用，可做耗时操作）<br>
 threadDataInited();（initDataFromThread执行完成后才会回调）<br>
 initData();<br>
 initWidget();<br>
@@ -228,7 +228,7 @@ kjh.urlDownload(mEt.getText().toString(), "/storage/sdcard0/3.png",file);
 ```
 ## DBLibrary模块
 包含了android中的orm框架，一行代码就可以进行增删改查。支持一对多，多对一等查询。<br>
-有关DB模块，很大程度上参考了[finalDB](https://github.com/kymjs/afinal)的设计，并在此基础上完善了几乎全部的API注释，与更多可定制的DB操作<br>
+DB模块，很大程度上参考了[finalDB](https://github.com/kymjs/afinal)的设计，并在此基础上完善了几乎全部的API注释，与更多可定制的DB操作<br>
 ```java
 //普通数据存储
 KJDB db = KJDB.create(this);
