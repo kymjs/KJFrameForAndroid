@@ -54,7 +54,7 @@ public class KJListView extends ListView implements OnScrollListener {
 
     // data
     private float mLastY = -1;
-    private int mHeaderViewHeight; // 头部高度
+    private int mHeaderViewHeight = 100; // 下拉到100后才会刷新
     private int mTotalItemCount; // item的总数
 
     // flag
@@ -112,8 +112,11 @@ public class KJListView extends ListView implements OnScrollListener {
                 new OnGlobalLayoutListener() {
                     @SuppressWarnings("deprecation")
                     public void onGlobalLayout() {
-                        mHeaderViewHeight = mHeaderViewContent
+                        int tempHeight = mHeaderViewContent
                                 .getHeight();
+                        if (tempHeight > 0) {
+                            mHeaderViewHeight = tempHeight;
+                        }
                         getViewTreeObserver()
                                 .removeGlobalOnLayoutListener(this);
                     }
@@ -336,6 +339,15 @@ public class KJListView extends ListView implements OnScrollListener {
      */
     public void setOnRefreshListener(KJRefreshListener l) {
         mListViewListener = l;
+    }
+
+    /**
+     * 设置头部高度，下拉到一定高度后才会刷新(默认为100)
+     * 
+     * @param height
+     */
+    public void setHeaderHeight(int height) {
+        mHeaderViewHeight = height;
     }
 
     /**
