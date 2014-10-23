@@ -72,6 +72,7 @@ public class KJListViewHeader extends LinearLayout {
         l.setLayoutParams(params);
         hintTextView = new TextView(context);
         hintTextView.setGravity(Gravity.CENTER);
+        hintTextView.setText(normal);
         timeTextView = new TextView(context);
         timeTextView.setGravity(Gravity.CENTER);
         l.addView(hintTextView);
