@@ -8,6 +8,9 @@ org.kymjs.aframe.database.utils
 org.kymjs.aframe.http
 org.kymjs.aframe.http.cache
 org.kymjs.aframe.http.downloader
+org.kymjs.aframe.plugin
+org.kymjs.aframe.plugin.activity
+org.kymjs.aframe.plugin.service
 org.kymjs.aframe.ui
 org.kymjs.aframe.ui.activity
 org.kymjs.aframe.ui.fragment

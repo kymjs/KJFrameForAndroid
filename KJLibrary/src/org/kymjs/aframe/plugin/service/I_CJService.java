@@ -38,7 +38,7 @@ public interface I_CJService {
     /**
      * 设置托管Service，并将that指针指向那个托管的Service
      * 
-     * @param proxyActivity
+     * @param proxyService
      * @param dexPath
      */
     void setProxy(Service proxyService, String dexPath);
