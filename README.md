@@ -9,6 +9,9 @@ KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复�
 
 ## KJFrameForAndroid 相关链接
 * QQ群：[257053751](http://shang.qq.com/wpa/qunwpa?idkey=00d92c040e81d87ccd21f8d0fffb10640baaa66da45254c3bd329b6ff7d46fef)(开发者群1)，[201055521](http://jq.qq.com/?_wv=1027&k=MBVdpK)(开发者群2)
+* 项目地址：[https://github.com/kymjs/KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid)
+* 项目备用地址（可能不是最新代码）：[http://git.oschina.net/kymjs/KJFrameForAndroid](http://git.oschina.net/kymjs/KJFrameForAndroid)
+* Apk动态加载框架[DL](https://github.com/singwhatiwanna/dynamic-load-apk)
 * 
 * wiki for English skip to [https://github.com/kymjs/KJFrameForAndroid/wiki](https://github.com/kymjs/KJFrameForAndroid/wiki)
 * 留言版 [https://github.com/kymjs/KJFrameForAndroid/issues](https://github.com/kymjs/KJFrameForAndroid/issues)
@@ -16,8 +19,13 @@ KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复�
 
 ---
 # 框架使用
-Demo工程运行：[下载](https://codeload.github.com/kymjs/KJFrameForAndroid/zip/master)框架最新源码，选择KJFrameExample工程导入Eclipse，并将/binrary目录最新的项目jar包复制至demo的libs目录即可<br>
-若需要对源码改动或学习，可打开KJLibrary工程查看源码，同时结合KJFrameExample演示项目更好的学习，另外也可以自己新建工程，并右键工程->preference->Android->library->Add,选择KJLibrary工程加入后apply应用。<br>
+**Demo工程运行** ：
+①[下载](https://codeload.github.com/kymjs/KJFrameForAndroid/zip/master)框架最新源码。
+②选择KJFrameExample工程导入Eclipse。
+③将/binrary目录最新的项目jar包复制至demo的libs目录。
+④删除[project.properties](https://github.com/kymjs/KJFrameForAndroid/blob/master/KJFrameExample/project.properties)文件的最后一行<br>
+**在项目中使用** ：将KJFrameForAndroid的[最新jar包](https://github.com/kymjs/KJFrameForAndroid/tree/master/binrary)添加到你工程/libs目录中并引用。<br>
+KJFrameForAndroid默认已集成了android-support-v4.jar，你无需再次添加。<br>
 由于使用了SDK最新的API函数，以及3.0版Fragment。KJFrameForAndroid框架最低支持Android3.0版本，本框架可以作代码混淆，混淆时请保留包含注解部分的类的完整性。<br>
 
 *注：使用 KJFrameForAndroid 应用开发框架需要在你项目的AndroidManifest.xml文件中加入以下基本权限：*
@@ -33,8 +41,19 @@ Demo工程运行：[下载](https://codeload.github.com/kymjs/KJFrameForAndroid/
 
 ## =======各模块使用介绍=======
 
+## Plugin模块
+使用Plugin模块可以让你的插件apk不用安装便直接被运行，极大的方便了APP动态更新，且可以轻松实现插件与APP项目之间的解耦。<br>
+Plugin模块 **现支持以下功能** 更多介绍请看[Plugin模块详细介绍](https://github.com/kymjs/KJFrameForAndroid/blob/master/PluginLibraryExplain.md)
+* apk无需安装即可被应用调用<br>
+* Activity的动态加载：包括生命周期和交互事件、R文件资源引用、插件与APP之间的数据通信<br>
+* Fragment的完美加载使用<br>
+* 动态注册的BroadcastReceiver<br>
+* 绑定式、启动式Service均可完美使用<br>
+* 已成功模拟出launchMode的效果。(launchModer实际上是一个虚拟的，生命周期的调用还是一样的，仅仅模拟出了系统的BackStack)<br>
+* 完美集成了KJFrameForAndroid中UiLibrary->Topology的全部功能，支持注解式绑定控件设置监听<br>
+
 ## UILibrary模块
-UILibrary包含两个部分Widget(控件)、Topology(Android框架结构继承链)  [详细介绍...](http://my.oschina.net/kymjs/blog/284897)<br>
+UILibrary包含两个部分Widget(控件)、Topology(Android框架结构继承链) [详细介绍...](http://my.oschina.net/kymjs/blog/284897)<br>
 
 **UILibrary -> Widget控件部分**
 主要封装了常用的UI控件，为了不让项目jar包过大，我们只引入了开发中一定会用到的控件，例如：可上下拉的KJListView、可上下拉的KJScrollView、可以双指缩放双击缩放双指旋转的ScaleImageView、等等......更多内容请自行查看项目文件中org.kymjs.aframe.widget包下的内容<br>
@@ -78,8 +97,8 @@ public class TabExample extends BaseActivity {
 Topology中各函数调用顺序：
 setRootView();<br>
 @BindView<br>
-initDataFromThread();（异步，线程中调用）<br>
-threadDataInited();（initDataFromThread执行完成后将会回调）<br>
+initDataFromThread();（异步，线程中调用，可做耗时操作）<br>
+threadDataInited();（initDataFromThread执行完成后才会回调）<br>
 initData();<br>
 initWidget();<br>
 registerBroadcast();<br>
