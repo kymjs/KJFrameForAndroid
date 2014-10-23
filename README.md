@@ -1,4 +1,4 @@
-﻿## ![logo](https://github.com/kymjs/KJFrameForAndroid/blob/master/KJFrameExample/logo.jpg) KJFrameForAndroid简介
+## ![logo](https://github.com/kymjs/KJFrameForAndroid/blob/master/KJFrameExample/logo.jpg) KJFrameForAndroid简介
 =================
 感谢支持KJFrameForAndroid的社区与组织：<br>
 [![Android Arsenal](http://img.shields.io/badge/Android%20Arsenal-KJFrameForAndroid-blue.svg?style=flat)](http://android-arsenal.com/details/1/836)
@@ -9,8 +9,6 @@ KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复�
 
 ## KJFrameForAndroid 相关链接
 * QQ群：[257053751](http://shang.qq.com/wpa/qunwpa?idkey=00d92c040e81d87ccd21f8d0fffb10640baaa66da45254c3bd329b6ff7d46fef)(开发者群1)，[201055521](http://jq.qq.com/?_wv=1027&k=MBVdpK)(开发者群2)
-* 项目地址：[https://github.com/kymjs/KJFrameForAndroid/tree/Plugin](https://github.com/kymjs/KJFrameForAndroid/tree/Plugin)
-* 相关框架：[Android插件开发框架](https://github.com/singwhatiwanna/dynamic-load-apk)
 * 
 * wiki for English skip to [https://github.com/kymjs/KJFrameForAndroid/wiki](https://github.com/kymjs/KJFrameForAndroid/wiki)
 * 留言版 [https://github.com/kymjs/KJFrameForAndroid/issues](https://github.com/kymjs/KJFrameForAndroid/issues)
@@ -18,7 +16,7 @@ KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复�
 
 ---
 # 框架使用
-Demo工程运行：[下载(含插件化模块)](https://codeload.github.com/kymjs/KJFrameForAndroid/zip/Plugin)框架最新源码，选择KJFrameExample工程导入Eclipse，并将/binrary目录最新的项目jar包复制至demo的libs目录即可<br>
+Demo工程运行：[下载](https://codeload.github.com/kymjs/KJFrameForAndroid/zip/master)框架最新源码，选择KJFrameExample工程导入Eclipse，并将/binrary目录最新的项目jar包复制至demo的libs目录即可<br>
 若需要对源码改动或学习，可打开KJLibrary工程查看源码，同时结合KJFrameExample演示项目更好的学习，另外也可以自己新建工程，并右键工程->preference->Android->library->Add,选择KJLibrary工程加入后apply应用。<br>
 由于使用了SDK最新的API函数，以及3.0版Fragment。KJFrameForAndroid框架最低支持Android3.0版本，本框架可以作代码混淆，混淆时请保留包含注解部分的类的完整性。<br>
 
@@ -34,17 +32,6 @@ Demo工程运行：[下载(含插件化模块)](https://codeload.github.com/kymj
 ----
 
 ## =======各模块使用介绍=======
-
-## Plugin模块
-**Android插件化开发：**在你的应用中动态调用未安装的APK文件，实现高自由度的定制化应用开发，更重要的是可以轻松实现插件与APP项目之间的解耦<br>
-[完整介绍与使用方法](https://github.com/kymjs/KJFrameForAndroid/blob/Plugin/PluginLibraryExplain.md)<br>
-**目前支持：**<br>
-* Activity的动态加载，包括生命周期和交互事件、插件与APP之间的数据通信<br>
-* Fragment的动态加载，Activity都可以正常加载，Fragment作为Activity的一部分，自然是没有问题的。<br>
-* 动态注册的BroadcastReceiver。<br>
-* 绑定式、启动式Service均可正常使用。<br>
-* 已成功模拟出launchMode的效果。(launchModer实际上是一个虚拟的，生命周期的调用还是一样的，仅仅模拟出了系统的BackStack)<br>
-使用Plugin模块，在开发插件时同样可以完美使用UiLibrary的全部功能，其中就包括最受欢迎的注解式绑定控件。<br>
 
 ## UILibrary模块
 UILibrary包含两个部分Widget(控件)、Topology(Android框架结构继承链)  [详细介绍...](http://my.oschina.net/kymjs/blog/284897)<br>
@@ -91,7 +78,8 @@ public class TabExample extends BaseActivity {
 Topology中各函数调用顺序：
 setRootView();<br>
 @BindView<br>
-initDataWithThread();（异步，线程中调用）<br>
+initDataFromThread();（异步，线程中调用）<br>
+threadDataInited();（initDataFromThread执行完成后将会回调）<br>
 initData();<br>
 initWidget();<br>
 registerBroadcast();<br>
