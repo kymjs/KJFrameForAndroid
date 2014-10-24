@@ -83,6 +83,8 @@ public abstract class KJTaskExecutor<Params, Progress, Result> {
     // 原子布尔型，支持高并发访问，标识任务是否被使用过
     private final AtomicBoolean mTaskInvoked = new AtomicBoolean();
 
+    private FinishedListener finishedListener;
+
     // 任务的状态 默认为挂起，即等待执行，其类型标识为易变的（volatile）
     private volatile Status mStatus = Status.PENDING;
 
@@ -190,6 +192,24 @@ public abstract class KJTaskExecutor<Params, Progress, Result> {
     }
 
     /*********************** method ***************************/
+
+    /**
+     * 耗时执行监听器
+     * 
+     * @return
+     */
+    public FinishedListener getFinishedListener() {
+        return finishedListener;
+    }
+
+    /**
+     * 设置耗时执行监听器
+     * 
+     * @param finishedListener
+     */
+    public void setFinishedListener(FinishedListener finishedListener) {
+        this.finishedListener = finishedListener;
+    }
 
     /**
      * 返回任务的状态
@@ -300,8 +320,14 @@ public abstract class KJTaskExecutor<Params, Progress, Result> {
     private void finish(Result result) {
         if (isCancelled()) {
             onCancelled(result);
+            if (finishedListener != null) {
+                finishedListener.onCancelled();
+            }
         } else {
             onPostExecute(result);
+            if (finishedListener != null) {
+                finishedListener.onPostExecute();
+            }
         }
         mStatus = Status.FINISHED;
     }
@@ -532,5 +558,11 @@ public abstract class KJTaskExecutor<Params, Progress, Result> {
                 mThreadPoolExecutor.execute(mActive);
             }
         }
+    }
+
+    public static interface FinishedListener {
+        void onCancelled();
+
+        void onPostExecute();
     }
 }
