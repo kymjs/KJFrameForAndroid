@@ -4,7 +4,7 @@
     <string name="app_name">KJFrame</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="search">感谢您的关注</string>
+    <string name="search">注：目前插件化模块效率不是很高，操作插件化demo时请将动作放慢一些。这个问题接下来会重点解决，感谢您的关注。</string>
     <string name="explain">"您好：
           感谢您对开源框架KJFrameForAndroid项目的关注。
           作为一名个人开发者维护这个免费的开源项目，希望您能支持一下，在您浏览本示例代码的过程中，可能会出现弹出式广告，希望您能点击几次，这是您对我也是对整个项目最大的支持。"</string>

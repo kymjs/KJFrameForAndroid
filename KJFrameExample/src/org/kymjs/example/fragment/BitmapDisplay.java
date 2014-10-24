@@ -76,7 +76,7 @@ public class BitmapDisplay extends BaseFragment {
             KJBitmap kjb3 = KJBitmap.create();
             kjb3.display(
                     imageView,
-                    "https://raw.githubusercontent.com/kymjs/KJFrameForAndroid/master/KJFrameExample/big_image2.jpg",
+                    "http://e.hiphotos.baidu.com/image/pic/item/9358d109b3de9c829d7a94986f81800a19d8438d.jpg",
                     true); // 开启环形等待条
             ViewInject.toast("图片较大，加载中");
             break;

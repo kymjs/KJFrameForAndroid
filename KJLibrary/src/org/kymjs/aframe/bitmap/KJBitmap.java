@@ -345,6 +345,7 @@ public class KJBitmap {
     private void loadImageWithProgress(View imageView,
             String imageUrl, Bitmap loadingBitmap, int width,
             int height) {
+        config.openProgress = true;
         ProgressBar bar = new ProgressBar(imageView.getContext());
         try {
             ViewGroup parent = ((ViewGroup) imageView.getParent());
@@ -390,6 +391,7 @@ public class KJBitmap {
             doSuccessCallBack(imageView); // 图片加载成功时的回调
             showLogIfOpen("download success, from memory cache\n"
                     + imageUrl);
+            showProgressIfOpen(imageView, imageUrl);
         } else {
             disPlayFromNet(imageView, imageUrl, loadingBitmap, width,
                     height);
