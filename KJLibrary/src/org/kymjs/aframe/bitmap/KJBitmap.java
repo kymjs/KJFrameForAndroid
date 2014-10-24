@@ -22,7 +22,7 @@ import org.kymjs.aframe.KJLoger;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
 import org.kymjs.aframe.bitmap.utils.BitmapHelper;
 import org.kymjs.aframe.bitmap.utils.BitmapMemoryCache;
-import org.kymjs.aframe.core.KJTaskExecutor;
+import org.kymjs.aframe.core.KJAsyncTask;
 import org.kymjs.aframe.utils.CipherUtils;
 
 import android.graphics.Bitmap;
@@ -194,8 +194,7 @@ public class KJBitmap {
         return bmp;
     }
 
-    private class LoadBmpWorkerTask extends
-            KJTaskExecutor<Void, Void, Bitmap> {
+    private class LoadBmpWorkerTask extends KJAsyncTask<Bitmap> {
         private LoadBitmapCallback callback;
         private String url;
         private int width, height;
@@ -209,7 +208,7 @@ public class KJBitmap {
         }
 
         @Override
-        protected Bitmap doInBackground(Void... params) {
+        protected Bitmap doInBackground() {
             // 再次检查内存是否由于多线程关系出现了Bitmap
             return loadBmpMustInThread(url, width, height);
         }
@@ -436,8 +435,7 @@ public class KJBitmap {
     }
 
     /********************* 异步获取Bitmap并设置image的任务类 *********************/
-    private class BitmapWorkerTask extends
-            KJTaskExecutor<Void, Void, Bitmap> {
+    private class BitmapWorkerTask extends KJAsyncTask<Bitmap> {
         private View view;
         private String url;
         private int width, height;
@@ -466,7 +464,7 @@ public class KJBitmap {
         }
 
         @Override
-        protected Bitmap doInBackground(Void... _void) {
+        protected Bitmap doInBackground() {
             Bitmap bmp = getBitmapFromNet(url, width, height);
             return bmp;
         }
