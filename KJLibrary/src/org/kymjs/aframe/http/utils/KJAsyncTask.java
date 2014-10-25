@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kymjs.aframe.core;
+package org.kymjs.aframe.http.utils;
 
 /**
  * 一个简化参数版本的KJTaskExecutor<br>

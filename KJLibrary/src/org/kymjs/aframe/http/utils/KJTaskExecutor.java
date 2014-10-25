@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kymjs.aframe.core;
+package org.kymjs.aframe.http.utils;
 
 import java.util.ArrayDeque;
 import java.util.Stack;
@@ -53,7 +53,8 @@ import android.widget.ListView;
  *            进度返回类型
  * @param <Result>
  *            结果返回类型
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs(kymjs123@gmail.com),
+ *         MaTianyu(https://github.com/litesuits/android-lite-async)
  * @version 1.1
  */
 public abstract class KJTaskExecutor<Params, Progress, Result> {

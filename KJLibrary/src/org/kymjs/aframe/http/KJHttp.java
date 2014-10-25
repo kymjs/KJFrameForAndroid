@@ -77,11 +77,11 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.SyncBasicHttpContext;
 import org.kymjs.aframe.core.KJException;
-import org.kymjs.aframe.core.KJTaskExecutor;
 import org.kymjs.aframe.core.KJThreadExecutors;
 import org.kymjs.aframe.http.cache.HttpCache;
 import org.kymjs.aframe.http.downloader.FileDownLoader;
 import org.kymjs.aframe.http.downloader.I_FileLoader;
+import org.kymjs.aframe.http.utils.KJTaskExecutor;
 import org.kymjs.aframe.utils.FileUtils;
 import org.kymjs.aframe.utils.StringUtils;
 

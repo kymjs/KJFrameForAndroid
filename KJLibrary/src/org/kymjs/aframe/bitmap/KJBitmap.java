@@ -22,7 +22,7 @@ import org.kymjs.aframe.KJLoger;
 import org.kymjs.aframe.bitmap.utils.BitmapCreate;
 import org.kymjs.aframe.bitmap.utils.BitmapHelper;
 import org.kymjs.aframe.bitmap.utils.BitmapMemoryCache;
-import org.kymjs.aframe.core.KJAsyncTask;
+import org.kymjs.aframe.http.utils.KJAsyncTask;
 import org.kymjs.aframe.utils.CipherUtils;
 
 import android.graphics.Bitmap;

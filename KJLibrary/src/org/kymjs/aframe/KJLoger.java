@@ -61,4 +61,10 @@ public final class KJLoger {
             Log.d("debug", packName + state);
         }
     }
+
+    public static final void exception(Exception e) {
+        if (DEBUG_LOG) {
+            e.printStackTrace();
+        }
+    }
 }
