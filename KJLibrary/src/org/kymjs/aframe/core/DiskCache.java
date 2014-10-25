@@ -30,6 +30,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.kymjs.aframe.KJConfig;
 import org.kymjs.aframe.KJLoger;
 import org.kymjs.aframe.utils.FileUtils;
 
@@ -51,10 +52,10 @@ import android.os.StatFs;
  * @author kymjs(kymjs123@gmail.com)
  */
 public final class DiskCache {
-    private boolean debug = KJLoger.IS_DEBUG;
+    private boolean debug = KJConfig.isDebug;
     private static long maxSize;
     // constant
-    private static final String CACHE_FILENAME_PREFIX = "KJLibrary_";
+    private static final String CACHE_FILENAME_PREFIX = KJConfig.IMAGE_PREFIX;
     private static final int MAX_REMOVALS = 4;
     private static final int INITIAL_CAPACITY = 32;
     private static final float LOAD_FACTOR = 0.75f;

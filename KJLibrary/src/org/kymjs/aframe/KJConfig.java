@@ -19,6 +19,8 @@ public final class KJConfig {
 
     public static final double VERSION = 1.32;
 
+    public static final boolean isDebug = true;
+
     /** 声音改变的广播 */
     public static final String RECEIVER_MUSIC_CHANGE = KJConfig.class
             .getName() + "org.kymjs.android.frame.music_change";
@@ -31,4 +33,13 @@ public final class KJConfig {
     /** preference键值对 */
     public static final String SETTING_FILE = "kjframe_preference";
     public static final String ONLY_WIFI = "only_wifi";
+
+    /** 图片缓存路径、http数据缓存路径 */
+    public static final String cachePath = "/KJLibrary/";
+    /** 图片本地缓存文件名前缀 */
+    public static final String IMAGE_PREFIX = "KJLibrary_";
+    /** 数据库名 */
+    public static final String DBNAME = "KJLibrary.db";
+    /** http数据通信中 */
+    public static final String HttpParamsKey = "KJFrameForAndroid_File";
 }

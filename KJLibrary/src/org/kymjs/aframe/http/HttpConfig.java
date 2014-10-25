@@ -18,6 +18,7 @@ package org.kymjs.aframe.http;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.kymjs.aframe.KJConfig;
 import org.kymjs.aframe.core.KJException;
 import org.kymjs.aframe.http.cache.I_HttpCache;
 import org.kymjs.aframe.http.downloader.I_FileLoader;
@@ -32,8 +33,8 @@ import org.kymjs.aframe.utils.StringUtils;
  * @version 1.1
  */
 public class HttpConfig {
-    public static final String FileParamsName = "KJFrameForAndroid_File";
-    public static final String FileParamsKey = "KJLibrary";
+    public static final String FileParamsName = KJConfig.HttpParamsKey;
+    public static final String FileParamsKey = KJConfig.HttpParamsKey;
 
     private static final int THREAD_COUNT = 6;
     private static final int DEFAULT_SOCKET_BUFFER_SIZE = 8 * 1024; // 8KB

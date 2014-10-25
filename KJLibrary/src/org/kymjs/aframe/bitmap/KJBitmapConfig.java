@@ -15,7 +15,7 @@
  */
 package org.kymjs.aframe.bitmap;
 
-import org.kymjs.aframe.KJLoger;
+import org.kymjs.aframe.KJConfig;
 
 import android.graphics.Bitmap;
 
@@ -29,7 +29,7 @@ import android.graphics.Bitmap;
  */
 public final class KJBitmapConfig {
     public static final int DEFAULT = Integer.MAX_VALUE;
-    public boolean isDEBUG = KJLoger.IS_DEBUG;
+    public boolean isDEBUG = KJConfig.isDebug;
 
     /** 网络连接等待时间 */
     public int timeOut = 5000;
@@ -52,7 +52,7 @@ public final class KJBitmapConfig {
     public int memoryCacheSize;
 
     /** 本地图片缓存路径 */
-    public String cachePath = "/KJLibrary/";
+    public String cachePath = KJConfig.cachePath;
     /** 是否开启本地图片缓存功能 */
     public boolean openDiskCache = true;
     /** 本地缓存大小 */

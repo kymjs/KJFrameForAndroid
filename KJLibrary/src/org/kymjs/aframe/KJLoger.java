@@ -25,9 +25,9 @@ import android.util.Log;
  * @version 1.1
  */
 public final class KJLoger {
-    public static boolean IS_DEBUG = true;
-    public static boolean DEBUG_LOG = true;
-    public static boolean SHOW_ACTIVITY_STATE = true;
+    public static boolean IS_DEBUG = KJConfig.isDebug;
+    public static boolean DEBUG_LOG = KJConfig.isDebug;
+    public static boolean SHOW_ACTIVITY_STATE = KJConfig.isDebug;
 
     public static final void openDebutLog(boolean enable) {
         IS_DEBUG = enable;
