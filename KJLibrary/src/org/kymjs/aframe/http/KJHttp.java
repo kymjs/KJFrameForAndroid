@@ -200,7 +200,6 @@ public class KJHttp {
                     conn.setRequestProperty("Charset",
                             config.getCharSet());
                     conn.setRequestMethod("GET");
-                    code = conn.getResponseCode();
                     String cookie = config.getCookie();
                     if (!StringUtils.isEmpty(cookie)) {
                         conn.setRequestProperty("Cookie", cookie);
@@ -225,6 +224,7 @@ public class KJHttp {
                             publishProgress(count, current);
                         }
                     }
+                    code = conn.getResponseCode();
                     conn.disconnect();
                 } catch (MalformedURLException e) {
                     return e;
@@ -317,7 +317,6 @@ public class KJHttp {
                 conn.setRequestProperty("Charset",
                         config.getCharSet());
                 conn.setInstanceFollowRedirects(true);
-                code = conn.getResponseCode();
                 conn.setRequestProperty("connection", "Keep-Alive");
                 conn.setRequestProperty("Content-Type",
                         "multipart/form-data; boundary=" + BOUNDARY);
@@ -357,6 +356,7 @@ public class KJHttp {
                 out.write(end_data);
                 out.flush();
 
+                code = conn.getResponseCode();
                 reader = new BufferedReader(new InputStreamReader(
                         conn.getInputStream()));
                 respond = new StringBuilder();
@@ -447,7 +447,6 @@ public class KJHttp {
                     conn.setDoInput(true);
                     conn.setRequestMethod("POST");
                     conn.setUseCaches(false);
-                    code = conn.getResponseCode();
                     String cookie = config.getCookie();
                     if (!StringUtils.isEmpty(cookie)) {
                         conn.setRequestProperty("Cookie", cookie);
@@ -464,7 +463,7 @@ public class KJHttp {
                         out.writeBytes(params.toString());
                         out.flush();
                     }
-
+                    code = conn.getResponseCode();
                     input = conn.getInputStream();
                     reader = new BufferedReader(
                             new InputStreamReader(input));

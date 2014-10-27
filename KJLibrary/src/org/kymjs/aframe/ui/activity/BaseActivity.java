@@ -245,7 +245,7 @@ public abstract class BaseActivity extends KJFrameActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (mOpenBackListener && keyCode == KeyEvent.KEYCODE_BACK
-                && KJActivityManager.create().getCount() <= 1) {
+                && KJActivityManager.create().getCount() < 2) {
             ViewInject.create().getExitDialog(this);
         }
         return super.onKeyDown(keyCode, event);
