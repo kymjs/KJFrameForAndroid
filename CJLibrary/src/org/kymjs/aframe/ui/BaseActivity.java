@@ -17,9 +17,7 @@ package org.kymjs.aframe.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.view.WindowManager;
 
 /**
  * Application BaseActivity,you should inherit it for your Activity<br>
@@ -37,42 +35,11 @@ public abstract class BaseActivity extends KJFrameActivity {
         RESUME, PAUSE, STOP, DESTROY
     }
 
-    /**
-     * Activity显示方向
-     */
-    public static enum ScreenOrientation {
-        HORIZONTAL, VERTICAL, AUTO
-    }
-
     public Activity aty;
     /** Activity状态 */
     public ActivityState activityState = ActivityState.DESTROY;
-    // 是否允许全屏
-    private boolean mAllowFullScreen = false;
     // 是否启用框架的退出界面
     private boolean mOpenBackListener = true;
-
-    // 屏幕方向
-    private ScreenOrientation orientation = ScreenOrientation.VERTICAL;
-
-    /**
-     * 是否全屏显示本Activity，全屏后将隐藏状态栏，默认不全屏（若修改必须在构造方法中调用）
-     * 
-     * @param allowFullScreen
-     *            是否允许全屏
-     */
-    public void setAllowFullScreen(boolean allowFullScreen) {
-        this.mAllowFullScreen = allowFullScreen;
-    }
-
-    /**
-     * 修改屏幕显示方向，默认竖屏锁定（若修改必须在构造方法中调用）
-     * 
-     * @param orientation
-     */
-    public void setScreenOrientation(ScreenOrientation orientation) {
-        this.orientation = orientation;
-    }
 
     /**
      * 是否启用返回键监听，若启用，则在显示最后一个Activity时将弹出退出对话框。默认启用（若修改必须在构造方法中调用）
@@ -154,23 +121,6 @@ public abstract class BaseActivity extends KJFrameActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         aty = this;
-        switch (orientation) {
-        case HORIZONTAL:
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            break;
-        case VERTICAL:
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            break;
-        case AUTO:
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
-            break;
-        }
-
-        if (mAllowFullScreen) {
-            getWindow().setFlags(
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
         super.onCreate(savedInstanceState);
     }
 
