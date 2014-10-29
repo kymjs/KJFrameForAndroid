@@ -37,15 +37,6 @@ public abstract class BaseSplash extends BaseActivity {
 
     protected abstract void setRootBackground(ImageView view);
 
-    /**
-     * 默认设置为全屏、竖屏锁定显示
-     */
-    public BaseSplash() {
-        setAllowFullScreen(true);
-        setHiddenActionBar(true);
-        setScreenOrientation(ScreenOrientation.VERTICAL);
-    }
-
     @Override
     public void setRootView() {
         mImageView = new ImageView(this);

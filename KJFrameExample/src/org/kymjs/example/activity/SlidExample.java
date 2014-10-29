@@ -29,10 +29,6 @@ public class SlidExample extends SlidTemplet {
 
     private BaseFragment fragContent;
 
-    public SlidExample() {
-        setHiddenActionBar(false);
-    }
-
     @Override
     protected int setRootViewID() {
         actionBar = getActionBar();

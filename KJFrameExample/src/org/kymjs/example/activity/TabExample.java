@@ -35,10 +35,6 @@ public class TabExample extends KJFragmentActivity {
 
     public ActionBar actionBar;
 
-    public TabExample() {
-        setHiddenActionBar(false);
-    }
-
     @Override
     public void setRootView() {
         setContentView(R.layout.aty_tab_example);

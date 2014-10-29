@@ -37,6 +37,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 
 /**
@@ -82,7 +83,7 @@ public class CJProxyActivity extends BaseActivity {
             // 若已经指定要启动的插件Activity完整类名，则直接调用
             launchPluginActivity(mClass);
         }
-        setHiddenActionBar(false);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
     }
 

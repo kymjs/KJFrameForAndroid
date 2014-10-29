@@ -15,9 +15,11 @@
  */
 package org.kymjs.aframe.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.os.Parcelable;
 import android.view.View;
 
@@ -77,5 +79,49 @@ public class ViewUtils {
         shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
         // 发送广播。OK
         cxt.sendBroadcast(shortcutIntent);
+    }
+
+    /**
+     * 获取当前屏幕截图，包含状态栏
+     * 
+     * @param aty
+     * @return
+     */
+    public static Bitmap snapShotWithStatusBar(Activity aty) {
+        View view = aty.getWindow().getDecorView();
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache();
+        Bitmap bmp = view.getDrawingCache();
+        int width = DensityUtils.getScreenW(aty);
+        int height = DensityUtils.getScreenH(aty);
+        Bitmap bp = null;
+        bp = Bitmap.createBitmap(bmp, 0, 0, width, height);
+        view.destroyDrawingCache();
+        return bp;
+    }
+
+    /**
+     * 获取当前屏幕截图，不包含状态栏
+     * 
+     * @param aty
+     * @return
+     */
+    public static Bitmap snapShotWithoutStatusBar(Activity aty) {
+        View view = aty.getWindow().getDecorView();
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache();
+        Bitmap bmp = view.getDrawingCache();
+        Rect frame = new Rect();
+        aty.getWindow().getDecorView()
+                .getWindowVisibleDisplayFrame(frame);
+        int statusBarHeight = frame.top;
+
+        int width = DensityUtils.getScreenW(aty);
+        int height = DensityUtils.getScreenH(aty);
+        Bitmap bp = null;
+        bp = Bitmap.createBitmap(bmp, 0, statusBarHeight, width,
+                height - statusBarHeight);
+        view.destroyDrawingCache();
+        return bp;
     }
 }
