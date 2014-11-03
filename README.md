@@ -3,7 +3,7 @@
 感谢支持KJFrameForAndroid的社区与组织：<br>
 [![Android Arsenal](http://img.shields.io/badge/Android%20Arsenal-KJFrameForAndroid-blue.svg?style=flat)](http://android-arsenal.com/details/1/836)
 [![BlackDuck OpenHUB](https://www.openhub.net/p/KJFrameForAndroid/widgets/project_thin_badge.gif)](https://www.openhub.net/p/KJFrameForAndroid)
-[![OSChina](https://www.oschina.net/img/logo_s2.gif)](https://www.oschina.net/)<br>
+[![OSChina](https://www.oschina.net/img/logo_s2.gif)](http://www.oschina.net/p/kjframeforandroid)<br>
 **KJFrameForAndroid** 又叫KJLibrary，是一个android的orm 和 ioc 框架。同时封装了android中的Bitmap与Http操作的框架，使其更加简单易用；<br>
 KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复杂操作而达到简化Android应用级开发，最终实现快速而又安全的开发APP。我们提倡用最少的代码，完成最多的操作，用最高的效率，完成最复杂的功能。<br>
 
