@@ -75,7 +75,7 @@ public class ResideMenuItem extends LinearLayout {
     private void initLayout(int iconRes, String title) {
         this.setGravity(LinearLayout.VERTICAL);
         this.setOrientation(LinearLayout.HORIZONTAL);
-        this.setPadding(0, DensityUtils.dip2px(getContext(), 30), 0, 0);
+        this.setPadding(0, DensityUtils.dip2px(getContext(), 40), 0, 0);
         if (iconRes != 0) {
             mImgIcon = createIcon();
             this.addView(mImgIcon);
