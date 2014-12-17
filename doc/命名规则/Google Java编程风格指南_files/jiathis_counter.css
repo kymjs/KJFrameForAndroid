@@ -1,0 +1,150 @@
+#ckepop a:hover{text-decoration:none;}
+#ckepop .jiathis_counter.jiathis_bubble_style {
+    display: block;
+    margin: 0 0 0 -2px;
+    text-align: center;
+    font-weight: bold;
+    background: url(../images/counter.gif) no-repeat 0 -64px;
+    padding: 0 0 0 4px;
+    height:16px;
+	font-family:arial,helvetica,sans-serif;
+    width: 32px !important; 
+}
+#ckepop .jiathis_counter.jiathis_bubble_style:hover {
+    color:#000000;background-position: -36px -64px !important;
+}
+#ckepop .jiathis_counter.jiathis_bubble_style .atc_s {
+    display: none !important;
+}
+#ckepop * html .jiathis_counter.jiathis_bubble_style { 
+    width: 36px !important; 
+    display:inline;
+}
+#ckepop * html .jiathis_counter.jiathis_bubble_style.compatmode0 { 
+    width: 32px !important; 
+    display:block;
+}
+#ckepop .jiathis_button_expanded{
+	float:left;
+	font-size:11px;
+	font-weight:bold;
+	color:#565656;
+	cursor:pointer;
+	text-decoration:none;
+	line-height:16px!important;
+}
+
+#jiathis_style_32x32 a:hover{text-decoration:none;}
+#jiathis_style_32x32 .jiathis_counter.jiathis_bubble_style {
+    background: url(../images/counter.gif) no-repeat 0 0;
+    height: 32px;
+    width: 54px !important;
+    line-height: 32px;
+    padding: 0 5px 0 6px;
+	font-family:arial,helvetica,sans-serif;
+	text-align: center;
+}
+#jiathis_style_32x32 .jiathis_counter.jiathis_bubble_style:hover {
+    color:#000000;background-position: 0 -32px !important;
+}
+#jiathis_style_32x32 * html .jiathis_counter.jiathis_bubble_style { 
+    width: 60px !important;
+}
+#jiathis_style_32x32  .jiathis_button_expanded{
+	float:left;
+	font-size:16px;
+	font-weight:bold;
+	color:#565656;
+	cursor:pointer;
+	text-decoration:none;
+	line-height:32px!important;
+}
+
+
+.jiathis_style a:hover{text-decoration:none;}
+.jiathis_style .jiathis_counter.jiathis_bubble_style {
+    display: block;
+    margin: 0 0 0 -2px;
+    text-align: center;
+    font-weight: bold;
+    background: url(../images/counter.gif) no-repeat 0 -64px;
+    padding: 0 0 0 4px;
+    height:16px;
+	font-family:arial,helvetica,sans-serif;
+    width: 32px !important; 
+}
+.jiathis_style .jiathis_counter.jiathis_bubble_style:hover {
+    color:#000000;background-position: -36px -64px !important;
+}
+.jiathis_style .jiathis_counter.jiathis_bubble_style .atc_s {
+    display: none !important;
+}
+.jiathis_style * html .jiathis_counter.jiathis_bubble_style { 
+    width: 36px !important; 
+    display:inline;
+}
+.jiathis_style * html .jiathis_counter.jiathis_bubble_style.compatmode0 { 
+    width: 32px !important; 
+    display:block;
+}
+.jiathis_style .jiathis_button_expanded{
+	float:left;
+	font-size:11px;
+	font-weight:bold;
+	color:#565656;
+	cursor:pointer;
+	text-decoration:none;
+	line-height:16px!important;
+}
+
+.jiathis_style_32x32 a:hover{text-decoration:none;}
+.jiathis_style_32x32 .jiathis_counter.jiathis_bubble_style {
+    background: url(../images/counter.gif) no-repeat 0 0;
+    height: 32px;
+    width: 54px !important;
+    line-height: 32px;
+    padding: 0 5px 0 6px;
+	font-family:arial,helvetica,sans-serif;
+	text-align: center;
+}
+.jiathis_style_32x32 .jiathis_counter.jiathis_bubble_style:hover {
+    color:#000000;background-position: 0 -32px !important;
+}
+.jiathis_style_32x32 * html .jiathis_counter.jiathis_bubble_style { 
+    width: 60px !important;
+}
+.jiathis_style_32x32  .jiathis_button_expanded{
+	float:left;
+	font-size:16px;
+	font-weight:bold;
+	color:#565656;
+	cursor:pointer;
+	text-decoration:none;
+	line-height:32px!important;
+}
+
+.jiathis_style_24x24 a:hover{text-decoration:none;}
+.jiathis_style_24x24 .jiathis_counter.jiathis_bubble_style {
+	background: url(../images/counter.gif) no-repeat 0 -80px;
+    height: 24px;
+    width: 54px !important;
+    line-height: 24px;
+    padding: 0 5px 0 6px;
+	font-family:arial,helvetica,sans-serif;
+	text-align: center;
+}
+.jiathis_style_24x24 .jiathis_counter.jiathis_bubble_style:hover {
+    color:#000000;background-position: 0 -104px !important;
+}
+.jiathis_style_24x24 * html .jiathis_counter.jiathis_bubble_style { 
+    width: 60px !important;
+}
+.jiathis_style_24x24  .jiathis_button_expanded{
+	float:left;
+	font-size:14px;
+	font-weight:bold;
+	color:#565656;
+	cursor:pointer;
+	text-decoration:none;
+	line-height:24px!important;
+}

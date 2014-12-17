@@ -1,0 +1,81 @@
+h1,h2,h3,h4{
+  color: #333;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  font-weight: 400;
+  border-bottom: 1px solid #ccc;
+}
+
+h1{
+  font-size: 36px;
+  margin-top: 18px;
+  margin-bottom: .15em;
+}
+h2{
+  font-size: 30px;
+  margin-bottom: 15px;
+}
+h3{
+  color: #777;
+  font-size: 25px;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+#post .authoring{
+  margin-bottom: 17px;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  padding-left: 0px;
+  font-size: 17px;
+  color: #777;
+}
+
+.posts .post_date{
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+}
+
+.brand {
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+}
+
+#footer {
+  margin-top: 20px;
+  padding-bottom: 40px;
+  text-align: center;
+}
+
+/* fixed navbar*/
+body {
+   padding-top: 40px;
+}
+
+/* tag_box ======================================================== */
+
+.tag_box {
+	list-style:none;
+	margin:0;
+	padding:5px 0 ;
+	overflow:hidden;
+}
+.tag_box li {
+	line-height:28px;
+}
+.tag_box.inline li {
+	float:left;
+}
+.tag_box a {
+	padding: 3px 6px;
+	margin: 2px;
+	background: #eee;
+	color:#005F6B;
+	border-radius: 3px;
+	text-decoration:none;
+}
+.tag_box a span{
+	vertical-align:super;
+	font-size:0.8em;
+}
+.tag_box a.active {
+	background:#57A957;
+	border:1px solid #4C964D;
+	color:#FFF;
+}
