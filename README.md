@@ -275,3 +275,7 @@ I am kymjs, From ShenZhen China.<br>
 blog：http://my.oschina.net/kymjs/blog<br>
 email：kymjs123@gmail.com<br>
 QQ: 766136833<br>
+If my project help you, Can you buy a bottle of beer for me? <br>
+my account is: kymjs@foxmail.com click there [one's voluntary contribution](https://shenghuo.alipay.com/send/payment/fill.htm)<br>
+如果我的项目帮助了你，希望你有能力的基础上能捐助我买书学习，以让我更有信心和能力回馈网友。
+我的支付宝账号：kymjs@foxmail.com点这里参与我的[众筹](https://shenghuo.alipay.com/send/payment/fill.htm)
