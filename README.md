@@ -1,24 +1,21 @@
-## ![logo](https://github.com/kymjs/KJFrameForAndroid/blob/master/KJLibraryExample/ic_launcher-web.png) KJFrameForAndroid summary
+## ![logo](https://github.com/kymjs/KJFrameForAndroid/blob/master/KJLibraryExample/ic_launcher-web.png) 
 =================
----
-#KJFrameForAndroid
+#KJFrameForAndroid Summary
 [![Android Arsenal](http://img.shields.io/badge/Android%20Arsenal-KJFrameForAndroid-blue.svg?style=flat)](http://android-arsenal.com/details/1/836)
 [![BlackDuck OpenHUB](https://www.openhub.net/p/KJFrameForAndroid/widgets/project_thin_badge.gif)](https://www.openhub.net/p/KJFrameForAndroid)
 [![OSChina](https://www.oschina.net/img/logo_s2.gif)](http://www.oschina.net/p/kjframeforandroid)<br>
 
-## What KJFrameForAndroid?
+## What is KJFrameForAndroid
 <br>KJFrameForAndroid is also called KJLibrary. It's an Android ORM and IOC framework and includes UILibrary, PluginLibrary, HttpLibrary, BitmapLibrary, DBLibrary. KJFrameForAndroid is designed to wrap complexity of the Android native SDK and keep things simple.
-However,KJFrameForAndroid is free open source object. Thanks for you follow this KJFrameForAndroid
+However,KJFrameForAndroid is free open source object. Thanks for you follow this KJFrameForAndroid.
 
 ## KJFrameForAndroid 相关链接
-* 国内用户请访问GIT.OSC：[http://git.oschina.net/kymjs/KJFrameForAndroid](http://git.oschina.net/kymjs/KJFrameForAndroid)
+* 国内用户请访问git.osc：[http://git.oschina.net/kymjs/KJFrameForAndroid](http://git.oschina.net/kymjs/KJFrameForAndroid)
 * github项目地址：[https://github.com/kymjs/KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid)
-* 
 * issues [https://github.com/kymjs/KJFrameForAndroid/issues](https://github.com/kymjs/KJFrameForAndroid/issues)
 * version log [https://github.com/kymjs/KJFrameForAndroid/blob/master/debug_log.txt](https://github.com/kymjs/KJFrameForAndroid/blob/master/debug_log.txt)
 
 ## Integrating KJFrameForAndroid to your project
-You can include in two ways<br>
 >Create /binrary/kjlibrary.jar and include as jar dependency to your project.<br>
 >Include the KJFrameForAndroid project as Library Dependency in your project.<br>
 *warn make use of KJFrameForAndroid works on Android 3.0 or higher and need permission in your AndroidManifest.xml*
@@ -26,6 +23,11 @@ You can include in two ways<br>
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 ```
+
+## PluginLibrary
+Did you really try? execute not installed apk file, PluginLibrary can I help you.<br>
+you can download [pluginDemo]() project integrating example project learn KJFrameForAndroid.[Detail](https://github.com/kymjs/KJFrameForAndroid/blob/master/PluginLibraryExplain.md)
+
 
 ## UILibrary
 **UILibrary -> Widget function**
