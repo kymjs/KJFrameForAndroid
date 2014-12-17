@@ -6,19 +6,19 @@
 [![OSChina](https://www.oschina.net/img/logo_s2.gif)](http://www.oschina.net/p/kjframeforandroid)<br>
 
 ## What is KJFrameForAndroid
-<br>KJFrameForAndroid is also called KJLibrary. It's an Android ORM and IOC framework and includes UILibrary, PluginLibrary, HttpLibrary, BitmapLibrary, DBLibrary. KJFrameForAndroid is designed to wrap complexity of the Android native SDK and keep things simple.
+KJFrameForAndroid is also called KJLibrary. It's an Android ORM and IOC framework and includes UILibrary, PluginLibrary, HttpLibrary, BitmapLibrary, DBLibrary. KJFrameForAndroid is designed to wrap complexity of the Android native SDK and keep things simple.
 However,KJFrameForAndroid is free open source object. Thanks for you follow this KJFrameForAndroid.
 
-## KJFrameForAndroid 相关链接
+## KJFrameForAndroid links
 * 国内用户请访问git.osc：[http://git.oschina.net/kymjs/KJFrameForAndroid](http://git.oschina.net/kymjs/KJFrameForAndroid)
-* github项目地址：[https://github.com/kymjs/KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid)
+* 
 * issues [https://github.com/kymjs/KJFrameForAndroid/issues](https://github.com/kymjs/KJFrameForAndroid/issues)
 * version log [https://github.com/kymjs/KJFrameForAndroid/blob/master/debug_log.txt](https://github.com/kymjs/KJFrameForAndroid/blob/master/debug_log.txt)
 
 ## Integrating KJFrameForAndroid to your project
 >Create /binrary/kjlibrary.jar and include as jar dependency to your project.<br>
 >Include the KJFrameForAndroid project as Library Dependency in your project.<br>
-*warn make use of KJFrameForAndroid works on Android 3.0 or higher and need permission in your AndroidManifest.xml*
+*make use of KJFrameForAndroid works on Android 3.0 or higher and need permission in your AndroidManifest.xml*
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -26,53 +26,46 @@ However,KJFrameForAndroid is free open source object. Thanks for you follow this
 
 ## PluginLibrary
 Did you really try? execute not installed apk file, PluginLibrary can I help you.<br>
-you can download [pluginDemo]() project integrating example project learn KJFrameForAndroid.[Detail](https://github.com/kymjs/KJFrameForAndroid/blob/master/PluginLibraryExplain.md)
-
+you can download [pluginDemo](https://github.com/kymjs/KJFrameForAndroid/blob/master/doc/plugin_demo.zip) project integrating example project learn KJFrameForAndroid.[Detail](https://github.com/kymjs/KJFrameForAndroid/blob/master/PluginLibraryExplain.md)
 
 ## UILibrary
 **UILibrary -> Widget function**
 import in common use widget,for example, can pull ListView/ScrollView; can double click zoom's ImageView.<br>
 **UILibrary -> Topology function**
 import a Activity inheritance link.Get topology all function, you can extends org.kymjs.kjframe.KJActivity(KJFragment) for your Activity(Fragment).
-example:
+
 ```java
+		public class TabExample extends KJActivity {
+			@BindView(id = R.id.bottombar_content1, click = true)
+			public RadioButton mRbtn1;
+			@BindView(id = R.id.bottombar_content2, click = true)
+			private RadioButton mRbtn2;
 
-public class TabExample extends KJActivity {
-    @BindView(id = R.id.bottombar_content1, click = true)
-    public RadioButton mRbtn1;
-    @BindView(id = R.id.bottombar_content2, click = true)
-    private RadioButton mRbtn2;
+			@Override
+			public void setRootView() {
+				setContentView(R.layout.aty_tab_example);
+			}
+			
+			@Override
+			protected void initWidget() {
+				super.initWidget();
+				mRbtn1.setText("widget clicked listener");
+			}
 
-    @Override
-    public void setRootView() {
-        setContentView(R.layout.aty_tab_example);
-    }
-    
-    @Override
-    protected void initWidget() {
-        super.initWidget();
-        mRbtn1.setText("widget clicked listener");
-    }
-
-    @Override
-    public void widgetClick(View v) {
-        super.widgetClick(v);
-        switch (v.getId()) {
-        case R.id.bottombar_content1:
-        ViewInject.toast("clicked mRbtn1");
-            break;
-        case R.id.bottombar_content2:
-        ViewInject.toast("clicked mRbtn2");
-            break;
-        }
-    }
-}
+			@Override
+			public void widgetClick(View v) {
+				super.widgetClick(v);
+				switch (v.getId()) {
+				case R.id.bottombar_content1:
+				ViewInject.toast("clicked mRbtn1");
+					break;
+				case R.id.bottombar_content2:
+				ViewInject.toast("clicked mRbtn2");
+					break;
+				}
+			}
+		}
 ```
-in topology method called queue：<br>
-*setRootView();<br>
-*@BindView<br>
-*initDataWithThread();（asynchronous,can do time consuming）<br>
-
 setRootView(); <br>
 @BindView <br>
 initDataFromThread();（asynchronous,can do time consuming） <br>
@@ -203,7 +196,7 @@ You can select which Http client.
             public void onSuccess(File f) {
                 super.onSuccess(f);
                 KJLoger.debug("success");
-                ViewInject.toast("下载成功");
+                ViewInject.toast("toast");
                 mProgress.setProgress(mProgress.getMax());
             }
 
@@ -277,7 +270,7 @@ About DataBase function，comes frome to finaldb object. Thinks.[finaldb](https:
  limitations under the License.
  ```
 ## About Me
-I am kymjs, From ShenZhen China.
+I am kymjs, From ShenZhen China.<br>
 blog：http://my.oschina.net/kymjs/blog<br>
 email：kymjs123@gmail.com<br>
-qq: 766136833<br>
+QQ: 766136833<br>
