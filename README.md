@@ -66,6 +66,7 @@ import a Activity inheritance link.Get topology all function, you can extends or
 			}
 		}
 ```
+in topology method called queue：<br>
 setRootView(); <br>
 @BindView <br>
 initDataFromThread();（asynchronous,can do time consuming） <br>
