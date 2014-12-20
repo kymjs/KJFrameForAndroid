@@ -1,3 +1,4 @@
+
 ## ![logo](https://github.com/kymjs/KJFrameForAndroid/blob/master/KJLibraryExample/ic_launcher-web.png) 
 =================
 #KJFrameForAndroid Summary
@@ -10,7 +11,9 @@ KJFrameForAndroid is also called KJLibrary. It's an Android ORM and IOC framewor
 However,KJFrameForAndroid is free open source object. Thanks for you follow this KJFrameForAndroid.
 
 ## KJFrameForAndroid links
+* QQ group：[257053751](http://jq.qq.com/?_wv=1027&k=WoM2Aa)(开发者群1)，[201055521](http://jq.qq.com/?_wv=1027&k=MBVdpK)(开发者群2)
 * 国内用户请访问git.osc：[http://git.oschina.net/kymjs/KJFrameForAndroid](http://git.oschina.net/kymjs/KJFrameForAndroid)
+* DL：[https://github.com/singwhatiwanna/dynamic-load-apk](https://github.com/singwhatiwanna/dynamic-load-apk)
 * 
 * issues [https://github.com/kymjs/KJFrameForAndroid/issues](https://github.com/kymjs/KJFrameForAndroid/issues)
 * version log [https://github.com/kymjs/KJFrameForAndroid/blob/master/debug_log.txt](https://github.com/kymjs/KJFrameForAndroid/blob/master/debug_log.txt)
@@ -276,6 +279,6 @@ blog：http://my.oschina.net/kymjs/blog<br>
 email：kymjs123@gmail.com<br>
 QQ: 766136833<br>
 If my project help you, Can you buy a bottle of beer for me? <br>
-my account is: kymjs@foxmail.com click there [one's voluntary contribution](https://shenghuo.alipay.com/send/payment/fill.htm)<br>
+my account is: kymjs@foxmail.com [click there one's voluntary contribution](https://shenghuo.alipay.com/send/payment/fill.htm)<br>
 如果我的项目帮助了你，希望你有能力的基础上能捐助我买书学习，以让我更有信心和能力回馈网友。
-我的支付宝账号：kymjs@foxmail.com点这里参与我的[众筹](https://shenghuo.alipay.com/send/payment/fill.htm)
+我的支付宝账号：kymjs@foxmail.com[点这里参与我的众筹](https://shenghuo.alipay.com/send/payment/fill.htm)
