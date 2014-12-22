@@ -72,7 +72,7 @@ public abstract class SafeTask<Params, Progress, Result> extends
 
     @Override
     protected final void onCancelled(Result result) {
-        onCancelled(result);
+        super.onCancelled(result);
     }
 
     /**
