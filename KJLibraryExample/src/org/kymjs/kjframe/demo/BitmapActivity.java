@@ -3,6 +3,8 @@ package org.kymjs.kjframe.demo;
 import org.kymjs.kjframe.KJActivity;
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.bitmap.BitmapConfig;
+import org.kymjs.kjframe.bitmap.BitmapDownloader;
 import org.kymjs.kjframe.bitmap.helper.BitmapCreate;
 import org.kymjs.kjframe.ui.BindView;
 import org.kymjs.kjframe.ui.ViewInject;
@@ -66,7 +68,7 @@ public class BitmapActivity extends KJActivity {
 
     private void display1() {
         KJBitmap kjb = KJBitmap.create();
-        // kjb.display(mImg1, "file://storage/sdcard0/1.jpg");//加载本地图片的方法
+        // kjb.display(mImg1, FileUtils.getSDCardPath() + "1.jpg"); // 加载本地图片的方法
         kjb.display(mImg1,
                 "http://static.oschina.net/uploads/space/2014/1202/142217_a864_12.jpg");
     }
@@ -108,5 +110,16 @@ public class BitmapActivity extends KJActivity {
         });
         kjb.display(mImg4,
                 "http://static.oschina.net/uploads/space/2014/1127/160305_YsAg_12.jpg");
+    }
+
+    /**
+     * 自定义缓存路径
+     */
+    private void display5() {
+        BitmapConfig bitmapConfig = new BitmapConfig();
+        bitmapConfig.cachePath = "hello/world"; // 设置图片缓存路径为SD卡根目录hello文件夹下world文件夹内
+        bitmapConfig.downloader = new BitmapDownloader(bitmapConfig, 0, 0); // 使用自定义的图片加载器（默认使用框架中的）
+        KJBitmap kjb = KJBitmap.create(bitmapConfig);
+        /** 然后剩下的都一样了 */
     }
 }

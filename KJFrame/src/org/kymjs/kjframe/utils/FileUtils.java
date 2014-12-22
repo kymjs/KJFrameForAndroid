@@ -118,19 +118,18 @@ public final class FileUtils {
      * @return 返回SD卡下的指定文件夹对象，若文件夹不存在则创建
      */
     public static File getSaveFolder(String folderName) {
-        File file = new File(Environment.getExternalStorageDirectory()
-                .getAbsolutePath()
-                + File.separator
-                + folderName
+        File file = new File(getSDCardPath() + File.separator + folderName
                 + File.separator);
         file.mkdirs();
         return file;
     }
 
+    public static String getSDCardPath() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath();
+    }
+
     /**
      * 输入流转byte[]<br>
-     * 
-     * <b>注意</b> 你必须手动关闭参数inStream
      */
     public static final byte[] input2byte(InputStream inStream) {
         if (inStream == null) {
@@ -141,7 +140,7 @@ public final class FileUtils {
         ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
         int rc = 0;
         try {
-            while ((rc = in.read()) > 0) {
+            while ((rc = in.read()) != -1) {
                 swapStream.write(rc);
             }
             in2b = swapStream.toByteArray();

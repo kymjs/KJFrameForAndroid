@@ -2,12 +2,16 @@ package org.kymjs.kjframe.demo;
 
 import org.kymjs.kjframe.KJActivity;
 import org.kymjs.kjframe.ui.BindView;
+import org.kymjs.kjframe.utils.KJConfig;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends KJActivity {
 
+    @BindView(id = R.id.textView1)
+    private TextView mTvVersion;
     @BindView(id = R.id.button1, click = true)
     private Button mBtnUI;
     @BindView(id = R.id.button2, click = true)
@@ -22,6 +26,12 @@ public class MainActivity extends KJActivity {
     @Override
     public void setRootView() {
         setContentView(R.layout.activity_main);
+    }
+
+    @Override
+    public void initWidget() {
+        super.initWidget();
+        mTvVersion.setText("当前框架版本为:" + KJConfig.VERSION);
     }
 
     @Override
