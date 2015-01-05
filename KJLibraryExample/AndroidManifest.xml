@@ -31,6 +31,9 @@
         <activity android:name="org.kymjs.kjframe.demo.PluginActivity" />
         <activity android:name="org.kymjs.kjframe.demo.WidgetActivity" />
         <activity android:name="org.kymjs.kjframe.plugin.CJProxyActivity"/>
+        <activity android:name="org.kymjs.kjframe.demo.widget.KJSlidingMenuDemo" />
+        <activity android:name="org.kymjs.kjframe.demo.widget.KJListViewDemo" />
+        <activity android:name="org.kymjs.kjframe.demo.widget.ScaleImageDemo" />
     </application>
 
 </manifest>

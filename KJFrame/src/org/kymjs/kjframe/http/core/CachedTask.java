@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.kymjs.kjframe.utils.CipherUtils;
 import org.kymjs.kjframe.utils.FileUtils;
+import org.kymjs.kjframe.utils.KJLoger;
 import org.kymjs.kjframe.utils.StringUtils;
 
 /**
@@ -34,15 +35,14 @@ import org.kymjs.kjframe.utils.StringUtils;
  * <b>注：</b> 参数Result需要序列化，否则不能或者不能完整的读取缓存。<br>
  * 
  * @author kymjs(kymjs123@gmail.com),
- *         MaTianyu(https://github.com/litesuits/android-lite-async)
  */
 public abstract class CachedTask<Params, Progress, Result extends Serializable>
         extends SafeTask<Params, Progress, Result> {
     private String cachePath = "folderName"; // 缓存路径
     private String cacheName = "MD5_effectiveTime"; // 缓存文件名格式
-    private long expiredTime = 0; // 缓存时间
+    private long expiredTime = 0; // 缓存有效时间
     private String key; // 缓存以键值对形式存在
-    private ConcurrentHashMap<String, Long> cacheMap;
+    private ConcurrentHashMap<String, Long> cacheMap; // (k:缓存md5(url),v:缓存时的时间)
 
     /**
      * 构造方法
@@ -64,7 +64,8 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
             // 对外单位：分，对内单位：毫秒
             this.expiredTime = TimeUnit.MILLISECONDS.convert(cacheTime,
                     TimeUnit.MINUTES);
-            this.cacheName = this.key + "_" + cacheTime;
+            KJLoger.debug(cacheTime + "----" + expiredTime);
+            this.cacheName = this.key + "_" + expiredTime;
             initCacheMap();
         }
     }
@@ -72,7 +73,8 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
     private void initCacheMap() {
         cacheMap = new ConcurrentHashMap<String, Long>();
         File folder = FileUtils.getSaveFolder(cachePath);
-        for (String name : folder.list()) {
+        for (File file : folder.listFiles()) {
+            String name = file.getName();
             if (!StringUtils.isEmpty(name)) {
                 String[] nameFormat = name.split("_");
                 // 若满足命名格式则认为是一个合格的cache
@@ -80,10 +82,8 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
                         && (nameFormat[0].length() == 32
                                 || nameFormat[0].length() == 64 || nameFormat[0]
                                 .length() == 128)) {
-                    cacheMap.put(nameFormat[0],
-                            TimeUnit.MILLISECONDS.convert(
-                                    StringUtils.toLong(nameFormat[1]),
-                                    TimeUnit.MINUTES));
+                    cacheMap.put(nameFormat[0], file.lastModified());
+                    KJLoger.debug("-85---" + file.lastModified());
                 }
             }
         }
@@ -102,11 +102,11 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
     protected final Result doInBackgroundSafely(Params... params)
             throws Exception {
         Result res = null;
-        Long time = cacheMap.get(key);
-        long lastTime = (time == null) ? 0 : time; // 获取缓存有效时间
+        Long temp = cacheMap.get(key);
+        long saveTime = (temp == null) ? 0 : temp; // 获取缓存时的时间
         long currentTime = System.currentTimeMillis(); // 获取当前时间
 
-        if (currentTime >= lastTime + expiredTime) { // 若缓存无效，联网下载
+        if (currentTime >= saveTime + expiredTime) { // 若缓存无效，联网下载
             res = doConnectNetwork(params);
             if (res == null) {
                 res = getResultFromCache();
@@ -129,7 +129,7 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
         ObjectInputStream ois = null;
         try {
             ois = new ObjectInputStream(new FileInputStream(
-                    FileUtils.getSaveFile(cachePath, key)));
+                    FileUtils.getSaveFile(cachePath, cacheName)));
             res = (Result) ois.readObject();
         } catch (Exception e) {
             e.printStackTrace();
@@ -147,7 +147,7 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
         ObjectOutputStream oos = null;
         try {
             oos = new ObjectOutputStream(new FileOutputStream(
-                    FileUtils.getSaveFile(cachePath, key)));
+                    FileUtils.getSaveFile(cachePath, cacheName)));
             oos.writeObject(res);
             saveSuccess = true;
         } catch (Exception e) {
@@ -189,7 +189,7 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
         // 对内是url的MD5
         String realKey = CipherUtils.md5(key);
         for (Map.Entry<String, Long> entry : cacheMap.entrySet()) {
-            if (entry.getKey().startsWith(realKey)) {
+            if (entry.getKey().equals(realKey)) {
                 cacheMap.remove(realKey);
                 return;
             }
@@ -206,6 +206,7 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
         if (res != null) {
             saveResultToCache(res);
             cacheMap.put(cacheName, System.currentTimeMillis());
+            KJLoger.debug("-208---" + System.currentTimeMillis());
         }
     }
 }

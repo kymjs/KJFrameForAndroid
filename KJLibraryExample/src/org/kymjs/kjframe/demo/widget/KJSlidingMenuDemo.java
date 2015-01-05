@@ -1,0 +1,1 @@
+package org.kymjs.kjframe.demo.widget;import org.kymjs.kjframe.KJActivity;import org.kymjs.kjframe.demo.R;public class KJSlidingMenuDemo extends KJActivity {    @Override    public void setRootView() {        setContentView(R.layout.aty_main);    }}

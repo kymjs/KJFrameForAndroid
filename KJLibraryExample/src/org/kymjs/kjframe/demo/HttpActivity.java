@@ -53,7 +53,9 @@ public class HttpActivity extends KJActivity {
         mBtn4.setText("自定义(高级设置)");
         mBtn5.setText("下载");
         mBtn6.setText("暂停下载");
-        mEtDownloadPath.setText("http://192.168.1.145/kymjs/upload/1.pdf");
+        mEtDownloadPath
+                .setText("http://www.orchidshell.com/materials/OrchidShell/Instructions.rar");
+        // mEtDownloadPath.setText("http://192.168.1.145/kymjs/upload/1.pdf");
     }
 
     @Override
@@ -91,9 +93,9 @@ public class HttpActivity extends KJActivity {
 
     private void get() {
         HttpConfig config = new HttpConfig();// 每个KJHttp对象对应一个config
-        config.cachePath = "hello/world"; // 数据缓存到SD卡根目录hello文件夹中world文件夹内
+        config.cachePath = "KJLibrary/cache"; // 数据缓存到SD卡根目录KJLibrary文件夹中cache文件夹内
         config.cacheTime = 0;// 强制不使用缓存
-                             // （你可以自己设置缓存时间，建议区分WiFi模式和3G网模式设置不同缓存时间并动态切换）
+        // （你可以自己设置缓存时间，建议区分WiFi模式和3G网模式设置不同缓存时间并动态切换）
         config.httpHeader.put("cache", "kjlibrary");// 设置http请求头信息
         config.maxRetries = 10;// 出错重连次数
         KJHttp kjhttp = new KJHttp(config);
