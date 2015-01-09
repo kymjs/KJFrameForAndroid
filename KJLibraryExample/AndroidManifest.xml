@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name="org.kymjs.kjframe.demo.AppContext"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -34,6 +35,7 @@
         <activity android:name="org.kymjs.kjframe.demo.widget.KJSlidingMenuDemo" />
         <activity android:name="org.kymjs.kjframe.demo.widget.KJListViewDemo" />
         <activity android:name="org.kymjs.kjframe.demo.widget.ScaleImageDemo" />
+        <activity android:name="org.kymjs.kjframe.demo.widget.NewListViewDemo" />
     </application>
 
 </manifest>

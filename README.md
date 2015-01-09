@@ -1,5 +1,3 @@
-
-## ![logo](https://github.com/kymjs/KJFrameForAndroid/blob/master/KJLibraryExample/ic_launcher-web.png) 
 =================
 #KJFrameForAndroid Summary
 [![Android Arsenal](http://img.shields.io/badge/Android%20Arsenal-KJFrameForAndroid-blue.svg?style=flat)](http://android-arsenal.com/details/1/836)
@@ -13,7 +11,7 @@ However,KJFrameForAndroid is free open source object. Thanks for you follow this
 ## KJFrameForAndroid links
 * QQ group：[257053751](http://jq.qq.com/?_wv=1027&k=WoM2Aa)(开发者群1)，[201055521](http://jq.qq.com/?_wv=1027&k=MBVdpK)(开发者群2)
 * 国内用户请访问git.osc：[http://git.oschina.net/kymjs/KJFrameForAndroid](http://git.oschina.net/kymjs/KJFrameForAndroid)
-* DL：[https://github.com/singwhatiwanna/dynamic-load-apk](https://github.com/singwhatiwanna/dynamic-load-apk)
+* 插件化开发框架dynamic-load-apk：[https://github.com/singwhatiwanna/dynamic-load-apk](https://github.com/singwhatiwanna/dynamic-load-apk)
 * 
 * issues [https://github.com/kymjs/KJFrameForAndroid/issues](https://github.com/kymjs/KJFrameForAndroid/issues)
 * version log [https://github.com/kymjs/KJFrameForAndroid/blob/master/debug_log.txt](https://github.com/kymjs/KJFrameForAndroid/blob/master/debug_log.txt)

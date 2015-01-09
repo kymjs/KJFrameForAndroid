@@ -34,12 +34,14 @@ import android.widget.TextView;
 
 /**
  * 可上下拉刷新listview<br>
+ * 由于Android5.0风格的改变，建议使用#{@link KJSwipeRefreshLayout}，此处仅为兼容旧版本代码。
  * 
  * <b>创建时间</b> 2014-7-5
  * 
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
  */
+@Deprecated
 public class KJListView extends ListView implements OnScrollListener {
     // listener
     private OnScrollListener mScrollListener;
