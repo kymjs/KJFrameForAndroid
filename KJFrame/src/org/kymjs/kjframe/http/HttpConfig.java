@@ -17,6 +17,8 @@ package org.kymjs.kjframe.http;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
 
@@ -43,10 +45,12 @@ public class HttpConfig {
 
     public SSLSocketFactory sslSocketFactory = null;
     public HashMap<String, String> httpHeader = null;
+    public Map<String, List<String>> respondHeader = null;
 
     public File savePath;
 
     public HttpConfig() {
+        respondHeader = new HashMap<String, List<String>>();
         httpHeader = new HashMap<String, String>();
         httpHeader.put("Charset", "UTF-8");// utf8其实是冗余的，因为在android中默认就是utf8
     }

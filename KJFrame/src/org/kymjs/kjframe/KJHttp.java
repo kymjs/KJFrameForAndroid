@@ -226,6 +226,8 @@ public class KJHttp {
                 respondMsg = conn.getResponseMessage();
                 respondCode = conn.getResponseCode();
                 input = conn.getInputStream();
+                httpConfig.respondHeader = conn.getHeaderFields();
+                callback.onHttpConnection(conn);
                 reader = new BufferedReader(new InputStreamReader(input));
                 int len = 0;
                 char[] buf = new char[1024];

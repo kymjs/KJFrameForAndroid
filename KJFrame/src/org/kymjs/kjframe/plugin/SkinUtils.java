@@ -87,7 +87,7 @@ public class SkinUtils {
     /**
      * 到指定路径下获取zip皮肤资源
      * 
-     * @param zipFolderPath
+     * @param zipFolder
      *            zip所在文件的绝对路径
      * @return
      */

@@ -21,13 +21,12 @@ import android.annotation.SuppressLint;
 import android.view.View;
 
 /**
- * SlidingMenu所需工具类{@link #SlidingMenu}
+ * SlidingMenu所需工具类{@link #KJSlidingMenu}
  * 
  * @author http://nineoldandroids.com/
  */
 public final class ViewHelper {
-    private ViewHelper() {
-    }
+    private ViewHelper() {}
 
     public static float getAlpha(View view) {
         return AnimatorProxy.NEEDS_PROXY ? AnimatorProxy.wrap(view).getAlpha()

@@ -16,6 +16,7 @@
 package org.kymjs.kjframe.http;
 
 import java.io.File;
+import java.net.HttpURLConnection;
 
 /**
  * Http请求回调类<br>
@@ -30,8 +31,14 @@ public abstract class HttpCallBack {
     /**
      * Http请求开始前回调
      */
-    public void onPreStart() {
-    };
+    public void onPreStart() {};
+
+    /**
+     * Http请求连接时调用
+     * 
+     * <b>waring</b> run in asynchrony thread
+     */
+    public void onHttpConnection(HttpURLConnection conn) {}
 
     /**
      * 进度回调，仅支持Download时使用
@@ -41,22 +48,19 @@ public abstract class HttpCallBack {
      * @param current
      *            当前进度
      */
-    public void onLoading(long count, long current) {
-    }
+    public void onLoading(long count, long current) {}
 
     /**
      * Http请求成功时回调
      * 
      * @param t
      */
-    public void onSuccess(String t) {
-    }
+    public void onSuccess(String t) {}
 
     /**
      * Http下载成功时回调
      */
-    public void onSuccess(File f) {
-    }
+    public void onSuccess(File f) {}
 
     /**
      * Http请求失败时回调
@@ -67,12 +71,10 @@ public abstract class HttpCallBack {
      * @param strMsg
      *            错误原因
      */
-    public void onFailure(Throwable t, int errorNo, String strMsg) {
-    }
+    public void onFailure(Throwable t, int errorNo, String strMsg) {}
 
     /**
      * Http请求结束后回调
      */
-    public void onFinish() {
-    }
+    public void onFinish() {}
 }

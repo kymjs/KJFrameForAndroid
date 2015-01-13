@@ -1,0 +1,13 @@
+org.kymjs.kjframe
+org.kymjs.kjframe.bitmap
+org.kymjs.kjframe.bitmap.helper
+org.kymjs.kjframe.database
+org.kymjs.kjframe.database.annotate
+org.kymjs.kjframe.database.utils
+org.kymjs.kjframe.http
+org.kymjs.kjframe.http.core
+org.kymjs.kjframe.http.download
+org.kymjs.kjframe.plugin
+org.kymjs.kjframe.ui
+org.kymjs.kjframe.utils
+org.kymjs.kjframe.widget

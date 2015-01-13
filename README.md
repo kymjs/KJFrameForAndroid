@@ -101,8 +101,7 @@ in memory,will difficult recovery, have possible crash. BitmapLibrary make use o
 ```
 
 ## HttpLibrary
-Android has provided two HTTP Clients AndroidHttpClient (Extended from apache HTTPClient) and HttpUrlConnection to make a HTTP Request. 
-You can select which Http client.
+As you know as an Android developer, you can't make a network call on the UI thread, and on the other hand you can't touch UI elements on any other thread than this one. So you need to manage threading.So you need to manage threading. In the HttpLibrary, threading is done using asynchronous methods and callback interfaces to implement.
 ### get method request JSON example
 ```java
 		// get
@@ -258,7 +257,8 @@ About DataBase function，comes frome to finaldb object. Thinks.[finaldb](https:
 
 ##License
 ```
- Copyright (c) 2014,The KJFrameForAndroid Open Source Project.
+ Copyright 2014,The KJFrameForAndroid Open Source Project.
+ 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
