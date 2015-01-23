@@ -57,6 +57,11 @@ import org.kymjs.kjframe.http.core.KJAsyncTask;
 
 import android.os.SystemClock;
 
+/**
+ * 一个简易文件下载器
+ * 
+ * @author kymjs (https://github.com/kymjs)
+ */
 public class SimpleDownloader extends KJAsyncTask<Object, Object, Object>
         implements I_FileLoader {
 

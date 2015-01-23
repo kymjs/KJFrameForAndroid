@@ -24,6 +24,10 @@ import org.apache.http.HttpEntity;
 import org.kymjs.kjframe.http.download.SimpleDownloader.DownloadProgress;
 import org.kymjs.kjframe.utils.FileUtils;
 
+/**
+ * 
+ * @author kymjs (https://github.com/kymjs)
+ */
 public class FileEntityHandler {
 
     private boolean mStop = false;

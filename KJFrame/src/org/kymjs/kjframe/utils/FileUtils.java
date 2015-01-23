@@ -46,7 +46,7 @@ import android.provider.MediaStore;
  * 
  * <b>创建时间</b> 2014-8-14
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.1
  */
 public final class FileUtils {
@@ -266,7 +266,7 @@ public final class FileUtils {
         try {
             out = new BufferedOutputStream(new FileOutputStream(filePath),
                     8 * 1024);
-            isSuccess = bitmap.compress(CompressFormat.PNG, 70, out);
+            isSuccess = bitmap.compress(CompressFormat.PNG, 100, out);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {

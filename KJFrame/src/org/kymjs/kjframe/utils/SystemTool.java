@@ -44,7 +44,7 @@ import android.view.inputmethod.InputMethodManager;
  * 
  * <b>创建时间</b> 2014-8-14
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.1
  */
 public final class SystemTool {

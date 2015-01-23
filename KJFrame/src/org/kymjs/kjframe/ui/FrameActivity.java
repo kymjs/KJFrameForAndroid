@@ -28,7 +28,7 @@ import android.view.View.OnClickListener;
  * <b>创建时间</b> 2014-3-1 <br>
  * <b>最后修改时间</b> 2014-10-17<br>
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.8
  */
 public abstract class FrameActivity extends Activity implements
@@ -58,8 +58,7 @@ public abstract class FrameActivity extends Activity implements
     /**
      * 如果调用了initDataFromThread()，则当数据初始化完成后将回调该方法。
      */
-    protected void threadDataInited() {
-    }
+    protected void threadDataInited() {}
 
     /**
      * 在线程中初始化数据，注意不能在这里执行UI操作
@@ -75,12 +74,10 @@ public abstract class FrameActivity extends Activity implements
     }
 
     @Override
-    public void initData() {
-    }
+    public void initData() {}
 
     @Override
-    public void initWidget() {
-    }
+    public void initWidget() {}
 
     // 仅仅是为了代码整洁点
     private void initializer() {
@@ -97,8 +94,7 @@ public abstract class FrameActivity extends Activity implements
 
     /** listened widget's click method */
     @Override
-    public void widgetClick(View v) {
-    }
+    public void widgetClick(View v) {}
 
     @Override
     public void onClick(View v) {
@@ -106,12 +102,10 @@ public abstract class FrameActivity extends Activity implements
     }
 
     @Override
-    public void registerBroadcast() {
-    }
+    public void registerBroadcast() {}
 
     @Override
-    public void unRegisterBroadcast() {
-    }
+    public void unRegisterBroadcast() {}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

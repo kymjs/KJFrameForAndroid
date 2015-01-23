@@ -29,7 +29,7 @@ import android.view.ViewGroup;
  * <b>创建时间</b> 2014-3-1 <br>
  * <b>最后修改时间</b> 2014-5-30<br>
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.6
  */
 public abstract class FrameFragment extends Fragment implements OnClickListener {
@@ -64,12 +64,10 @@ public abstract class FrameFragment extends Fragment implements OnClickListener 
      * 
      * @param parentView
      */
-    protected void initWidget(View parentView) {
-    }
+    protected void initWidget(View parentView) {}
 
     /** initialization data */
-    protected void initData() {
-    }
+    protected void initData() {}
 
     /**
      * initialization data. And this method run in background thread, so you
@@ -88,12 +86,10 @@ public abstract class FrameFragment extends Fragment implements OnClickListener 
     /**
      * 如果调用了initDataFromThread()，则当数据初始化完成后将回调该方法。
      */
-    protected void threadDataInited() {
-    }
+    protected void threadDataInited() {}
 
     /** widget click method */
-    protected void widgetClick(View v) {
-    }
+    protected void widgetClick(View v) {}
 
     @Override
     public void onClick(View v) {

@@ -30,8 +30,7 @@ import android.os.Looper;
  * <li>3. Timer Runnable, 定时任务。
  * </ul>
  * 
- * @author kymjs(kymjs123@gmail.com),
- *         MaTianyu(https://github.com/litesuits/android-lite-async)
+ * @author kymjs (https://github.com/kymjs)
  */
 public class TaskExecutor {
 

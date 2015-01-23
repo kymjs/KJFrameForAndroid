@@ -17,6 +17,8 @@ package org.kymjs.kjframe.widget;
 
 /**
  * 包含刷新和加载更多地接口方法
+ * 
+ * @author kymjs (https://github.com/kymjs)
  */
 public interface KJRefreshListener {
     /**

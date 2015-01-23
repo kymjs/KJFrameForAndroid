@@ -36,6 +36,10 @@ import org.kymjs.kjframe.http.download.I_FileLoader;
 import org.kymjs.kjframe.http.download.SimpleDownloader;
 import org.kymjs.kjframe.utils.FileUtils;
 
+/**
+ * 
+ * @author kymjs (https://github.com/kymjs)
+ */
 public class KJHttp {
     public static final String BOUNDARY = "---------7d4a6d158c9"; // 定义http上传文件的数据分隔线
 
@@ -156,7 +160,7 @@ public class KJHttp {
                 save.createNewFile();
             }
         } catch (Exception e) {
-            throw new RuntimeException("save can not create");
+            throw new RuntimeException("save file can not create");
         }
         this.downloader = downloader;
         httpConfig.savePath = save;

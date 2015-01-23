@@ -61,6 +61,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="更多操作请查看Demo中注释" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </org.kymjs.kjframe.widget.KJScrollView>

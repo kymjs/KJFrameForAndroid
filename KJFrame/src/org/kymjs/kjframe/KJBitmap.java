@@ -15,6 +15,7 @@
  */
 package org.kymjs.kjframe;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,24 +24,28 @@ import org.kymjs.kjframe.bitmap.BitmapConfig;
 import org.kymjs.kjframe.bitmap.helper.BitmapCreate;
 import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
 import org.kymjs.kjframe.bitmap.helper.BitmapMemoryCache;
+import org.kymjs.kjframe.http.core.KJAsyncTask;
+import org.kymjs.kjframe.http.core.KJAsyncTask.OnFinishedListener;
 import org.kymjs.kjframe.http.core.SimpleSafeAsyncTask;
 import org.kymjs.kjframe.utils.CipherUtils;
+import org.kymjs.kjframe.utils.FileUtils;
 import org.kymjs.kjframe.utils.KJLoger;
 import org.kymjs.kjframe.utils.SystemTool;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 
 /**
  * The BitmapLibrary's core classes<br>
  * <b>创建时间</b> 2014-7-11<br>
- * <b>最后修改</b> 2014-11-19<br>
+ * <b>最后修改</b> 2015-1-19<br>
  * 
- * @author kymjs(kymjs123@gmail.com)
- * @version 2.2
+ * @author kymjs (https://github.com/kymjs)
+ * @version 2.3
  */
 public class KJBitmap {
 
@@ -74,6 +79,43 @@ public class KJBitmap {
         this.config = bitmapConfig;
         taskCollection = new HashSet<BitmapWorkerTask>();
         mMemoryCache = new BitmapMemoryCache(bitmapConfig.memoryCacheSize);
+    }
+
+    /**
+     * 加载过程中图片不会闪烁加载方法
+     * 
+     * @param imageView
+     *            要显示图片的控件(ImageView设置src，普通View设置bg)
+     * @param imageUrl
+     *            图片的URL
+     */
+    public void displayNotTwink(View imageView, String imageUrl) {
+        imageView.measure(0, 0);
+        displayNotTwink(imageView, imageUrl, imageView.getMeasuredWidth(),
+                imageView.getMeasuredHeight());
+    }
+
+    /**
+     * 加载过程中图片不会闪烁加载方法
+     * 
+     * @param imageView
+     *            要显示图片的控件(ImageView设置src，普通View设置bg)
+     * @param imageUrl
+     *            图片的URL
+     * @param width
+     *            图片的宽
+     * @param height
+     *            图片的高
+     */
+    public void displayNotTwink(View imageView, String imageUrl, int width,
+            int height) {
+        if (imageView instanceof ImageView) {
+            display(imageView, imageUrl, width, height,
+                    ((ImageView) imageView).getDrawable());
+        } else {
+            display(imageView, imageUrl, width, height,
+                    imageView.getBackground());
+        }
     }
 
     /**
@@ -111,6 +153,23 @@ public class KJBitmap {
      *            要显示图片的控件
      * @param imageUrl
      *            图片地址
+     * @param loadingId
+     *            载入过程中显示的图片
+     */
+    public void display(View imageView, String imageUrl, int loadingId) {
+        imageView.measure(0, 0);
+        display(imageView, imageUrl, imageView.getMeasuredWidth(),
+                imageView.getMeasuredHeight(), imageView.getResources()
+                        .getDrawable(loadingId));
+    }
+
+    /**
+     * 加载网络图片
+     * 
+     * @param imageView
+     *            要显示图片的控件
+     * @param imageUrl
+     *            图片地址
      * @param width
      *            图片宽度
      * @param height
@@ -136,19 +195,48 @@ public class KJBitmap {
      */
     public void display(View imageView, String imageUrl, Bitmap loadBitmap,
             int width, int height) {
-        // 开启task的时候先检查传进来的这个view是否已经有一个task是为它执行
-        for (BitmapWorkerTask task : taskCollection) {
-            if (task.imageView.equals(imageView)) {
-                // 是同一个url的话就不用开新的task，不一样就取消掉之前开新的
-                if (task.imageUrl.equals(imageUrl)) {
-                    return;
-                } else {
-                    task.cancelTask();
-                    taskCollection.remove(task);
-                    break;
-                }
-            }
-        }
+        display(imageView, imageUrl, width, height, new BitmapDrawable(
+                imageView.getResources(), loadBitmap));
+    }
+
+    /**
+     * 加载网络图片
+     * 
+     * @param imageView
+     *            要显示图片的控件
+     * @param imageUrl
+     *            图片地址
+     * @param loadingId
+     *            图片载入过程中的显示
+     * @param width
+     *            图片宽度
+     * @param height
+     *            图片高度
+     */
+    public void display(View imageView, String imageUrl, int loadingId,
+            int width, int height) {
+        display(imageView, imageUrl, width, height, imageView.getResources()
+                .getDrawable(loadingId));
+    }
+
+    /**
+     * 加载网络图片
+     * 
+     * @param imageView
+     *            要显示图片的控件
+     * @param imageUrl
+     *            图片地址
+     * @param loadBitmap
+     *            图片载入过程中的显示
+     * @param width
+     *            图片宽度
+     * @param height
+     *            图片高度
+     */
+    public void display(View imageView, String imageUrl, int width, int height,
+            Drawable loadBitmap) {
+        config.setDefaultHeight(height);
+        config.setDefaultWidth(width);
         BitmapWorkerTask task = new BitmapWorkerTask(imageView, imageUrl,
                 loadBitmap, width, height);
         taskCollection.add(task);
@@ -160,12 +248,18 @@ public class KJBitmap {
 
         final View imageView;
         final String imageUrl;
-        final Bitmap loadBitmap;
+        final Drawable loadBitmap;
         final int w;
         final int h;
 
         public BitmapWorkerTask(View imageView, String imageUrl,
                 Bitmap loadBitmap, int w, int h) {
+            this(imageView, imageUrl, new BitmapDrawable(
+                    imageView.getResources(), loadBitmap), w, h);
+        }
+
+        public BitmapWorkerTask(View imageView, String imageUrl,
+                Drawable loadBitmap, int w, int h) {
             this.imageView = imageView;
             this.imageUrl = imageUrl;
             this.loadBitmap = loadBitmap;
@@ -185,7 +279,7 @@ public class KJBitmap {
             setViewImage(imageView, loadBitmap);
             config.downloader.setImageCallBack(callback);
             if (callback != null) {
-                callback.onLoading(imageView);
+                callback.onPreLoad(imageView);
             }
             imageView.setTag(imageUrl);
         }
@@ -212,8 +306,13 @@ public class KJBitmap {
                     callback.onFailure(e);
                 }
             }
+            if (callback != null) {
+                callback.onFinish(imageView);
+            }
         }
     }
+
+    /********************* public preference method *********************/
 
     /**
      * 从指定链接获取一张图片，必须放在线程中执行<br>
@@ -273,6 +372,90 @@ public class KJBitmap {
     }
 
     /**
+     * 保存一张图片到本地
+     * 
+     * @param url
+     *            图片地址
+     * @param fileName
+     *            在本地的文件名
+     */
+    public void saveImage(String url, String fileName) {
+        saveImage(url, fileName, 0, 0, null);
+    }
+
+    /**
+     * 保存一张图片到本地
+     * 
+     * @param url
+     *            图片地址
+     * @param fileName
+     *            在本地的文件名
+     * @param cb
+     *            保存过程回调
+     */
+    public void saveImage(String url, String fileName, BitmapCallBack cb) {
+        saveImage(url, fileName, 0, 0, cb);
+    }
+
+    /**
+     * 保存一张图片到本地
+     * 
+     * @param url
+     *            图片地址
+     * @param fileName
+     *            在本地的文件名
+     * @param reqW
+     *            图片的宽度（0表示默认）
+     * @param reqH
+     *            图片的高度（0表示默认）
+     * @param cb
+     *            保存过程回调
+     */
+    public void saveImage(final String url, final String fileName,
+            final int reqW, final int reqH, final BitmapCallBack cb) {
+        if (cb != null)
+            cb.onPreLoad(null);
+
+        Bitmap bmp = getBitmapFromMC(url);
+        if (bmp == null) {
+            KJAsyncTask.setOnFinishedListener(new OnFinishedListener() {
+                @Override
+                public void onPostExecute() {
+                    if (cb != null) {
+                        cb.onSuccess(null);
+                        cb.onFinish(null);
+                    }
+                }
+            });
+            KJAsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    Bitmap bmp = getBitmapFromNet(url, reqW, reqH);
+                    if (bmp == null && cb != null) {
+                        cb.onFailure(new RuntimeException("download error"));
+                    } else {
+                        FileUtils.bitmapToFile(bmp, FileUtils.getSDCardPath()
+                                + File.separator + fileName);
+                    }
+                }
+            });
+        } else {
+            bmp = BitmapHelper.scaleWithWH(bmp, reqW, reqH);
+            showLogIfOpen("load image frome memory cache");
+            boolean success = FileUtils.bitmapToFile(bmp,
+                    FileUtils.getSDCardPath() + File.separator + fileName);
+            if (cb != null) {
+                if (success) {
+                    cb.onSuccess(null);
+                } else {
+                    cb.onFailure(new RuntimeException("save error"));
+                }
+                cb.onFinish(null);
+            }
+        }
+    }
+
+    /**
      * 从内存缓存读取Bitmap
      * 
      * @param key
@@ -303,10 +486,20 @@ public class KJBitmap {
     public void cancle(View view) {
         for (BitmapWorkerTask task : taskCollection) {
             if (task.imageView.equals(view)) {
-                task.cancel(true);
+                task.cancelTask();
                 taskCollection.remove(task);
                 break;
             }
+        }
+    }
+
+    /**
+     * 取消全部下载
+     */
+    public void cancleAll() {
+        for (BitmapWorkerTask task : taskCollection) {
+            task.cancelTask();
+            taskCollection.remove(task);
         }
     }
 
@@ -333,6 +526,19 @@ public class KJBitmap {
             } else {
                 view.setBackgroundDrawable(new BitmapDrawable(view
                         .getResources(), background));
+            }
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private void setViewImage(View view, Drawable background) {
+        if (view instanceof ImageView) {
+            ((ImageView) view).setImageDrawable(background);
+        } else {
+            if (SystemTool.getSDKVersion() >= 16) {
+                view.setBackground(background);
+            } else {
+                view.setBackgroundDrawable(background);
             }
         }
     }

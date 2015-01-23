@@ -25,7 +25,7 @@ import android.content.Context;
  * 
  * <b>创建时间</b> 2014-8-15
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  */
 final public class DaoConfig {

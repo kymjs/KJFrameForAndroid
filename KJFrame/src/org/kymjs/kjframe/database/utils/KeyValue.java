@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
  * 
  * <b>创建时间</b> 2014-8-15
  * 
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  */
 public class KeyValue {
@@ -33,8 +34,7 @@ public class KeyValue {
         this.value = value;
     }
 
-    public KeyValue() {
-    }
+    public KeyValue() {}
 
     public String getKey() {
         return key;

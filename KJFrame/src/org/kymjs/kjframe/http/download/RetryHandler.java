@@ -36,7 +36,7 @@ import android.os.SystemClock;
  * 
  * <b>创建时间</b> 2014-8-14
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  */
 public class RetryHandler implements HttpRequestRetryHandler {

@@ -47,6 +47,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * 
  * <b>创建时间</b> 2014-8-15<br>
  * 
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.1
  */
 public class KJDB {
@@ -816,8 +817,7 @@ public class KJDB {
         }
 
         @Override
-        public void onCreate(SQLiteDatabase db) {
-        }
+        public void onCreate(SQLiteDatabase db) {}
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

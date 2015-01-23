@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * 经过Least Recently Used（最近最少使用）算法处理的LinkedHashMap<br>
  * 
- * <b>修改</b> kymjs(kymjs123@gmail.com)<br>
+ * <b>修改</b> kymjs (https://github.com/kymjs)<br>
  * <b>创建时间</b> 2014-7-11
  * 
  * @author Android Open Source Project
@@ -229,8 +229,7 @@ public class MemoryLruCache<K, V> {
      *            removal was caused by a {@link #put}. Otherwise it was caused
      *            by an eviction or a {@link #remove}.
      */
-    protected void entryRemoved(boolean evicted, K key, V oldValue, V newValue) {
-    }
+    protected void entryRemoved(boolean evicted, K key, V oldValue, V newValue) {}
 
     /**
      * Called after a cache miss to compute a value for the corresponding key.

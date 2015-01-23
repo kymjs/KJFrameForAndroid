@@ -20,7 +20,7 @@ import java.util.ArrayDeque;
 /**
  * 精简版{@link ArrayDeque}实现。 兼容旧版本Android的{@link ArrayDeque}，高性能Stack和Queue。
  * 
- * @author MaTianyu(https://github.com/litesuits/android-lite-async) 2014-1-31
+ * @author kymjs (https://github.com/kymjs)
  */
 public class ArrayDequeCompat<E> {
     private transient E[] elements;

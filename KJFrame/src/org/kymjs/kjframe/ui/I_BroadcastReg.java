@@ -20,7 +20,7 @@ package org.kymjs.kjframe.ui;
  * 
  * <b>创建时间</b> 2014-7-11
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  */
 public interface I_BroadcastReg {

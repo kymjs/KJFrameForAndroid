@@ -47,8 +47,8 @@ import android.os.StatFs;
  * 
  * <b>创建时间</b> 2014-7-16
  * 
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.0
- * @author kymjs(kymjs123@gmail.com)
  */
 public final class DiskCache {
     private boolean debug = KJLoger.IS_DEBUG;

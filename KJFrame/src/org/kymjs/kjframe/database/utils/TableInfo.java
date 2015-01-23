@@ -24,6 +24,7 @@ import java.util.List;
  * 
  * <b>创建时间</b> 2014-8-15
  * 
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  */
 public class TableInfo {
@@ -41,8 +42,7 @@ public class TableInfo {
 
     private static final HashMap<String, TableInfo> tableInfoMap = new HashMap<String, TableInfo>();
 
-    private TableInfo() {
-    }
+    private TableInfo() {}
 
     @SuppressWarnings("unused")
     public static TableInfo get(Class<?> clazz) {

@@ -37,12 +37,11 @@ import android.widget.Toast;
 /**
  * 侵入式View的调用工具类
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  */
 public class ViewInject {
 
-    private ViewInject() {
-    }
+    private ViewInject() {}
 
     private static class ClassHolder {
         private static final ViewInject instance = new ViewInject();

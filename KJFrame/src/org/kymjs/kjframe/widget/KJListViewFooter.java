@@ -28,7 +28,7 @@ import android.widget.TextView;
  * 
  * <b>创建时间</b> 2014-7-5
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  */
 public class KJListViewFooter extends LinearLayout {

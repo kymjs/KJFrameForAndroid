@@ -32,6 +32,7 @@ import android.text.TextUtils;
  * 
  * <b>创建时间</b> 2014-8-15
  * 
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  */
 public class SqlBuilder {

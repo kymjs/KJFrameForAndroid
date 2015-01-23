@@ -23,7 +23,7 @@ import android.view.MotionEvent;
 /**
  * 基于google的可上下拉控件的改版，重写了触摸屏判断逻辑，方便实现嵌入容器View中
  * 
- * @author kymjs (kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * 
  */
 public class KJSwipeRefreshLayout extends SwipeRefreshLayout {

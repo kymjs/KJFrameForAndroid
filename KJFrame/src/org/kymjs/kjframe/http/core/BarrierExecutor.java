@@ -21,8 +21,7 @@ import java.util.concurrent.CountDownLatch;
 /**
  * 在完成一组正在其他线程中执行的操作之前, 它允许一个或多个线程一直等待
  * 
- * @author kymjs(kymjs123@gmail.com),
- *         MaTianyu(https://github.com/litesuits/android-lite-async)
+ * @author kymjs (https://github.com/kymjs)
  */
 public class BarrierExecutor {
 
@@ -119,7 +118,7 @@ public class BarrierExecutor {
     @SuppressWarnings("unchecked")
     private void startInternal(final CountDownLatch latch) {
         for (KJAsyncTask<?, ?, ?> each : taskList) {
-            each.setFinishedListener(new KJAsyncTask.FinishedListener() {
+            each.setOnFinishedListener(new KJAsyncTask.OnFinishedListener() {
                 @Override
                 public void onPostExecute() {
                     latch.countDown();

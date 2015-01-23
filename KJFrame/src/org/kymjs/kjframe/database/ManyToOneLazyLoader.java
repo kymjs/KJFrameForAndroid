@@ -25,6 +25,8 @@ import org.kymjs.kjframe.KJDB;
  *            宿主实体的class
  * @param <M>
  *            多放实体class
+ * 
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  */
 public class ManyToOneLazyLoader<M, O> {

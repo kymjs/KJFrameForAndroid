@@ -15,6 +15,16 @@
  */
 package org.kymjs.kjframe.bitmap;
 
+import org.kymjs.kjframe.bitmap.helper.BitmapCreate;
+
+import android.util.Log;
+
+/**
+ * Bitmap配置器
+ * 
+ * @author kymjs (https://github.com/kymjs)
+ * 
+ */
 public class BitmapConfig {
 
     public boolean isDEBUG = true;
@@ -28,5 +38,29 @@ public class BitmapConfig {
     public BitmapConfig() {
         memoryCacheSize = (int) (Runtime.getRuntime().maxMemory() / 1024);
         downloader = new BitmapDownloader(this, 0, 0);
+    }
+
+    public void setDefaultWidth(int w) {
+        if (w > 0) {
+            BitmapCreate.DEFAULT_W = w;
+        } else {
+            Log.e("KJFrame", "default width is not 0");
+        }
+    }
+
+    public int getDefaultWidth() {
+        return BitmapCreate.DEFAULT_W;
+    }
+
+    public void setDefaultHeight(int h) {
+        if (h > 0) {
+            BitmapCreate.DEFAULT_H = h;
+        } else {
+            Log.e("KJFrame", "default height is not 0");
+        }
+    }
+
+    public int getDefaultHeight() {
+        return BitmapCreate.DEFAULT_H;
     }
 }

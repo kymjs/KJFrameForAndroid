@@ -56,6 +56,9 @@ public class PluginActivity extends KJActivity {
         }
     }
 
+    /**
+     * 点击事件是核心，从这个点击事件相应后，就跳转到插件的界面去了
+     */
     @Override
     public void initWidget() {
         mList.setAdapter(new PluginAdapter());
@@ -63,6 +66,9 @@ public class PluginActivity extends KJActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
+                /**
+                 * 传入context和apk插件的绝对路径（接下来就全看插件模块的了）
+                 */
                 CJActivityUtils
                         .launchPlugin(aty, datas.get(position).getPath());
             }

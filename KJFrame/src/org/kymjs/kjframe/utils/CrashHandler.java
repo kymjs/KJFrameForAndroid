@@ -34,7 +34,7 @@ import android.os.Build;
  * 
  * <b>创建时间</b> 2014-7-2
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  */
 public class CrashHandler implements UncaughtExceptionHandler {
     private final Context mContext;

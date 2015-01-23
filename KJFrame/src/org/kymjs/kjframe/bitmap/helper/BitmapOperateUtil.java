@@ -37,7 +37,7 @@ import android.widget.ImageView;
  * 
  * <b>创建时间</b> 2014-6-30<br>
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.1
  */
 public class BitmapOperateUtil {

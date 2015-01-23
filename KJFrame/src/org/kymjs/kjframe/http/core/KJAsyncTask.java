@@ -52,8 +52,7 @@ import android.os.Message;
  *            进度返回类型
  * @param <Result>
  *            结果返回类型
- * @author kymjs(kymjs123@gmail.com),
- *         MaTianyu(https://github.com/litesuits/android-lite-async)
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.2
  */
 public abstract class KJAsyncTask<Params, Progress, Result> {
@@ -67,6 +66,7 @@ public abstract class KJAsyncTask<Params, Progress, Result> {
 
     private static final int MESSAGE_POST_RESULT = 0x1;// 消息类型：发送结果
     private static final int MESSAGE_POST_PROGRESS = 0x2;// 消息类型：更新进度
+    private static final int MESSAGE_POST_FINISH = 0x3;// 消息类型：异步执行完成
     // 用来发送结果和进度通知，采用UI线程的Looper来处理消息 这就是为什么Task必须在UI线程调用
     private static final InternalHandler mHandler = new InternalHandler();
 
@@ -83,7 +83,7 @@ public abstract class KJAsyncTask<Params, Progress, Result> {
     // 原子布尔型，支持高并发访问，标识任务是否被使用过
     private final AtomicBoolean mTaskInvoked = new AtomicBoolean();
 
-    private FinishedListener finishedListener;
+    private static OnFinishedListener finishedListener;
 
     // 任务的状态 默认为挂起，即等待执行，其类型标识为易变的（volatile）
     private volatile Status mStatus = Status.PENDING;
@@ -199,7 +199,7 @@ public abstract class KJAsyncTask<Params, Progress, Result> {
      * 
      * @return
      */
-    public FinishedListener getFinishedListener() {
+    public OnFinishedListener getFinishedListener() {
         return finishedListener;
     }
 
@@ -208,8 +208,8 @@ public abstract class KJAsyncTask<Params, Progress, Result> {
      * 
      * @param finishedListener
      */
-    public void setFinishedListener(FinishedListener finishedListener) {
-        this.finishedListener = finishedListener;
+    public static void setOnFinishedListener(OnFinishedListener finishedListener) {
+        KJAsyncTask.finishedListener = finishedListener;
     }
 
     /**
@@ -412,6 +412,11 @@ public abstract class KJAsyncTask<Params, Progress, Result> {
             case MESSAGE_POST_PROGRESS:
                 result.mTask.onProgressUpdate(result.mData);
                 break;
+            case MESSAGE_POST_FINISH:
+                if (finishedListener != null) {
+                    finishedListener.onPostExecute();
+                }
+                break;
             }
         }
     }
@@ -522,6 +527,7 @@ public abstract class KJAsyncTask<Params, Progress, Result> {
                 public void run() {
                     command.run();
                     next();
+                    mHandler.sendEmptyMessage(MESSAGE_POST_FINISH);
                 }
             };
             if ((mThreadPoolExecutor).getActiveCount() < serialOneTime) {
@@ -556,9 +562,9 @@ public abstract class KJAsyncTask<Params, Progress, Result> {
         }
     }
 
-    public static interface FinishedListener {
-        void onCancelled();
+    public static abstract class OnFinishedListener {
+        public void onCancelled() {}
 
-        void onPostExecute();
+        public void onPostExecute() {}
     }
 }

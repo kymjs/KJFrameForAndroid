@@ -34,7 +34,7 @@ import org.apache.http.message.BasicHeader;
  * http://blog.rafaelsanches.com/2011/01/29/upload-using-multipart-post-
  * using-httpclient-in-android/)<br>
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  * @created 2014-8-14
  */

@@ -29,7 +29,7 @@ import android.widget.LinearLayout;
 /**
  * 应用主界面跟布局ViewGroup，侧滑界面控件
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  */
 public class KJSlidingMenu extends HorizontalScrollView {
     private final int mScreenWidth; // 屏幕宽度

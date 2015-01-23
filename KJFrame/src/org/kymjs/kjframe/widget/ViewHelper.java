@@ -23,7 +23,7 @@ import android.view.View;
 /**
  * SlidingMenu所需工具类{@link #KJSlidingMenu}
  * 
- * @author http://nineoldandroids.com/
+ * @author kymjs (https://github.com/kymjs)
  */
 public final class ViewHelper {
     private ViewHelper() {}

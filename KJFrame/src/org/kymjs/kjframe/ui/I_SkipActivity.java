@@ -22,7 +22,7 @@ import android.os.Bundle;
 /**
  * 规范Activity跳转的接口协议
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  */
 public interface I_SkipActivity {
     /**

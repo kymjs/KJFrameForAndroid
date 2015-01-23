@@ -26,6 +26,12 @@ import org.kymjs.kjframe.utils.CipherUtils;
 import org.kymjs.kjframe.utils.FileUtils;
 import org.kymjs.kjframe.utils.KJLoger;
 
+/**
+ * Bitmap下载器
+ * 
+ * @author kymjs (https://github.com/kymjs)
+ * 
+ */
 public class BitmapDownloader implements I_ImageLoader {
     private final DiskCache diskCache;
     private int width, height;

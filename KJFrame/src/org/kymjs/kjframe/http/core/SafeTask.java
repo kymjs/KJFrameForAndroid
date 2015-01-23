@@ -26,7 +26,7 @@ import android.os.AsyncTask;
  * {@link #onPostExecuteSafely(Object, Exception)}。 <br>
  * 如果用户取消了任务，那么会将回调org.kymjs.kjframe.http.HttpCallback.onCancelled().
  * 
- * @author MaTianyu 2014-2-23下午9:22:34
+ * @author kymjs (https://github.com/kymjs)
  */
 public abstract class SafeTask<Params, Progress, Result> extends
         KJAsyncTask<Params, Progress, Result> {

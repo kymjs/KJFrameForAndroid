@@ -21,7 +21,7 @@ package org.kymjs.kjframe.http.core;
  * <b>优化点：</b>采用并发替代了系统的串行执行,同时修复了2.3之前并行执行大量数据是FC的问题。<br>
  * <b>创建时间</b> 2014-10-24 <br>
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  * 
  * @param <T>

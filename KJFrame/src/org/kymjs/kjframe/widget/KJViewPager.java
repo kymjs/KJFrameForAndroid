@@ -29,7 +29,7 @@ import android.widget.Scroller;
  * 
  * <b>创建时间</b> 2014-9-12
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  */
 public class KJViewPager extends ViewGroup {

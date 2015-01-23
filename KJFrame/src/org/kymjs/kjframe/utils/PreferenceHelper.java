@@ -30,7 +30,7 @@ import android.content.SharedPreferences.Editor;
  * 
  * <b>创建时间</b> 2014-7-27
  * 
- * @author kymjs
+ * @author kymjs (https://github.com/kymjs)
  */
 public class PreferenceHelper {
     public static void write(Context context, String fileName, String k, int v) {

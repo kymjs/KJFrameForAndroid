@@ -25,15 +25,14 @@ import android.content.Context;
  * 
  * <b>创建时间</b> 2014-2-28
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.1
  */
 final public class KJActivityStack {
     private static Stack<I_KJActivity> activityStack;
     private static final KJActivityStack instance = new KJActivityStack();
 
-    private KJActivityStack() {
-    }
+    private KJActivityStack() {}
 
     public static KJActivityStack create() {
         return instance;

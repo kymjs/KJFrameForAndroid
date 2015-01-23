@@ -18,7 +18,7 @@ package org.kymjs.kjframe.bitmap;
 /**
  * 图片加载器接口协议
  * 
- * @author kymjs
+ * @author kymjs (https://github.com/kymjs)
  * 
  */
 public interface I_ImageLoader {

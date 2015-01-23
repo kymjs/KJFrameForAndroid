@@ -29,10 +29,15 @@ import android.graphics.Rect;
  * 
  * <b>创建时间</b> 2014-7-11
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.1
  */
 public class BitmapCreate {
+
+    // 加载出错时，使用默认宽高再次加载
+    public static int DEFAULT_H = 400;
+    public static int DEFAULT_W = 300;
+
     /**
      * 获取一个指定大小的bitmap
      * 
@@ -74,15 +79,21 @@ public class BitmapCreate {
     public static Bitmap bitmapFromFile(String pathName, int reqWidth,
             int reqHeight) {
         if (reqHeight == 0 || reqWidth == 0) {
-            return BitmapFactory.decodeFile(pathName);
-        } else {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(pathName, options);
-            options = BitmapHelper.calculateInSampleSize(options, reqWidth,
-                    reqHeight);
-            return BitmapFactory.decodeFile(pathName, options);
+
+            try {
+                return BitmapFactory.decodeFile(pathName);
+            } catch (OutOfMemoryError e) {
+                reqHeight = DEFAULT_H;
+                reqWidth = DEFAULT_W;
+            }
         }
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(pathName, options);
+        options = BitmapHelper.calculateInSampleSize(options, reqWidth,
+                reqHeight);
+        return BitmapFactory.decodeFile(pathName, options);
     }
 
     /**
@@ -102,15 +113,20 @@ public class BitmapCreate {
     public static Bitmap bitmapFromByteArray(byte[] data, int offset,
             int length, int reqWidth, int reqHeight) {
         if (reqHeight == 0 || reqWidth == 0) {
-            return BitmapFactory.decodeByteArray(data, offset, length);
-        } else {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeByteArray(data, offset, length, options);
-            options = BitmapHelper.calculateInSampleSize(options, reqWidth,
-                    reqHeight);
-            return BitmapFactory.decodeByteArray(data, offset, length, options);
+            try {
+                return BitmapFactory.decodeByteArray(data, offset, length);
+            } catch (OutOfMemoryError e) {
+                reqHeight = DEFAULT_H;
+                reqWidth = DEFAULT_W;
+            }
+
         }
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeByteArray(data, offset, length, options);
+        options = BitmapHelper.calculateInSampleSize(options, reqWidth,
+                reqHeight);
+        return BitmapFactory.decodeByteArray(data, offset, length, options);
     }
 
     /**
@@ -127,12 +143,16 @@ public class BitmapCreate {
     public static Bitmap bitmapFromStream(InputStream is, int reqWidth,
             int reqHeight) {
         if (reqHeight == 0 || reqWidth == 0) {
-            return BitmapFactory.decodeStream(is);
-        } else {
-            byte[] data = FileUtils.input2byte(is);
-            return bitmapFromByteArray(data, 0, data.length, reqWidth,
-                    reqHeight);
+
+            try {
+                return BitmapFactory.decodeStream(is);
+            } catch (OutOfMemoryError e) {
+                reqHeight = DEFAULT_H;
+                reqWidth = DEFAULT_W;
+            }
         }
+        byte[] data = FileUtils.input2byte(is);
+        return bitmapFromByteArray(data, 0, data.length, reqWidth, reqHeight);
     }
 
     /**
@@ -151,15 +171,22 @@ public class BitmapCreate {
      */
     public static Bitmap bitmapFromStream(InputStream is, Rect outPadding,
             int reqWidth, int reqHeight) {
+        Bitmap bmp = null;
         if (reqHeight == 0 || reqWidth == 0) {
-            return BitmapFactory.decodeStream(is);
-        } else {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(is, outPadding, options);
-            options = BitmapHelper.calculateInSampleSize(options, reqWidth,
-                    reqHeight);
-            return BitmapFactory.decodeStream(is, outPadding, options);
+            try {
+                return BitmapFactory.decodeStream(is);
+            } catch (OutOfMemoryError e) {
+                reqHeight = DEFAULT_H;
+                reqWidth = DEFAULT_W;
+            }
         }
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(is, outPadding, options);
+        options = BitmapHelper.calculateInSampleSize(options, reqWidth,
+                reqHeight);
+        bmp = BitmapFactory.decodeStream(is, outPadding, options);
+
+        return bmp;
     }
 }

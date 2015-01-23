@@ -16,6 +16,11 @@
             android:layout_height="fill_parent"
             android:background="#ff00ff00"
             android:orientation="horizontal" >
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textview"
+                android:text="点击"/>
         </LinearLayout>
 
         <include

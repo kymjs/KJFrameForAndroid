@@ -23,7 +23,7 @@ import android.view.View;
  * <b>创建时间</b> 2014-3-1 <br>
  * <b>最后修改时间</b> 2014-5-30
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  */
 public interface I_KJActivity {

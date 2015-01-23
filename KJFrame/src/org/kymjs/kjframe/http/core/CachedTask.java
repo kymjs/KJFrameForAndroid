@@ -34,7 +34,7 @@ import org.kymjs.kjframe.utils.StringUtils;
  * 本类主要用于获取网络数据，并将结果缓存至文件，文件名为key，缓存有效时间为value <br>
  * <b>注：</b> 参数Result需要序列化，否则不能或者不能完整的读取缓存。<br>
  * 
- * @author kymjs(kymjs123@gmail.com),
+ * @author kymjs (https://github.com/kymjs)
  */
 public abstract class CachedTask<Params, Progress, Result extends Serializable>
         extends SafeTask<Params, Progress, Result> {

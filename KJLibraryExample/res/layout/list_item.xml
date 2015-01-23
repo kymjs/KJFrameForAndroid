@@ -5,8 +5,8 @@
     android:orientation="horizontal" >
     
     <org.kymjs.kjframe.widget.RoundImageView 
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:id="@+id/list_item_img"/>
     
     <TextView android:layout_width="wrap_content"

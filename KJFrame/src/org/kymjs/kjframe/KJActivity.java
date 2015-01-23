@@ -23,6 +23,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+/**
+ * @author kymjs (https://github.com/kymjs)
+ */
 public abstract class KJActivity extends FrameActivity {
 
     /**
