@@ -28,8 +28,10 @@ import org.kymjs.kjframe.http.core.KJAsyncTask;
 import org.kymjs.kjframe.http.core.KJAsyncTask.OnFinishedListener;
 import org.kymjs.kjframe.http.core.SimpleSafeAsyncTask;
 import org.kymjs.kjframe.utils.CipherUtils;
+import org.kymjs.kjframe.utils.DensityUtils;
 import org.kymjs.kjframe.utils.FileUtils;
 import org.kymjs.kjframe.utils.KJLoger;
+import org.kymjs.kjframe.utils.StringUtils;
 import org.kymjs.kjframe.utils.SystemTool;
 
 import android.annotation.SuppressLint;
@@ -42,7 +44,7 @@ import android.widget.ImageView;
 /**
  * The BitmapLibrary's core classes<br>
  * <b>创建时间</b> 2014-7-11<br>
- * <b>最后修改</b> 2015-1-19<br>
+ * <b>最后修改</b> 2015-1-26<br>
  * 
  * @author kymjs (https://github.com/kymjs)
  * @version 2.3
@@ -90,9 +92,7 @@ public class KJBitmap {
      *            图片的URL
      */
     public void displayNotTwink(View imageView, String imageUrl) {
-        imageView.measure(0, 0);
-        displayNotTwink(imageView, imageUrl, imageView.getMeasuredWidth(),
-                imageView.getMeasuredHeight());
+        displayNotTwink(imageView, imageUrl, 0, 0);
     }
 
     /**
@@ -109,13 +109,7 @@ public class KJBitmap {
      */
     public void displayNotTwink(View imageView, String imageUrl, int width,
             int height) {
-        if (imageView instanceof ImageView) {
-            display(imageView, imageUrl, width, height,
-                    ((ImageView) imageView).getDrawable());
-        } else {
-            display(imageView, imageUrl, width, height,
-                    imageView.getBackground());
-        }
+        display(imageView, imageUrl, width, height);
     }
 
     /**
@@ -127,11 +121,27 @@ public class KJBitmap {
      *            图片的URL
      */
     public void display(View imageView, String imageUrl) {
-        display(imageView, imageUrl, null);
+        display(imageView, imageUrl, 0, 0);
     }
 
     /**
-     * 加载网络图片
+     * 显示网络图片
+     * 
+     * @param imageView
+     *            要显示图片的控件
+     * @param imageUrl
+     *            图片地址
+     * @param width
+     *            宽
+     * @param height
+     *            高
+     */
+    public void display(View imageView, String imageUrl, int width, int height) {
+        display(imageView, imageUrl, width, height, null);
+    }
+
+    /**
+     * 显示网络图片
      * 
      * @param imageView
      *            要显示图片的控件
@@ -141,13 +151,11 @@ public class KJBitmap {
      *            载入过程中显示的图片
      */
     public void display(View imageView, String imageUrl, Bitmap loadBitmap) {
-        imageView.measure(0, 0);
-        display(imageView, imageUrl, loadBitmap, imageView.getMeasuredWidth(),
-                imageView.getMeasuredHeight());
+        display(imageView, imageUrl, loadBitmap, 0, 0);
     }
 
     /**
-     * 加载网络图片
+     * 显示网络图片
      * 
      * @param imageView
      *            要显示图片的控件
@@ -157,30 +165,12 @@ public class KJBitmap {
      *            载入过程中显示的图片
      */
     public void display(View imageView, String imageUrl, int loadingId) {
-        imageView.measure(0, 0);
-        display(imageView, imageUrl, imageView.getMeasuredWidth(),
-                imageView.getMeasuredHeight(), imageView.getResources()
-                        .getDrawable(loadingId));
+        display(imageView, imageUrl, 0, 0, imageView.getResources()
+                .getDrawable(loadingId));
     }
 
     /**
-     * 加载网络图片
-     * 
-     * @param imageView
-     *            要显示图片的控件
-     * @param imageUrl
-     *            图片地址
-     * @param width
-     *            图片宽度
-     * @param height
-     *            图片高度
-     */
-    public void display(View imageView, String imageUrl, int width, int height) {
-        display(imageView, imageUrl, null, width, height);
-    }
-
-    /**
-     * 加载网络图片
+     * 显示网络图片
      * 
      * @param imageView
      *            要显示图片的控件
@@ -195,12 +185,16 @@ public class KJBitmap {
      */
     public void display(View imageView, String imageUrl, Bitmap loadBitmap,
             int width, int height) {
-        display(imageView, imageUrl, width, height, new BitmapDrawable(
-                imageView.getResources(), loadBitmap));
+        Drawable loadDrawable = null;
+        if (loadBitmap != null) {
+            loadDrawable = new BitmapDrawable(imageView.getResources(),
+                    loadBitmap);
+        }
+        display(imageView, imageUrl, width, height, loadDrawable);
     }
 
     /**
-     * 加载网络图片
+     * 显示网络图片
      * 
      * @param imageView
      *            要显示图片的控件
@@ -220,7 +214,7 @@ public class KJBitmap {
     }
 
     /**
-     * 加载网络图片
+     * 显示网络图片(core)
      * 
      * @param imageView
      *            要显示图片的控件
@@ -233,12 +227,34 @@ public class KJBitmap {
      * @param height
      *            图片高度
      */
-    public void display(View imageView, String imageUrl, int width, int height,
-            Drawable loadBitmap) {
+    private void display(View imageView, String imageUrl, int width,
+            int height, Drawable loadBitmap) {
+        if (imageView == null) {
+            return;
+        }
+        if (StringUtils.isEmpty(imageUrl)) {
+            return;
+        }
+        if (width == 0 || height == 0) {
+            int w = DensityUtils.getScreenW(imageView.getContext()) / 2;
+            imageView.measure(w, w);
+            if (imageView.getMeasuredWidth() != 0) {
+                w = imageView.getMeasuredWidth();
+            }
+            width = height = w;
+        }
+        boolean notTwink = false;
+        if (loadBitmap == null) {
+            notTwink = true;
+        }
+
         config.setDefaultHeight(height);
         config.setDefaultWidth(width);
+
+        cancle(imageView);
+
         BitmapWorkerTask task = new BitmapWorkerTask(imageView, imageUrl,
-                loadBitmap, width, height);
+                loadBitmap, width, height, notTwink);
         taskCollection.add(task);
         task.execute();
     }
@@ -251,20 +267,22 @@ public class KJBitmap {
         final Drawable loadBitmap;
         final int w;
         final int h;
+        boolean notTwink;
+
+        // public BitmapWorkerTask(View imageView, String imageUrl,
+        // Bitmap loadBitmap, int w, int h, boolean notTwink) {
+        // this(imageView, imageUrl, new BitmapDrawable(
+        // imageView.getResources(), loadBitmap), w, h, notTwink);
+        // }
 
         public BitmapWorkerTask(View imageView, String imageUrl,
-                Bitmap loadBitmap, int w, int h) {
-            this(imageView, imageUrl, new BitmapDrawable(
-                    imageView.getResources(), loadBitmap), w, h);
-        }
-
-        public BitmapWorkerTask(View imageView, String imageUrl,
-                Drawable loadBitmap, int w, int h) {
+                Drawable loadBitmap, int w, int h, boolean notTwink) {
             this.imageView = imageView;
             this.imageUrl = imageUrl;
             this.loadBitmap = loadBitmap;
             this.w = w;
             this.h = h;
+            this.notTwink = notTwink;
         }
 
         // 取消当前正在进行的任务
@@ -276,7 +294,9 @@ public class KJBitmap {
         @Override
         protected void onPreExecuteSafely() throws Exception {
             super.onPreExecuteSafely();
-            setViewImage(imageView, loadBitmap);
+            if (!notTwink) {
+                setViewImage(imageView, loadBitmap);
+            }
             config.downloader.setImageCallBack(callback);
             if (callback != null) {
                 callback.onPreLoad(imageView);

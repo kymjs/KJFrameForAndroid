@@ -36,7 +36,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * ZIP文件工具类
  * 
- * @author kymjs (https://github.com/kymjs)
+ * @author kymjs(kymjs123@gmail.com)
  */
 public class ZipUtils {
     private static final int BUFF_SIZE = 1024 * 1024; // 1M Byte

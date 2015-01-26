@@ -39,7 +39,7 @@ import org.kymjs.kjframe.utils.StringUtils;
  * @version 1.3
  */
 public class HttpParams {
-    private ConcurrentHashMap<String, String> urlParams;
+    public ConcurrentHashMap<String, String> urlParams;
     public ConcurrentHashMap<String, FileWrapper> fileWraps;
 
     private void init(int i) {
@@ -109,10 +109,7 @@ public class HttpParams {
         fileWraps.remove(key);
     }
 
-    /*********************** httpClient method ************************************/
-
-    @Override
-    public String toString() {
+    public String getStringParams() {
         StringBuilder result = new StringBuilder();
         for (ConcurrentHashMap.Entry<String, String> entry : urlParams
                 .entrySet()) {
@@ -123,6 +120,15 @@ public class HttpParams {
             result.append("=");
             result.append(entry.getValue());
         }
+        return result.toString();
+    }
+
+    /*********************** httpClient method ************************************/
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder(getStringParams());
+
         for (ConcurrentHashMap.Entry<String, FileWrapper> entry : fileWraps
                 .entrySet()) {
             if (result.length() > 0) {
@@ -174,9 +180,6 @@ public class HttpParams {
         return entity;
     }
 
-    /**
-     * String的参数集，如果参数仅有String而没有File时，为了效率你应该使用KJStringParams
-     */
     protected List<BasicNameValuePair> getParamsList() {
         List<BasicNameValuePair> lparams = new LinkedList<BasicNameValuePair>();
         for (ConcurrentHashMap.Entry<String, String> entry : urlParams

@@ -320,9 +320,23 @@ public class KJHttp {
             try {
                 out = new DataOutputStream(connection.getOutputStream());
                 byte[] end_data = ("\r\n--" + BOUNDARY + "--\r\n").getBytes();// 定义最后数据分隔线
+
+                StringBuilder sb = new StringBuilder();
+                for (Map.Entry<String, String> entry : params.urlParams
+                        .entrySet()) {
+                    sb.append("--");
+                    sb.append(BOUNDARY);
+                    sb.append("\r\nContent-Disposition: form-data; name=\"");
+                    sb.append(entry.getKey());
+                    sb.append("\"\r\n\r\n");
+                    sb.append(entry.getValue());
+                    out.write(sb.toString().getBytes());
+                    out.write("\r\n".getBytes());
+                    sb.delete(0, sb.length());
+                }
+
                 for (Map.Entry<String, HttpParams.FileWrapper> entry : params.fileWraps
                         .entrySet()) {
-                    StringBuilder sb = new StringBuilder();
                     sb.append("--")
                             .append(BOUNDARY)
                             .append("\r\nContent-Disposition: form-data;name=\"")
@@ -339,6 +353,7 @@ public class KJHttp {
                         out.write(buf, 0, bytes);
                     }
                     out.write("\r\n".getBytes()); // 多个文件时，二个文件之间加入这个
+                    sb.delete(0, sb.length());
                 }
                 out.write(end_data);
                 out.flush();
@@ -354,5 +369,4 @@ public class KJHttp {
         }
         return connection;
     }
-
 }

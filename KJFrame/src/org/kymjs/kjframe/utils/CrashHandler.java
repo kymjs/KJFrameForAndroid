@@ -73,8 +73,8 @@ public class CrashHandler implements UncaughtExceptionHandler {
     }
 
     private void saveToSDCard(Throwable ex) throws Exception {
-        File file = FileUtils.getSaveFile("KJFrame", mContext.getPackageName()
-                + FILE_NAME_SUFFIX);
+        File file = FileUtils.getSaveFile("KJLibrary",
+                mContext.getPackageName() + FILE_NAME_SUFFIX);
         boolean append = false;
         if (System.currentTimeMillis() - file.lastModified() > 5000) {
             append = true;

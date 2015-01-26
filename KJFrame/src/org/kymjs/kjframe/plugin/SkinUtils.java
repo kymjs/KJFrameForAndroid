@@ -38,7 +38,7 @@ import android.widget.ImageView;
 /**
  * 提供应用换肤功能
  * 
- * @author kymjs (https://github.com/kymjs)
+ * @author kymjs(kymjs123@gmail.com)
  * 
  */
 public class SkinUtils {

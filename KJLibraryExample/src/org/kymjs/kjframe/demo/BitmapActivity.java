@@ -36,6 +36,8 @@ public class BitmapActivity extends KJActivity {
     private TextView mTv4;
     @BindView(id = R.id.button, click = true)
     private Button mBtn;
+    @BindView(id = R.id.oomcheck, click = true)
+    private Button mOOMBtn;
 
     @Override
     public void setRootView() {
@@ -50,6 +52,7 @@ public class BitmapActivity extends KJActivity {
         mTv3.setText("加载过程中自定义显示过程(基础设置)");
         mTv4.setText("使用回调自定义显示过程(高级设置)");
         mBtn.setText("保存网络图片到本地");
+        mOOMBtn.setText("OOM测试");
     }
 
     @Override
@@ -71,14 +74,19 @@ public class BitmapActivity extends KJActivity {
         case R.id.button:
             save();
             break;
+        case R.id.oomcheck:
+            showActivity(aty, OOMCheckActivity.class);
+            break;
         }
     }
 
     private void display1() {
         KJBitmap kjb = KJBitmap.create();
         // kjb.display(mImg1, FileUtils.getSDCardPath() + "1.jpg"); // 加载本地图片的方法
-        kjb.display(mImg1,
-                "http://static.oschina.net/uploads/space/2014/1202/142217_a864_12.jpg");
+        kjb.display(
+                mImg1,
+                "http://static.oschina.net/uploads/space/2014/1202/142217_a864_12.jpg",
+                R.drawable.ic_launcher);
     }
 
     private void display2() {
@@ -141,7 +149,7 @@ public class BitmapActivity extends KJActivity {
         // "KJLibrary/KJLibraryImage.jpg");
 
         // 最完善的一种方法，提供整个图片下载过程中的回调
-        KJBitmap.create().saveImage(ImageData.imgs[2], "KJLLLL.jpg",
+        KJBitmap.create().saveImage(ImageData.imgs[2], "KJLibraryImage.jpg",
                 new BitmapCallBack() {
                     @Override
                     public void onPreLoad(View view) {

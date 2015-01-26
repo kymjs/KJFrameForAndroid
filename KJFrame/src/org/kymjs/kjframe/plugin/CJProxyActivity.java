@@ -16,9 +16,11 @@
 package org.kymjs.kjframe.plugin;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import org.kymjs.kjframe.KJActivity;
+import org.kymjs.kjframe.ui.BindView;
 import org.kymjs.kjframe.ui.I_KJActivity;
 
 import android.content.Intent;
@@ -30,6 +32,9 @@ import android.content.res.Resources.Theme;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 
 /**
@@ -39,7 +44,7 @@ import android.view.WindowManager.LayoutParams;
  * 只不过每个Activity在启动时传递的CJConfig.KEY_EXTRA_CLASS不同。<br>
  * <b>创建时间：</b> 2014-10-11 <br>
  * 
- * @author kymjs (https://github.com/kymjs)
+ * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
  */
 public class CJProxyActivity extends KJActivity {
@@ -57,10 +62,12 @@ public class CJProxyActivity extends KJActivity {
 
     /** not use */
     @Override
-    public void setRootView() {}
+    public void setRootView() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         Intent fromAppIntent = getIntent();
         mClass = fromAppIntent.getStringExtra(CJConfig.KEY_EXTRA_CLASS);
         mAtyIndex = fromAppIntent.getIntExtra(CJConfig.KEY_ATY_INDEX, 0);
@@ -124,7 +131,6 @@ public class CJProxyActivity extends KJActivity {
             } catch (Exception e1) {
             }
         }
-        // 获取清单文件中指定序列activity的类名
         if ((packageInfo.activities != null)
                 && (packageInfo.activities.length > 0)) {
             mClass = packageInfo.activities[mAtyIndex].name;
@@ -155,9 +161,48 @@ public class CJProxyActivity extends KJActivity {
         }
         setRemoteActivity(instance);
         mPluginAty.setProxy(this, mDexPath);
+        initAnnotate(instance); // 初始化插件界面的RootView和注解
         Bundle bundle = new Bundle();
         bundle.putInt(CJConfig.FROM, CJConfig.FROM_PROXY_APP);
         mPluginAty.onCreate(bundle);
+    }
+
+    /**
+     * 初始化插件界面的RootView和注解
+     * 
+     * @param currentClass
+     *            插件Activity对象
+     */
+    private void initAnnotate(Object currentClass) {
+        if (mPluginKJAty != null) {
+            mPluginKJAty.setRootView();
+            View rootView = this.getWindow().getDecorView();
+            // 通过反射获取到全部属性，反射的字段可能是一个类（静态）字段或实例字段
+            Field[] fields = currentClass.getClass().getDeclaredFields();
+            if (fields != null && fields.length > 0) {
+                for (Field field : fields) {
+                    // 返回BindView类型的注解内容
+                    BindView bindView = field.getAnnotation(BindView.class);
+                    if (bindView != null) {
+                        int viewId = bindView.id();
+                        boolean clickLis = bindView.click();
+                        try {
+                            field.setAccessible(true);
+                            if (clickLis) {
+                                rootView.findViewById(viewId)
+                                        .setOnClickListener(
+                                                (OnClickListener) currentClass);
+                            }
+                            // 将currentClass的field赋值为sourceView.findViewById(viewId)
+                            field.set(currentClass,
+                                    rootView.findViewById(viewId));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**

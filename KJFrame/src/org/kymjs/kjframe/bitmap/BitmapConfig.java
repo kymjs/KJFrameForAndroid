@@ -16,8 +16,7 @@
 package org.kymjs.kjframe.bitmap;
 
 import org.kymjs.kjframe.bitmap.helper.BitmapCreate;
-
-import android.util.Log;
+import org.kymjs.kjframe.utils.KJLoger;
 
 /**
  * Bitmap配置器
@@ -27,7 +26,7 @@ import android.util.Log;
  */
 public class BitmapConfig {
 
-    public boolean isDEBUG = true;
+    public boolean isDEBUG = KJLoger.DEBUG_LOG;
     public int memoryCacheSize;
 
     public String cachePath = "KJLibrary/image";
@@ -36,15 +35,13 @@ public class BitmapConfig {
     public I_ImageLoader downloader;
 
     public BitmapConfig() {
-        memoryCacheSize = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        memoryCacheSize = (int) (Runtime.getRuntime().maxMemory());
         downloader = new BitmapDownloader(this, 0, 0);
     }
 
     public void setDefaultWidth(int w) {
         if (w > 0) {
             BitmapCreate.DEFAULT_W = w;
-        } else {
-            Log.e("KJFrame", "default width is not 0");
         }
     }
 
@@ -55,8 +52,6 @@ public class BitmapConfig {
     public void setDefaultHeight(int h) {
         if (h > 0) {
             BitmapCreate.DEFAULT_H = h;
-        } else {
-            Log.e("KJFrame", "default height is not 0");
         }
     }
 

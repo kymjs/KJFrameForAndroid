@@ -24,7 +24,7 @@ import android.content.Intent;
  * 
  * <b>创建时间</b> 2014-10-11 <br>
  * 
- * @author kymjs (https://github.com/kymjs)
+ * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
  */
 public class CJActivityUtils {

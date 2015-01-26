@@ -33,8 +33,8 @@ public final class BitmapMemoryCache {
     private MemoryLruCache<String, Bitmap> cache;
 
     public BitmapMemoryCache() {
-        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        init(maxMemory / 8);
+        int maxMemory = (int) (Runtime.getRuntime().maxMemory());
+        init(maxMemory / 4);
     }
 
     /**
@@ -42,7 +42,7 @@ public final class BitmapMemoryCache {
      *            使用内存缓存的内存大小，单位：kb
      */
     public BitmapMemoryCache(int maxSize) {
-        init(maxSize);
+        init(maxSize / 4);
     }
 
     /**
@@ -56,9 +56,9 @@ public final class BitmapMemoryCache {
             protected int sizeOf(String key, Bitmap value) {
                 super.sizeOf(key, value);
                 if (SystemTool.getSDKVersion() >= 12) {
-                    return value.getByteCount() / 1024;
+                    return value.getByteCount();
                 } else {
-                    return value.getRowBytes() * value.getHeight() / 1024;
+                    return value.getRowBytes() * value.getHeight();
                 }
             }
         };

@@ -26,6 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="org.kymjs.kjframe.demo.OOMCheckActivity" />
         <activity android:name="org.kymjs.kjframe.demo.HttpActivity" />
         <activity android:name="org.kymjs.kjframe.demo.BitmapActivity" />
         <activity android:name="org.kymjs.kjframe.demo.DBActivity" />

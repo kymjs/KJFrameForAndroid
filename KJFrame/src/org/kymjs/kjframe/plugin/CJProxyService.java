@@ -30,7 +30,7 @@ import android.os.IBinder;
  * 只不过每个Service在启动时传递的CJConfig.KEY_EXTRA_CLASS不同。<br>
  * <b>创建时间</b> 2014-10-15 <br>
  * 
- * @author kymjs (https://github.com/kymjs)
+ * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
  */
 public class CJProxyService extends Service {
@@ -85,7 +85,8 @@ public class CJProxyService extends Service {
     }
 
     @Override
-    public void onCreate() {} // 不能调用屏蔽super
+    public void onCreate() {
+    } // 不能调用屏蔽super
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

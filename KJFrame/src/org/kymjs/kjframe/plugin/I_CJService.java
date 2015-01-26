@@ -26,7 +26,7 @@ import android.os.IBinder;
  * 
  * <b>创建时间</b> 2014-10-15 <br>
  * 
- * @author kymjs (https://github.com/kymjs)
+ * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
  */
 public interface I_CJService {

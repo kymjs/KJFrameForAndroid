@@ -27,7 +27,7 @@ import android.os.IBinder;
  * <b>注意</b> 在CJService以及子类中，绝对不可以使用this调用，应该使用that调用<br>
  * <b>创建时间</b> 2014-10-15 <br>
  * 
- * @author kymjs (https://github.com/kymjs)
+ * @author kymjs(kymjs123@gmail.com)
  * @version 1.0
  */
 public abstract class CJService extends Service implements I_CJService {

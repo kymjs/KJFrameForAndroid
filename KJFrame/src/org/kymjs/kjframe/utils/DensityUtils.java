@@ -15,7 +15,6 @@
  */
 package org.kymjs.kjframe.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
 
@@ -64,7 +63,7 @@ public final class DensityUtils {
     /**
      * 获取dialog宽度
      */
-    public static int getDialogW(Activity aty) {
+    public static int getDialogW(Context aty) {
         DisplayMetrics dm = new DisplayMetrics();
         dm = aty.getResources().getDisplayMetrics();
         int w = dm.widthPixels - 100;
@@ -75,7 +74,7 @@ public final class DensityUtils {
     /**
      * 获取屏幕宽度
      */
-    public static int getScreenW(Activity aty) {
+    public static int getScreenW(Context aty) {
         DisplayMetrics dm = new DisplayMetrics();
         dm = aty.getResources().getDisplayMetrics();
         int w = dm.widthPixels;
@@ -86,7 +85,7 @@ public final class DensityUtils {
     /**
      * 获取屏幕高度
      */
-    public static int getScreenH(Activity aty) {
+    public static int getScreenH(Context aty) {
         DisplayMetrics dm = new DisplayMetrics();
         dm = aty.getResources().getDisplayMetrics();
         int h = dm.heightPixels;

@@ -35,8 +35,8 @@ import android.graphics.Rect;
 public class BitmapCreate {
 
     // 加载出错时，使用默认宽高再次加载
-    public static int DEFAULT_H = 400;
-    public static int DEFAULT_W = 300;
+    public static int DEFAULT_H = 40;
+    public static int DEFAULT_W = 30;
 
     /**
      * 获取一个指定大小的bitmap
@@ -60,10 +60,6 @@ public class BitmapCreate {
         // return BitmapFactory.decodeResource(res, resId, options);
 
         // 通过JNI的形式读取本地图片达到节省内存的目的
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.RGB_565;
-        options.inPurgeable = true;
-        options.inInputShareable = true;
         InputStream is = res.openRawResource(resId);
         return bitmapFromStream(is, null, reqWidth, reqHeight);
     }
@@ -119,10 +115,10 @@ public class BitmapCreate {
                 reqHeight = DEFAULT_H;
                 reqWidth = DEFAULT_W;
             }
-
         }
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
+        options.inPurgeable = true;
         BitmapFactory.decodeByteArray(data, offset, length, options);
         options = BitmapHelper.calculateInSampleSize(options, reqWidth,
                 reqHeight);
@@ -143,7 +139,6 @@ public class BitmapCreate {
     public static Bitmap bitmapFromStream(InputStream is, int reqWidth,
             int reqHeight) {
         if (reqHeight == 0 || reqWidth == 0) {
-
             try {
                 return BitmapFactory.decodeStream(is);
             } catch (OutOfMemoryError e) {
@@ -182,11 +177,11 @@ public class BitmapCreate {
         }
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
+        options.inPurgeable = true;
         BitmapFactory.decodeStream(is, outPadding, options);
         options = BitmapHelper.calculateInSampleSize(options, reqWidth,
                 reqHeight);
         bmp = BitmapFactory.decodeStream(is, outPadding, options);
-
         return bmp;
     }
 }

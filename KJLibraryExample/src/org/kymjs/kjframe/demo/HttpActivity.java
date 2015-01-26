@@ -173,17 +173,20 @@ public class HttpActivity extends KJActivity {
     // ?>
     private void upload() {
         HttpParams params = new HttpParams();
+        params.put("uid", "12");
         try {
-            params.put("file", FileUtils.getSaveFile("KJLibrary", "logo.jpg"));
+            params.put("avatar", FileUtils.getSaveFile("KJLibrary", "logo.jpg"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        kjh.post("http://192.168.1.149/kymjs/hello.php", params,
-                new HttpCallBack() {
+        // kjh.post("http://192.168.1.125/kymjs/hello.php", params,
+        kjh.post("http://182.92.220.212/golf/index.php/Appuser/uplaodAvatar/",
+                params, new HttpCallBack() {
                     @Override
                     public void onSuccess(String t) {
                         super.onSuccess(t);
                         ViewInject.toast("文件上传完成");
+                        KJLoger.debug("服务器返回：" + t);
                     }
 
                     @Override
