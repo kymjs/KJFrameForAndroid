@@ -17,6 +17,7 @@ However,KJFrameForAndroid is free open source object. Thanks for you follow this
 * version log [https://github.com/kymjs/KJFrameForAndroid/blob/master/debug_log.txt](https://github.com/kymjs/KJFrameForAndroid/blob/master/debug_log.txt)
 
 ## Integrating KJFrameForAndroid to your project
+Used in real project example: [KJMusic player](https://github.com/KJMusicPlayer/KJMusic)
 >Create /binrary/kjlibrary.jar and include as jar dependency to your project.<br>
 >Include the KJFrameForAndroid project as Library Dependency in your project.<br>
 *make use of KJFrameForAndroid works on Android 3.0 or higher and need permission in your AndroidManifest.xml*
@@ -279,4 +280,4 @@ If my project help you, Can you buy a bottle of beer for me? <br>
 my account is: kymjs@foxmail.com [click there one's voluntary contribution](https://shenghuo.alipay.com/send/payment/fill.htm)<br>
 如果我的项目帮助了你，希望你有能力的基础上能捐助我买书学习，以让我更有信心和能力回馈网友。
 我的支付宝账号：kymjs@foxmail.com[点这里参与我的众筹](https://shenghuo.alipay.com/send/payment/fill.htm)
-#感谢<font color="#000066">沙加</font> 的捐赠
+##感谢 沙加(￥99) 扯淡兄(￥88) 的捐赠
