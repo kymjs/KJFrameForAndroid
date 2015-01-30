@@ -22,9 +22,14 @@ package org.kymjs.kjframe.bitmap;
  * 
  */
 public interface I_ImageLoader {
-    void setImageWH(int w, int h);
-
     void setImageCallBack(BitmapCallBack callback);
 
+    /**
+     * 图片URI
+     * 
+     * @param uri
+     *            图片地址
+     * @return
+     */
     byte[] loadImage(String uri);
 }

@@ -212,6 +212,14 @@ public class MemoryLruCache<K, V> {
     }
 
     /**
+     * @author kymjs
+     */
+    public final void removeAll() {
+        map.clear();
+        size = 0;
+    }
+
+    /**
      * Called for entries that have been evicted or removed. This method is
      * invoked when a value is evicted to make space, removed by a call to
      * {@link #remove}, or replaced by a call to {@link #put}. The default

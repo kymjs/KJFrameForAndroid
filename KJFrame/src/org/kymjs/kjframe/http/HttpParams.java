@@ -27,7 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.kymjs.kjframe.utils.StringUtils;
 
@@ -187,10 +186,6 @@ public class HttpParams {
             lparams.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
         }
         return lparams;
-    }
-
-    public String getParamString() {
-        return URLEncodedUtils.format(getParamsList(), "UTF-8");
     }
 
     /**

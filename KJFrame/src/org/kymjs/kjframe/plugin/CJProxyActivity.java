@@ -62,8 +62,7 @@ public class CJProxyActivity extends KJActivity {
 
     /** not use */
     @Override
-    public void setRootView() {
-    }
+    public void setRootView() {}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,7 +160,10 @@ public class CJProxyActivity extends KJActivity {
         }
         setRemoteActivity(instance);
         mPluginAty.setProxy(this, mDexPath);
-        initAnnotate(instance); // 初始化插件界面的RootView和注解
+        if (mPluginKJAty != null) {
+            mPluginKJAty.setRootView();
+        }
+        // initAnnotate(instance); // 初始化插件界面的RootView和注解
         Bundle bundle = new Bundle();
         bundle.putInt(CJConfig.FROM, CJConfig.FROM_PROXY_APP);
         mPluginAty.onCreate(bundle);
@@ -175,7 +177,6 @@ public class CJProxyActivity extends KJActivity {
      */
     private void initAnnotate(Object currentClass) {
         if (mPluginKJAty != null) {
-            mPluginKJAty.setRootView();
             View rootView = this.getWindow().getDecorView();
             // 通过反射获取到全部属性，反射的字段可能是一个类（静态）字段或实例字段
             Field[] fields = currentClass.getClass().getDeclaredFields();

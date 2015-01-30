@@ -29,14 +29,15 @@ public class BitmapConfig {
     public boolean isDEBUG = KJLoger.DEBUG_LOG;
     public int memoryCacheSize;
 
-    public String cachePath = "KJLibrary/image";
+    public static String CACHEPATH = "KJLibrary/image";
+    public static String CACHE_FILENAME_PREFIX = "KJLibrary_";
     public int diskCacheSize = 41943040; // 40M
 
     public I_ImageLoader downloader;
 
     public BitmapConfig() {
         memoryCacheSize = (int) (Runtime.getRuntime().maxMemory());
-        downloader = new BitmapDownloader(this, 0, 0);
+        downloader = new BitmapDownloader(this);
     }
 
     public void setDefaultWidth(int w) {

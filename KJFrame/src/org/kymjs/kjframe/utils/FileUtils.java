@@ -262,6 +262,12 @@ public final class FileUtils {
         if (bitmap == null) {
             return isSuccess;
         }
+        File file = new File(filePath.substring(0,
+                filePath.lastIndexOf(File.separator)));
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
         OutputStream out = null;
         try {
             out = new BufferedOutputStream(new FileOutputStream(filePath),

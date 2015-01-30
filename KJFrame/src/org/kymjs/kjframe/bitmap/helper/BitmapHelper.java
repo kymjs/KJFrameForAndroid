@@ -86,7 +86,7 @@ public class BitmapHelper {
      * @param maxSize
      *            压缩后的大小，单位kb
      */
-    public static void imageZoom(Bitmap bitmap, double maxSize) {
+    public static Bitmap imageZoom(Bitmap bitmap, double maxSize) {
         // 将bitmap放至数组中，意在获得bitmap的大小（与实际读取的原文件要大）
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         // 格式、质量、输出流
@@ -97,13 +97,13 @@ public class BitmapHelper {
         // 获取bitmap大小 是允许最大大小的多少倍
         double i = mid / maxSize;
         // 判断bitmap占用空间是否大于允许最大空间 如果大于则压缩 小于则不压缩
-        doRecycledIfNot(bitmap);
         if (i > 1) {
             // 缩放图片 此处用到平方根 将宽带和高度压缩掉对应的平方根倍
             // （保持宽高不变，缩放后也达到了最大占用空间的大小）
             bitmap = scaleWithWH(bitmap, bitmap.getWidth() / Math.sqrt(i),
                     bitmap.getHeight() / Math.sqrt(i));
         }
+        return bitmap;
     }
 
     /***

@@ -30,6 +30,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.kymjs.kjframe.bitmap.BitmapConfig;
 import org.kymjs.kjframe.utils.FileUtils;
 import org.kymjs.kjframe.utils.KJLoger;
 
@@ -54,7 +55,7 @@ public final class DiskCache {
     private boolean debug = KJLoger.IS_DEBUG;
     private static long maxSize;
     // constant
-    private static final String CACHE_FILENAME_PREFIX = "KJLibrary_";
+    private static String CACHE_FILENAME_PREFIX = BitmapConfig.CACHE_FILENAME_PREFIX;
     private static final int MAX_REMOVALS = 4;
     private static final int INITIAL_CAPACITY = 32;
     private static final float LOAD_FACTOR = 0.75f;
@@ -231,7 +232,7 @@ public final class DiskCache {
     }
 
     /**
-     * 清楚全部缓存
+     * 清除全部缓存
      */
     public void clearCache() {
         clearCache(mFileDir);

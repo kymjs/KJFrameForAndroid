@@ -73,6 +73,7 @@ public abstract class CJActivity extends Activity implements OnClickListener,
         if (mFrom == CJConfig.FROM_PLUGIN) {
             super.onCreate(savedInstanceState);
             that = this;
+            this.setRootView();
         }
         initializer();
         registerBroadcast();
@@ -358,18 +359,15 @@ public abstract class CJActivity extends Activity implements OnClickListener,
     /**
      * 如果调用了initDataFromThread()，则当数据初始化完成后将回调该方法。
      */
-    protected void threadDataInited() {
-    }
+    protected void threadDataInited() {}
 
     /** initialization data */
     @Override
-    public void initData() {
-    }
+    public void initData() {}
 
     /** initialization widget */
     @Override
-    public void initWidget() {
-    }
+    public void initWidget() {}
 
     /** 初始化方法 */
     public void initializer() {
@@ -393,19 +391,15 @@ public abstract class CJActivity extends Activity implements OnClickListener,
 
     /** 点击事件回调方法 */
     @Override
-    public void widgetClick(View v) {
-    }
+    public void widgetClick(View v) {}
 
     /** 设置root界面 */
     @Override
-    public void setRootView() {
-    }
+    public void setRootView() {}
 
     @Override
-    public void registerBroadcast() {
-    }
+    public void registerBroadcast() {}
 
     @Override
-    public void unRegisterBroadcast() {
-    }
+    public void unRegisterBroadcast() {}
 }

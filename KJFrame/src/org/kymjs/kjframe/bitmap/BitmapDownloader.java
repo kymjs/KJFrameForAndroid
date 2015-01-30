@@ -20,11 +20,11 @@ import java.io.FileNotFoundException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.kymjs.kjframe.bitmap.helper.BitmapCreate;
-import org.kymjs.kjframe.bitmap.helper.DiskCache;
-import org.kymjs.kjframe.utils.CipherUtils;
+import org.kymjs.kjframe.ui.KJActivityStack;
 import org.kymjs.kjframe.utils.FileUtils;
 import org.kymjs.kjframe.utils.KJLoger;
+
+import android.app.Activity;
 
 /**
  * Bitmap下载器
@@ -33,29 +33,11 @@ import org.kymjs.kjframe.utils.KJLoger;
  * 
  */
 public class BitmapDownloader implements I_ImageLoader {
-    private final DiskCache diskCache;
-    private int width, height;
     private final BitmapConfig config;
     private BitmapCallBack callback;
 
-    public BitmapDownloader(BitmapConfig config, int reqW, int reqH) {
-        diskCache = new DiskCache(config.cachePath, config.memoryCacheSize * 8,
-                config.isDEBUG);
-        this.width = reqW;
-        this.height = reqH;
+    public BitmapDownloader(BitmapConfig config) {
         this.config = config;
-    }
-
-    /**
-     * 默认的宽高为0，也就是加载图片显示默认大小，不处理OOM
-     * 
-     * @param w
-     * @param h
-     */
-    @Override
-    public void setImageWH(int w, int h) {
-        this.width = w;
-        this.height = h;
     }
 
     @Override
@@ -81,7 +63,6 @@ public class BitmapDownloader implements I_ImageLoader {
             con.setDoInput(true);
             con.connect();
             data = FileUtils.input2byte(con.getInputStream());
-            putBmpToDC(uri, data); // 建立diskLru缓存
         } catch (Exception e) {
             failure(e);
         } finally {
@@ -106,7 +87,6 @@ public class BitmapDownloader implements I_ImageLoader {
             fis = new FileInputStream(uri);
             if (fis != null) {
                 data = FileUtils.input2byte(fis);
-                putBmpToDC(uri, data); // 建立diskLru缓存
             }
         } catch (Exception e) {
             failure(e);
@@ -114,20 +94,6 @@ public class BitmapDownloader implements I_ImageLoader {
             FileUtils.closeIO(fis);
         }
         return data;
-    }
-
-    /**
-     * 加入磁盘缓存
-     * 
-     * @param imagePath
-     *            图片路径
-     * @param bmpByteArray
-     *            图片二进制数组数据
-     */
-    private void putBmpToDC(String imagePath, byte[] bmpByteArray) {
-        diskCache.put(CipherUtils.md5(imagePath), BitmapCreate
-                .bitmapFromByteArray(bmpByteArray, 0, bmpByteArray.length,
-                        this.width, this.height));
     }
 
     /**
@@ -141,28 +107,32 @@ public class BitmapDownloader implements I_ImageLoader {
         }
     }
 
-    private void failure(Exception e) {
+    private void failure(final Exception e) {
         if (callback != null) {
-            callback.onFailure(e);
+            final Activity aty = KJActivityStack.create().topActivity();
+            if (aty != null) {
+                aty.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onFailure(e);
+                    }
+                });
+            }
         }
         throw new RuntimeException(e);
     }
 
     @Override
     public byte[] loadImage(String uri) {
-        byte[] data = diskCache.getByteArray(CipherUtils.md5(uri));
-        if (data == null) {
-            if (uri.trim().toLowerCase().startsWith("http")) {
-                // 网络图片：首先从本地缓如果存读取，本地没有，则重新从网络加载
-                data = fromNet(uri);
-                showLogIfOpen("download image from net");
-            } else {
-                // 如果是本地图片
-                data = fromFile(uri);
-                showLogIfOpen("download image from local file");
-            }
+        byte[] data = null;
+        if (uri.trim().toLowerCase().startsWith("http")) {
+            // 网络图片：首先从本地缓如果存读取，本地没有，则重新从网络加载
+            data = fromNet(uri);
+            showLogIfOpen("download image from net");
         } else {
-            showLogIfOpen("download image from disk cache");
+            // 如果是本地图片
+            data = fromFile(uri);
+            showLogIfOpen("download image from local file");
         }
         return data;
     }

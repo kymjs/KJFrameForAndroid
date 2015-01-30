@@ -206,7 +206,8 @@ public class KJHttp {
 
         public VolleyTask(Method requestMethod, String uri, HttpParams params,
                 HttpCallBack callback) {
-            super(httpConfig.cachePath, uri, httpConfig.cacheTime);
+            super(httpConfig.cachePath, uri + params.toString(),
+                    httpConfig.cacheTime);
             this.requestMethod = requestMethod;
             this.uri = uri;
             this.params = params;

@@ -73,4 +73,12 @@ public final class BitmapMemoryCache {
     public Bitmap get(String key) {
         return cache.get(key);
     }
+
+    public void remove(String key) {
+        cache.remove(key);
+    }
+
+    public void removeAll() {
+        cache.removeAll();
+    }
 }

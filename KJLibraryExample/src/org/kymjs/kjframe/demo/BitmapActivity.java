@@ -6,10 +6,14 @@ import org.kymjs.kjframe.bitmap.BitmapCallBack;
 import org.kymjs.kjframe.bitmap.BitmapConfig;
 import org.kymjs.kjframe.bitmap.BitmapDownloader;
 import org.kymjs.kjframe.bitmap.helper.BitmapCreate;
+import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
 import org.kymjs.kjframe.demo.bean.ImageData;
 import org.kymjs.kjframe.ui.BindView;
 import org.kymjs.kjframe.ui.ViewInject;
+import org.kymjs.kjframe.utils.FileUtils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -80,6 +84,17 @@ public class BitmapActivity extends KJActivity {
         }
     }
 
+    /**
+     * 图片压缩方法
+     */
+    private void zoomImage() {
+        // 图片压缩
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
+                R.drawable.image);
+        bitmap = BitmapHelper.imageZoom(bitmap, 100);
+        FileUtils.bitmapToFile(bitmap, FileUtils.getSDCardPath() + "/111.jpg");
+    }
+
     private void display1() {
         KJBitmap kjb = KJBitmap.create();
         // kjb.display(mImg1, FileUtils.getSDCardPath() + "1.jpg"); // 加载本地图片的方法
@@ -134,8 +149,9 @@ public class BitmapActivity extends KJActivity {
      */
     private void display5() {
         BitmapConfig bitmapConfig = new BitmapConfig();
-        bitmapConfig.cachePath = "hello/world"; // 设置图片缓存路径为SD卡根目录hello文件夹下world文件夹内
-        bitmapConfig.downloader = new BitmapDownloader(bitmapConfig, 0, 0); // 使用自定义的图片加载器（默认使用框架中的）
+        BitmapConfig.CACHEPATH = "hello/world"; // 设置图片缓存路径为SD卡根目录hello文件夹下world文件夹内
+        // BitmapConfig.CACHE_FILENAME_PREFIX = "KJLibrary_";// 设置缓存前缀
+        bitmapConfig.downloader = new BitmapDownloader(bitmapConfig); // 使用自定义的图片加载器（默认使用框架中的）
         KJBitmap kjb = KJBitmap.create(bitmapConfig);
         /** 然后剩下的都一样了 */
     }

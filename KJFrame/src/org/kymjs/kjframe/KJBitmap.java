@@ -24,6 +24,7 @@ import org.kymjs.kjframe.bitmap.BitmapConfig;
 import org.kymjs.kjframe.bitmap.helper.BitmapCreate;
 import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
 import org.kymjs.kjframe.bitmap.helper.BitmapMemoryCache;
+import org.kymjs.kjframe.bitmap.helper.DiskCache;
 import org.kymjs.kjframe.http.core.KJAsyncTask;
 import org.kymjs.kjframe.http.core.KJAsyncTask.OnFinishedListener;
 import org.kymjs.kjframe.http.core.SimpleSafeAsyncTask;
@@ -58,6 +59,7 @@ public class KJBitmap {
     private final BitmapConfig config;
     /** LRU缓存器 */
     private final BitmapMemoryCache mMemoryCache;
+    private final DiskCache diskCache;
     private BitmapCallBack callback;
 
     public static KJBitmap create() {
@@ -80,7 +82,9 @@ public class KJBitmap {
     private KJBitmap(BitmapConfig bitmapConfig) {
         this.config = bitmapConfig;
         taskCollection = new HashSet<BitmapWorkerTask>();
-        mMemoryCache = new BitmapMemoryCache(bitmapConfig.memoryCacheSize);
+        mMemoryCache = new BitmapMemoryCache(config.memoryCacheSize);
+        diskCache = new DiskCache(BitmapConfig.CACHEPATH,
+                config.memoryCacheSize * 8, config.isDEBUG);
     }
 
     /**
@@ -268,6 +272,7 @@ public class KJBitmap {
         final int w;
         final int h;
         boolean notTwink;
+        private Bitmap keyBitmap;
 
         // public BitmapWorkerTask(View imageView, String imageUrl,
         // Bitmap loadBitmap, int w, int h, boolean notTwink) {
@@ -294,41 +299,53 @@ public class KJBitmap {
         @Override
         protected void onPreExecuteSafely() throws Exception {
             super.onPreExecuteSafely();
-            if (!notTwink) {
-                setViewImage(imageView, loadBitmap);
-            }
             config.downloader.setImageCallBack(callback);
             if (callback != null) {
                 callback.onPreLoad(imageView);
             }
             imageView.setTag(imageUrl);
+
+            keyBitmap = getBitmapFromCache(imageUrl);
+            if (keyBitmap == null) {
+                if (!notTwink && imageUrl.startsWith("http")) {
+                    setViewImage(imageView, loadBitmap);
+                }
+            }
         }
 
         @Override
         protected Bitmap doInBackground() {
-            return loadBmpMustInThread(imageUrl, w, h);
+            if (keyBitmap == null) {
+                keyBitmap = getBitmapFromNet(imageUrl, w, h);
+                if (keyBitmap != null) {
+                    putBitmapToMC(imageUrl, keyBitmap);
+                }
+            }
+            return keyBitmap;
         }
 
         @Override
         protected void onPostExecuteSafely(Bitmap result, Exception e)
                 throws Exception {
             super.onPostExecuteSafely(result, e);
-            if (e == null) {
-                if (imageUrl.equals(imageView.getTag()) && result != null) {
+            if (result != null) {
+                if (imageUrl.equals(imageView.getTag())) {
                     setViewImage(imageView, result);
-                    putBitmapToMC(imageUrl, result);
                     if (callback != null) {
                         callback.onSuccess(imageView);
                     }
                 }
             } else {
                 if (callback != null) {
+                    e = (e == null) ? new RuntimeException("bitmap not found")
+                            : e;
                     callback.onFailure(e);
                 }
             }
             if (callback != null) {
                 callback.onFinish(imageView);
             }
+            keyBitmap = null;
         }
     }
 
@@ -348,15 +365,9 @@ public class KJBitmap {
      *            图片期望高度，0为图片默认大小
      */
     public Bitmap loadBmpMustInThread(String imageUrl, int reqW, int reqH) {
-        Bitmap bmp = getBitmapFromMC(imageUrl);
+        Bitmap bmp = getBitmapFromCache(imageUrl);
         if (bmp == null) {
             bmp = getBitmapFromNet(imageUrl, reqW, reqH);
-        } else {
-            bmp = BitmapHelper.scaleWithWH(bmp, reqW, reqH);
-            showLogIfOpen("load image frome memory cache");
-        }
-        if (bmp != null) {
-            putBitmapToMC(imageUrl, bmp);
         }
         return bmp;
     }
@@ -377,16 +388,14 @@ public class KJBitmap {
      */
     public Bitmap getBitmapFromNet(String url, int reqW, int reqH) {
         Bitmap bmp = null;
-        byte[] res = null;
-        try {
-            config.downloader.setImageWH(reqW, reqH);
-            res = config.downloader.loadImage(url);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } // 调用加载器加载url中的图片
+        // 调用加载器加载url中的图片
+        byte[] res = config.downloader.loadImage(url);
         if (res != null) {
             bmp = BitmapCreate.bitmapFromByteArray(res, 0, res.length, reqW,
                     reqH);
+            if (bmp != null && url.startsWith("http")) {
+                putBitmapToDC(url, bmp);
+            }
         }
         return bmp;
     }
@@ -396,11 +405,11 @@ public class KJBitmap {
      * 
      * @param url
      *            图片地址
-     * @param fileName
-     *            在本地的文件名
+     * @param path
+     *            在本地的绝对路径
      */
-    public void saveImage(String url, String fileName) {
-        saveImage(url, fileName, 0, 0, null);
+    public void saveImage(String url, String path) {
+        saveImage(url, path, 0, 0, null);
     }
 
     /**
@@ -408,13 +417,13 @@ public class KJBitmap {
      * 
      * @param url
      *            图片地址
-     * @param fileName
-     *            在本地的文件名
+     * @param path
+     *            在本地的绝对路径
      * @param cb
      *            保存过程回调
      */
-    public void saveImage(String url, String fileName, BitmapCallBack cb) {
-        saveImage(url, fileName, 0, 0, cb);
+    public void saveImage(String url, String path, BitmapCallBack cb) {
+        saveImage(url, path, 0, 0, cb);
     }
 
     /**
@@ -422,8 +431,8 @@ public class KJBitmap {
      * 
      * @param url
      *            图片地址
-     * @param fileName
-     *            在本地的文件名
+     * @param path
+     *            在本地的绝对路径
      * @param reqW
      *            图片的宽度（0表示默认）
      * @param reqH
@@ -431,12 +440,12 @@ public class KJBitmap {
      * @param cb
      *            保存过程回调
      */
-    public void saveImage(final String url, final String fileName,
-            final int reqW, final int reqH, final BitmapCallBack cb) {
+    public void saveImage(final String url, final String path, final int reqW,
+            final int reqH, final BitmapCallBack cb) {
         if (cb != null)
             cb.onPreLoad(null);
 
-        Bitmap bmp = getBitmapFromMC(url);
+        Bitmap bmp = getBitmapFromCache(url);
         if (bmp == null) {
             KJAsyncTask.setOnFinishedListener(new OnFinishedListener() {
                 @Override
@@ -452,18 +461,17 @@ public class KJBitmap {
                 public void run() {
                     Bitmap bmp = getBitmapFromNet(url, reqW, reqH);
                     if (bmp == null && cb != null) {
-                        cb.onFailure(new RuntimeException("download error"));
+                        // cb.onFailure(new RuntimeException("download error"));
+                        // //不能在线程中调用
                     } else {
-                        FileUtils.bitmapToFile(bmp, FileUtils.getSDCardPath()
-                                + File.separator + fileName);
+                        FileUtils.bitmapToFile(bmp, path);
                     }
                 }
             });
         } else {
             bmp = BitmapHelper.scaleWithWH(bmp, reqW, reqH);
-            showLogIfOpen("load image frome memory cache");
-            boolean success = FileUtils.bitmapToFile(bmp,
-                    FileUtils.getSDCardPath() + File.separator + fileName);
+            showLogIfOpen("load image from cache");
+            boolean success = FileUtils.bitmapToFile(bmp, path);
             if (cb != null) {
                 if (success) {
                     cb.onSuccess(null);
@@ -476,6 +484,19 @@ public class KJBitmap {
     }
 
     /**
+     * 从缓存查找Bitmap
+     * 
+     * @param key
+     */
+    public Bitmap getBitmapFromCache(String key) {
+        Bitmap bmp = getBitmapFromMC(key);
+        if (bmp == null) {
+            bmp = getBitmapFromDC(key);
+        }
+        return bmp;
+    }
+
+    /**
      * 从内存缓存读取Bitmap
      * 
      * @param key
@@ -483,7 +504,11 @@ public class KJBitmap {
      * @return 如果没有key对应的value返回null
      */
     public Bitmap getBitmapFromMC(String key) {
-        return mMemoryCache.get(CipherUtils.md5(key));
+        Bitmap bmp = mMemoryCache.get(CipherUtils.md5(key));
+        if (bmp != null) {
+            showLogIfOpen("get bitmap from memory cache");
+        }
+        return bmp;
     }
 
     /**
@@ -496,6 +521,60 @@ public class KJBitmap {
      */
     public void putBitmapToMC(String k, Bitmap v) {
         mMemoryCache.put(CipherUtils.md5(k), v);
+    }
+
+    /**
+     * 从磁盘缓存读取Bitmap
+     * 
+     * @param key
+     *            图片地址Url
+     * @return 如果没有key对应的value返回null
+     */
+    public Bitmap getBitmapFromDC(String key) {
+        Bitmap bmp = diskCache.get(CipherUtils.md5(key));
+        if (bmp != null) {
+            showLogIfOpen("get bitmap from disk cache");
+        }
+        return bmp;
+    }
+
+    /**
+     * 加入磁盘缓存
+     * 
+     * @param imagePath
+     *            图片路径
+     * @param v
+     *            要保存的Bitmap
+     */
+    public void putBitmapToDC(String imagePath, Bitmap v) {
+        diskCache.put(CipherUtils.md5(imagePath), v);
+    }
+
+    /**
+     * 移除一个指定的图片缓存
+     * 
+     * @param key
+     */
+    public void removeCache(String key) {
+        key = CipherUtils.md5(key);
+        mMemoryCache.remove(key);
+        File dir = FileUtils.getSaveFolder(BitmapConfig.CACHEPATH);
+        File file = new File(dir, BitmapConfig.CACHE_FILENAME_PREFIX + key);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
+    /**
+     * 清空图片缓存
+     */
+    public void removeCacheAll() {
+        mMemoryCache.removeAll();
+        diskCache.clearCache();
+        // File dir = FileUtils.getSaveFolder(BitmapConfig.CACHEPATH);
+        // for (File f : dir.listFiles()) {
+        // f.delete();
+        // }
     }
 
     /**
@@ -522,8 +601,6 @@ public class KJBitmap {
             taskCollection.remove(task);
         }
     }
-
-    /********************* preference method ******************/
 
     /**
      * 设置BitmapLibrary的回调监听器
