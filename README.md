@@ -28,7 +28,7 @@ Used in real project example: [KJMusic player](https://github.com/KJMusicPlayer/
 
 ## PluginLibrary
 Did you really try? execute not installed apk file, PluginLibrary can I help you.<br>
-you can download [pluginDemo](https://github.com/kymjs/KJFrameForAndroid/blob/master/doc/plugin_demo.zip) project integrating example project learn KJFrameForAndroid.[Detail](https://github.com/kymjs/KJFrameForAndroid/blob/master/PluginLibraryExplain.md)
+you can download [pluginDemo](https://github.com/kymjs/CJFrameForAndroid/tree/master/binrary/DemoResources) project integrating example project learn KJFrameForAndroid.[Detail](https://github.com/kymjs/KJFrameForAndroid/blob/master/doc/README.md)
 
 ## UILibrary
 **UILibrary -> Widget function**
