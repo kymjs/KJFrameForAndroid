@@ -18,6 +18,8 @@ package org.kymjs.kjframe.bitmap;
 import org.kymjs.kjframe.bitmap.helper.BitmapCreate;
 import org.kymjs.kjframe.utils.KJLoger;
 
+import android.app.Activity;
+
 /**
  * Bitmap配置器
  * 
@@ -28,6 +30,8 @@ public class BitmapConfig {
 
     public boolean isDEBUG = KJLoger.DEBUG_LOG;
     public int memoryCacheSize;
+
+    public Activity cxt;
 
     public static String CACHEPATH = "KJLibrary/image";
     public static String CACHE_FILENAME_PREFIX = "KJLibrary_";

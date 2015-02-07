@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -135,7 +136,12 @@ public final class DiskCache {
         int count = 0;
         while (count < MAX_REMOVALS
                 && (cacheSize > maxCacheItemSize || cacheByteSize > maxSize)) {
-            eldestEntry = mLinkedHashMap.entrySet().iterator().next();
+            Iterator<Entry<String, String>> iterator = mLinkedHashMap
+                    .entrySet().iterator();
+            if (!iterator.hasNext()) {
+                return;
+            }
+            eldestEntry = iterator.next();
             eldestFile = new File(eldestEntry.getValue());
             eldestFileSize = eldestFile.length();
             mLinkedHashMap.remove(eldestEntry.getKey());

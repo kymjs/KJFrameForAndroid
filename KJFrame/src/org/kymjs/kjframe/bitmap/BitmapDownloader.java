@@ -109,7 +109,12 @@ public class BitmapDownloader implements I_ImageLoader {
 
     private void failure(final Exception e) {
         if (callback != null) {
-            final Activity aty = KJActivityStack.create().topActivity();
+            final Activity aty;
+            if (config.cxt != null) {
+                aty = config.cxt;
+            } else {
+                aty = KJActivityStack.create().topActivity();
+            }
             if (aty != null) {
                 aty.runOnUiThread(new Runnable() {
                     @Override

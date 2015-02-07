@@ -206,12 +206,12 @@ public class KJHttp {
 
         public VolleyTask(Method requestMethod, String uri, HttpParams params,
                 HttpCallBack callback) {
-            super(httpConfig.cachePath, uri + params.toString(),
-                    httpConfig.cacheTime);
+            super(httpConfig.cachePath, uri + params, httpConfig.cacheTime);
             this.requestMethod = requestMethod;
             this.uri = uri;
             this.params = params;
             this.callback = callback;
+
         }
 
         @Override
@@ -250,8 +250,9 @@ public class KJHttp {
         protected void onPostExecuteSafely(String result, Exception e)
                 throws Exception {
             super.onPostExecuteSafely(result, e);
+            callback.respondCode = this.respondCode;
             if (e == null) {
-                callback.onSuccess(result);
+                callback.onSuccess(respondCode, result);
             } else {
                 callback.onFailure(e, respondCode, respondMsg);
             }
@@ -269,6 +270,12 @@ public class KJHttp {
      */
     private HttpURLConnection openConnection(Method requestMethod, String uri,
             HttpParams params) throws IOException {
+
+        String charsetName = httpConfig.httpHeader.get("Charset");
+        if (charsetName == null) {
+            charsetName = "utf-8";
+        }
+
         URL url = new URL(uri);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -320,7 +327,8 @@ public class KJHttp {
             DataOutputStream out = null;
             try {
                 out = new DataOutputStream(connection.getOutputStream());
-                byte[] end_data = ("\r\n--" + BOUNDARY + "--\r\n").getBytes();// 定义最后数据分隔线
+                byte[] end_data = ("\r\n--" + BOUNDARY + "--\r\n")
+                        .getBytes(charsetName);// 定义最后数据分隔线
 
                 StringBuilder sb = new StringBuilder();
                 for (Map.Entry<String, String> entry : params.urlParams
@@ -331,8 +339,8 @@ public class KJHttp {
                     sb.append(entry.getKey());
                     sb.append("\"\r\n\r\n");
                     sb.append(entry.getValue());
-                    out.write(sb.toString().getBytes());
-                    out.write("\r\n".getBytes());
+                    out.write(sb.toString().getBytes(charsetName));
+                    out.write("\r\n".getBytes(charsetName));
                     sb.delete(0, sb.length());
                 }
 
@@ -345,7 +353,7 @@ public class KJHttp {
                             .append("\";filename=\"")
                             .append(entry.getValue().fileName)
                             .append("\"\r\nContent-Type:application/octet-stream\r\n\r\n");
-                    byte[] data = sb.toString().getBytes();
+                    byte[] data = sb.toString().getBytes(charsetName);
                     out.write(data);
                     in = new DataInputStream(entry.getValue().inputStream);
                     int bytes = 0;
@@ -353,13 +361,13 @@ public class KJHttp {
                     while ((bytes = in.read(buf)) != -1) {
                         out.write(buf, 0, bytes);
                     }
-                    out.write("\r\n".getBytes()); // 多个文件时，二个文件之间加入这个
+                    out.write("\r\n".getBytes(charsetName)); // 多个文件时，二个文件之间加入这个
                     sb.delete(0, sb.length());
                 }
                 out.write(end_data);
                 out.flush();
             } finally {
-                out.close();
+                FileUtils.closeIO(out);
             }
         }
         // use caller-provided custom SslSocketFactory, if any, for HTTPS

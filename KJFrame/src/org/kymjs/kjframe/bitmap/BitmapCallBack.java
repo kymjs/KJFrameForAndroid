@@ -15,6 +15,7 @@
  */
 package org.kymjs.kjframe.bitmap;
 
+import android.graphics.Bitmap;
 import android.view.View;
 
 /**
@@ -28,7 +29,7 @@ public abstract class BitmapCallBack {
     public void onPreLoad(final View view) {}
 
     /** bitmap载入完成将回调 */
-    public void onSuccess(final View view) {}
+    public void onSuccess(final View view, final Bitmap bitmap) {}
 
     /** bitmap载入失败将回调 */
     public void onFailure(final Exception e) {}

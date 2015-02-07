@@ -27,6 +27,7 @@ import java.net.HttpURLConnection;
  * @version 1.3
  */
 public abstract class HttpCallBack {
+    public int respondCode = -1;
 
     /**
      * Http请求开始前回调
@@ -56,6 +57,18 @@ public abstract class HttpCallBack {
      * @param t
      */
     public void onSuccess(String t) {}
+
+    /**
+     * Http请求成功时回调
+     * 
+     * @param code
+     *            请求码
+     * @param t
+     *            Http请求返回信息
+     */
+    public void onSuccess(int code, String t) {
+        onSuccess(t);
+    }
 
     /**
      * Http下载成功时回调

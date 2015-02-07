@@ -125,7 +125,7 @@ public class BitmapActivity extends KJActivity {
         KJBitmap kjb = KJBitmap.create();
         kjb.setCallback(new BitmapCallBack() {
             @Override
-            public void onSuccess(View view) {
+            public void onSuccess(View view, Bitmap bitmap) {
                 ViewInject.toast("加载成功");
             }
 
@@ -174,8 +174,8 @@ public class BitmapActivity extends KJActivity {
                     }
 
                     @Override
-                    public void onSuccess(View view) {
-                        super.onSuccess(view);
+                    public void onSuccess(View view, Bitmap bitmap) {
+                        super.onSuccess(view, bitmap);
                         ViewInject.toast("成功");
                     }
 

@@ -2,6 +2,8 @@ package org.kymjs.kjframe.demo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.HttpURLConnection;
+import java.util.List;
 
 import org.kymjs.kjframe.KJActivity;
 import org.kymjs.kjframe.KJHttp;
@@ -205,7 +207,37 @@ public class HttpActivity extends KJActivity {
                              // （你可以自己设置缓存时间，建议区分WiFi模式和3G网模式设置不同缓存时间并动态切换）
         config.httpHeader.put("cache", "kjlibrary");// 设置http请求头信息
         config.maxRetries = 10;// 出错重连次数
+
+        // 获取服务器返回的cookie
+        List<String> cookieList = config.respondHeader.get("Set-Cookie");
+        for (String cookie : cookieList) {
+            KJLoger.debug("这个是cookie" + cookie);
+        }
+
+        // 向服务器写cookie
+        config.httpHeader.put("Cookie", "cookie写在这里");// 注：如果有多个cookie请用分号隔开
+
         KJHttp kjhttp = new KJHttp(config);
+        kjhttp.get("", new HttpCallBack() {
+            // 如果你需要根据请求码来做响应的操作，可以使用重载的onSuccess方法
+            @Override
+            public void onSuccess(int code, String t) {
+                super.onSuccess(code, t);
+                if (code == HttpURLConnection.HTTP_OK) {
+                    // do something
+                }
+
+            }
+
+            // 在KJFrameForAndroid_v2.133以后，新加入了一个全局变量,例如你可以使用如下方法
+            // @Override
+            // public void onSuccess(String t) {
+            // super.onSuccess(t);
+            // if (respondCode == HttpURLConnection.HTTP_OK) {
+            // }
+            // }
+        });
+
         // //剩下的都是一样的了
         ViewInject.toast("请查看代码中注释");
     }

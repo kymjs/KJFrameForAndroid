@@ -17,7 +17,6 @@ package org.kymjs.kjframe.widget;
 
 import org.kymjs.kjframe.utils.DensityUtils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -37,6 +36,8 @@ public class KJSlidingMenu extends HorizontalScrollView {
     private int mMenuWidth; // 菜单宽度
     private boolean isOpen;
     private boolean once; // 本控件是否首次创建
+
+    private boolean showAnim;
 
     private int mHalfMenuWidth; // 改变菜单状态时手指滑动的最大值:默认菜单宽度的1/3
     public static final int SNAP_VELOCITY = 270; // 改变菜单状态时手指滑动的最大速度
@@ -60,7 +61,7 @@ public class KJSlidingMenu extends HorizontalScrollView {
 
     public KJSlidingMenu(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mScreenWidth = DensityUtils.getScreenW((Activity) context);
+        mScreenWidth = DensityUtils.getScreenW(context);
         mMenuRightPadding = (int) (mScreenWidth * 0.27);
     }
 
@@ -94,19 +95,21 @@ public class KJSlidingMenu extends HorizontalScrollView {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-        float scale = l * 1.0f / mMenuWidth;
-        float leftScale = 1 - 0.3f * scale;
-        float rightScale = 0.8f + scale * 0.2f;
+        if (showAnim) {
+            float scale = l * 1.0f / mMenuWidth;
+            float leftScale = 1 - 0.3f * scale;
+            float rightScale = 0.8f + scale * 0.2f;
 
-        ViewHelper.setScaleX(mMenu, leftScale);
-        ViewHelper.setScaleY(mMenu, leftScale);
-        ViewHelper.setAlpha(mMenu, 0.6f + 0.4f * (1 - scale));
-        ViewHelper.setTranslationX(mMenu, mMenuWidth * scale * 0.7f);
+            ViewHelper.setScaleX(mMenu, leftScale);
+            ViewHelper.setScaleY(mMenu, leftScale);
+            ViewHelper.setAlpha(mMenu, 0.6f + 0.4f * (1 - scale));
+            ViewHelper.setTranslationX(mMenu, mMenuWidth * scale * 0.7f);
 
-        ViewHelper.setPivotX(mContent, 0);
-        ViewHelper.setPivotY(mContent, mContent.getHeight() / 2);
-        ViewHelper.setScaleX(mContent, rightScale);
-        ViewHelper.setScaleY(mContent, rightScale);
+            ViewHelper.setPivotX(mContent, 0);
+            ViewHelper.setPivotY(mContent, mContent.getHeight() / 2);
+            ViewHelper.setScaleX(mContent, rightScale);
+            ViewHelper.setScaleY(mContent, rightScale);
+        }
     }
 
     @Override
@@ -244,6 +247,14 @@ public class KJSlidingMenu extends HorizontalScrollView {
         } else {
             open();
         }
+    }
+
+    public boolean isShowAnim() {
+        return showAnim;
+    }
+
+    public void setShowAnim(boolean showAnim) {
+        this.showAnim = showAnim;
     }
 
     public boolean isOpen() {

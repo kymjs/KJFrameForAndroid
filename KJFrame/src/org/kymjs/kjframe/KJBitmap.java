@@ -36,9 +36,11 @@ import org.kymjs.kjframe.utils.StringUtils;
 import org.kymjs.kjframe.utils.SystemTool;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -80,15 +82,16 @@ public class KJBitmap {
     }
 
     private KJBitmap(BitmapConfig bitmapConfig) {
-        this.config = bitmapConfig;
         taskCollection = new HashSet<BitmapWorkerTask>();
+        this.config = bitmapConfig;
         mMemoryCache = new BitmapMemoryCache(config.memoryCacheSize);
         diskCache = new DiskCache(BitmapConfig.CACHEPATH,
                 config.memoryCacheSize * 8, config.isDEBUG);
+        callback = null;
     }
 
     /**
-     * 加载过程中图片不会闪烁加载方法
+     * 加载过程中图片不会闪烁加载方法(不可用在ListView中)
      * 
      * @param imageView
      *            要显示图片的控件(ImageView设置src，普通View设置bg)
@@ -100,7 +103,7 @@ public class KJBitmap {
     }
 
     /**
-     * 加载过程中图片不会闪烁加载方法
+     * 加载过程中图片不会闪烁加载方法(不可用在ListView中)
      * 
      * @param imageView
      *            要显示图片的控件(ImageView设置src，普通View设置bg)
@@ -234,9 +237,11 @@ public class KJBitmap {
     private void display(View imageView, String imageUrl, int width,
             int height, Drawable loadBitmap) {
         if (imageView == null) {
+            callFailure("imageview is null");
             return;
         }
         if (StringUtils.isEmpty(imageUrl)) {
+            callFailure("image url is empty");
             return;
         }
         if (width == 0 || height == 0) {
@@ -252,6 +257,7 @@ public class KJBitmap {
             notTwink = true;
         }
 
+        config.cxt = (Activity) imageView.getContext();
         config.setDefaultHeight(height);
         config.setDefaultWidth(width);
 
@@ -332,7 +338,7 @@ public class KJBitmap {
                 if (imageUrl.equals(imageView.getTag())) {
                     setViewImage(imageView, result);
                     if (callback != null) {
-                        callback.onSuccess(imageView);
+                        callback.onSuccess(imageView, result);
                     }
                 }
             } else {
@@ -451,7 +457,7 @@ public class KJBitmap {
                 @Override
                 public void onPostExecute() {
                     if (cb != null) {
-                        cb.onSuccess(null);
+                        cb.onSuccess(null, null);
                         cb.onFinish(null);
                     }
                 }
@@ -460,9 +466,14 @@ public class KJBitmap {
                 @Override
                 public void run() {
                     Bitmap bmp = getBitmapFromNet(url, reqW, reqH);
-                    if (bmp == null && cb != null) {
-                        // cb.onFailure(new RuntimeException("download error"));
-                        // //不能在线程中调用
+                    if (bmp == null && cb != null && config.cxt != null) {
+                        config.cxt.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                cb.onFailure(new RuntimeException(
+                                        "download error"));
+                            }
+                        });
                     } else {
                         FileUtils.bitmapToFile(bmp, path);
                     }
@@ -474,7 +485,7 @@ public class KJBitmap {
             boolean success = FileUtils.bitmapToFile(bmp, path);
             if (cb != null) {
                 if (success) {
-                    cb.onSuccess(null);
+                    cb.onSuccess(null, null);
                 } else {
                     cb.onFailure(new RuntimeException("save error"));
                 }
@@ -645,4 +656,18 @@ public class KJBitmap {
             KJLoger.debugLog(getClass().getName(), msg);
         }
     }
+
+    private void callFailure(String errorInfo) {
+        if (callback != null) {
+            callback.onFailure(new RuntimeException(errorInfo));
+        }
+        Log.e("debug", errorInfo);
+    }
+
+    private void callFailure(Exception e) {
+        if (callback != null) {
+            callback.onFailure(e);
+        }
+    }
+
 }
