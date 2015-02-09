@@ -22,7 +22,7 @@ However,KJFrameForAndroid is free open source object. Thanks for you follow this
 		[BitmapLibrary](https://github.com/kymjs/KJFrameForAndroid/wiki/BitmapLibrary)<br>
 		[HttpLibrary](https://github.com/kymjs/KJFrameForAndroid/wiki/HttpLibrary)<br>
 		[DBLibrary](https://github.com/kymjs/KJFrameForAndroid/wiki/DBLibrary)<br>
-3、Used in real project example: [KJMusic player](https://github.com/KJMusicPlayer/KJMusic)<br>
+3、Used in real project example: [KJMusic player](https://github.com/KJFrame/KJMusic)<br>
 *make use of KJFrameForAndroid works on Android 3.0 or higher and need permission in your AndroidManifest.xml*
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
