@@ -103,6 +103,7 @@ public class KJHttp {
             str.append("?").append(params.toString());
             url = str.toString();
         }
+        VolleyTask.setDefaultExecutor(VolleyTask.mLruSerialExecutor);
         new VolleyTask(Method.GET, url, null, callback).execute();
     }
 
@@ -117,6 +118,7 @@ public class KJHttp {
      *            请求中的回调方法
      */
     public void post(String url, HttpParams params, HttpCallBack callback) {
+        VolleyTask.setDefaultExecutor(VolleyTask.mLruSerialExecutor);
         if (params != null) {
             if (params.haveFile()) {
                 new VolleyTask(Method.FILE, url, params, callback).execute();
@@ -188,10 +190,29 @@ public class KJHttp {
     }
 
     /**
-     * 自带数据缓存功能，且各部分均可捕获异常，可处理{@link org.kymjs.kjlibrary.KJHttp.Method}
+     * 移除一份磁盘缓存
+     * 
+     * @param uri
+     *            接口地址
+     * @param params
+     *            http请求时的参数，如果没有则传null
+     */
+    public void removeDiskCache(String uri, HttpParams params) {
+        VolleyTask.remove(uri + params);
+    }
+
+    /**
+     * 清空缓存(本操作是异步处理，不会卡顿UI)
+     */
+    public void removeAllDiskCache() {
+        VolleyTask.cleanCacheFiles(httpConfig.cachePath);
+    }
+
+    /**
+     * 自带数据缓存功能，且各部分均可捕获异常,可处理#{@link org.kymjs.kjlibrary.KJHttp.Method}
      * 中定义的http请求类型
      */
-    private class VolleyTask extends CachedTask<String, Object, String> {
+    public class VolleyTask extends CachedTask<String, Object, String> {
         private int respondCode = -1;
         private String respondMsg = "";
 
@@ -211,7 +232,6 @@ public class KJHttp {
             this.uri = uri;
             this.params = params;
             this.callback = callback;
-
         }
 
         @Override
@@ -273,7 +293,7 @@ public class KJHttp {
 
         String charsetName = httpConfig.httpHeader.get("Charset");
         if (charsetName == null) {
-            charsetName = "utf-8";
+            charsetName = "UTF-8";
         }
 
         URL url = new URL(uri);

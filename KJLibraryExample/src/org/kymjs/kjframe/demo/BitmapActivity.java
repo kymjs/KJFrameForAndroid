@@ -79,7 +79,7 @@ public class BitmapActivity extends KJActivity {
             save();
             break;
         case R.id.oomcheck:
-            showActivity(aty, OOMCheckActivity.class);
+            // showActivity(aty, OOMCheckActivity.class);
             break;
         }
     }

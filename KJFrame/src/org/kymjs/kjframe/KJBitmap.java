@@ -266,6 +266,7 @@ public class KJBitmap {
         BitmapWorkerTask task = new BitmapWorkerTask(imageView, imageUrl,
                 loadBitmap, width, height, notTwink);
         taskCollection.add(task);
+        BitmapWorkerTask.setDefaultExecutor(BitmapWorkerTask.mSerialExecutor);
         task.execute();
     }
 

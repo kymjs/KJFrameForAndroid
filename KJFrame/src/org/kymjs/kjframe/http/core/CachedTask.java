@@ -38,11 +38,11 @@ import org.kymjs.kjframe.utils.StringUtils;
  */
 public abstract class CachedTask<Params, Progress, Result extends Serializable>
         extends SafeTask<Params, Progress, Result> {
-    private String cachePath = "folderName"; // 缓存路径
+    private static String cachePath = "folderName"; // 缓存路径
     private String cacheName = "MD5_effectiveTime"; // 缓存文件名格式
     private long expiredTime = 0; // 缓存有效时间
     private String key; // 缓存以键值对形式存在
-    private ConcurrentHashMap<String, Long> cacheMap; // (k:缓存md5(url),v:缓存时的时间)
+    private static ConcurrentHashMap<String, Long> cacheMap; // (k:缓存md5(url),v:缓存时的时间)
 
     /**
      * 构造方法
@@ -57,6 +57,10 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
     public CachedTask(String cachePath, String key, long cacheTime) {
         if (StringUtils.isEmpty(cachePath) || StringUtils.isEmpty(key)) {
             throw new RuntimeException("cachePath or key is empty");
+        } else if (cacheTime == 0) {
+            this.cachePath = cachePath;
+            this.expiredTime = 0;
+            this.cacheName = this.key + "_" + expiredTime;
         } else {
             this.cachePath = cachePath;
             // 对外url，对内url的md5值（不仅可以防止由于url过长造成文件名错误，还能防止恶意修改缓存内容）
@@ -64,26 +68,31 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
             // 对外单位：分，对内单位：毫秒
             this.expiredTime = TimeUnit.MILLISECONDS.convert(cacheTime,
                     TimeUnit.MINUTES);
-            KJLoger.debug(cacheTime + "----" + expiredTime);
+            KJLoger.debug("cacheTime:" + cacheTime + "----expiredTime:"
+                    + expiredTime);
             this.cacheName = this.key + "_" + expiredTime;
             initCacheMap();
         }
     }
 
     private void initCacheMap() {
-        cacheMap = new ConcurrentHashMap<String, Long>();
+        if (cacheMap == null) {
+            cacheMap = new ConcurrentHashMap<String, Long>();
+        }
         File folder = FileUtils.getSaveFolder(cachePath);
-        for (File file : folder.listFiles()) {
-            String name = file.getName();
-            if (!StringUtils.isEmpty(name)) {
-                String[] nameFormat = name.split("_");
-                // 若满足命名格式则认为是一个合格的cache
-                if (nameFormat.length == 2
-                        && (nameFormat[0].length() == 32
-                                || nameFormat[0].length() == 64 || nameFormat[0]
-                                .length() == 128)) {
-                    cacheMap.put(nameFormat[0], file.lastModified());
-                    KJLoger.debug("-85---" + file.lastModified());
+        // 如果文件的数量与cache大小的相同则认为是已经初始化。虽然会有可能有误差,但是在很大程度上降低了文件遍历,提高了效率
+        if (folder.listFiles().length != cacheMap.size()) {
+            for (File file : folder.listFiles()) {
+                String name = file.getName();
+                if (!StringUtils.isEmpty(name)) {
+                    String[] nameFormat = name.split("_");
+                    // 若满足命名格式则认为是一个合格的cache
+                    if (nameFormat.length == 2
+                            && (nameFormat[0].length() == 32
+                                    || nameFormat[0].length() == 64 || nameFormat[0]
+                                    .length() == 128)) {
+                        cacheMap.put(nameFormat[0], file.lastModified());
+                    }
                 }
             }
         }
@@ -102,23 +111,24 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
     protected final Result doInBackgroundSafely(Params... params)
             throws Exception {
         Result res = null;
-        Long temp = cacheMap.get(key);
-        long saveTime = (temp == null) ? 0 : temp; // 获取缓存时的时间
-        long currentTime = System.currentTimeMillis(); // 获取当前时间
+        if (expiredTime != 0) { // 为0就不读写cache，提升效率
+            Long temp = cacheMap.get(key);
+            long saveTime = (temp == null) ? 0 : temp; // 获取缓存时的时间
+            long currentTime = System.currentTimeMillis(); // 获取当前时间
 
-        if (currentTime >= saveTime + expiredTime) { // 若缓存无效，联网下载
-            res = doConnectNetwork(params);
-            if (res == null) {
-                res = getResultFromCache();
-            } else {
-                saveCache(res);
-            }
-        } else { // 缓存有效，使用缓存
-            res = getResultFromCache();
-            if (res == null) { // 若缓存数据意外丢失，重新下载
+            if (currentTime >= saveTime + expiredTime) { // 若缓存无效，联网下载
                 res = doConnectNetwork(params);
-                saveCache(res);
+                if (res != null)
+                    saveCache(res);
+            } else { // 缓存有效，使用缓存
+                res = getResultFromCache();
+                if (res == null) { // 若缓存数据意外丢失，重新下载
+                    res = doConnectNetwork(params);
+                    saveCache(res);
+                }
             }
+        } else {
+            res = doConnectNetwork(params);
         }
         return res;
     }
@@ -161,7 +171,14 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
     /**
      * 清空缓存文件（异步）
      */
-    public void cleanCacheFiles() {
+    public static void cleanCacheFiles() {
+        cleanCacheFiles(cachePath);
+    }
+
+    /**
+     * 清空缓存文件（异步）
+     */
+    public static void cleanCacheFiles(String cachePath) {
         cacheMap.clear();
         File file = FileUtils.getSaveFolder(cachePath);
         final File[] fileList = file.listFiles();
@@ -185,7 +202,7 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
      * 
      * @param key
      */
-    public void remove(String key) {
+    public static void remove(String key) {
         // 对内是url的MD5
         String realKey = CipherUtils.md5(key);
         for (Map.Entry<String, Long> entry : cacheMap.entrySet()) {

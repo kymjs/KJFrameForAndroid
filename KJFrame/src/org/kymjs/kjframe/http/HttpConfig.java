@@ -52,6 +52,6 @@ public class HttpConfig {
     public HttpConfig() {
         respondHeader = new HashMap<String, List<String>>();
         httpHeader = new HashMap<String, String>();
-        httpHeader.put("Charset", "UTF-8");// utf8其实是冗余的，因为在android中默认就是utf8
+        httpHeader.put("Charset", "UTF-8");// 如果你是用Windows开发，请不要修改本选项；除非你的服务端也是瘟到死系统
     }
 }

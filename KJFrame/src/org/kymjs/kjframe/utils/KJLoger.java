@@ -44,6 +44,10 @@ public final class KJLoger {
         }
     }
 
+    public static final void log(String packName, String state) {
+        debugLog(packName, state);
+    }
+
     public static final void debug(String msg, Throwable tr) {
         if (IS_DEBUG) {
             Log.i("debug", msg, tr);
