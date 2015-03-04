@@ -19,8 +19,11 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.net.ssl.SSLSocketFactory;
+
+import org.kymjs.kjframe.http.core.CaseInsensitiveMap;
 
 /**
  * HttpClient请求的配置类<br>
@@ -43,15 +46,26 @@ public class HttpConfig {
 
     public int socketBuffer = 8192;// 8kb
 
+    public static String sCookie = "";
+
     public SSLSocketFactory sslSocketFactory = null;
-    public HashMap<String, String> httpHeader = null;
+    public TreeMap<String, String> httpHeader = null;
     public Map<String, List<String>> respondHeader = null;
 
     public File savePath;
 
     public HttpConfig() {
         respondHeader = new HashMap<String, List<String>>();
-        httpHeader = new HashMap<String, String>();
+        httpHeader = new CaseInsensitiveMap<String, String>();
         httpHeader.put("Charset", "UTF-8");// 如果你是用Windows开发，请不要修改本选项；除非你的服务端也是瘟到死系统
+    }
+
+    public void setCookieString(String cookie) {
+        sCookie = cookie;
+
+    }
+
+    public String getCookieString() {
+        return sCookie;
     }
 }

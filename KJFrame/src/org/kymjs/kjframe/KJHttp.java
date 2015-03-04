@@ -35,6 +35,7 @@ import org.kymjs.kjframe.http.core.CachedTask;
 import org.kymjs.kjframe.http.download.I_FileLoader;
 import org.kymjs.kjframe.http.download.SimpleDownloader;
 import org.kymjs.kjframe.utils.FileUtils;
+import org.kymjs.kjframe.utils.StringUtils;
 
 /**
  * 
@@ -198,7 +199,10 @@ public class KJHttp {
      *            http请求时的参数，如果没有则传null
      */
     public void removeDiskCache(String uri, HttpParams params) {
-        VolleyTask.remove(uri + params);
+        VolleyTask.remove(uri + params); // post请求时的key
+        if (params != null) {
+            VolleyTask.remove(uri + "?" + params + "null"); // get请求时的key
+        }
     }
 
     /**
@@ -220,6 +224,7 @@ public class KJHttp {
         private String uri;
         private HttpParams params;
         private HttpCallBack callback;
+        private String charsetName;
 
         private VolleyTask(String cachePath, String key, long cacheTime) {
             super(cachePath, key, cacheTime);
@@ -232,6 +237,16 @@ public class KJHttp {
             this.uri = uri;
             this.params = params;
             this.callback = callback;
+
+            this.charsetName = httpConfig.httpHeader.get("Charset");
+            if (StringUtils.isEmpty(charsetName)) {
+                this.charsetName = "UTF-8";
+            }
+            String cookie = httpConfig.httpHeader.get("Cookie");
+            if (StringUtils.isEmpty(cookie)) {
+                httpConfig.httpHeader.put("cookie",
+                        httpConfig.getCookieString());
+            }
         }
 
         @Override
@@ -245,15 +260,17 @@ public class KJHttp {
             InputStream input = null;
             BufferedReader reader = null;
             StringBuilder respond = new StringBuilder();
+
             try {
                 HttpURLConnection conn = openConnection(requestMethod, uri,
-                        params);
+                        params, charsetName);
                 respondMsg = conn.getResponseMessage();
                 respondCode = conn.getResponseCode();
                 input = conn.getInputStream();
                 httpConfig.respondHeader = conn.getHeaderFields();
                 callback.onHttpConnection(conn);
-                reader = new BufferedReader(new InputStreamReader(input));
+                reader = new BufferedReader(new InputStreamReader(input,
+                        charsetName));
                 int len = 0;
                 char[] buf = new char[1024];
                 while ((len = reader.read(buf)) != -1) {
@@ -289,12 +306,7 @@ public class KJHttp {
      * @throws IOException
      */
     private HttpURLConnection openConnection(Method requestMethod, String uri,
-            HttpParams params) throws IOException {
-
-        String charsetName = httpConfig.httpHeader.get("Charset");
-        if (charsetName == null) {
-            charsetName = "UTF-8";
-        }
+            HttpParams params, String charsetName) throws IOException {
 
         URL url = new URL(uri);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -340,7 +352,7 @@ public class KJHttp {
                 out.writeBytes(params.toString());
                 out.flush();
             } finally {
-                out.close();
+                FileUtils.closeIO(out);
             }
         } else if (requestMethod == Method.FILE && params != null) {
             DataInputStream in = null;

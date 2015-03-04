@@ -75,7 +75,6 @@ public class BitmapCreate {
     public static Bitmap bitmapFromFile(String pathName, int reqWidth,
             int reqHeight) {
         if (reqHeight == 0 || reqWidth == 0) {
-
             try {
                 return BitmapFactory.decodeFile(pathName);
             } catch (OutOfMemoryError e) {

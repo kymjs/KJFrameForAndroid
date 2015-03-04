@@ -27,7 +27,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.kymjs.kjframe.utils.CipherUtils;
 import org.kymjs.kjframe.utils.FileUtils;
-import org.kymjs.kjframe.utils.KJLoger;
 import org.kymjs.kjframe.utils.StringUtils;
 
 /**
@@ -42,7 +41,7 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
     private String cacheName = "MD5_effectiveTime"; // 缓存文件名格式
     private long expiredTime = 0; // 缓存有效时间
     private String key; // 缓存以键值对形式存在
-    private static ConcurrentHashMap<String, Long> cacheMap; // (k:缓存md5(url),v:缓存时的时间)
+    private static ConcurrentHashMap<String, Long> cacheMap = new ConcurrentHashMap<String, Long>(); // (k:缓存md5(url),v:缓存时的时间)
 
     /**
      * 构造方法
@@ -68,17 +67,12 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
             // 对外单位：分，对内单位：毫秒
             this.expiredTime = TimeUnit.MILLISECONDS.convert(cacheTime,
                     TimeUnit.MINUTES);
-            KJLoger.debug("cacheTime:" + cacheTime + "----expiredTime:"
-                    + expiredTime);
             this.cacheName = this.key + "_" + expiredTime;
             initCacheMap();
         }
     }
 
     private void initCacheMap() {
-        if (cacheMap == null) {
-            cacheMap = new ConcurrentHashMap<String, Long>();
-        }
         File folder = FileUtils.getSaveFolder(cachePath);
         // 如果文件的数量与cache大小的相同则认为是已经初始化。虽然会有可能有误差,但是在很大程度上降低了文件遍历,提高了效率
         if (folder.listFiles().length != cacheMap.size()) {
@@ -142,7 +136,6 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
                     FileUtils.getSaveFile(cachePath, cacheName)));
             res = (Result) ois.readObject();
         } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             FileUtils.closeIO(ois);
         }
@@ -208,7 +201,17 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
         for (Map.Entry<String, Long> entry : cacheMap.entrySet()) {
             if (entry.getKey().equals(realKey)) {
                 cacheMap.remove(realKey);
-                return;
+                break;
+            }
+        }
+        // 删除文件缓存
+        File file = FileUtils.getSaveFolder(cachePath);
+        final File[] fileList = file.listFiles();
+        for (File cacheFile : fileList) {
+            String cacheFilekey = cacheFile.getName().split("_")[0];
+            if (cacheFilekey.equalsIgnoreCase(realKey)) {
+                cacheFile.delete();
+                break;
             }
         }
     }
@@ -223,7 +226,6 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
         if (res != null) {
             saveResultToCache(res);
             cacheMap.put(cacheName, System.currentTimeMillis());
-            KJLoger.debug("-208---" + System.currentTimeMillis());
         }
     }
 }

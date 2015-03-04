@@ -124,7 +124,6 @@ public class BitmapDownloader implements I_ImageLoader {
                 });
             }
         }
-        throw new RuntimeException(e);
     }
 
     @Override
