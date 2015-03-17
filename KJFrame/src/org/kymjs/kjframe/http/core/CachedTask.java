@@ -154,7 +154,6 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
             oos.writeObject(res);
             saveSuccess = true;
         } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             FileUtils.closeIO(oos);
         }

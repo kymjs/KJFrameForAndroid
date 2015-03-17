@@ -103,7 +103,7 @@ public class KJDB {
     public static KJDB create(boolean isDebug) {
         Context cxt = KJActivityStack.create().topActivity();
         if (cxt == null) {
-            throw new NullPointerException("you have to extends BaseActivity");
+            throw new NullPointerException("you have to extends KJActivity");
         }
         return create(cxt, isDebug);
     }

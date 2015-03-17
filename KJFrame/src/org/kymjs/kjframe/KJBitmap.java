@@ -594,7 +594,7 @@ public class KJBitmap {
      * 
      * @param view
      */
-    public void cancle(View view) {
+    public synchronized void cancle(View view) {
         for (BitmapWorkerTask task : taskCollection) {
             if (task.imageView.equals(view)) {
                 task.cancelTask();

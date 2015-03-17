@@ -34,7 +34,7 @@ public class BarrierExecutor {
      * @param task
      * @return
      */
-    public BarrierExecutor put(KJAsyncTask<?, ?, ?> task) {
+    public BarrierExecutor put(KJAsyncTask task) {
         if (task != null) {
             taskList.add(task);
         }
@@ -48,7 +48,7 @@ public class BarrierExecutor {
      *            关卡任务，在UI线程中运行
      */
     @SuppressWarnings("unchecked")
-    public void start(final KJAsyncTask<?, ?, ?> finishOnUiTask) {
+    public void start(final KJAsyncTask finishOnUiTask) {
         if (isRunning) {
             throw new RuntimeException(
                     "CyclicBarrierExecutor only can start once.");

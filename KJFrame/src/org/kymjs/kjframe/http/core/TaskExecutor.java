@@ -50,8 +50,7 @@ public class TaskExecutor {
      * @param time
      *            延迟时间：秒
      */
-    public static void startDelayedTask(final KJAsyncTask<?, ?, ?> task,
-            long time) {
+    public static void startDelayedTask(final KJAsyncTask task, long time) {
         long delay = time;
         delay = TimeUnit.MILLISECONDS.convert(time, TimeUnit.SECONDS);
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
