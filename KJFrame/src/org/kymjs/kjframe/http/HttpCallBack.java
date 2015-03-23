@@ -57,6 +57,15 @@ public abstract class HttpCallBack {
      * @param t
      */
     public void onSuccess(String t) {}
+    
+    /**
+     * Http请求成功时回调
+     * 
+     * @param t
+     */
+    public void onSuccessFromCache(int code, String t) {
+    	onSuccess(code, t);
+    }
 
     /**
      * Http请求成功时回调

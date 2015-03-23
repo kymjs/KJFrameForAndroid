@@ -34,17 +34,26 @@ import org.kymjs.kjframe.http.core.CaseInsensitiveMap;
  * @version 1.2
  */
 public class HttpConfig {
-    public String cachePath = "KJLibrary/cache"; // 缓存文件夹
+    /** 缓存文件夹 */
+    public static String CACHEPATH = "KJLibrary/cache";
+    /** 请改用HttpConfig.CACHEPATH */
+    @Deprecated
+    public static String cachePath = CACHEPATH;
 
-    public long cacheTime = 5; // 缓存时间5分钟
-
-    public int timeOut = 10000; // 超时设置，包括读超时、写超时、socket链接超时
-
-    public int maxConnections = 10;// http请求最大并发连接数
-
-    public int maxRetries = 5;// 错误尝试次数，错误异常表请在RetryHandler添加
-
-    public int socketBuffer = 8192;// 8kb
+    /** 缓存时间5分钟 */
+    public long cacheTime = 5;
+    /** 超时设置，包括读超时、写超时、socket链接超时 */
+    public int timeOut = 10000;
+    /** http请求最大并发连接数 */
+    public int maxConnections = 10;
+    /** 错误尝试次数，错误异常表请在RetryHandler添加 */
+    public int maxRetries = 5;
+    /** 默认8kb */
+    public int socketBuffer = 8192;
+    /** 为了更真实的模拟网络请求。如果启用，在读取完成以后，并不立即返回而是延迟500毫秒再返回 */
+    public boolean useDelayCache = false;
+    /** 如果启用了useDelayCache，本属性才有效。单位:ms */
+    public long delayTime = 500;
 
     public static String sCookie = "";
 

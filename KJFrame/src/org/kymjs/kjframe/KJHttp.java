@@ -45,7 +45,7 @@ public class KJHttp {
     public static final String BOUNDARY = "---------7d4a6d158c9"; // 定义http上传文件的数据分隔线
 
     private enum Method {
-        UNKNOW, GET, POST, FILE
+        UNKNOW, GET, POST
     }
 
     private HttpConfig httpConfig;
@@ -121,11 +121,7 @@ public class KJHttp {
     public void post(String url, HttpParams params, HttpCallBack callback) {
         VolleyTask.setDefaultExecutor(VolleyTask.mLruSerialExecutor);
         if (params != null) {
-            if (params.haveFile()) {
-                new VolleyTask(Method.FILE, url, params, callback).execute();
-            } else {
-                new VolleyTask(Method.POST, url, params, callback).execute();
-            }
+            new VolleyTask(Method.POST, url, params, callback).execute();
         } else {
             new VolleyTask(Method.GET, url, null, callback).execute();
         }
@@ -209,7 +205,23 @@ public class KJHttp {
      * 清空缓存(本操作是异步处理，不会卡顿UI)
      */
     public void removeAllDiskCache() {
-        VolleyTask.cleanCacheFiles(httpConfig.cachePath);
+        VolleyTask.cleanCacheFiles(HttpConfig.CACHEPATH);
+    }
+
+    /**
+     * 读取一份缓存数据，不考虑缓存是否已过期
+     * 
+     * @return 如果不存在，则为null
+     */
+    public String getCache(String uri, HttpParams params) {
+        String cache = null;
+        if (params == null) {
+            cache = VolleyTask.getCache(HttpConfig.CACHEPATH, uri + params);
+        } else {
+            cache = VolleyTask.getCache(HttpConfig.CACHEPATH, uri + "?"
+                    + params + "null");
+        }
+        return cache;
     }
 
     /**
@@ -232,7 +244,7 @@ public class KJHttp {
 
         public VolleyTask(Method requestMethod, String uri, HttpParams params,
                 HttpCallBack callback) {
-            super(httpConfig.cachePath, uri + params, httpConfig.cacheTime);
+            super(HttpConfig.CACHEPATH, uri + params, httpConfig.cacheTime);
             this.requestMethod = requestMethod;
             this.uri = uri;
             this.params = params;
@@ -246,6 +258,10 @@ public class KJHttp {
             if (StringUtils.isEmpty(cookie)) {
                 httpConfig.httpHeader.put("cookie",
                         httpConfig.getCookieString());
+            }
+
+            if (httpConfig.useDelayCache) {
+                setDelayCacheTime(httpConfig.delayTime);
             }
         }
 
@@ -289,7 +305,11 @@ public class KJHttp {
             super.onPostExecuteSafely(result, e);
             callback.respondCode = this.respondCode;
             if (e == null) {
-                callback.onSuccess(respondCode, result);
+                if (resFromCache) {
+                    callback.onSuccessFromCache(respondCode, result);
+                } else {
+                    callback.onSuccess(respondCode, result);
+                }
             } else {
                 callback.onFailure(e, respondCode, respondMsg);
             }
@@ -324,13 +344,6 @@ public class KJHttp {
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
             connection.setInstanceFollowRedirects(true);
-            httpConfig.httpHeader.put("Content-Type",
-                    "application/x-www-form-urlencoded");
-            break;
-        case FILE:
-            connection.setRequestMethod("POST");
-            connection.setDoOutput(true);
-            connection.setInstanceFollowRedirects(true);
             connection.setRequestProperty("connection", "Keep-Alive");
             connection.setRequestProperty("Content-Type",
                     "multipart/form-data; boundary=" + BOUNDARY);
@@ -346,15 +359,6 @@ public class KJHttp {
         }
 
         if (requestMethod == Method.POST && params != null) {
-            DataOutputStream out = null;
-            try {
-                out = new DataOutputStream(connection.getOutputStream());
-                out.writeBytes(params.toString());
-                out.flush();
-            } finally {
-                FileUtils.closeIO(out);
-            }
-        } else if (requestMethod == Method.FILE && params != null) {
             DataInputStream in = null;
             DataOutputStream out = null;
             try {

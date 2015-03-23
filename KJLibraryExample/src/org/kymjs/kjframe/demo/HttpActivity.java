@@ -95,7 +95,7 @@ public class HttpActivity extends KJActivity {
 
     private void get() {
         HttpConfig config = new HttpConfig();// 每个KJHttp对象对应一个config
-        config.cachePath = "KJLibrary/cache"; // 数据缓存到SD卡根目录KJLibrary文件夹中cache文件夹内
+        HttpConfig.CACHEPATH = "KJLibrary/cache"; // 数据缓存到SD卡根目录KJLibrary文件夹中cache文件夹内
         config.cacheTime = 0;// 强制不使用缓存
         // （你可以自己设置缓存时间，建议区分WiFi模式和3G网模式设置不同缓存时间并动态切换）
         config.httpHeader.put("cache", "kjlibrary");// 设置http请求头信息
@@ -202,7 +202,7 @@ public class HttpActivity extends KJActivity {
 
     private void highRequest() {
         HttpConfig config = new HttpConfig();// 每个KJHttp对象对应一个config
-        config.cachePath = "hello/world"; // 数据缓存到SD卡根目录hello文件夹中world文件夹内
+        HttpConfig.CACHEPATH = "hello/world"; // 数据缓存到SD卡根目录hello文件夹中world文件夹内
         config.cacheTime = 0;// 强制不使用缓存
                              // （你可以自己设置缓存时间，建议区分WiFi模式和3G网模式设置不同缓存时间并动态切换）
         config.httpHeader.put("cache", "kjlibrary");// 设置http请求头信息

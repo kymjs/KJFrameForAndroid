@@ -43,6 +43,26 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
     private String key; // 缓存以键值对形式存在
     private static ConcurrentHashMap<String, Long> cacheMap = new ConcurrentHashMap<String, Long>(); // (k:缓存md5(url),v:缓存时的时间)
 
+    protected boolean resFromCache = false; // 如果本次请求的结果是从缓存读取，本变量会被赋值为true
+
+    private long delayCacheTime = 0;
+
+    /**
+     * 读取缓存以后sleep的时间
+     */
+    public void setDelayCacheTime(long delayCacheTime) {
+        this.delayCacheTime = delayCacheTime;
+    }
+
+    /**
+     * 读取缓存以后sleep的时间
+     * 
+     * @param delayCacheTime
+     */
+    public long getDelayCacheTime() {
+        return delayCacheTime;
+    }
+
     /**
      * 构造方法
      * 
@@ -57,11 +77,11 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
         if (StringUtils.isEmpty(cachePath) || StringUtils.isEmpty(key)) {
             throw new RuntimeException("cachePath or key is empty");
         } else if (cacheTime == 0) {
-            this.cachePath = cachePath;
+            CachedTask.cachePath = cachePath;
             this.expiredTime = 0;
             this.cacheName = this.key + "_" + expiredTime;
         } else {
-            this.cachePath = cachePath;
+            CachedTask.cachePath = cachePath;
             // 对外url，对内url的md5值（不仅可以防止由于url过长造成文件名错误，还能防止恶意修改缓存内容）
             this.key = CipherUtils.md5(key);
             // 对外单位：分，对内单位：毫秒
@@ -92,6 +112,12 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
         }
     }
 
+    @Override
+    protected void onPreExecuteSafely() throws Exception {
+        resFromCache = false;
+        super.onPreExecuteSafely();
+    }
+
     /**
      * 做联网操作,本方法运行在线程中
      */
@@ -115,10 +141,13 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
                 if (res != null)
                     saveCache(res);
             } else { // 缓存有效，使用缓存
-                res = getResultFromCache();
+                res = getResultFromCache(cacheName);
                 if (res == null) { // 若缓存数据意外丢失，重新下载
                     res = doConnectNetwork(params);
                     saveCache(res);
+                } else {
+                    resFromCache = true;
+                    Thread.sleep(delayCacheTime);
                 }
             }
         } else {
@@ -128,7 +157,7 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
     }
 
     @SuppressWarnings("unchecked")
-    private Result getResultFromCache() {
+    private Result getResultFromCache(String cacheName) {
         Result res = null;
         ObjectInputStream ois = null;
         try {
@@ -213,6 +242,37 @@ public abstract class CachedTask<Params, Progress, Result extends Serializable>
                 break;
             }
         }
+    }
+
+    /**
+     * 获取url对应的缓存数据(不论是否过期)，若不存在，则返回null
+     * 
+     * @param url
+     *            链接地址
+     */
+    public static String getCache(String cachePath, String url) {
+        // 对内是url的MD5
+        String realKey = CipherUtils.md5(url);
+        String res = null;
+
+        // 删除文件缓存
+        File file = FileUtils.getSaveFolder(cachePath);
+        final File[] fileList = file.listFiles();
+        for (File cacheFile : fileList) {
+            String cacheFilekey = cacheFile.getName().split("_")[0];
+            if (cacheFilekey.equalsIgnoreCase(realKey)) {
+                ObjectInputStream ois = null;
+                try {
+                    ois = new ObjectInputStream(new FileInputStream(cacheFile));
+                    res = ois.readObject().toString();
+                } catch (Exception e) {
+                } finally {
+                    FileUtils.closeIO(ois);
+                }
+                break;
+            }
+        }
+        return res;
     }
 
     /**

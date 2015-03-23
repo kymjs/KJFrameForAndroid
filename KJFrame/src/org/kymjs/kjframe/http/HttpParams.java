@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -74,6 +75,10 @@ public class HttpParams {
         return (fileWraps.size() != 0);
     }
 
+    public void put(String key, int value) {
+        put(key, value + "");
+    }
+
     public void put(String key, String value) {
         if (key != null && value != null) {
             urlParams.put(key, value);
@@ -115,9 +120,18 @@ public class HttpParams {
             if (result.length() > 0) {
                 result.append("&");
             }
-            result.append(entry.getKey());
-            result.append("=");
-            result.append(entry.getValue());
+            if (fileWraps.size() != 0) {
+                try {
+                    result.append(URLEncoder.encode(entry.getKey(), "utf-8"));
+                    result.append("=");
+                    result.append(URLEncoder.encode(entry.getValue(), "utf-8"));
+                } catch (UnsupportedEncodingException e) {
+                    result.append(entry.getKey());
+                    result.append("=");
+                    result.append(entry.getValue());
+                }
+            } else {
+            }
         }
         return result.toString();
     }
