@@ -74,7 +74,7 @@ public abstract class KJActivity extends FrameActivity {
 
     @Override
     protected void onStop() {
-        super.onResume();
+        super.onStop();
         activityState = ActivityState.STOP;
         KJLoger.state(this.getClass().getName(), "---------onStop ");
     }

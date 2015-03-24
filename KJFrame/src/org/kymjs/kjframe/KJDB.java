@@ -280,7 +280,7 @@ public class KJDB {
      * 
      * @param entities
      */
-    public void save(List<Object> entities) {
+    public void save(List<? extends Object> entities) {
         if (entities != null) {
             for (Object t : entities) {
                 save(t);

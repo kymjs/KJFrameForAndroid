@@ -23,7 +23,7 @@ However,KJFrameForAndroid is free open source object. Thanks for you follow this
 		[BitmapLibrary](https://github.com/kymjs/KJFrameForAndroid/wiki/BitmapLibrary)<br>
 		[HttpLibrary](https://github.com/kymjs/KJFrameForAndroid/wiki/HttpLibrary)<br>
 		[DBLibrary](https://github.com/kymjs/KJFrameForAndroid/wiki/DBLibrary)<br>
-3、Used in real project example: [KJMusic player](https://github.com/KJFrame/KJMusic)<br>
+3、Used in real project example: [KJMusic player](https://github.com/KJFrame/KJMusic) and [KJBlog](https://github.com/KJFrame/KJBlog)<br>
 *make use of KJFrameForAndroid works on Android 3.0 or higher and need permission in your AndroidManifest.xml*
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
@@ -49,10 +49,10 @@ However,KJFrameForAndroid is free open source object. Thanks for you follow this
  ```
 ## About Me
 I am Tao Zhang, From ShenZhen China.<br>
-blog：http://my.oschina.net/kymjs/blog<br>
+blog：http://blog.kymjs.com<br>
 email：kymjs123@gmail.com<br>
 If my project help you, Can you buy a bottle of beer for me? <br>
 my account is: kymjs@foxmail.com [click there one's voluntary contribution](https://shenghuo.alipay.com/send/payment/fill.htm)<br>
-如果我的项目帮助了你，希望你有能力的基础上能捐助我买书学习，以让我更有信心和能力回馈网友。
+如果我的项目帮助了你，希望你有能力的基础上能捐助我学习，以让我更有信心和能力回馈网友。
 我的支付宝账号(张涛)：kymjs@foxmail.com[点这里参与我的众筹](https://shenghuo.alipay.com/send/payment/fill.htm)
 ####感谢 沙加(￥99) 江斌(￥88) 夏志强(￥168) 马俊谟(￥88) 黄文燕(￥88) 王婷婷(￥20) 的捐赠
