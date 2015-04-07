@@ -245,7 +245,7 @@ public class KJHttp {
         public VolleyTask(Method requestMethod, String uri, HttpParams params,
                 HttpCallBack callback) {
             super(HttpConfig.CACHEPATH, uri
-                    + (params == null ? "null" : params + "null"),
+                    + (params == null ? "null" : "?" + params + "null"),
                     httpConfig.cacheTime);
             this.requestMethod = requestMethod;
             this.uri = uri;
