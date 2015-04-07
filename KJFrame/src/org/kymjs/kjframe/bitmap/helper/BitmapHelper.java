@@ -119,7 +119,7 @@ public class BitmapHelper {
      *            ：缩放后高度
      */
     public static Bitmap scaleWithWH(Bitmap src, double w, double h) {
-        if (w == 0 || h == 0 || src == null) {
+        if (w <= 0 || h <= 0 || src == null) {
             return src;
         } else {
             // 记录src的宽高

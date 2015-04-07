@@ -244,7 +244,9 @@ public class KJHttp {
 
         public VolleyTask(Method requestMethod, String uri, HttpParams params,
                 HttpCallBack callback) {
-            super(HttpConfig.CACHEPATH, uri + params, httpConfig.cacheTime);
+            super(HttpConfig.CACHEPATH, uri
+                    + (params == null ? "null" : params + "null"),
+                    httpConfig.cacheTime);
             this.requestMethod = requestMethod;
             this.uri = uri;
             this.params = params;
@@ -367,8 +369,14 @@ public class KJHttp {
                         .getBytes(charsetName);// 定义最后数据分隔线
 
                 StringBuilder sb = new StringBuilder();
+                boolean isFirst = true;
                 for (Map.Entry<String, String> entry : params.urlParams
                         .entrySet()) {
+                    if (!isFirst) {
+                        out.write("\r\n".getBytes(charsetName));
+                    } else {
+                        isFirst = false;
+                    }
                     sb.append("--");
                     sb.append(BOUNDARY);
                     sb.append("\r\nContent-Disposition: form-data; name=\"");
@@ -376,12 +384,17 @@ public class KJHttp {
                     sb.append("\"\r\n\r\n");
                     sb.append(entry.getValue());
                     out.write(sb.toString().getBytes(charsetName));
-                    out.write("\r\n".getBytes(charsetName));
                     sb.delete(0, sb.length());
                 }
 
+                isFirst = true;
                 for (Map.Entry<String, HttpParams.FileWrapper> entry : params.fileWraps
                         .entrySet()) {
+                    if (!isFirst) {
+                        out.write("\r\n".getBytes(charsetName));
+                    } else {
+                        isFirst = false;
+                    }
                     sb.append("--")
                             .append(BOUNDARY)
                             .append("\r\nContent-Disposition: form-data;name=\"")
@@ -397,7 +410,6 @@ public class KJHttp {
                     while ((bytes = in.read(buf)) != -1) {
                         out.write(buf, 0, bytes);
                     }
-                    out.write("\r\n".getBytes(charsetName)); // 多个文件时，二个文件之间加入这个
                     sb.delete(0, sb.length());
                 }
                 out.write(end_data);

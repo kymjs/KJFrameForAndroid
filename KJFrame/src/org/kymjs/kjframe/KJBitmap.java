@@ -341,6 +341,8 @@ public class KJBitmap {
                     if (callback != null) {
                         callback.onSuccess(imageView, result);
                     }
+                } else {
+                    setViewImage(imageView, loadBitmap);
                 }
             } else {
                 if (callback != null) {
