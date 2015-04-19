@@ -40,8 +40,6 @@ public class BitmapActivity extends KJActivity {
     private TextView mTv4;
     @BindView(id = R.id.button, click = true)
     private Button mBtn;
-    @BindView(id = R.id.oomcheck, click = true)
-    private Button mOOMBtn;
 
     @Override
     public void setRootView() {
@@ -56,7 +54,6 @@ public class BitmapActivity extends KJActivity {
         mTv3.setText("加载过程中自定义显示过程(基础设置)");
         mTv4.setText("使用回调自定义显示过程(高级设置)");
         mBtn.setText("保存网络图片到本地");
-        mOOMBtn.setText("OOM测试");
     }
 
     @Override
@@ -76,10 +73,7 @@ public class BitmapActivity extends KJActivity {
             display4();
             break;
         case R.id.button:
-            save();
-            break;
-        case R.id.oomcheck:
-            // showActivity(aty, OOMCheckActivity.class);
+            ViewInject.toast("请查看代码中注释");
             break;
         }
     }

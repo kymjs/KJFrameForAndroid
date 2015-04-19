@@ -3,7 +3,6 @@ package org.kymjs.kjframe.demo;
 import org.kymjs.kjframe.KJActivity;
 import org.kymjs.kjframe.demo.widget.KJListViewDemo;
 import org.kymjs.kjframe.demo.widget.KJSlidingMenuDemo;
-import org.kymjs.kjframe.demo.widget.NewListViewDemo;
 import org.kymjs.kjframe.demo.widget.ScaleImageDemo;
 import org.kymjs.kjframe.ui.BindView;
 
@@ -21,8 +20,6 @@ public class WidgetActivity extends KJActivity {
     private Button mBtn4;
     @BindView(id = R.id.button5, click = true)
     private Button mBtn5;
-    @BindView(id = R.id.button6, click = true)
-    private Button mBtn6;
 
     @Override
     public void setRootView() {
@@ -37,7 +34,6 @@ public class WidgetActivity extends KJActivity {
         mBtn3.setText("KJScrollView不支持上下拉刷新");
         mBtn4.setText("KJViewPager请访问：https://github.com/kymjs/KJController");
         mBtn5.setText("缩放旋转ImageView");
-        mBtn6.setText("新版上下拉控件");
     }
 
     @Override
@@ -56,9 +52,6 @@ public class WidgetActivity extends KJActivity {
             break;
         case R.id.button5:
             showActivity(aty, ScaleImageDemo.class);
-            break;
-        case R.id.button6:
-            showActivity(aty, NewListViewDemo.class);
             break;
         }
     }

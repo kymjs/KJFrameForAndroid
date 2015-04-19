@@ -228,7 +228,7 @@ public class StringUtils {
         }
 
         if (time == null) {
-            return sdate;
+            return "Unknown";
         }
         String ftime = "";
         Calendar cal = Calendar.getInstance();

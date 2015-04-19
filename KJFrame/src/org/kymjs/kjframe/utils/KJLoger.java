@@ -71,4 +71,8 @@ public final class KJLoger {
             e.printStackTrace();
         }
     }
+
+    public static final void debug(String msg, Object... format) {
+        debug(String.format(msg, format));
+    }
 }
