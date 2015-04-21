@@ -313,6 +313,7 @@ public class KJHttp {
      * @param request
      */
     public void doRequest(Request<?> request) {
+        request.setConfig(mConfig);
         add(request);
     }
 
@@ -332,6 +333,16 @@ public class KJHttp {
         } else {
             return new byte[0];
         }
+    }
+
+    /**
+     * 只有你确定cache是一个String时才可以使用这个方法，否则还是应该使用getCache(String);
+     * 
+     * @param url
+     * @return
+     */
+    public String getStringCache(String url) {
+        return new String(getCache(url));
     }
 
     /**

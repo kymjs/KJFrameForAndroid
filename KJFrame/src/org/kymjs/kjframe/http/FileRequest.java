@@ -40,7 +40,8 @@ public class FileRequest extends Request<byte[]> {
             if (mTemporaryFile.canRead() && mTemporaryFile.length() > 0) {
                 if (mTemporaryFile.renameTo(mStoreFile)) {
                     return Response.success(response.data, response.headers,
-                            HttpHeaderParser.parseCacheHeaders(response));
+                            HttpHeaderParser.parseCacheHeaders(mConfig,
+                                    response));
                 } else {
                     errorMessage = "Can't rename the download temporary file!";
                 }

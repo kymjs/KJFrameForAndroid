@@ -27,7 +27,8 @@ import org.apache.http.protocol.HTTP;
  */
 public class HttpHeaderParser {
 
-    public static Cache.Entry parseCacheHeaders(NetworkResponse response) {
+    public static Cache.Entry parseCacheHeaders(HttpConfig httpconfig,
+            NetworkResponse response) {
         long now = System.currentTimeMillis();
 
         Map<String, String> headers = response.headers;
@@ -86,7 +87,7 @@ public class HttpHeaderParser {
         if (HttpConfig.useServerControl) {
             entry.softTtl = softExpire;
         } else {
-            entry.softTtl = now + HttpConfig.cacheTime * 60000; // 分钟转毫秒
+            entry.softTtl = now + httpconfig.cacheTime * 60000; // 分钟转毫秒
         }
 
         entry.etag = serverEtag;

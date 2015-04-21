@@ -71,6 +71,7 @@ public abstract class Request<T> implements Comparable<Request<T>> {
 
     protected final HttpCallBack mCallback;
     protected KJHttp mRequestQueue;
+    protected HttpConfig mConfig;
 
     private Object mTag; // 本次请求的tag，方便在取消时找到它
     private Cache.Entry mCacheEntry = null;
@@ -89,6 +90,10 @@ public abstract class Request<T> implements Comparable<Request<T>> {
 
     public int getMethod() {
         return mMethod;
+    }
+
+    public void setConfig(HttpConfig config) {
+        this.mConfig = config;
     }
 
     /**

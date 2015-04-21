@@ -467,7 +467,6 @@ public class KJDB {
             T entity = CursorHelper.dbModel2Entity(dbModel, clazz);
             return loadManyToOne(entity, clazz);
         }
-
         return null;
     }
 

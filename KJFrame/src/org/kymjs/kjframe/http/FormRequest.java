@@ -53,7 +53,7 @@ public class FormRequest extends Request<byte[]> {
     @Override
     public Response<byte[]> parseNetworkResponse(NetworkResponse response) {
         return Response.success(response.data, response.headers,
-                HttpHeaderParser.parseCacheHeaders(response));
+                HttpHeaderParser.parseCacheHeaders(mConfig, response));
     }
 
     @Override
