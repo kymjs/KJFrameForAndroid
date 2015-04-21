@@ -16,12 +16,12 @@ However,KJFrameForAndroid is free open source object. Thanks for you follow this
 * dynamic-load-apk：[https://github.com/singwhatiwanna/dynamic-load-apk](https://github.com/singwhatiwanna/dynamic-load-apk)<br>
 
 ## usage
-For English help file: [click here](https://github.com/kymjs/KJFrameForAndroid/wiki/)
+For English help file: [click here](https://github.com/kymjs/KJFrameForAndroid/wiki/)<br>
 中文版使用帮助：[点击查看](https://github.com/kymjs/KJFrameForAndroid/wiki/Home_cn)
 
 ##License
 ```
- Copyright 2014,The KJFrameForAndroid Open Source Project.
+ Copyright (C) 2014, 张涛
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ For English help file: [click here](https://github.com/kymjs/KJFrameForAndroid/w
  limitations under the License.
  ```
 ## About Me
-我的自我介绍：[我就是我](http://blog.kymjs.com/about)<br>
+我的自我介绍：[张涛就是我](http://blog.kymjs.com/about)<br>
 如果我的项目帮到了你，可否在你有能力的基础捐助我买书学习，以让我更有信心和能力回馈网友。<br>
 [点这里参与捐助](https://shenghuo.alipay.com/send/payment/fill.htm) 我的支付宝账号[kymjs@foxmail.com](https://shenghuo.alipay.com/send/payment/fill.htm)<br>
 
