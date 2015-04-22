@@ -55,7 +55,6 @@ public interface Cache {
 
         public long serverDate; // 本次请求成功时的服务器时间
         public long ttl; // 有效期,System.currentTimeMillis()
-        public long softTtl; // 刷新期,System.currentTimeMillis()
 
         public Map<String, String> responseHeaders = Collections.emptyMap();
 
@@ -64,13 +63,6 @@ public interface Cache {
          */
         public boolean isExpired() {
             return this.ttl < System.currentTimeMillis();
-        }
-
-        /**
-         * 是否需要刷新这个缓存
-         */
-        public boolean refreshNeeded() {
-            return this.softTtl < System.currentTimeMillis();
         }
     }
 

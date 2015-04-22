@@ -36,12 +36,6 @@ public class Response<T> {
 
     public final Map<String, String> headers;
 
-    /**
-     * 这个响应是否是中介响应(当本地有一个未过期缓存的时候会优先返回一个缓存，但如果这个缓存又是需要刷新的时候，会再次去请求网络，
-     * 那么之前返回的那个有效但需要刷新的就是中介响应)
-     */
-    public boolean intermediate = false;
-
     public boolean isSuccess() {
         return error == null;
     }

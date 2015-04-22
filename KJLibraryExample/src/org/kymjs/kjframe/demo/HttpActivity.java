@@ -160,8 +160,8 @@ public class HttpActivity extends KJActivity {
         // params.put("msg", "没有网，[发怒]");
         // params.putHeaders("cookie", "cookie不能告诉你");
         // kjh.post("http://www.oschina.net/action/api/tweet_pub", params,
-        params.put("username", "OSC账号");
-        params.put("pwd", "OSC密码");
+        params.put("username", "kymjs123@gmail.com");
+        params.put("pwd", "ZT2995212680");
         kjh.post("http://www.oschina.net/action/api/login_validate", params,
                 new HttpCallBack() {
                     @Override

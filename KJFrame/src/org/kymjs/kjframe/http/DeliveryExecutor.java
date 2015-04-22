@@ -95,10 +95,7 @@ public class DeliveryExecutor implements Delivery {
                 mRequest.deliverError(mResponse.error);
             }
             mRequest.requestFinish();
-
-            if (!mResponse.intermediate) { // 如果不是中介响应
-                mRequest.finish("done");
-            }
+            mRequest.finish("done");
             if (mRunnable != null) { // 执行参数runnable
                 mRunnable.run();
             }

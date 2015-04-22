@@ -114,28 +114,10 @@ public class CacheDispatcher extends Thread {
                 Response<?> response = request
                         .parseNetworkResponse(new NetworkResponse(entry.data,
                                 entry.responseHeaders));
-
-                if (!entry.refreshNeeded()) { // 如果缓存是不需要刷新的，则直接分发出去
-                    if (mConfig.useDelayCache) {
-                        sleep(mConfig.delayTime);
-                    }
-                    mDelivery.postResponse(request, response);
-                } else {
-                    // 如果缓存需要刷新，则先分发出去一个响应，同时再去请求一次新数据
-                    request.setCacheEntry(entry);
-                    response.intermediate = true;
-                    // 把中介事情交给分发器去处理
-                    mDelivery.postResponse(request, response, new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                mNetworkQueue.put(request);
-                            } catch (InterruptedException e) {
-                            }
-                        }
-                    });
+                if (mConfig.useDelayCache) {
+                    sleep(mConfig.delayTime);
                 }
-
+                mDelivery.postResponse(request, response);
             } catch (InterruptedException e) {
                 if (mQuit) {
                     return;

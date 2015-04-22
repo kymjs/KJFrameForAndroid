@@ -85,13 +85,12 @@ public class HttpHeaderParser {
         entry.data = response.data;
 
         if (HttpConfig.useServerControl) {
-            entry.softTtl = softExpire;
+            entry.ttl = softExpire;
         } else {
-            entry.softTtl = now + httpconfig.cacheTime * 60000; // 分钟转毫秒
+            entry.ttl = now + httpconfig.cacheTime * 60000; // 分钟转毫秒
         }
 
         entry.etag = serverEtag;
-        entry.ttl = entry.softTtl;
         entry.serverDate = serverDate;
         entry.responseHeaders = headers;
         return entry;

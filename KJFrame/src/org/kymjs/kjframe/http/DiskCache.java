@@ -168,11 +168,8 @@ public class DiskCache implements Cache {
     @Override
     public synchronized void invalidate(String key, boolean fullExpire) {
         Entry entry = get(key);
-        if (entry != null) {
-            entry.softTtl = 0;
-            if (fullExpire) {
-                entry.ttl = 0;
-            }
+        if (entry != null && fullExpire) {
+            entry.ttl = 0;
             put(key, entry);
         }
 
@@ -353,7 +350,6 @@ public class DiskCache implements Cache {
             this.etag = entry.etag;
             this.serverDate = entry.serverDate;
             this.ttl = entry.ttl;
-            this.softTtl = entry.softTtl;
             this.responseHeaders = entry.responseHeaders;
         }
 
@@ -393,7 +389,6 @@ public class DiskCache implements Cache {
             e.etag = etag;
             e.serverDate = serverDate;
             e.ttl = ttl;
-            e.softTtl = softTtl;
             e.responseHeaders = responseHeaders;
             return e;
         }
