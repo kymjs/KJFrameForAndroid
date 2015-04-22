@@ -57,9 +57,9 @@ public class FormRequest extends Request<byte[]> {
     }
 
     @Override
-    protected void deliverResponse(byte[] response) {
+    protected void deliverResponse(Map<String, String> headers, byte[] response) {
         if (mCallback != null) {
-            mCallback.onSuccess(response);
+            mCallback.onSuccess(headers, response);
         }
     }
 }

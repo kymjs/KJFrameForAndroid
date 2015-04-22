@@ -50,6 +50,8 @@ public class HttpConfig {
     public Delivery mDelivery;
     /** 下载控制器队列，对每个下载任务都有一个控制器负责控制下载 */
     public DownloadTaskQueue mController;
+    /** 全局的cookie，如果每次Http请求都需要传递固定的cookie，可以设置本项 */
+    public static String sCookie;
 
     public HttpConfig() {
         File folder = FileUtils.getSaveFolder(CACHEPATH);
@@ -71,5 +73,14 @@ public class HttpConfig {
             return new HttpClientStack(
                     AndroidHttpClient.newInstance("volley/0"));
         }
+    }
+
+    public void setCookieString(String cookie) {
+        sCookie = cookie;
+
+    }
+
+    public String getCookieString() {
+        return sCookie;
     }
 }

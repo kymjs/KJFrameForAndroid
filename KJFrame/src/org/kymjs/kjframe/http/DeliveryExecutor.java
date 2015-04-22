@@ -90,7 +90,7 @@ public class DeliveryExecutor implements Delivery {
             }
 
             if (mResponse.isSuccess()) {
-                mRequest.deliverResponse(mResponse.result);
+                mRequest.deliverResponse(mResponse.headers, mResponse.result);
             } else {
                 mRequest.deliverError(mResponse.error);
             }

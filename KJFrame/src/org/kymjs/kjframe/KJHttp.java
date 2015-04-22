@@ -106,7 +106,7 @@ public class KJHttp {
      *            请求中的回调方法
      */
     public Request<byte[]> get(String url, HttpCallBack callback) {
-        return get(url, null, callback);
+        return get(url, new HttpParams(), callback);
     }
 
     /**

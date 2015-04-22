@@ -304,7 +304,8 @@ public abstract class Request<T> implements Comparable<Request<T>> {
      * @param response
      *            {@link #parseNetworkResponse(NetworkResponse)}
      */
-    abstract protected void deliverResponse(T response);
+    abstract protected void deliverResponse(Map<String, String> headers,
+            T response);
 
     /**
      * 响应Http请求异常的回调

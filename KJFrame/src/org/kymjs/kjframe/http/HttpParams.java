@@ -81,6 +81,7 @@ public class HttpParams implements HttpEntity {
 
     public HttpParams() {
         this.mBoundary = generateBoundary();
+        mHeaders.put("cookie", HttpConfig.sCookie);
     }
 
     /**

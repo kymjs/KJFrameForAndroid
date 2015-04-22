@@ -1,6 +1,7 @@
 package org.kymjs.kjframe.demo;
 
 import java.io.File;
+import java.util.Map;
 
 import org.kymjs.kjframe.KJActivity;
 import org.kymjs.kjframe.KJHttp;
@@ -10,6 +11,7 @@ import org.kymjs.kjframe.ui.BindView;
 import org.kymjs.kjframe.utils.FileUtils;
 import org.kymjs.kjframe.utils.KJLoger;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -154,15 +156,20 @@ public class HttpActivity extends KJActivity {
     private void post() {
         KJHttp kjh = KJHttp.create();
         HttpParams params = new HttpParams();
-        params.put("uid", 863548);
-        params.put("msg", "没有网，[发怒]");
-        params.putHeaders("cookie", "cookie不能告诉你");
-        kjh.post("http://www.oschina.net/action/api/tweet_pub", params,
+        // params.put("uid", 863548);
+        // params.put("msg", "没有网，[发怒]");
+        // params.putHeaders("cookie", "cookie不能告诉你");
+        // kjh.post("http://www.oschina.net/action/api/tweet_pub", params,
+        params.put("username", "OSC账号");
+        params.put("pwd", "OSC密码");
+        kjh.post("http://www.oschina.net/action/api/login_validate", params,
                 new HttpCallBack() {
                     @Override
-                    public void onSuccess(String t) {
-                        super.onSuccess(t);
-                        toast(t);
+                    public void onSuccess(Map<String, String> headers, byte[] t) {
+                        super.onSuccess(headers, t);
+                        // 获取cookie
+                        KJLoger.debug("===" + headers.get("Set-Cookie"));
+                        Log.i("kymjs", new String(t));
                     }
                 });
     }
