@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 The Android Open Source Project
+ * Copyright (c) 2014, 张涛.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
-import org.kymjs.kjframe.http.Request;
 
 /**
  * Http请求端，已知实现类:
