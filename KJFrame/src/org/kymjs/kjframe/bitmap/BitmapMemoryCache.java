@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kymjs.kjframe.bitmap.helper;
+package org.kymjs.kjframe.bitmap;
 
+import org.kymjs.kjframe.bitmap.ImageDisplayer.ImageCache;
 import org.kymjs.kjframe.utils.SystemTool;
 
 import android.annotation.SuppressLint;
@@ -28,13 +29,13 @@ import android.graphics.Bitmap;
  * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  */
-public final class BitmapMemoryCache {
+public final class BitmapMemoryCache implements ImageCache {
 
     private MemoryLruCache<String, Bitmap> cache;
 
     public BitmapMemoryCache() {
         int maxMemory = (int) (Runtime.getRuntime().maxMemory());
-        init(maxMemory / 4);
+        init(maxMemory / 8);
     }
 
     /**
@@ -42,7 +43,7 @@ public final class BitmapMemoryCache {
      *            使用内存缓存的内存大小，单位：kb
      */
     public BitmapMemoryCache(int maxSize) {
-        init(maxSize / 4);
+        init(maxSize);
     }
 
     /**
@@ -64,21 +65,61 @@ public final class BitmapMemoryCache {
         };
     }
 
-    public void put(String key, Bitmap bitmap) {
-        if (this.get(key) == null) {
-            cache.put(key, bitmap);
-        }
-    }
-
-    public Bitmap get(String key) {
-        return cache.get(key);
-    }
-
     public void remove(String key) {
         cache.remove(key);
     }
 
     public void removeAll() {
         cache.removeAll();
+    }
+
+    /**
+     * 已过期，请使用putBitmap(String key, Bitmap bitmap)
+     * 
+     * @param key
+     *            图片的地址
+     * @param bitmap
+     *            要缓存的bitmap
+     */
+    @Deprecated
+    public void put(String key, Bitmap bitmap) {
+        if (this.get(key) == null) {
+            cache.put(key, bitmap);
+        }
+    }
+
+    /**
+     * 已过期，请使用gutBitmap(String key)
+     * 
+     * @param key
+     *            图片的地址
+     * @return
+     */
+    @Deprecated
+    public Bitmap get(String key) {
+        return cache.get(key);
+    }
+
+    /**
+     * @param url
+     *            图片的地址
+     * @return
+     */
+    @Override
+    public Bitmap getBitmap(String url) {
+        return cache.get(url);
+    }
+
+    /**
+     * @param url
+     *            图片的地址
+     * @param bitmap
+     *            要缓存的bitmap
+     */
+    @Override
+    public void putBitmap(String url, Bitmap bitmap) {
+        if (this.getBitmap(url) == null) {
+            cache.put(url, bitmap);
+        }
     }
 }

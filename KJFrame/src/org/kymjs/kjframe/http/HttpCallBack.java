@@ -17,6 +17,8 @@ package org.kymjs.kjframe.http;
 
 import java.util.Map;
 
+import android.graphics.Bitmap;
+
 /**
  * Http请求回调类<br>
  * 
@@ -63,6 +65,14 @@ public abstract class HttpCallBack {
     public void onSuccess(Map<String, String> headers, byte[] t) {
         onSuccess(t);
     }
+
+    /**
+     * 仅在KJBitmap中可用，图片加载完成时回调
+     * 
+     * @param headers
+     * @param t
+     */
+    public void onSuccess(Bitmap t) {}
 
     /**
      * Http请求失败时回调

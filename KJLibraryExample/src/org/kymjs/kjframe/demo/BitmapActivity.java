@@ -3,17 +3,11 @@ package org.kymjs.kjframe.demo;
 import org.kymjs.kjframe.KJActivity;
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.bitmap.BitmapConfig;
-import org.kymjs.kjframe.bitmap.BitmapDownloader;
-import org.kymjs.kjframe.bitmap.helper.BitmapCreate;
-import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
-import org.kymjs.kjframe.demo.bean.ImageData;
 import org.kymjs.kjframe.ui.BindView;
 import org.kymjs.kjframe.ui.ViewInject;
 import org.kymjs.kjframe.utils.FileUtils;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -52,7 +46,7 @@ public class BitmapActivity extends KJActivity {
         mTv1.setText("使用控件宽高显示图片(默认)");
         mTv2.setText("强制显示原图(可能OOM)");
         mTv3.setText("加载过程中自定义显示过程(基础设置)");
-        mTv4.setText("使用回调自定义显示过程(高级设置)");
+        mTv4.setText("高级设置");
         mBtn.setText("保存网络图片到本地");
     }
 
@@ -70,39 +64,37 @@ public class BitmapActivity extends KJActivity {
             display3();
             break;
         case R.id.imageView4:
-            display4();
+            ViewInject.toast("请查看代码中的更多方法");
             break;
         case R.id.button:
-            ViewInject.toast("请查看代码中注释");
+            save();
+            ViewInject.toast("图片将会出现在SD卡根目录OSL.png");
             break;
         }
     }
 
-    /**
-     * 图片压缩方法
-     */
-    private void zoomImage() {
-        // 图片压缩
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.image);
-        bitmap = BitmapHelper.imageZoom(bitmap, 100);
-        FileUtils.bitmapToFile(bitmap, FileUtils.getSDCardPath() + "/111.jpg");
+    private void save() {
+        KJBitmap kjb = KJBitmap.create();
+        kjb.saveImage(this, "http://www.kymjs.com/image/logo.png",
+                FileUtils.getSDCardPath() + "/OSL.png");
+    }
+
+    private void removeCache() {
+        KJBitmap kjb = KJBitmap.create();
+        kjb.removeCache("http://static.oschina.net/uploads/space/2015/0420/133006_NnLQ_12.jpg");
     }
 
     private void display1() {
         KJBitmap kjb = KJBitmap.create();
-        // kjb.display(mImg1, FileUtils.getSDCardPath() + "1.jpg"); // 加载本地图片的方法
-        kjb.display(
-                mImg1,
-                "http://static.oschina.net/uploads/space/2014/1202/142217_a864_12.jpg",
-                R.drawable.ic_launcher);
+        kjb.display(mImg1,
+                "http://static.oschina.net/uploads/space/2015/0420/133006_NnLQ_12.jpg");
     }
 
     private void display2() {
         KJBitmap kjb = KJBitmap.create();
         kjb.display(
                 mImg2,
-                "http://static.oschina.net/uploads/space/2014/1202/141911_y1Zl_993989.jpg",
+                "http://static.oschina.net/uploads/space/2015/0420/133006_NnLQ_12.jpg",
                 0, 0);
     }
 
@@ -110,79 +102,30 @@ public class BitmapActivity extends KJActivity {
         KJBitmap kjb = KJBitmap.create();
         kjb.display(
                 mImg3,
-                "http://static.oschina.net/uploads/space/2014/1202/142217_a864_12.jpg",
-                BitmapCreate.bitmapFromResource(getResources(),
-                        R.drawable.ic_launcher, 0, 0));
-    }
-
-    private void display4() {
-        KJBitmap kjb = KJBitmap.create();
-        kjb.setCallback(new BitmapCallBack() {
-            @Override
-            public void onSuccess(View view, Bitmap bitmap) {
-                ViewInject.toast("加载成功");
-            }
-
-            @Override
-            public void onPreLoad(View view) {
-                super.onPreLoad(view);
-                ViewInject.toast("开始加载图片");
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                ViewInject.toast("加载失败");
-            }
-        });
-        kjb.display(mImg4,
-                "http://static.oschina.net/uploads/space/2014/1127/160305_YsAg_12.jpg");
-    }
-
-    /**
-     * 自定义缓存路径
-     */
-    private void display5() {
-        BitmapConfig bitmapConfig = new BitmapConfig();
-        BitmapConfig.CACHEPATH = "hello/world"; // 设置图片缓存路径为SD卡根目录hello文件夹下world文件夹内
-        // BitmapConfig.CACHE_FILENAME_PREFIX = "KJLibrary_";// 设置缓存前缀
-        bitmapConfig.downloader = new BitmapDownloader(bitmapConfig); // 使用自定义的图片加载器（默认使用框架中的）
-        KJBitmap kjb = KJBitmap.create(bitmapConfig);
-        /** 然后剩下的都一样了 */
-    }
-
-    /**
-     * 保存一个网络图片到本地
-     */
-    private void save() {
-        // 简洁版，保存当前图片到SD卡KJLibrary目录下并命名为KJLibraryImage.jpg
-        // KJBitmap.create().saveImage(ImageData.imgs[2],
-        // "KJLibrary/KJLibraryImage.jpg");
-
-        // 最完善的一种方法，提供整个图片下载过程中的回调
-        KJBitmap.create().saveImage(ImageData.imgs[2], "KJLibraryImage.jpg",
+                "http://static.oschina.net/uploads/space/2015/0420/133006_NnLQ_12.jpg",
                 new BitmapCallBack() {
                     @Override
-                    public void onPreLoad(View view) {
-                        super.onPreLoad(view);
-                        ViewInject.toast("开始");
+                    public void onPreLoad() {
+                        super.onPreLoad();
+                        ViewInject.toast("即将开始下载");
                     }
 
                     @Override
-                    public void onSuccess(View view, Bitmap bitmap) {
-                        super.onSuccess(view, bitmap);
-                        ViewInject.toast("成功");
+                    public void onSuccess(Bitmap bitmap) {
+                        super.onSuccess(bitmap);
+                        ViewInject.toast("加载成功");
                     }
 
                     @Override
                     public void onFailure(Exception e) {
                         super.onFailure(e);
-                        ViewInject.toast("失败");
+                        ViewInject.toast("加载失败");
                     }
 
                     @Override
-                    public void onFinish(View view) {
-                        super.onFinish(view);
-                        ViewInject.toast("完成");
+                    public void onFinish() {
+                        super.onFinish();
+                        ViewInject.toast("加载完成");
                     }
                 });
     }

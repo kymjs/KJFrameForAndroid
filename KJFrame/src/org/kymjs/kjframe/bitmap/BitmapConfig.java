@@ -15,10 +15,13 @@
  */
 package org.kymjs.kjframe.bitmap;
 
-import org.kymjs.kjframe.bitmap.helper.BitmapCreate;
-import org.kymjs.kjframe.utils.KJLoger;
+import java.io.File;
 
-import android.app.Activity;
+import org.kymjs.kjframe.bitmap.ImageDisplayer.ImageCache;
+import org.kymjs.kjframe.http.Cache;
+import org.kymjs.kjframe.http.DiskCache;
+import org.kymjs.kjframe.utils.FileUtils;
+import org.kymjs.kjframe.utils.KJLoger;
 
 /**
  * Bitmap配置器
@@ -29,38 +32,23 @@ import android.app.Activity;
 public class BitmapConfig {
 
     public boolean isDEBUG = KJLoger.DEBUG_LOG;
-    public int memoryCacheSize;
-
-    public Activity cxt;
 
     public static String CACHEPATH = "KJLibrary/image";
-    public static String CACHE_FILENAME_PREFIX = "KJLibrary_";
-    public int diskCacheSize = 41943040; // 40M
 
-    public I_ImageLoader downloader;
+    /** 磁盘缓存大小 */
+    public static int DISK_CACHE_SIZE = 5 * 1024 * 1024;
+    /** 磁盘缓存器 **/
+    public Cache mCache;
+    public ImageCache mMemoryCache;
+
+    /** 已使用全新的DiskCache，不再需要prefix参数 */
+    @Deprecated
+    public static String CACHE_FILENAME_PREFIX = "KJLibrary_";
 
     public BitmapConfig() {
-        memoryCacheSize = (int) (Runtime.getRuntime().maxMemory());
-        downloader = new BitmapDownloader(this);
-    }
-
-    public void setDefaultWidth(int w) {
-        if (w > 0) {
-            BitmapCreate.DEFAULT_W = w;
-        }
-    }
-
-    public int getDefaultWidth() {
-        return BitmapCreate.DEFAULT_W;
-    }
-
-    public void setDefaultHeight(int h) {
-        if (h > 0) {
-            BitmapCreate.DEFAULT_H = h;
-        }
-    }
-
-    public int getDefaultHeight() {
-        return BitmapCreate.DEFAULT_H;
+        File folder = FileUtils.getSaveFolder(CACHEPATH);
+        mCache = new DiskCache(folder, DISK_CACHE_SIZE);
+        mMemoryCache = new BitmapMemoryCache((int) (Runtime.getRuntime()
+                .maxMemory() / 8));
     }
 }
