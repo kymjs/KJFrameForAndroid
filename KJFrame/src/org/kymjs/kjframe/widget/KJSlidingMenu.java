@@ -17,7 +17,6 @@ package org.kymjs.kjframe.widget;
 
 import org.kymjs.kjframe.utils.DensityUtils;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -37,7 +36,7 @@ public class KJSlidingMenu extends HorizontalScrollView {
     private int mMenuWidth; // 菜单宽度
     private boolean isOpen;
     private boolean once; // 本控件是否首次创建
-    private boolean actionUpIsEffective = true;// ActionUp事件是否有效
+
     private boolean showAnim;
 
     private int mHalfMenuWidth; // 改变菜单状态时手指滑动的最大值:默认菜单宽度的1/3
@@ -46,7 +45,6 @@ public class KJSlidingMenu extends HorizontalScrollView {
     private float prevX = 0; // 初始按下时的X坐标
     private float maxX = 0; // 移动过程中X的极大值
     private float minX = 0; // 移动过程中X的极小值
-    private float currentLeft = 0; // 当前onScrollChange的第一个参数值
 
     private OnScrollProgressListener progressListener;
 
@@ -68,7 +66,6 @@ public class KJSlidingMenu extends HorizontalScrollView {
     }
 
     @Override
-    @SuppressLint({ "DrawAllocation", "ClickableViewAccessibility" })
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (!once) {
             LinearLayout wrapper = (LinearLayout) getChildAt(0);// 获取到根布局
@@ -98,7 +95,6 @@ public class KJSlidingMenu extends HorizontalScrollView {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-        currentLeft = l;
         if (showAnim) {
             float scale = l * 1.0f / mMenuWidth;
             float leftScale = 1 - 0.3f * scale;
@@ -117,37 +113,13 @@ public class KJSlidingMenu extends HorizontalScrollView {
     }
 
     @Override
-    @SuppressLint("ClickableViewAccessibility")
     public boolean onTouchEvent(MotionEvent ev) {
         createVelocityTracker(ev);
         switch (ev.getAction()) {
-        case MotionEvent.ACTION_DOWN: // 不调用break
         case MotionEvent.ACTION_MOVE:
             float x = ev.getX();
             if (prevX == 0) { // 放在move事件中初始化，防止down事件不调用
                 maxX = minX = prevX = x;
-            }
-            if (currentLeft > mMenuWidth) {
-                if (prevX < x) {
-                    actionUpIsEffective = false;
-                } else {
-                    actionUpIsEffective = true;
-                }
-                return false;
-            } else if (currentLeft == mMenuWidth && prevX >= x) {
-                actionUpIsEffective = false;
-                return false;
-            }
-            if (currentLeft < 0) {
-                if (prevX > x) {
-                    actionUpIsEffective = false;
-                } else {
-                    actionUpIsEffective = true;
-                }
-                return false;
-            } else if (currentLeft == 0 && prevX <= x) {
-                actionUpIsEffective = false;
-                return false;
             }
             if (maxX < x) {
                 maxX = x;
@@ -155,24 +127,15 @@ public class KJSlidingMenu extends HorizontalScrollView {
             if (minX > x) {
                 minX = x;
             }
-            actionUpIsEffective = true;
             break;
         case MotionEvent.ACTION_UP:
-            if (isOpen & prevX > mMenuWidth && getX() > mMenuWidth) {
-                close();
-                return true;
+            if (getScrollVelocity() > SNAP_VELOCITY) { // 如果滑动达到一定速度
+                checkMenuByOrientation(prevX - maxX, prevX - minX); // 检测这个手势是想打开还是关闭并执行
+            } else { // 如果达不到，就检测移动的距离
+                checkMenuByDistance();
             }
-            if (actionUpIsEffective) {
-                if (getScrollVelocity() > SNAP_VELOCITY) { // 如果滑动达到一定速度
-                    checkMenuByOrientation(prevX - maxX, prevX - minX); // 检测这个手势是想打开还是关闭并执行
-                } else { // 如果达不到，就检测移动的距离
-                    checkMenuByDistance();
-                }
-                maxX = minX = prevX = 0;
-                recycleVelocityTracker();
-            } else {
-                reduction();
-            }
+            maxX = minX = prevX = 0;
+            recycleVelocityTracker();
             return true;
         }
         return super.onTouchEvent(ev);
@@ -250,23 +213,11 @@ public class KJSlidingMenu extends HorizontalScrollView {
     }
 
     /**
-     * 由于判断失误造成的微量移动，还原这个移动
-     */
-    private void reduction() {
-        if (Math.abs(currentLeft - 0) < Math.abs(currentLeft - mMenuWidth)) {
-            open();
-        } else {
-            close();
-        }
-    }
-
-    /**
      * 打开菜单
      */
     private void open() {
         this.smoothScrollTo(0, 0);
         isOpen = true;
-        mContent.setClickable(false);
     }
 
     /**
@@ -275,15 +226,9 @@ public class KJSlidingMenu extends HorizontalScrollView {
     private void close() {
         this.smoothScrollTo(mMenuWidth, 0);
         isOpen = false;
-        mContent.setClickable(true);
     }
 
     /************************ public method *****************************/
-
-    public ViewGroup getContentView() {
-        return mContent;
-    }
-
     public void openMenu() {
         if (!isOpen) {
             open();

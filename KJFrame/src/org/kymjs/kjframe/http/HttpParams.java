@@ -121,7 +121,7 @@ public class HttpParams implements HttpEntity {
     /**
      * 添加二进制参数, 例如Bitmap的字节流参数
      * 
-     * @param key
+     * @param paramName
      * @param rawData
      */
     public void put(String paramName, final byte[] rawData) {

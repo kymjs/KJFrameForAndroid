@@ -34,7 +34,7 @@ import android.widget.TextView;
 
 /**
  * 可上下拉刷新listview<br>
- * 由于Android5.0风格的改变，建议使用#{@link KJSwipeRefreshLayout}，此处仅为兼容旧版本代码。
+ * 由于Android5.0风格的改变，建议使用 v4包的KJSwipeRefreshLayout，此处仅为兼容旧版本代码。
  * 
  * <b>创建时间</b> 2014-7-5
  * 

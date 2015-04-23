@@ -21,7 +21,7 @@ import android.annotation.SuppressLint;
 import android.view.View;
 
 /**
- * SlidingMenu所需工具类{@link #KJSlidingMenu}
+ * KJSlidingMenu所需工具类
  * 
  * @author kymjs (https://github.com/kymjs)
  */

@@ -253,7 +253,7 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     }
 
     /**
-     * 本次请求的优先级，四种<
+     * 本次请求的优先级，四种
      */
     public enum Priority {
         LOW, NORMAL, HIGH, IMMEDIATE

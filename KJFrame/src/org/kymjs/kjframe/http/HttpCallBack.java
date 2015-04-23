@@ -69,7 +69,6 @@ public abstract class HttpCallBack {
     /**
      * 仅在KJBitmap中可用，图片加载完成时回调
      * 
-     * @param headers
      * @param t
      */
     public void onSuccess(Bitmap t) {}
@@ -77,7 +76,6 @@ public abstract class HttpCallBack {
     /**
      * Http请求失败时回调
      * 
-     * @param t
      * @param errorNo
      *            错误码
      * @param strMsg

@@ -53,7 +53,7 @@ import org.kymjs.kjframe.utils.KJLoger;
  * 2、另一边由TaskThread不停从NetworkQueue中取Request并交给Network执行器(逻辑请查看
  * {@link NetworkDispatcher} )，<br>
  * 3、Network执行器将执行成功的NetworkResponse返回给TaskThead，并通过Request的定制方法
- * {@link Request#parseNetworkResponse()}封装成Response，最终交给分发器 {@link Delivery}
+ * {@link #Request#parseNetworkResponse()}封装成Response，最终交给分发器 {@link Delivery}
  * 分发到主线程并调用HttpCallback相应的方法
  * 
  */
