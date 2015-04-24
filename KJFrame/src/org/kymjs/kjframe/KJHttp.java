@@ -76,20 +76,11 @@ public class KJHttp {
     // 配置器
     private final HttpConfig mConfig;
 
-    private static KJHttp instance;
-
-    public static KJHttp create() {
-        return create(new HttpConfig());
+    public KJHttp() {
+        this(new HttpConfig());
     }
 
-    public synchronized static KJHttp create(HttpConfig config) {
-        if (instance == null) {
-            instance = new KJHttp(config);
-        }
-        return instance;
-    }
-
-    private KJHttp(HttpConfig config) {
+    public KJHttp(HttpConfig config) {
         this.mConfig = config;
         mConfig.mController.setRequestQueue(this);
         mTaskThreads = new NetworkDispatcher[HttpConfig.NETWORK_POOL_SIZE];

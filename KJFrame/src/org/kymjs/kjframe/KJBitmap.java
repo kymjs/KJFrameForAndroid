@@ -56,31 +56,16 @@ import android.widget.ImageView;
  */
 public class KJBitmap {
 
-    private static KJBitmap instance;
-
     private final BitmapConfig mConfig;
     private final ImageDisplayer displayer;
 
     private final List<View> doLoadingViews;
 
-    public static KJBitmap create() {
-        return create(new BitmapConfig());
+    public KJBitmap() {
+        this(new BitmapConfig());
     }
 
-    /**
-     * 使用配置器创建KJBitmap
-     * 
-     * @param bitmapConfig
-     * @return
-     */
-    public synchronized static KJBitmap create(BitmapConfig bitmapConfig) {
-        if (instance == null) {
-            instance = new KJBitmap(bitmapConfig);
-        }
-        return instance;
-    }
-
-    private KJBitmap(BitmapConfig bitmapConfig) {
+    public KJBitmap(BitmapConfig bitmapConfig) {
         this.mConfig = bitmapConfig;
         displayer = new ImageDisplayer(mConfig);
         doLoadingViews = new LinkedList<View>();
@@ -383,8 +368,7 @@ public class KJBitmap {
         }
         byte[] data = getCache(url);
         if (data.length == 0) {
-            KJHttp kjh = KJHttp.create();
-            kjh.download(path, url, cb);
+            new KJHttp().download(path, url, cb);
         } else {
             File file = new File(path);
             if (!file.exists()) {

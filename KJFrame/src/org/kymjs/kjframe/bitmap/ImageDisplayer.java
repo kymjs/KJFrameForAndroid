@@ -25,6 +25,7 @@ import org.kymjs.kjframe.http.KJHttpException;
 import org.kymjs.kjframe.http.Request;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -54,7 +55,8 @@ public class ImageDisplayer {
     public ImageDisplayer(BitmapConfig bitmapConfig) {
         HttpConfig config = new HttpConfig();
         config.mCache = bitmapConfig.mCache;
-        mKJHttp = KJHttp.create(config);
+        config.cacheTime = Integer.MAX_VALUE;
+        mKJHttp = new KJHttp(config);
         mMemoryCache = bitmapConfig.mMemoryCache;
     }
 
@@ -94,6 +96,16 @@ public class ImageDisplayer {
 
         final String cacheKey = getCacheKey(requestUrl, maxWidth, maxHeight);
         Bitmap cachedBitmap = mMemoryCache.getBitmap(cacheKey);
+        try {
+            if (cachedBitmap == null) {
+                byte[] cacheData = mKJHttp.getCache(requestUrl);
+                if (cacheData != null) {
+                    cachedBitmap = BitmapFactory.decodeByteArray(cacheData, 0,
+                            cacheData.length);
+                }
+            }
+        } catch (Exception e) { // 本地缓存读取异常，则去网络加载
+        }
         if (cachedBitmap != null) {
             ImageBale container = new ImageBale(cachedBitmap, requestUrl, null,
                     null);

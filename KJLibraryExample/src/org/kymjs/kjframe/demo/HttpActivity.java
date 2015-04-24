@@ -94,7 +94,7 @@ public class HttpActivity extends KJActivity {
      * 清空全部缓存
      */
     private void cleanCache() {
-        KJHttp kjh = KJHttp.create();
+        KJHttp kjh = new KJHttp();
         kjh.cleanCache();
     }
 
@@ -102,7 +102,7 @@ public class HttpActivity extends KJActivity {
      * 移除指定key的缓存（注意，get请求的时候，记得把参数附带上）
      */
     private void removeCache() {
-        KJHttp kjh = KJHttp.create();
+        KJHttp kjh = new KJHttp();
         String url = "http://www.oschina.net/action/api/team_stickynote_batch_update";
         kjh.removeCache(url);
     }
@@ -111,13 +111,13 @@ public class HttpActivity extends KJActivity {
      * 读取一条指定缓存，没有会返回空字符串
      */
     private void readCache() {
-        KJHttp kjh = KJHttp.create();
+        KJHttp kjh = new KJHttp();
         String url = "http://www.oschina.net/action/api/team_stickynote_batch_update";
         toast(new String(kjh.getCache(url)));
     }
 
     private void get() {
-        KJHttp kjh = KJHttp.create();
+        KJHttp kjh = new KJHttp();
         HttpParams params = new HttpParams();
         params.put("pageIndex", 0);
         params.put("pageSize", 20);
@@ -135,7 +135,7 @@ public class HttpActivity extends KJActivity {
      * 附带有Http请求头的get请求
      */
     private void getWithHeader() {
-        KJHttp kjh = KJHttp.create();
+        KJHttp kjh = new KJHttp();
         HttpParams params = new HttpParams();
         params.put("uid", 863548);
         params.put("teamid", 12375);
@@ -154,7 +154,7 @@ public class HttpActivity extends KJActivity {
     }
 
     private void post() {
-        KJHttp kjh = KJHttp.create();
+        KJHttp kjh = new KJHttp();
         HttpParams params = new HttpParams();
         // params.put("uid", 863548);
         // params.put("msg", "没有网，[发怒]");
@@ -178,7 +178,7 @@ public class HttpActivity extends KJActivity {
      * 附带有文件的post请求
      */
     private void postWithFile() {
-        KJHttp kjh = KJHttp.create();
+        KJHttp kjh = new KJHttp();
         HttpParams params = new HttpParams();
         params.put("uid", 863548);
         params.put("msg", "在有图片的时 [发呆]");
@@ -198,7 +198,7 @@ public class HttpActivity extends KJActivity {
      * 使用JSON提交参数而不是Form表单
      */
     private void jsonRequest() {
-        KJHttp kjh = KJHttp.create();
+        KJHttp kjh = new KJHttp();
         HttpParams params = new HttpParams();
         params.putHeaders("Cookie", "cookie不能告诉你");
         params.putJsonParams("{\"uid\":863548,\"stickys\":[{\"id\":29058,\"iid\":0,\"content\":\"你好\",\"color\":\"green\",\"createtime\":\"2015-04-16 16:26:17\",\"updatetime\":\"2015-04-16 16:26:17\"}]}");
@@ -213,7 +213,7 @@ public class HttpActivity extends KJActivity {
                 });
     }
 
-    KJHttp kjh = KJHttp.create();
+    KJHttp kjh = new KJHttp();
 
     /**
      * 暂停下载

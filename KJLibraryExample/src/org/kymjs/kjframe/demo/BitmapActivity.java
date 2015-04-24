@@ -74,24 +74,24 @@ public class BitmapActivity extends KJActivity {
     }
 
     private void save() {
-        KJBitmap kjb = KJBitmap.create();
+        KJBitmap kjb = new KJBitmap();
         kjb.saveImage(this, "http://www.kymjs.com/image/logo.png",
                 FileUtils.getSDCardPath() + "/OSL.png");
     }
 
     private void removeCache() {
-        KJBitmap kjb = KJBitmap.create();
+        KJBitmap kjb = new KJBitmap();
         kjb.removeCache("http://static.oschina.net/uploads/space/2015/0420/133006_NnLQ_12.jpg");
     }
 
     private void display1() {
-        KJBitmap kjb = KJBitmap.create();
+        KJBitmap kjb = new KJBitmap();
         kjb.display(mImg1,
                 "http://static.oschina.net/uploads/space/2015/0420/133006_NnLQ_12.jpg");
     }
 
     private void display2() {
-        KJBitmap kjb = KJBitmap.create();
+        KJBitmap kjb = new KJBitmap();
         kjb.display(
                 mImg2,
                 "http://static.oschina.net/uploads/space/2015/0420/133006_NnLQ_12.jpg",
@@ -99,7 +99,7 @@ public class BitmapActivity extends KJActivity {
     }
 
     private void display3() {
-        KJBitmap kjb = KJBitmap.create();
+        KJBitmap kjb = new KJBitmap();
         kjb.display(
                 mImg3,
                 "http://static.oschina.net/uploads/space/2015/0420/133006_NnLQ_12.jpg",
