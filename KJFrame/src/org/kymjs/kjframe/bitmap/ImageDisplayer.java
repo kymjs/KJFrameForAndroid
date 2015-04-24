@@ -25,7 +25,6 @@ import org.kymjs.kjframe.http.KJHttpException;
 import org.kymjs.kjframe.http.Request;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -71,10 +70,9 @@ public class ImageDisplayer {
      *            图片最大高度
      * @return
      */
-    public boolean isCached(String requestUrl, int maxWidth, int maxHeight) {
+    public boolean isCached(String requestUrl) {
         throwIfNotOnMainThread();
-        String cacheKey = getCacheKey(requestUrl, maxWidth, maxHeight);
-        return mMemoryCache.getBitmap(cacheKey) != null;
+        return mMemoryCache.getBitmap(requestUrl) != null;
     }
 
     /**
@@ -94,21 +92,9 @@ public class ImageDisplayer {
         throwIfNotOnMainThread();
         callback.onPreLoad();
 
-        final String cacheKey = getCacheKey(requestUrl, maxWidth, maxHeight);
-        Bitmap cachedBitmap = mMemoryCache.getBitmap(cacheKey);
-        try {
-            if (cachedBitmap == null) {
-                byte[] cacheData = mKJHttp.getCache(requestUrl);
-                if (cacheData != null) {
-                    cachedBitmap = BitmapFactory.decodeByteArray(cacheData, 0,
-                            cacheData.length);
-                }
-            }
-        } catch (Exception e) { // 本地缓存读取异常，则去网络加载
-        }
+        Bitmap cachedBitmap = mMemoryCache.getBitmap(requestUrl);
         if (cachedBitmap != null) {
-            ImageBale container = new ImageBale(cachedBitmap, requestUrl, null,
-                    null);
+            ImageBale container = new ImageBale(cachedBitmap, requestUrl, null);
             callback.onSuccess(cachedBitmap);
             callback.onFinish();
             return container;
@@ -117,39 +103,39 @@ public class ImageDisplayer {
             callback.onSuccess(null);
         }
 
-        ImageBale imageBale = new ImageBale(null, requestUrl, cacheKey,
-                callback);
-        ImageRequestEven request = mRequestsMap.get(cacheKey);
+        ImageBale imageBale = new ImageBale(null, requestUrl, callback);
+        ImageRequestEven request = mRequestsMap.get(requestUrl);
         if (request != null) {
             request.addImageBale(imageBale);
             return imageBale;
         }
 
         Request<Bitmap> newRequest = makeImageRequest(requestUrl, maxWidth,
-                maxHeight, cacheKey);
+                maxHeight);
 
         mKJHttp.doRequest(newRequest);
-        mRequestsMap.put(cacheKey, new ImageRequestEven(newRequest, imageBale));
+        mRequestsMap.put(requestUrl,
+                new ImageRequestEven(newRequest, imageBale));
         return imageBale;
     }
 
     /**
      * 创建一个网络请求
      */
-    protected Request<Bitmap> makeImageRequest(String requestUrl, int maxWidth,
-            int maxHeight, final String cacheKey) {
+    protected Request<Bitmap> makeImageRequest(final String requestUrl,
+            int maxWidth, int maxHeight) {
         return new ImageRequest(requestUrl, maxWidth, maxHeight,
                 new HttpCallBack() {
                     @Override
                     public void onSuccess(Bitmap t) {
                         super.onSuccess(t);
-                        onGetImageSuccess(cacheKey, t);
+                        onGetImageSuccess(requestUrl, t);
                     }
 
                     @Override
                     public void onFailure(int errorNo, String strMsg) {
                         super.onFailure(errorNo, strMsg);
-                        onGetImageError(cacheKey, new KJHttpException(strMsg));
+                        onGetImageError(requestUrl, new KJHttpException(strMsg));
                     }
                 });
     }
@@ -157,36 +143,36 @@ public class ImageDisplayer {
     /**
      * 从网络获取bitmap成功时调用
      * 
-     * @param cacheKey
+     * @param url
      *            缓存key
      * @param bitmap
      *            获取到的bitmap
      */
-    protected void onGetImageSuccess(String cacheKey, Bitmap bitmap) {
-        mMemoryCache.putBitmap(cacheKey, bitmap);
+    protected void onGetImageSuccess(String url, Bitmap bitmap) {
+        mMemoryCache.putBitmap(url, bitmap);
         // 从正在请求的列表中移除这个已完成的请求
-        ImageRequestEven request = mRequestsMap.remove(cacheKey);
+        ImageRequestEven request = mRequestsMap.remove(url);
 
         if (request != null) {
             request.mBitmapRespond = bitmap;
-            batchResponse(cacheKey, request);
+            batchResponse(url, request);
         }
     }
 
     /**
      * 从网络获取bitmap失败时调用
      * 
-     * @param cacheKey
+     * @param url
      *            缓存key
      * @param error
      *            失败原因
      */
-    protected void onGetImageError(String cacheKey, KJHttpException error) {
+    protected void onGetImageError(String url, KJHttpException error) {
         // 从正在请求的列表中移除这个已完成的请求
-        ImageRequestEven request = mRequestsMap.remove(cacheKey);
+        ImageRequestEven request = mRequestsMap.remove(url);
         if (request != null) {
             request.setError(error);
-            batchResponse(cacheKey, request);
+            batchResponse(url, request);
         }
     }
 
@@ -201,14 +187,12 @@ public class ImageDisplayer {
     public class ImageBale {
         private Bitmap mBitmap;
         private final String mRequestUrl;
-        private final String mCacheKey;
         private final BitmapCallBack mCallback;
 
-        public ImageBale(Bitmap bitmap, String requestUrl, String cacheKey,
+        public ImageBale(Bitmap bitmap, String requestUrl,
                 BitmapCallBack callback) {
             mBitmap = bitmap;
             mRequestUrl = requestUrl;
-            mCacheKey = cacheKey;
             mCallback = callback;
         }
 
@@ -217,18 +201,18 @@ public class ImageDisplayer {
                 return;
             }
 
-            ImageRequestEven request = mRequestsMap.get(mCacheKey);
+            ImageRequestEven request = mRequestsMap.get(mRequestUrl);
             if (request != null) {
                 boolean canceled = request.removeBale(this);
                 if (canceled) {
-                    mRequestsMap.remove(mCacheKey);
+                    mRequestsMap.remove(mRequestUrl);
                 }
             } else {
-                request = mResponsesMap.get(mCacheKey);
+                request = mResponsesMap.get(mRequestUrl);
                 if (request != null) {
                     request.removeBale(this);
                     if (request.mImageBales.size() == 0) {
-                        mResponsesMap.remove(mCacheKey);
+                        mResponsesMap.remove(mRequestUrl);
                     }
                 }
             }
@@ -287,8 +271,8 @@ public class ImageDisplayer {
     /**
      * 分发这次ImageRequest事件的结果
      */
-    private void batchResponse(String cacheKey, final ImageRequestEven request) {
-        mResponsesMap.put(cacheKey, request);
+    private void batchResponse(String url, final ImageRequestEven request) {
+        mResponsesMap.put(url, request);
         if (mRunnable == null) {
             mRunnable = new Runnable() {
                 @Override
@@ -331,15 +315,6 @@ public class ImageDisplayer {
      */
     public void cancle(String url) {
         mKJHttp.cancel(url);
-    }
-
-    /**
-     * 根据指定url创建一个key
-     */
-    private static String getCacheKey(String url, int maxWidth, int maxHeight) {
-        return new StringBuilder(url.length() + 12).append("#W")
-                .append(maxWidth).append("#H").append(maxHeight).append(url)
-                .toString();
     }
 
     /**

@@ -336,6 +336,16 @@ public class KJBitmap {
     }
 
     /**
+     * 获取内存缓存
+     * 
+     * @param url
+     * @return
+     */
+    public Bitmap getMemoryCache(String url) {
+        return mConfig.mMemoryCache.getBitmap(url);
+    }
+
+    /**
      * 取消一个加载请求
      * 
      * @param url
