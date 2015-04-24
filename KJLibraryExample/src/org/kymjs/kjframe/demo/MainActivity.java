@@ -2,6 +2,7 @@ package org.kymjs.kjframe.demo;
 
 import org.kymjs.kjframe.KJActivity;
 import org.kymjs.kjframe.ui.BindView;
+import org.kymjs.kjframe.ui.KJActivityStack;
 import org.kymjs.kjframe.utils.KJConfig;
 
 import android.view.View;
@@ -24,6 +25,9 @@ public class MainActivity extends KJActivity {
     @Override
     public void setRootView() {
         setContentView(R.layout.activity_main);
+        if (!"org.kymjs.kjframe.demo".equals(getApplication().getPackageName())) {
+            KJActivityStack.create().AppExit(aty);
+        }
     }
 
     @Override
