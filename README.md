@@ -14,7 +14,6 @@ However,KJFrameForAndroid is free open source object. Thanks for you follow this
 * blog：http://blog.kymjs.com/
 * GitHub：[http://github.com/kymjs/KJFrameForAndroid](http://github.com/kymjs/KJFrameForAndroid)
 * online API document：[在线API文档](https://KJFrame.github.io)<br>
-* dynamic-load-apk：[https://github.com/singwhatiwanna/dynamic-load-apk](https://github.com/singwhatiwanna/dynamic-load-apk)<br>
 
 ## usage
 For English help file: [click here](https://github.com/kymjs/KJFrameForAndroid/wiki/)<br>
