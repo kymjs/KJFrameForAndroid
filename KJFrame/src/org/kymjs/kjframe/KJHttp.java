@@ -74,7 +74,7 @@ public class KJHttp {
     // 缓存队列调度器
     private CacheDispatcher mCacheDispatcher;
     // 配置器
-    private final HttpConfig mConfig;
+    private HttpConfig mConfig;
 
     public KJHttp() {
         this(new HttpConfig());
@@ -379,8 +379,28 @@ public class KJHttp {
         mConfig.mCache.remove(uri);
     }
 
+    /**
+     * 已过期，请更换为getConfig()
+     */
+    @Deprecated
+    public HttpConfig getHttpConfig() {
+        return getConfig();
+    }
+
     public HttpConfig getConfig() {
         return mConfig;
+    }
+
+    /**
+     * 已过期，请更换为setConfig()
+     */
+    @Deprecated
+    public void setHttpConfig(HttpConfig config) {
+        setConfig(config);
+    }
+
+    public void setConfig(HttpConfig config) {
+        this.mConfig = config;
     }
 
     /******************************** core method ****************************************/
