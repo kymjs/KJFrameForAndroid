@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
 import org.kymjs.kjframe.bitmap.BitmapConfig;
+import org.kymjs.kjframe.bitmap.DiskImageRequest;
 import org.kymjs.kjframe.bitmap.ImageDisplayer;
 import org.kymjs.kjframe.http.Cache;
 import org.kymjs.kjframe.http.HttpCallBack;
@@ -187,6 +188,27 @@ public class KJBitmap {
     }
 
     /**
+     * @param imageView
+     *            要显示的View
+     * @param imageUrl
+     *            网络图片地址
+     * @param width
+     *            要显示的图片的最大宽度
+     * @param height
+     *            要显示图片的最大高度
+     * @param loadOrErrorBitmap
+     *            加载中或加载失败都显示这张图片
+     * @param callback
+     *            加载过程的回调
+     */
+    public void display(View imageView, String imageUrl, int loadOrErrorBitmap,
+            int width, int height, BitmapCallBack callback) {
+        display(imageView, imageUrl, width, height, imageView.getResources()
+                .getDrawable(loadOrErrorBitmap), imageView.getResources()
+                .getDrawable(loadOrErrorBitmap), callback);
+    }
+
+    /**
      * 显示网络图片(core)
      * 
      * @param imageView
@@ -237,7 +259,8 @@ public class KJBitmap {
         checkViewExist(imageView);
 
         imageView.setTag(imageUrl);
-        displayer.get(imageUrl, width, height, new BitmapCallBack() {
+
+        BitmapCallBack mCallback = new BitmapCallBack() {
             @Override
             public void onPreLoad() {
                 if (callback != null) {
@@ -271,7 +294,14 @@ public class KJBitmap {
                     callback.onFinish();
                 }
             }
-        });
+        };
+
+        if (imageUrl.startsWith("http")) {
+            displayer.get(imageUrl, width, height, mCallback);
+        } else {
+            DiskImageRequest.loadFromFile(imageUrl, width, height, mCallback);
+        }
+
     }
 
     private void doFailure(View view, Drawable errorImage) {

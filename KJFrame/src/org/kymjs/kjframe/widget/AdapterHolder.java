@@ -1,4 +1,4 @@
-package org.kymjs.kjframe.utils;
+package org.kymjs.kjframe.widget;
 
 import org.kymjs.kjframe.KJBitmap;
 
