@@ -112,6 +112,26 @@ public class KJBitmap {
     }
 
     /**
+     * 如果内存缓存有图片，则显示内存缓存的图片，否则显示默认图片
+     * 
+     * @param imageView
+     *            要显示的View
+     * @param imageUrl
+     *            网络图片地址
+     * @param defaultImage
+     *            如果没有内存缓存，则显示默认图片
+     */
+    public void displayCacheOrDefult(View imageView, String imageUrl,
+            int defaultImage) {
+        Bitmap cache = getMemoryCache(imageUrl);
+        if (cache == null) {
+            setViewImage(imageView, defaultImage);
+        } else {
+            setViewImage(imageView, cache);
+        }
+    }
+
+    /**
      * @param imageView
      *            要显示的View
      * @param imageUrl
@@ -270,12 +290,11 @@ public class KJBitmap {
 
             @Override
             public void onSuccess(Bitmap bitmap) {
-                if (!imageUrl.equals(imageView.getTag())) {
-                    return;
-                }
-                doSuccess(imageView, bitmap, loadBitmap);
-                if (callback != null) {
-                    callback.onSuccess(bitmap);
+                if (imageUrl.equals(imageView.getTag())) {
+                    doSuccess(imageView, bitmap, loadBitmap);
+                    if (callback != null) {
+                        callback.onSuccess(bitmap);
+                    }
                 }
             }
 
@@ -289,7 +308,10 @@ public class KJBitmap {
 
             @Override
             public void onFinish() {
-                doLoadingViews.remove(imageView);
+                try {
+                    doLoadingViews.remove(imageView);
+                } catch (Exception e) {
+                }
                 if (callback != null) {
                     callback.onFinish();
                 }
@@ -299,9 +321,8 @@ public class KJBitmap {
         if (imageUrl.startsWith("http")) {
             displayer.get(imageUrl, width, height, mCallback);
         } else {
-            DiskImageRequest.loadFromFile(imageUrl, width, height, mCallback);
+            new DiskImageRequest().load(imageUrl, width, width, mCallback);
         }
-
     }
 
     private void doFailure(View view, Drawable errorImage) {
@@ -480,6 +501,14 @@ public class KJBitmap {
                 view.setBackgroundDrawable(new BitmapDrawable(view
                         .getResources(), background));
             }
+        }
+    }
+
+    private void setViewImage(View view, int background) {
+        if (view instanceof ImageView) {
+            ((ImageView) view).setImageResource(background);
+        } else {
+            view.setBackgroundResource(background);
         }
     }
 

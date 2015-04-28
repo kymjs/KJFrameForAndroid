@@ -52,10 +52,6 @@ public class HttpActivity extends KJActivity {
     private Button mBtn3;
     @BindView(id = R.id.button4, click = true)
     private Button mBtn4;
-    @BindView(id = R.id.button5, click = true)
-    private Button mBtn5;
-    @BindView(id = R.id.button6, click = true)
-    private Button mBtn6;
 
     @Override
     public void setRootView() {
@@ -250,33 +246,4 @@ public class HttpActivity extends KJActivity {
         Toast.makeText(this, text, Toast.LENGTH_LONG).show();
         KJLoger.debug(text);
     }
-
-    // private void download() {
-    // kjh.download(mEtDownloadPath.getText().toString(),
-    // FileUtils.getSaveFile("KJLibrary", "l.pdf"),
-    // new HttpCallBack() {
-    // @Override
-    // public void onSuccess(File f) {
-    // super.onSuccess(f);
-    // KJLoger.debug("success");
-    // ViewInject.toast("下载成功");
-    // mProgress.setProgress(mProgress.getMax());
-    // }
-    //
-    // @Override
-    // public void onFailure(Throwable t, int errorNo,
-    // String strMsg) {
-    // super.onFailure(t, errorNo, strMsg);
-    // KJLoger.debug("onFailure");
-    // }
-    //
-    // @Override
-    // public void onLoading(long count, long current) {
-    // super.onLoading(count, current);
-    // mProgress.setMax((int) count);
-    // mProgress.setProgress((int) current);
-    // KJLoger.debug(count + "------" + current);
-    // }
-    // });
-    // }
 }

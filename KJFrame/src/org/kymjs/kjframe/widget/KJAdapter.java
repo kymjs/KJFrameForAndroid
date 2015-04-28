@@ -1,6 +1,24 @@
+/*
+ * Copyright (c) 2014, 张涛.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kymjs.kjframe.widget;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,18 +26,25 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 
+/**
+ * 对ViewHolder的封装，以及更方便的控制ListView滑动过程中不加载图片
+ * 
+ * @author kymjs (https://www.kymjs.com/)
+ * 
+ * @param <T>
+ */
 public abstract class KJAdapter<T> extends BaseAdapter implements
         AbsListView.OnScrollListener {
 
     protected LayoutInflater mInflater;
-    protected List<T> mDatas;
+    protected Collection<T> mDatas;
     protected final int mItemLayoutId;
     protected AbsListView mList;
     protected boolean isScrolling;
 
     private AbsListView.OnScrollListener listener;
 
-    public KJAdapter(AbsListView view, List<T> mDatas, int itemLayoutId) {
+    public KJAdapter(AbsListView view, Collection<T> mDatas, int itemLayoutId) {
         this.mInflater = LayoutInflater.from(view.getContext());
         this.mDatas = mDatas;
         this.mItemLayoutId = itemLayoutId;
@@ -27,7 +52,7 @@ public abstract class KJAdapter<T> extends BaseAdapter implements
         mList.setOnScrollListener(this);
     }
 
-    public void refresh(List<T> datas) {
+    public void refresh(Collection<T> datas) {
         this.mDatas = datas;
         notifyDataSetChanged();
     }
@@ -43,7 +68,13 @@ public abstract class KJAdapter<T> extends BaseAdapter implements
 
     @Override
     public T getItem(int position) {
-        return mDatas.get(position);
+        if (mDatas instanceof List) {
+            return ((List<T>) mDatas).get(position);
+        } else if (mDatas instanceof Set) {
+            return new ArrayList<T>(mDatas).get(position);
+        } else {
+            return null;
+        }
     }
 
     @Override

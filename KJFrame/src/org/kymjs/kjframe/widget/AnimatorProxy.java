@@ -37,7 +37,6 @@ import android.view.animation.Transformation;
 /**
  * SlidingMenu所需工具类,对3.0以前的版本进行转换
  * 
- * @author http://nineoldandroids.com/，
  * @author kymjs (https://github.com/kymjs)
  */
 public final class AnimatorProxy extends Animation {

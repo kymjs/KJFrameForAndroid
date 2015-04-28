@@ -38,8 +38,8 @@ public class BitmapConfig {
     /** 磁盘缓存大小 */
     public static int DISK_CACHE_SIZE = 5 * 1024 * 1024;
     /** 磁盘缓存器 **/
-    public Cache mCache;
-    public ImageCache mMemoryCache;
+    public static Cache mCache;
+    public static ImageCache mMemoryCache;
 
     /** 已使用全新的DiskCache，不再需要prefix参数 */
     @Deprecated
@@ -47,8 +47,10 @@ public class BitmapConfig {
 
     public BitmapConfig() {
         File folder = FileUtils.getSaveFolder(CACHEPATH);
-        mCache = new DiskCache(folder, DISK_CACHE_SIZE);
-        mMemoryCache = new BitmapMemoryCache((int) (Runtime.getRuntime()
-                .maxMemory() / 8));
+        if (mCache == null) {
+            mCache = new DiskCache(folder, DISK_CACHE_SIZE);
+            mMemoryCache = new BitmapMemoryCache((int) (Runtime.getRuntime()
+                    .maxMemory() / 8));
+        }
     }
 }

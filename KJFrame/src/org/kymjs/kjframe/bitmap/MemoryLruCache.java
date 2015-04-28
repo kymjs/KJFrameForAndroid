@@ -21,10 +21,10 @@ import java.util.Map;
 /**
  * 经过Least Recently Used（最近最少使用）算法处理的LinkedHashMap<br>
  * 
- * <b>修改</b> kymjs (https://github.com/kymjs)<br>
  * <b>创建时间</b> 2014-7-11
  * 
  * @author Android Open Source Project
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  */
 public class MemoryLruCache<K, V> {

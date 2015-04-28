@@ -30,6 +30,8 @@ import android.os.Looper;
 
 /**
  * 图片显示器
+ * 
+ * @author kymjs (https://www.kymjs.com/)
  */
 public class ImageDisplayer {
     private final KJHttp mKJHttp; // 使用KJHttp的线程池执行队列去加载图片

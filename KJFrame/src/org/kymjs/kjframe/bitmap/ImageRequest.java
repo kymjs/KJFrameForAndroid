@@ -32,6 +32,8 @@ import android.graphics.BitmapFactory;
 
 /**
  * 从网络下载一张bitmap
+ * 
+ * @author kymjs (https://www.kymjs.com/)
  */
 public class ImageRequest extends Request<Bitmap> {
 

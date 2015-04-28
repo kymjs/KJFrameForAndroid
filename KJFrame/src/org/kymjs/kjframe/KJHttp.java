@@ -56,6 +56,7 @@ import org.kymjs.kjframe.utils.KJLoger;
  * {@link #Request#parseNetworkResponse()}封装成Response，最终交给分发器 {@link Delivery}
  * 分发到主线程并调用HttpCallback相应的方法
  * 
+ * @author kymjs (https://www.kymjs.com/)
  */
 public class KJHttp {
 
