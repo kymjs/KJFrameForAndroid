@@ -36,6 +36,17 @@ public class FileRequest extends Request<byte[]> {
     public FileRequest(String storeFilePath, String url, HttpCallBack callback) {
         super(HttpMethod.GET, url, callback);
         mStoreFile = new File(storeFilePath);
+        File folder = mStoreFile.getParentFile();
+        if (folder != null) {
+            folder.mkdirs();
+        }
+        if (!mStoreFile.exists()) {
+            try {
+                mStoreFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         mTemporaryFile = new File(storeFilePath + ".tmp");
         setShouldCache(false);
     }

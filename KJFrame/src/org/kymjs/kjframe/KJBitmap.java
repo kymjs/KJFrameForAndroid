@@ -384,8 +384,15 @@ public class KJBitmap {
         displayer.cancle(url);
     }
 
+    /**
+     * 保存一张图片到本地，并自动通知图库刷新
+     * 
+     * @param cxt
+     * @param url
+     * @param path
+     */
     public void saveImage(Context cxt, String url, String path) {
-        saveImage(cxt, url, path);
+        saveImage(cxt, url, path, null);
     }
 
     /**
@@ -411,21 +418,30 @@ public class KJBitmap {
             new KJHttp().download(path, url, cb);
         } else {
             File file = new File(path);
+            cb.onPreStar();
+            File folder = file.getParentFile();
+            if (folder != null) {
+                folder.mkdirs();
+            }
             if (!file.exists()) {
-                cb.onPreStar();
-
-                OutputStream os = null;
                 try {
-                    os = new FileOutputStream(file);
-                    os.write(data);
-                    cb.onSuccess(data);
-                    refresh(cxt, path);
-                } catch (IOException e) {
-                    cb.onFailure(-1, e.getMessage());
-                } finally {
-                    FileUtils.closeIO(os);
-                    cb.onFinish();
+                    file.createNewFile();
+                } catch (IOException e1) {
+                    cb.onFailure(-1, e1.getMessage());
+                    return;
                 }
+            }
+            OutputStream os = null;
+            try {
+                os = new FileOutputStream(file);
+                os.write(data);
+                cb.onSuccess(data);
+                refresh(cxt, path);
+            } catch (IOException e) {
+                cb.onFailure(-1, e.getMessage());
+            } finally {
+                FileUtils.closeIO(os);
+                cb.onFinish();
             }
         }
     }
