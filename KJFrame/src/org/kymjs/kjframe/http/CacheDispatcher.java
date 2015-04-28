@@ -35,7 +35,7 @@ import android.os.Process;
  * 如果缓存器中没有有效缓存，则把请求添加到mNetworkQueue工作队列中去执行网络请求;<br>
  * 
  * Note:<br>
- * 关于中介相应查看{@link #Response#intermediate}
+ * 关于中介相应查看{@link Response#intermediate}
  */
 public class CacheDispatcher extends Thread {
 

@@ -56,7 +56,6 @@ public class AdapterHolder {
     /**
      * 拿到一个ViewHolder对象
      * 
-     * @param context
      * @param convertView
      * @param parent
      * @param layoutId
@@ -122,7 +121,7 @@ public class AdapterHolder {
      * 为ImageView设置图片
      * 
      * @param viewId
-     * @param drawableId
+     * @param bm
      * @return
      */
     public AdapterHolder setImageBitmap(int viewId, Bitmap bm) {
@@ -135,7 +134,7 @@ public class AdapterHolder {
      * 为ImageView设置图片
      * 
      * @param viewId
-     * @param drawableId
+     * @param url
      * @return
      */
     public AdapterHolder setImageByUrl(KJBitmap bitmap, int viewId, String url) {
