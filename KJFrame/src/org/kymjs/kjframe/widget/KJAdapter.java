@@ -46,6 +46,9 @@ public abstract class KJAdapter<T> extends BaseAdapter implements
 
     public KJAdapter(AbsListView view, Collection<T> mDatas, int itemLayoutId) {
         this.mInflater = LayoutInflater.from(view.getContext());
+        if (mDatas == null) {
+            mDatas = new ArrayList<T>(0);
+        }
         this.mDatas = mDatas;
         this.mItemLayoutId = itemLayoutId;
         this.mList = view;
@@ -53,6 +56,9 @@ public abstract class KJAdapter<T> extends BaseAdapter implements
     }
 
     public void refresh(Collection<T> datas) {
+        if (datas == null) {
+            datas = new ArrayList<T>(0);
+        }
         this.mDatas = datas;
         notifyDataSetChanged();
     }

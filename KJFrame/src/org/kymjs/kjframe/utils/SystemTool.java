@@ -202,11 +202,26 @@ public final class SystemTool {
     /**
      * 获取当前应用程序的版本号
      */
-    public static String getAppVersion(Context context) {
+    public static String getAppVersionName(Context context) {
         String version = "0";
         try {
             version = context.getPackageManager().getPackageInfo(
                     context.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(SystemTool.class.getName()
+                    + "the application not found");
+        }
+        return version;
+    }
+
+    /**
+     * 获取当前应用程序的版本号
+     */
+    public static int getAppVersionCode(Context context) {
+        int version = 0;
+        try {
+            version = context.getPackageManager().getPackageInfo(
+                    context.getPackageName(), 0).versionCode;
         } catch (PackageManager.NameNotFoundException e) {
             throw new RuntimeException(SystemTool.class.getName()
                     + "the application not found");

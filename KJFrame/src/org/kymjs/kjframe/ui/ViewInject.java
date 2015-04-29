@@ -101,9 +101,10 @@ public class ViewInject {
     /**
      * 返回一个退出确认对话框
      */
-    public void getExitDialog(final Context context) {
+    public void getExitDialog(final Context context, String title,
+            OnClickListener l) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("确定退出吗？");
+        builder.setMessage(title);
         builder.setCancelable(false);
         builder.setNegativeButton("取消", new OnClickListener() {
             @Override
@@ -111,13 +112,7 @@ public class ViewInject {
                 dialog.dismiss();
             }
         });
-        builder.setPositiveButton("确定", new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                KJActivityStack.create().AppExit(context);
-            }
-        });
+        builder.setPositiveButton("确定", l);
         builder.create();
         builder.show();
         builder = null;
