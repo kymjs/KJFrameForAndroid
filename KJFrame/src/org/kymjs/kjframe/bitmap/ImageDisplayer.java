@@ -56,13 +56,12 @@ public class ImageDisplayer {
     public ImageDisplayer(BitmapConfig bitmapConfig) {
         HttpConfig config = new HttpConfig();
         config.mCache = BitmapConfig.mCache;
-        // 靠，在这里踩了个坑。
-        // 最初写的是Integer.MAX_VALUE,结果把这个值*60000转成毫秒long以后溢出了
-        // 这次换一个方法，我直接拿最大值除，我还不除60000我除100000不信还溢出
+        // 靠，在这里踩了个坑。 最初写的是Integer.MAX_VALUE,
+        // 结果把这个值*60000转成毫秒long以后溢出了 这次我给个死的值行不行。1000天，能不能算永久了
         // 其实还有一种解决办法是直接在缓存读取的时候，看到是bitmap缓存不管是否失效都返回，
         // 但是这种不利于自定义扩展，就不用了，有兴趣的可以看CacheDispatcher的109行
         // @kymjs记录于2015.4.30
-        config.cacheTime = (int) (Long.MAX_VALUE / 100000);
+        config.cacheTime = bitmapConfig.cacheTime;
         mKJHttp = new KJHttp(config);
         mMemoryCache = BitmapConfig.mMemoryCache;
     }

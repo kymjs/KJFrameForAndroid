@@ -41,6 +41,8 @@ public class BitmapConfig {
     public static Cache mCache;
     public static ImageCache mMemoryCache;
 
+    public int cacheTime = 1440000;
+
     /** 已使用全新的DiskCache，不再需要prefix参数 */
     @Deprecated
     public static String CACHE_FILENAME_PREFIX = "KJLibrary_";
