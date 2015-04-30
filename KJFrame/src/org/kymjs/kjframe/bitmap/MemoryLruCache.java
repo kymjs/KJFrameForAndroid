@@ -18,6 +18,8 @@ package org.kymjs.kjframe.bitmap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import android.annotation.SuppressLint;
+
 /**
  * 经过Least Recently Used（最近最少使用）算法处理的LinkedHashMap<br>
  * 
@@ -351,6 +353,7 @@ public class MemoryLruCache<K, V> {
     }
 
     @Override
+    @SuppressLint("DefaultLocale")
     public synchronized final String toString() {
         int accesses = hitCount + missCount;
         int hitPercent = accesses != 0 ? (100 * hitCount / accesses) : 0;

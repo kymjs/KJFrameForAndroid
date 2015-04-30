@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
@@ -47,6 +48,7 @@ import android.view.inputmethod.InputMethodManager;
  * @author kymjs (https://github.com/kymjs)
  * @version 1.1
  */
+@SuppressLint("SimpleDateFormat")
 public final class SystemTool {
     /**
      * 指定格式返回当前系统时间

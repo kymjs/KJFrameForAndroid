@@ -19,7 +19,6 @@ package org.kymjs.kjframe.bitmap;
 import java.util.Map;
 
 import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpConfig;
 import org.kymjs.kjframe.http.HttpHeaderParser;
 import org.kymjs.kjframe.http.KJHttpException;
 import org.kymjs.kjframe.http.NetworkResponse;
@@ -150,10 +149,8 @@ public class ImageRequest extends Request<Bitmap> {
         if (bitmap == null) {
             return Response.error(new KJHttpException(response));
         } else {
-            HttpConfig config = new HttpConfig();
-            config.cacheTime = Integer.MAX_VALUE;
             Response<Bitmap> b = Response.success(bitmap, response.headers,
-                    HttpHeaderParser.parseCacheHeaders(config, response));
+                    HttpHeaderParser.parseCacheHeaders(mConfig, response));
             return b;
         }
     }

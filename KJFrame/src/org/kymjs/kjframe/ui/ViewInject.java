@@ -27,10 +27,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -132,13 +130,13 @@ public class ViewInject {
     /**
      * 用于创建PopupWindow封装一些公用属性
      */
-    private PopupWindow createWindow(View view, int w, int h, int argb) {
-        PopupWindow popupView = new PopupWindow(view, w, h);
-        popupView.setFocusable(true);
-        popupView.setBackgroundDrawable(new ColorDrawable(argb));
-        popupView.setOutsideTouchable(true);
-        return popupView;
-    }
+    // private PopupWindow createWindow(View view, int w, int h, int argb) {
+    // PopupWindow popupView = new PopupWindow(view, w, h);
+    // popupView.setFocusable(true);
+    // popupView.setBackgroundDrawable(new ColorDrawable(argb));
+    // popupView.setOutsideTouchable(true);
+    // return popupView;
+    // }
 
     /**
      * 返回一个日期对话框

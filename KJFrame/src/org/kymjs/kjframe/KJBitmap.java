@@ -350,7 +350,7 @@ public class KJBitmap {
      *            哪条url的缓存
      */
     public void removeCache(String url) {
-        mConfig.mCache.remove(url);
+        BitmapConfig.mCache.remove(url);
     }
 
     /**
@@ -365,7 +365,7 @@ public class KJBitmap {
      * 清空缓存
      */
     public void cleanCache() {
-        mConfig.mCache.clear();
+        BitmapConfig.mCache.clear();
     }
 
     /**
@@ -376,7 +376,7 @@ public class KJBitmap {
      * @return
      */
     public byte[] getCache(String url) {
-        Cache cache = mConfig.mCache;
+        Cache cache = BitmapConfig.mCache;
         cache.initialize();
         Cache.Entry entry = cache.get(url);
         if (entry != null) {
@@ -393,7 +393,7 @@ public class KJBitmap {
      * @return
      */
     public Bitmap getMemoryCache(String url) {
-        return mConfig.mMemoryCache.getBitmap(url);
+        return BitmapConfig.mMemoryCache.getBitmap(url);
     }
 
     /**

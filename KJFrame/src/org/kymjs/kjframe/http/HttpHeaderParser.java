@@ -89,7 +89,6 @@ public class HttpHeaderParser {
         } else {
             entry.ttl = now + httpconfig.cacheTime * 60000; // 分钟转毫秒
         }
-
         entry.etag = serverEtag;
         entry.serverDate = serverDate;
         entry.responseHeaders = headers;

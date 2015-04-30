@@ -104,7 +104,9 @@ public class CacheDispatcher extends Thread {
                     continue;
                 }
 
-                if (entry.isExpired()) { // 如果缓存过期，去网络请求
+                // 如果缓存过期，去网络请求,图片缓存永久有效
+                if (entry.isExpired()) {
+                    // && !(request instanceof ImageRequest)
                     request.setCacheEntry(entry);
                     mNetworkQueue.put(request);
                     continue;
