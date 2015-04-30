@@ -1,6 +1,5 @@
 =================
 #[![OSL](http://www.kymjs.com/image/logo_s.png)](http://www.kymjs.com/)
-#KJFrameForAndroid
 
 ## What is KJFrameForAndroid
 KJFrameForAndroid is also called KJLibrary. It's an Android ORM and IOC framework and includes UILibrary, PluginLibrary, HttpLibrary, BitmapLibrary, DBLibrary. KJFrameForAndroid is designed to wrap complexity of the Android native SDK and keep things simple.<br>
