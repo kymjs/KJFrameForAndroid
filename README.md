@@ -1,8 +1,5 @@
 =================
-#[![logo](https://github.com/kymjs/KJFrameForAndroid/blob/master/KJLibraryExample/res/drawable-xhdpi/ic_launcher.png)](https://github.com/kymjs/KJFrameForAndroid)KJFrameForAndroid
-[![Android Arsenal](http://img.shields.io/badge/Android%20Arsenal-KJFrameForAndroid-blue.svg?style=flat)](http://android-arsenal.com/details/1/836)
-[![BlackDuck OpenHUB](https://www.openhub.net/p/KJFrameForAndroid/widgets/project_thin_badge.gif)](https://www.openhub.net/p/KJFrameForAndroid)
-[![OSL](http://www.kymjs.com/image/logo_s.png)](http://www.kymjs.com/)<br>
+#[![OSL](http://www.kymjs.com/image/logo_s.png)](http://www.kymjs.com/)
 
 ## What is KJFrameForAndroid
 KJFrameForAndroid is also called KJLibrary. It's an Android ORM and IOC framework and includes UILibrary, PluginLibrary, HttpLibrary, BitmapLibrary, DBLibrary. KJFrameForAndroid is designed to wrap complexity of the Android native SDK and keep things simple.<br>
