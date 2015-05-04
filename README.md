@@ -4,12 +4,12 @@
 ## What is KJFrameForAndroid
 KJFrameForAndroid is also called KJLibrary. It's an Android ORM and IOC framework and includes UILibrary, PluginLibrary, HttpLibrary, BitmapLibrary, DBLibrary. KJFrameForAndroid is designed to wrap complexity of the Android native SDK and keep things simple.<br>
 However,KJFrameForAndroid is free open source object. Thanks for you follow this KJFrameForAndroid.<br>
+===
 
-## More about KJFrameForAndroid
 * GitHub：[http://github.com/kymjs/KJFrameForAndroid](http://github.com/kymjs/KJFrameForAndroid)
 * online API document：[在线API文档](https://KJFrame.github.io)<br>
 
-## usage
+## Usage
 For English help file: [click here](https://github.com/kymjs/KJFrameForAndroid/wiki/)<br>
 中文版使用帮助：[点击查看](https://github.com/kymjs/KJFrameForAndroid/wiki/Home_cn)
 
