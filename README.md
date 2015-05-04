@@ -9,15 +9,24 @@ KJFrameForAndroid is also called KJLibrary. It's an Android ORM and IOC framewor
 However,KJFrameForAndroid is free open source object. Thanks for you follow this KJFrameForAndroid.<br>
 
 ## More about KJFrameForAndroid
-* QQ Group：[257053751](http://jq.qq.com/?_wv=1027&k=WoM2Aa)(开发者群1)，[201055521](http://jq.qq.com/?_wv=1027&k=MBVdpK)(开发者群2)<br>
-* More of my open source projects：[开源实验室](http://www.kymjs.com/)
-* blog：http://blog.kymjs.com/
 * GitHub：[http://github.com/kymjs/KJFrameForAndroid](http://github.com/kymjs/KJFrameForAndroid)
 * online API document：[在线API文档](https://KJFrame.github.io)<br>
 
 ## usage
 For English help file: [click here](https://github.com/kymjs/KJFrameForAndroid/wiki/)<br>
 中文版使用帮助：[点击查看](https://github.com/kymjs/KJFrameForAndroid/wiki/Home_cn)
+
+## About Me
+* QQ Group：[257053751](http://jq.qq.com/?_wv=1027&k=WoM2Aa)(开发者群1)，[201055521](http://jq.qq.com/?_wv=1027&k=MBVdpK)(开发者群2)<br>
+* More of my open source projects：[开源实验室](http://www.kymjs.com/)
+* blog：http://blog.kymjs.com/
+
+自我介绍：[张涛就是我](http://blog.kymjs.com/about)<br>
+如果我的项目帮到了你，可否在你有能力的基础捐助我买书学习，以让我更有信心和能力回馈网友。<br>
+[点这里参与捐助](https://shenghuo.alipay.com/send/payment/fill.htm) 我的支付宝账号[kymjs@foxmail.com](https://shenghuo.alipay.com/send/payment/fill.htm)<br>
+
+我们会将捐助者信息公布在[开源实验室](http://www.kymjs.com)首页，如果你有什么想说的话也可以留言给我。
+
 
 ##License
 ```
@@ -35,9 +44,3 @@ For English help file: [click here](https://github.com/kymjs/KJFrameForAndroid/w
  See the License for the specific language governing permissions and
  limitations under the License.
  ```
-## About Me
-我的自我介绍：[张涛就是我](http://blog.kymjs.com/about)<br>
-如果我的项目帮到了你，可否在你有能力的基础捐助我买书学习，以让我更有信心和能力回馈网友。<br>
-[点这里参与捐助](https://shenghuo.alipay.com/send/payment/fill.htm) 我的支付宝账号[kymjs@foxmail.com](https://shenghuo.alipay.com/send/payment/fill.htm)<br>
-
-我们会将捐助者信息公布在[开源实验室](http://www.kymjs.com)首页，如果你有什么想说的话也可以留言给我。
