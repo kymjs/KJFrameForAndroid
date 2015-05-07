@@ -68,6 +68,8 @@ public class HttpParams implements HttpEntity {
             8);
     private final Map<String, String> mHeaders = new HashMap<String, String>();
     private final ByteArrayOutputStream mOutputStream = new ByteArrayOutputStream();
+    private boolean hasFile;
+    private String contentType = null;
 
     private String jsonParams;
 
@@ -125,6 +127,7 @@ public class HttpParams implements HttpEntity {
      * @param rawData
      */
     public void put(String paramName, final byte[] rawData) {
+        hasFile = true;
         writeToOutputStream(paramName, rawData, TYPE_OCTET_STREAM,
                 BINARY_ENCODING, "KJFrameFile");
     }
@@ -137,6 +140,7 @@ public class HttpParams implements HttpEntity {
      */
     public void put(final String key, final File file) {
         try {
+            hasFile = true;
             writeToOutputStream(key,
                     FileUtils.input2byte(new FileInputStream(file)),
                     TYPE_OCTET_STREAM, BINARY_ENCODING, file.getName());
@@ -196,8 +200,18 @@ public class HttpParams implements HttpEntity {
 
     @Override
     public Header getContentType() {
-        return new BasicHeader("Content-Type", "multipart/form-data; boundary="
-                + mBoundary);
+        if (contentType != null) {
+            return new BasicHeader("Content-Type", contentType);
+        }
+        if (hasFile) {
+            return new BasicHeader("Content-Type",
+                    "multipart/form-data; boundary=" + mBoundary);
+        }
+        return null;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
     @Override
