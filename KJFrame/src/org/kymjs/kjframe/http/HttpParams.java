@@ -239,7 +239,7 @@ public class HttpParams implements HttpEntity {
             //
             outstream.write(mOutputStream.toByteArray());
         } else {
-            outstream.write(getUrlParams().getBytes());
+            outstream.write(getUrlParams().substring(1).getBytes());
         }
     }
 
@@ -257,7 +257,7 @@ public class HttpParams implements HttpEntity {
         return new ByteArrayInputStream(mOutputStream.toByteArray());
     }
 
-    public String getUrlParams() {
+    public StringBuilder getUrlParams() {
         StringBuilder result = new StringBuilder();
         boolean isFirst = true;
         for (ConcurrentHashMap.Entry<String, String> entry : urlParams
@@ -272,7 +272,7 @@ public class HttpParams implements HttpEntity {
             result.append("=");
             result.append(entry.getValue());
         }
-        return result.toString();
+        return result;
     }
 
     public String getJsonParams() {
