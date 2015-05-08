@@ -231,12 +231,16 @@ public class HttpParams implements HttpEntity {
 
     @Override
     public void writeTo(final OutputStream outstream) throws IOException {
-        // 参数最末尾的结束符
-        final String endString = "--" + mBoundary + "--\r\n";
-        // 写入结束符
-        mOutputStream.write(endString.getBytes());
-        //
-        outstream.write(mOutputStream.toByteArray());
+        if (hasFile) {
+            // 参数最末尾的结束符
+            final String endString = "--" + mBoundary + "--\r\n";
+            // 写入结束符
+            mOutputStream.write(endString.getBytes());
+            //
+            outstream.write(mOutputStream.toByteArray());
+        } else {
+            outstream.write(getUrlParams().getBytes());
+        }
     }
 
     @Override
