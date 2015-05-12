@@ -36,7 +36,7 @@ public class BitmapConfig {
     public static String CACHEPATH = "KJLibrary/image";
 
     /** 磁盘缓存大小 */
-    public static int DISK_CACHE_SIZE = 5 * 1024 * 1024;
+    public static int DISK_CACHE_SIZE = 10 * 1024 * 1024;
     /** 磁盘缓存器 **/
     public static Cache mCache;
     public static ImageCache mMemoryCache;
@@ -51,8 +51,7 @@ public class BitmapConfig {
         File folder = FileUtils.getSaveFolder(CACHEPATH);
         if (mCache == null) {
             mCache = new DiskCache(folder, DISK_CACHE_SIZE);
-            mMemoryCache = new BitmapMemoryCache((int) (Runtime.getRuntime()
-                    .maxMemory() / 8));
+            mMemoryCache = new BitmapMemoryCache();
         }
     }
 }
