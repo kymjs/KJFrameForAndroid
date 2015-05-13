@@ -38,6 +38,7 @@ import org.kymjs.kjframe.utils.SystemTool;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -177,6 +178,22 @@ public class KJBitmap {
             int errorBitmap) {
         displayWithDefWH(imageView, imageUrl, null, imageView.getResources()
                 .getDrawable(errorBitmap), null);
+    }
+
+    /**
+     * 
+     * @param imageView
+     *            要显示的View
+     * @param imageUrl
+     *            网络图片地址
+     * @param errorBitmap
+     *            加载出错时设置的默认图片
+     */
+    public void displayLoadAndErrorBitmap(View imageView, String imageUrl,
+            int loadBitmap, int errorBitmap) {
+        Resources res = imageView.getResources();
+        displayWithDefWH(imageView, imageUrl, res.getDrawable(loadBitmap),
+                res.getDrawable(errorBitmap), null);
     }
 
     /**
