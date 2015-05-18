@@ -33,7 +33,7 @@ public abstract class HttpCallBack {
      * 请求开始之前回调
      */
     public void onPreStart() {
-        onPreStart();
+        onPreStar();
     }
 
     /**
