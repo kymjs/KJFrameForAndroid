@@ -15,10 +15,10 @@
  */
 package org.kymjs.kjframe.ui;
 
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -31,7 +31,7 @@ import android.view.View.OnClickListener;
  * @author kymjs (https://github.com/kymjs)
  * @version 1.8
  */
-public abstract class FrameActivity extends Activity implements
+public abstract class FrameActivity extends FragmentActivity implements
         OnClickListener, I_BroadcastReg, I_KJActivity, I_SkipActivity {
 
     public static final int WHICH_MSG = 0X37210;
@@ -132,6 +132,22 @@ public abstract class FrameActivity extends Activity implements
      */
     public void changeFragment(int resView, KJFragment targetFragment) {
         FragmentTransaction transaction = getFragmentManager()
+                .beginTransaction();
+        transaction.replace(resView, targetFragment, targetFragment.getClass()
+                .getName());
+        transaction.commit();
+    }
+
+    /**
+     * 用Fragment替换视图
+     * 
+     * @param resView
+     *            将要被替换掉的视图
+     * @param targetFragment
+     *            用来替换的Fragment
+     */
+    public void changeFragment(int resView, SupportFragment targetFragment) {
+        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction();
         transaction.replace(resView, targetFragment, targetFragment.getClass()
                 .getName());
