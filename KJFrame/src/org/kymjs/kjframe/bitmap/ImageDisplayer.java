@@ -71,10 +71,6 @@ public class ImageDisplayer {
      * 
      * @param requestUrl
      *            图片地址
-     * @param maxWidth
-     *            图片最大宽度
-     * @param maxHeight
-     *            图片最大高度
      * @return
      */
     public boolean isCached(String requestUrl) {
