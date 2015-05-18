@@ -456,7 +456,7 @@ public class KJBitmap {
             new KJHttp().download(path, url, cb);
         } else {
             File file = new File(path);
-            cb.onPreStar();
+            cb.onPreStart();
             File folder = file.getParentFile();
             if (folder != null) {
                 folder.mkdirs();

@@ -32,6 +32,14 @@ public abstract class HttpCallBack {
     /**
      * 请求开始之前回调
      */
+    public void onPreStart() {
+        onPreStart();
+    }
+
+    /**
+     * 拼写错误，请使用onPreStart()
+     */
+    @Deprecated
     public void onPreStar() {}
 
     /**

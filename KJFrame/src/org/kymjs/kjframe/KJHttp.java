@@ -465,7 +465,7 @@ public class KJHttp {
      */
     public <T> Request<T> add(Request<T> request) {
         if (request.getCallback() != null) {
-            request.getCallback().onPreStar();
+            request.getCallback().onPreStart();
         }
 
         // 标记该请求属于该队列，并将它添加到该组当前的请求。
