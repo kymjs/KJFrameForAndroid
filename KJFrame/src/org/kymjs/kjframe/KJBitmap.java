@@ -430,7 +430,7 @@ public class KJBitmap {
      * @param path
      */
     public void saveImage(Context cxt, String url, String path) {
-        saveImage(cxt, url, path, null);
+        saveImage(cxt, url, path, true, null);
     }
 
     /**
@@ -441,13 +441,15 @@ public class KJBitmap {
      * @param cb
      */
     public void saveImage(final Context cxt, String url, final String path,
-            HttpCallBack cb) {
+            final boolean isRefresh, HttpCallBack cb) {
         if (cb == null) {
             cb = new HttpCallBack() {
                 @Override
                 public void onSuccess(byte[] t) {
                     super.onSuccess(t);
-                    refresh(cxt, path);
+                    if (isRefresh) {
+                        refresh(cxt, path);
+                    }
                 }
             };
         }
@@ -474,7 +476,9 @@ public class KJBitmap {
                 os = new FileOutputStream(file);
                 os.write(data);
                 cb.onSuccess(data);
-                refresh(cxt, path);
+                if (isRefresh) {
+                    refresh(cxt, path);
+                }
             } catch (IOException e) {
                 cb.onFailure(-1, e.getMessage());
             } finally {
@@ -484,14 +488,13 @@ public class KJBitmap {
         }
     }
 
-    /********************* private method *********************/
     /**
      * 刷新图库
      * 
      * @param cxt
      * @param path
      */
-    private void refresh(Context cxt, String path) {
+    public void refresh(Context cxt, String path) {
         String name = "";
         name = path.substring(path.lastIndexOf('/'));
         try {
@@ -504,6 +507,8 @@ public class KJBitmap {
         cxt.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri
                 .parse("file://" + path)));
     }
+
+    /********************* private method *********************/
 
     @SuppressLint("NewApi")
     @SuppressWarnings("deprecation")
