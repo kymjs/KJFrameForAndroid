@@ -1,7 +1,6 @@
 package org.kymjs.kjframe.demo;
 
 import org.kymjs.kjframe.KJActivity;
-import org.kymjs.kjframe.demo.widget.KJListViewDemo;
 import org.kymjs.kjframe.demo.widget.KJSlidingMenuDemo;
 import org.kymjs.kjframe.demo.widget.ScaleImageDemo;
 import org.kymjs.kjframe.ui.BindView;
@@ -45,7 +44,6 @@ public class WidgetActivity extends KJActivity {
             showActivity(aty, KJSlidingMenuDemo.class);
             break;
         case R.id.button2:
-            showActivity(aty, KJListViewDemo.class);
             break;
         case R.id.button3:
             ViewInject.toast("请查看KJBlog项目");
