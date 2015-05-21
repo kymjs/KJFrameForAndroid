@@ -39,8 +39,6 @@ import android.os.Process;
  */
 public class CacheDispatcher extends Thread {
 
-    private static final boolean DEBUG = HttpConfig.DEBUG;
-
     private final BlockingQueue<Request<?>> mCacheQueue; // 缓存队列
     private final BlockingQueue<Request<?>> mNetworkQueue; // 用于执行网络请求的工作队列
     private final Cache mCache; // 缓存器
@@ -84,9 +82,6 @@ public class CacheDispatcher extends Thread {
      */
     @Override
     public void run() {
-        if (DEBUG) {
-            KJLoger.debug("开启一个新的缓存任务");
-        }
         Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
         mCache.initialize();
 
@@ -116,6 +111,7 @@ public class CacheDispatcher extends Thread {
                 Response<?> response = request
                         .parseNetworkResponse(new NetworkResponse(entry.data,
                                 entry.responseHeaders));
+                KJLoger.debugLog("CacheDispatcher：", "http resopnd from cache");
                 if (mConfig.useDelayCache) {
                     sleep(mConfig.delayTime);
                 }

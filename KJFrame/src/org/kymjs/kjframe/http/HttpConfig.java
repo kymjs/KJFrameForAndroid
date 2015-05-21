@@ -92,7 +92,6 @@ public class HttpConfig {
 
     public void setCookieString(String cookie) {
         sCookie = cookie;
-
     }
 
     public String getCookieString() {
