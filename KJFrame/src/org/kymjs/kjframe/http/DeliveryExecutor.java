@@ -109,7 +109,5 @@ public class DeliveryExecutor implements Delivery {
     }
 
     @Override
-    public void postCancel(Request<?> request) {
-
-    }
+    public void postCancel(Request<?> request) {}
 }

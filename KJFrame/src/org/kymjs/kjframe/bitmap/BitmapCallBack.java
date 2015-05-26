@@ -35,4 +35,7 @@ public abstract class BitmapCallBack {
 
     /** bitmap载入完成不管成功失败 */
     public void onFinish() {}
+
+    /** bitmap开始加载网络图片 */
+    public void onDoHttp() {}
 }

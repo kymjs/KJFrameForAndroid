@@ -103,7 +103,7 @@ public class ImageDisplayer {
             return container;
         } else {
             // 开始加载网络图片的标志
-            callback.onSuccess(null);
+            callback.onDoHttp();
         }
 
         ImageBale imageBale = new ImageBale(null, requestUrl, callback);

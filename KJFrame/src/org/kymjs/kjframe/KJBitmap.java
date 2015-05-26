@@ -333,6 +333,14 @@ public class KJBitmap {
                     callback.onFinish();
                 }
             }
+
+            @Override
+            public void onDoHttp() {
+                super.onDoHttp();
+                if (callback != null) {
+                    callback.onDoHttp();
+                }
+            }
         };
 
         if (imageUrl.startsWith("http")) {
