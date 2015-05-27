@@ -95,7 +95,7 @@ public class DownloadController {
      * @return
      */
     public boolean pause() {
-        if (mStatus == STATUS_DOWNLOADING && mRequest != null && mQueue != null) {
+        if ((mStatus == STATUS_DOWNLOADING || mStatus == STATUS_WAITING) && mRequest != null && mQueue != null) {
             mStatus = STATUS_PAUSE;
             mRequest.cancel();
             mQueue.wake();
