@@ -130,7 +130,7 @@ public class DownloadController {
         if (mStatus == STATUS_DISCARD || mStatus == STATUS_SUCCESS) {
             return false;
         }
-        if (mStatus == STATUS_DOWNLOADING && mRequest != null) {
+        if ((mStatus == STATUS_DOWNLOADING || mStatus == STATUS_WAITING) && mRequest != null) {
             mRequest.cancel();
             mStatus = STATUS_DISCARD;
         }
