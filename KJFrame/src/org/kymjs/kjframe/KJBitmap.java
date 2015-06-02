@@ -212,13 +212,12 @@ public class KJBitmap {
      */
     public void displayWithDefWH(View imageView, String imageUrl,
             Drawable loadBitmap, Drawable errorBitmap, BitmapCallBack callback) {
-        imageView.measure(0, 0);
-        int w = imageView.getMeasuredWidth();
-        int h = imageView.getMeasuredHeight();
-        if (w < 5) {
+        int w = imageView.getWidth();;
+        int h = imageView.getHeight();
+        if (w == 0) {
             w = DensityUtils.getScreenW(imageView.getContext()) / 2;
         }
-        if (h < 5) {
+        if (h == 0) {
             h = DensityUtils.getScreenH(imageView.getContext()) / 2;
         }
         display(imageView, imageUrl, w, h, loadBitmap, errorBitmap, callback);
