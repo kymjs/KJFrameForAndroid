@@ -35,6 +35,7 @@ import org.apache.http.message.BasicHeader;
 import org.kymjs.kjframe.utils.FileUtils;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 /**
  * Http请求的参数集合
@@ -145,6 +146,7 @@ public class HttpParams implements HttpEntity {
                     FileUtils.input2byte(new FileInputStream(file)),
                     TYPE_OCTET_STREAM, BINARY_ENCODING, file.getName());
         } catch (FileNotFoundException e) {
+            Log.e("kjframe", "HttpParams.put()-> file not found");
         }
     }
 
