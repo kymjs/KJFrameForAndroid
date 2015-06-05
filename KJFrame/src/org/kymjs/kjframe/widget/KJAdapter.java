@@ -56,14 +56,10 @@ public abstract class KJAdapter<T> extends BaseAdapter implements
     }
 
     public void refresh(Collection<T> datas) {
-        if (mDatas == null) {
-            mDatas = new ArrayList<T>(0);
-        }
         if (datas == null) {
             datas = new ArrayList<T>(0);
         }
-        this.mDatas.clear();
-        this.mDatas.addAll(datas);
+        this.mDatas = datas;
         notifyDataSetChanged();
     }
 
