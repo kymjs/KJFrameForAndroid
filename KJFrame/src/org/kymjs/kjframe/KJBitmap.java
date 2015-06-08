@@ -434,7 +434,9 @@ public class KJBitmap {
      * 
      * @param cxt
      * @param url
+     *            网络图片链接
      * @param path
+     *            保存到本地的绝对路径
      */
     public void saveImage(Context cxt, String url, String path) {
         saveImage(cxt, url, path, true, null);
@@ -444,8 +446,11 @@ public class KJBitmap {
      * 保存一张图片到本地
      * 
      * @param url
+     *            网络图片链接
      * @param path
+     *            保存到本地的绝对路径
      * @param cb
+     *            保存过程监听器
      */
     public void saveImage(final Context cxt, String url, final String path,
             final boolean isRefresh, HttpCallBack cb) {
