@@ -572,15 +572,17 @@ public class KJBitmap {
      * @param view
      */
     private void checkViewExist(View view) {
-        for (View v : doLoadingViews) {
-            if (v.equals(view)) {
-                String url = (String) v.getTag();
-                if (!StringUtils.isEmpty(url)) {
-                    cancle(url);
-                    break;
+        synchronized (doLoadingViews) {
+            for (View v : doLoadingViews) {
+                if (v.equals(view)) {
+                    String url = (String) v.getTag();
+                    if (!StringUtils.isEmpty(url)) {
+                        cancle(url);
+                        break;
+                    }
                 }
             }
+            doLoadingViews.add(view);
         }
-        doLoadingViews.add(view);
     }
 }
