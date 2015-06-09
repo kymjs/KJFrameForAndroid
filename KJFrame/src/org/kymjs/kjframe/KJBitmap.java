@@ -20,8 +20,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
 import org.kymjs.kjframe.bitmap.BitmapConfig;
@@ -70,7 +70,7 @@ public class KJBitmap {
     public KJBitmap(BitmapConfig bitmapConfig) {
         this.mConfig = bitmapConfig;
         displayer = new ImageDisplayer(mConfig);
-        doLoadingViews = new LinkedList<View>();
+        doLoadingViews = new Vector<View>(30);
     }
 
     /**
@@ -572,14 +572,15 @@ public class KJBitmap {
      * @param view
      */
     private void checkViewExist(View view) {
-        synchronized (doLoadingViews) {
-            if (doLoadingViews.contains(view)) {
-                String url = (String) view.getTag();
+        for (View v : doLoadingViews) {
+            if (v.equals(view)) {
+                String url = (String) v.getTag();
                 if (!StringUtils.isEmpty(url)) {
                     cancle(url);
+                    break;
                 }
             }
-            doLoadingViews.add(view);
         }
+        doLoadingViews.add(view);
     }
 }
