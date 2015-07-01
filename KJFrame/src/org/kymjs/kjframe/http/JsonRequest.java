@@ -63,6 +63,15 @@ public class JsonRequest extends Request<byte[]> {
     }
 
     @Override
+    public String getCacheKey() {
+        if (getMethod() == HttpMethod.POST) {
+            return getUrl() + mParams.getUrlParams();
+        } else {
+            return getUrl();
+        }
+    }
+
+    @Override
     public byte[] getBody() {
         try {
             return mRequestBody == null ? null : mRequestBody

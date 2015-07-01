@@ -53,6 +53,11 @@ public class ImageRequest extends Request<Bitmap> {
         return Priority.LOW;
     }
 
+    @Override
+    public String getCacheKey() {
+        return "";
+    }
+
     /**
      * 框架会自动将大于设定值的bitmap转换成设定值，所以需要这个方法来判断应该显示默认大小或者是设定值大小。<br>
      * 本方法会根据maxPrimary与actualPrimary比较来判断，如果无法判断则会根据辅助值判断，辅助值一般是主要值对应的。

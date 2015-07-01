@@ -60,6 +60,11 @@ public class FileRequest extends Request<byte[]> {
     }
 
     @Override
+    public String getCacheKey() {
+        return "";
+    }
+
+    @Override
     public Response<byte[]> parseNetworkResponse(NetworkResponse response) {
         String errorMessage = null;
         if (!isCanceled()) {

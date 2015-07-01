@@ -26,7 +26,8 @@ import android.os.Build;
 import android.os.Process;
 
 /**
- * 网络请求任务的调度器，负责不停的从RequestQueue中取Request并交给NetWork执行
+ * 网络请求任务的调度器，负责不停的从RequestQueue中取Request并交给NetWork执行，
+ * 执行完成后分发执行结果到UI线程的回调并缓存结果到缓存器
  */
 public class NetworkDispatcher extends Thread {
     private final BlockingQueue<Request<?>> mQueue; // 正在发生请求的队列

@@ -264,6 +264,7 @@ public class KJHttp {
             HttpCallBack callback) {
         FileRequest request = new FileRequest(storeFilePath, url, callback);
         mConfig.mController.add(request);
+        request.setShouldCache(false);
         doRequest(request);
         return mConfig.mController;
     }
@@ -309,7 +310,7 @@ public class KJHttp {
     }
 
     /**
-     * 获取内存缓存数据
+     * 获取缓存数据
      * 
      * @param url
      *            哪条url的缓存
@@ -324,6 +325,37 @@ public class KJHttp {
         } else {
             return new byte[0];
         }
+    }
+
+    /**
+     * 获取缓存数据
+     * 
+     * @param url
+     *            哪条url的缓存
+     * @param params
+     *            http请求中的参数集(KJHttp的缓存会连同请求参数一起作为一个缓存的key)
+     * @since 2.234以后有用
+     */
+    public byte[] getCache(String url, HttpParams params) {
+        if (params != null) {
+            url += params.getUrlParams();
+        }
+        return getCache(url);
+    }
+
+    /**
+     * 只有你确定cache是一个String时才可以使用这个方法，否则还是应该使用getCache(String);
+     * 
+     * @param url
+     *            url
+     * @param params
+     *            http请求中的参数集(KJHttp的缓存会连同请求参数一起作为一个缓存的key)
+     */
+    public String getStringCache(String url, HttpParams params) {
+        if (params != null) {
+            url += params.getUrlParams();
+        }
+        return new String(getCache(url));
     }
 
     /**
@@ -351,17 +383,6 @@ public class KJHttp {
      */
     public void cleanCache() {
         mConfig.mCache.clear();
-    }
-
-    /**
-     * 已过期，请更换为getCache()
-     */
-    @Deprecated
-    public String getCache(String uri, HttpParams params) {
-        if (params != null) {
-            uri += params.getUrlParams();
-        }
-        return new String(getCache(uri));
     }
 
     /**

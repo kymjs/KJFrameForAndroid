@@ -21,7 +21,7 @@ package org.kymjs.kjframe.utils;
  */
 public final class KJConfig {
 
-    public static final double VERSION = 2.232;
+    public static final double VERSION = 2.234;
 
     /** 错误处理广播 */
     public static final String RECEIVER_ERROR = KJConfig.class.getName()

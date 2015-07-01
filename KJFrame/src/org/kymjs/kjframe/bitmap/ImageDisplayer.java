@@ -115,6 +115,7 @@ public class ImageDisplayer {
 
         Request<Bitmap> newRequest = makeImageRequest(requestUrl, maxWidth,
                 maxHeight);
+        newRequest.setShouldCache(false);
         newRequest.setConfig(mKJHttp.getConfig());
         mKJHttp.doRequest(newRequest);
         mRequestsMap.put(requestUrl,
