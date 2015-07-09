@@ -134,6 +134,9 @@ public abstract class FrameActivity extends FragmentActivity implements
      *            用来替换的Fragment
      */
     public void changeFragment(int resView, KJFragment targetFragment) {
+        if (targetFragment.equals(currentFragment)) {
+            return;
+        }
         FragmentTransaction transaction = getFragmentManager()
                 .beginTransaction();
         if (!targetFragment.isAdded()) {
@@ -159,6 +162,9 @@ public abstract class FrameActivity extends FragmentActivity implements
      *            用来替换的Fragment
      */
     public void changeFragment(int resView, SupportFragment targetFragment) {
+        if (targetFragment.equals(currentSupportFragment)) {
+            return;
+        }
         android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction();
         if (!targetFragment.isAdded()) {
