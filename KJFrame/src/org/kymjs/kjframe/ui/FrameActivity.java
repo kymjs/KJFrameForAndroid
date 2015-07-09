@@ -36,7 +36,7 @@ public abstract class FrameActivity extends FragmentActivity implements
 
     public static final int WHICH_MSG = 0X37210;
 
-    protected KJFragment currentFragment;
+    protected KJFragment currentKJFragment;
     protected SupportFragment currentSupportFragment;
 
     /**
@@ -134,7 +134,7 @@ public abstract class FrameActivity extends FragmentActivity implements
      *            用来替换的Fragment
      */
     public void changeFragment(int resView, KJFragment targetFragment) {
-        if (targetFragment.equals(currentFragment)) {
+        if (targetFragment.equals(currentKJFragment)) {
             return;
         }
         FragmentTransaction transaction = getFragmentManager()
@@ -146,10 +146,10 @@ public abstract class FrameActivity extends FragmentActivity implements
         if (targetFragment.isHidden()) {
             transaction.show(targetFragment);
         }
-        if (currentFragment != null && currentFragment.isVisible()) {
-            transaction.hide(currentFragment);
+        if (currentKJFragment != null && currentKJFragment.isVisible()) {
+            transaction.hide(currentKJFragment);
         }
-        currentFragment = targetFragment;
+        currentKJFragment = targetFragment;
         transaction.commit();
     }
 
