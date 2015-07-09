@@ -36,6 +36,9 @@ public abstract class FrameActivity extends FragmentActivity implements
 
     public static final int WHICH_MSG = 0X37210;
 
+    protected KJFragment currentFragment;
+    protected SupportFragment currentSupportFragment;
+
     /**
      * 一个私有回调类，线程中初始化数据完成后的回调
      */
@@ -133,8 +136,17 @@ public abstract class FrameActivity extends FragmentActivity implements
     public void changeFragment(int resView, KJFragment targetFragment) {
         FragmentTransaction transaction = getFragmentManager()
                 .beginTransaction();
-        transaction.replace(resView, targetFragment, targetFragment.getClass()
-                .getName());
+        if (!targetFragment.isAdded()) {
+            transaction.add(resView, targetFragment, targetFragment.getClass()
+                    .getName());
+        }
+        if (targetFragment.isHidden()) {
+            transaction.show(targetFragment);
+        }
+        if (currentFragment != null && currentFragment.isVisible()) {
+            transaction.hide(currentFragment);
+        }
+        currentFragment = targetFragment;
         transaction.commit();
     }
 
@@ -149,8 +161,18 @@ public abstract class FrameActivity extends FragmentActivity implements
     public void changeFragment(int resView, SupportFragment targetFragment) {
         android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction();
-        transaction.replace(resView, targetFragment, targetFragment.getClass()
-                .getName());
+        if (!targetFragment.isAdded()) {
+            transaction.add(resView, targetFragment, targetFragment.getClass()
+                    .getName());
+        }
+        if (targetFragment.isHidden()) {
+            transaction.show(targetFragment);
+        }
+        if (currentSupportFragment != null
+                && currentSupportFragment.isVisible()) {
+            transaction.hide(currentSupportFragment);
+        }
+        currentSupportFragment = targetFragment;
         transaction.commit();
     }
 }
