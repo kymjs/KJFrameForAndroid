@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -41,6 +42,7 @@ public abstract class KJAdapter<T> extends BaseAdapter implements
     protected AbsListView mList;
     protected boolean isScrolling;
     protected Context mCxt;
+    protected LayoutInflater mInflater;
 
     private AbsListView.OnScrollListener listener;
 
@@ -52,6 +54,7 @@ public abstract class KJAdapter<T> extends BaseAdapter implements
         this.mItemLayoutId = itemLayoutId;
         this.mList = view;
         mCxt = view.getContext();
+        mInflater = LayoutInflater.from(mCxt);
         mList.setOnScrollListener(this);
     }
 
