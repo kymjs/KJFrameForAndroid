@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import android.view.LayoutInflater;
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -36,22 +36,22 @@ import android.widget.BaseAdapter;
 public abstract class KJAdapter<T> extends BaseAdapter implements
         AbsListView.OnScrollListener {
 
-    protected LayoutInflater mInflater;
     protected Collection<T> mDatas;
     protected final int mItemLayoutId;
     protected AbsListView mList;
     protected boolean isScrolling;
+    protected Context mCxt;
 
     private AbsListView.OnScrollListener listener;
 
     public KJAdapter(AbsListView view, Collection<T> mDatas, int itemLayoutId) {
-        this.mInflater = LayoutInflater.from(view.getContext());
         if (mDatas == null) {
             mDatas = new ArrayList<T>(0);
         }
         this.mDatas = mDatas;
         this.mItemLayoutId = itemLayoutId;
         this.mList = view;
+        mCxt = view.getContext();
         mList.setOnScrollListener(this);
     }
 
@@ -92,7 +92,7 @@ public abstract class KJAdapter<T> extends BaseAdapter implements
     public View getView(int position, View convertView, ViewGroup parent) {
         final AdapterHolder viewHolder = getViewHolder(position, convertView,
                 parent);
-        convert(viewHolder, getItem(position), isScrolling);
+        convert(viewHolder, getItem(position), isScrolling, position);
         return viewHolder.getConvertView();
 
     }
@@ -104,6 +104,11 @@ public abstract class KJAdapter<T> extends BaseAdapter implements
 
     public abstract void convert(AdapterHolder helper, T item,
             boolean isScrolling);
+
+    public void convert(AdapterHolder helper, T item, boolean isScrolling,
+            int position) {
+        convert(helper, getItem(position), isScrolling);
+    }
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
