@@ -36,6 +36,8 @@ public abstract class FrameFragment extends Fragment implements OnClickListener 
 
     public static final int WHICH_MSG = 0X37211;
 
+    protected View fragmentRootView;
+
     /**
      * 一个私有回调类，线程中初始化数据完成后的回调
      */
@@ -99,10 +101,10 @@ public abstract class FrameFragment extends Fragment implements OnClickListener 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View view = inflaterView(inflater, container, savedInstanceState);
-        AnnotateUtil.initBindView(this, view);
+        fragmentRootView = inflaterView(inflater, container, savedInstanceState);
+        AnnotateUtil.initBindView(this, fragmentRootView);
         initData();
-        initWidget(view);
+        initWidget(fragmentRootView);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -110,6 +112,18 @@ public abstract class FrameFragment extends Fragment implements OnClickListener 
                 threadHandle.sendEmptyMessage(WHICH_MSG);
             }
         }).start();
+        return fragmentRootView;
+    }
+
+    protected <T extends View> T bindView(int id) {
+        return (T) fragmentRootView.findViewById(id);
+    }
+
+    protected <T extends View> T bindView(int id, boolean click) {
+        T view = (T) fragmentRootView.findViewById(id);
+        if (click) {
+            view.setOnClickListener(this);
+        }
         return view;
     }
 }

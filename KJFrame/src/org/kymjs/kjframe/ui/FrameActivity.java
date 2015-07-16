@@ -104,6 +104,18 @@ public abstract class FrameActivity extends FragmentActivity implements
         widgetClick(v);
     }
 
+    protected <T extends View> T bindView(int id) {
+        return (T) findViewById(id);
+    }
+
+    protected <T extends View> T bindView(int id, boolean click) {
+        T view = (T) findViewById(id);
+        if (click) {
+            view.setOnClickListener(this);
+        }
+        return view;
+    }
+
     @Override
     public void registerBroadcast() {}
 
