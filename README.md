@@ -29,7 +29,7 @@ KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复�
 如果我的项目帮到了你，可否在你有能力的基础捐助我买书学习，以让我更有信心和能力回馈网友。<br>
 [点这里参与捐助](https://shenghuo.alipay.com/send/payment/fill.htm) 我的支付宝账号[kymjs@foxmail.com](https://shenghuo.alipay.com/send/payment/fill.htm)<br>
 
-我们会将捐助者信息公布在[开源实验室](http://www.kymjs.com)捐赠页，如果你有什么想说的话也可以留言给我。
+我们会将捐助者信息公布在[开源实验室·捐赠](http://www.kymjs.com/donate)捐赠页，如果你有什么想说的话也可以留言给我。
 
 
 ##开源协议
