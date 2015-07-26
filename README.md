@@ -21,6 +21,7 @@ KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复�
 ```
 
 ## 关于
+* GitHub项目地址：[https://github.com/kymjs/KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid)  
 * QQ 群[257053751](http://jq.qq.com/?_wv=1027&k=WoM2Aa)(开发者群1)，[201055521](http://jq.qq.com/?_wv=1027&k=MBVdpK)(开发者群2)<br>
 * 更多我的开源项目：[开源实验室](http://www.kymjs.com/)
 * blog：http://blog.kymjs.com/
