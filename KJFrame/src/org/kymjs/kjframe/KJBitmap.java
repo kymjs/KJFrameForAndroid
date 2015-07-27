@@ -421,12 +421,22 @@ public class KJBitmap {
     }
 
     /**
+     * 取消一个加载请求(拼写错误，请使用cancel(url))
+     * 
+     * @param url
+     */
+    @Deprecated
+    public void cancle(String url) {
+        displayer.cancel(url);
+    }
+
+    /**
      * 取消一个加载请求
      * 
      * @param url
      */
-    public void cancle(String url) {
-        displayer.cancle(url);
+    public void cancel(String url) {
+        displayer.cancel(url);
     }
 
     /**
