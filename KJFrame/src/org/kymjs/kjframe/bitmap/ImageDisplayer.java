@@ -317,8 +317,18 @@ public class ImageDisplayer {
      * 
      * @param url
      */
-    public void cancle(String url) {
+    public void cancel(String url) {
         mKJHttp.cancel(url);
+    }
+
+    /**
+     * 取消一个加载请求(拼写错误，请使用cancel(url))
+     * 
+     * @param url
+     */
+    @Deprecated
+    public void cancle(String url) {
+        this.cancel(url);
     }
 
     /**
