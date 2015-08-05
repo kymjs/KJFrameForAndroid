@@ -42,10 +42,8 @@ public class BitmapConfig {
     public static ImageCache mMemoryCache;
 
     public int cacheTime = 1440000;
-
-    /** 已使用全新的DiskCache，不再需要prefix参数 */
-    @Deprecated
-    public static String CACHE_FILENAME_PREFIX = "KJLibrary_";
+    // 为了防止网速很快的时候速度过快而造成先显示加载中图片，然后瞬间显示网络图片的闪烁问题
+    public long delayTime = 100;
 
     public BitmapConfig() {
         File folder = FileUtils.getSaveFolder(CACHEPATH);

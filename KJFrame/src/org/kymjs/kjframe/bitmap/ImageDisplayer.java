@@ -37,8 +37,7 @@ public class ImageDisplayer {
     private final KJHttp mKJHttp; // 使用KJHttp的线程池执行队列去加载图片
 
     private final ImageCache mMemoryCache; // 内存缓存器
-    // 为了防止网速很快的时候速度过快而造成先显示加载中图片，然后瞬间显示网络图片的闪烁问题
-    private final int mResponseDelayMs = 100;
+    private final long mResponseDelayMs;
 
     private Runnable mRunnable;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
@@ -64,6 +63,7 @@ public class ImageDisplayer {
         config.cacheTime = bitmapConfig.cacheTime;
         mKJHttp = new KJHttp(config);
         mMemoryCache = BitmapConfig.mMemoryCache;
+        mResponseDelayMs = bitmapConfig.delayTime;
     }
 
     /**

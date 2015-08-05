@@ -86,7 +86,7 @@ public class HttpConfig {
             return new HttpConnectStack();
         } else {
             return new HttpClientStack(
-                    AndroidHttpClient.newInstance("volley/0"));
+                    AndroidHttpClient.newInstance("kjframe/0"));
         }
     }
 
