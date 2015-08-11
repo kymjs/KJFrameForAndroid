@@ -239,6 +239,12 @@ public class HttpActivity extends KJActivity {
                         super.onSuccess(t);
                         toast("完成");
                     }
+
+                    @Override
+                    public void onFailure(int errorNo, String strMsg) {
+                        super.onFailure(errorNo, strMsg);
+                        KJLoger.debug(errorNo + "====" + strMsg);
+                    }
                 });
     }
 

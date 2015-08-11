@@ -246,7 +246,7 @@ public abstract class Request<T> implements Comparable<Request<T>> {
         return this;
     }
 
-    public final boolean shouldCache() {
+    public boolean shouldCache() {
         return mShouldCache;
     }
 

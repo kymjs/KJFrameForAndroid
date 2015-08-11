@@ -48,7 +48,6 @@ public class FileRequest extends Request<byte[]> {
             }
         }
         mTemporaryFile = new File(storeFilePath + ".tmp");
-        setShouldCache(false);
     }
 
     public File getStoreFile() {
@@ -62,6 +61,11 @@ public class FileRequest extends Request<byte[]> {
     @Override
     public String getCacheKey() {
         return "";
+    }
+
+    @Override
+    public boolean shouldCache() {
+        return false;
     }
 
     @Override

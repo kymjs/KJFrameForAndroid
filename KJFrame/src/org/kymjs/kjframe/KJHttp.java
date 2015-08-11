@@ -59,7 +59,6 @@ import org.kymjs.kjframe.utils.KJLoger;
  * @author kymjs (https://www.kymjs.com/)
  */
 public class KJHttp {
-
     // 请求缓冲区
     private final Map<String, Queue<Request<?>>> mWaitingRequests = new HashMap<String, Queue<Request<?>>>();
     // 请求的序列化生成器
@@ -263,9 +262,8 @@ public class KJHttp {
     public DownloadTaskQueue download(String storeFilePath, String url,
             HttpCallBack callback) {
         FileRequest request = new FileRequest(storeFilePath, url, callback);
+        request.setConfig(mConfig);
         mConfig.mController.add(request);
-        request.setShouldCache(false);
-        doRequest(request);
         return mConfig.mController;
     }
 
