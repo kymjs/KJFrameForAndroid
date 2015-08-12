@@ -119,7 +119,7 @@ public class ImageRequest extends Request<Bitmap> {
         byte[] data = response.data;
         BitmapFactory.Options option = new BitmapFactory.Options();
         Bitmap bitmap = null;
-        if (mMaxWidth == 0 && mMaxHeight == 0) {
+        if (mMaxWidth <= 0 && mMaxHeight <= 0) {
             bitmap = BitmapFactory
                     .decodeByteArray(data, 0, data.length, option);
         } else {
