@@ -55,7 +55,7 @@ public class ImageRequest extends Request<Bitmap> {
 
     @Override
     public String getCacheKey() {
-        return "";
+        return getUrl();
     }
 
     /**

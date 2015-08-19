@@ -15,12 +15,8 @@
  */
 package org.kymjs.kjframe.bitmap;
 
-import java.io.File;
-
 import org.kymjs.kjframe.bitmap.ImageDisplayer.ImageCache;
-import org.kymjs.kjframe.http.Cache;
-import org.kymjs.kjframe.http.DiskCache;
-import org.kymjs.kjframe.utils.FileUtils;
+import org.kymjs.kjframe.http.HttpConfig;
 import org.kymjs.kjframe.utils.KJLoger;
 
 /**
@@ -33,12 +29,13 @@ public class BitmapConfig {
 
     public boolean isDEBUG = KJLoger.DEBUG_LOG;
 
-    public static String CACHEPATH = "KJLibrary/image";
+    /** 新版本图片缓存与http缓存处于同一目录 */
+    @Deprecated
+    public static String CACHEPATH = HttpConfig.CACHEPATH;
 
     /** 磁盘缓存大小 */
     public static int DISK_CACHE_SIZE = 10 * 1024 * 1024;
     /** 磁盘缓存器 **/
-    public static Cache mCache;
     public static ImageCache mMemoryCache;
 
     public int cacheTime = 1440000;
@@ -46,9 +43,7 @@ public class BitmapConfig {
     public long delayTime = 100;
 
     public BitmapConfig() {
-        File folder = FileUtils.getSaveFolder(CACHEPATH);
-        if (mCache == null) {
-            mCache = new DiskCache(folder, DISK_CACHE_SIZE);
+        if (mMemoryCache == null) {
             mMemoryCache = new BitmapMemoryCache();
         }
     }

@@ -65,39 +65,14 @@ public final class BitmapMemoryCache implements ImageCache {
         };
     }
 
+    @Override
     public void remove(String key) {
         cache.remove(key);
     }
 
-    public void removeAll() {
-        cache.removeAll();
-    }
-
-    /**
-     * 已过期，请使用putBitmap(String key, Bitmap bitmap)
-     * 
-     * @param key
-     *            图片的地址
-     * @param bitmap
-     *            要缓存的bitmap
-     */
-    @Deprecated
-    public void put(String key, Bitmap bitmap) {
-        if (this.get(key) == null) {
-            cache.put(key, bitmap);
-        }
-    }
-
-    /**
-     * 已过期，请使用gutBitmap(String key)
-     * 
-     * @param key
-     *            图片的地址
-     * @return
-     */
-    @Deprecated
-    public Bitmap get(String key) {
-        return cache.get(key);
+    @Override
+    public void clean() {
+        cache.clean();
     }
 
     /**

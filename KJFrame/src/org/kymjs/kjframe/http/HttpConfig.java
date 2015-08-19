@@ -58,7 +58,7 @@ public class HttpConfig {
     public static int MAX_DOWNLOAD_TASK_SIZE = 2;
 
     /** 缓存器 **/
-    public Cache mCache;
+    public static Cache mCache;
     /** 网络请求执行器 **/
     public Network mNetwork;
     /** Http响应的分发器 **/
@@ -69,8 +69,10 @@ public class HttpConfig {
     public static String sCookie;
 
     public HttpConfig() {
-        File folder = FileUtils.getSaveFolder(CACHEPATH);
-        mCache = new DiskCache(folder, DISK_CACHE_SIZE);
+        if (mCache == null) {
+            File folder = FileUtils.getSaveFolder(CACHEPATH);
+            mCache = new DiskCache(folder, DISK_CACHE_SIZE);
+        }
         mNetwork = new Network(httpStackFactory());
         mDelivery = new DeliveryExecutor(new Handler(Looper.getMainLooper()));
         mController = new DownloadTaskQueue(HttpConfig.MAX_DOWNLOAD_TASK_SIZE);

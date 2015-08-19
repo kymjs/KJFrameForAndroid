@@ -29,7 +29,7 @@ public interface Cache {
 
     public void remove(String key);
 
-    public void clear();
+    public void clean();
 
     /**
      * 执行在线程中

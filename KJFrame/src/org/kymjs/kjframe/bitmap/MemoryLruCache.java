@@ -216,7 +216,7 @@ public class MemoryLruCache<K, V> {
     /**
      * @author kymjs
      */
-    public final void removeAll() {
+    public final void clean() {
         map.clear();
         size = 0;
     }

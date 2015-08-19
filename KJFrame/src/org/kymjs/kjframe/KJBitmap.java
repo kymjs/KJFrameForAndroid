@@ -29,6 +29,7 @@ import org.kymjs.kjframe.bitmap.DiskImageRequest;
 import org.kymjs.kjframe.bitmap.ImageDisplayer;
 import org.kymjs.kjframe.http.Cache;
 import org.kymjs.kjframe.http.HttpCallBack;
+import org.kymjs.kjframe.http.HttpConfig;
 import org.kymjs.kjframe.utils.DensityUtils;
 import org.kymjs.kjframe.utils.FileUtils;
 import org.kymjs.kjframe.utils.KJLoger;
@@ -374,22 +375,16 @@ public class KJBitmap {
      *            哪条url的缓存
      */
     public void removeCache(String url) {
-        BitmapConfig.mCache.remove(url);
-    }
-
-    /**
-     * 已过期，请改用cleanCache()
-     */
-    @Deprecated
-    public void removeCacheAll() {
-        cleanCache();
+        BitmapConfig.mMemoryCache.remove(url);
+        HttpConfig.mCache.remove(url);
     }
 
     /**
      * 清空缓存
      */
     public void cleanCache() {
-        BitmapConfig.mCache.clear();
+        BitmapConfig.mMemoryCache.clean();
+        HttpConfig.mCache.clean();
     }
 
     /**
@@ -400,7 +395,7 @@ public class KJBitmap {
      * @return
      */
     public byte[] getCache(String url) {
-        Cache cache = BitmapConfig.mCache;
+        Cache cache = HttpConfig.mCache;
         cache.initialize();
         Cache.Entry entry = cache.get(url);
         if (entry != null) {

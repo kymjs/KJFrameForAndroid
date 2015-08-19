@@ -74,7 +74,7 @@ public class DiskCache implements Cache {
      * 清空磁盘缓存
      */
     @Override
-    public synchronized void clear() {
+    public synchronized void clean() {
         File[] files = mRootDirectory.listFiles();
         if (files != null) {
             for (File file : files) {

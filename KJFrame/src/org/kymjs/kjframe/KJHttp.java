@@ -315,7 +315,7 @@ public class KJHttp {
      * @return
      */
     public byte[] getCache(String url) {
-        Cache cache = mConfig.mCache;
+        Cache cache = HttpConfig.mCache;
         cache.initialize();
         Cache.Entry entry = cache.get(url);
         if (entry != null) {
@@ -373,38 +373,14 @@ public class KJHttp {
      *            哪条url的缓存
      */
     public void removeCache(String url) {
-        mConfig.mCache.remove(url);
+        HttpConfig.mCache.remove(url);
     }
 
     /**
      * 清空缓存
      */
     public void cleanCache() {
-        mConfig.mCache.clear();
-    }
-
-    /**
-     * 已过期，请更换为cleanCache()
-     */
-    @Deprecated
-    public void removeAllDiskCache() {
-        cleanCache();
-    }
-
-    /**
-     * 已过期，请更换为removeCache()
-     */
-    @Deprecated
-    public void removeDiskCache(String uri, HttpParams params) {
-        mConfig.mCache.remove(uri);
-    }
-
-    /**
-     * 已过期，请更换为getConfig()
-     */
-    @Deprecated
-    public HttpConfig getHttpConfig() {
-        return getConfig();
+        HttpConfig.mCache.clean();
     }
 
     public HttpConfig getConfig() {
@@ -431,12 +407,12 @@ public class KJHttp {
     private void start() {
         stop();// 首先关闭之前的运行，不管是否存在
         mCacheDispatcher = new CacheDispatcher(mCacheQueue, mNetworkQueue,
-                mConfig.mCache, mConfig.mDelivery, mConfig);
+                HttpConfig.mCache, mConfig.mDelivery, mConfig);
         mCacheDispatcher.start();
         // 构建线程池
         for (int i = 0; i < mTaskThreads.length; i++) {
             NetworkDispatcher tasker = new NetworkDispatcher(mNetworkQueue,
-                    mConfig.mNetwork, mConfig.mCache, mConfig.mDelivery);
+                    mConfig.mNetwork, HttpConfig.mCache, mConfig.mDelivery);
             mTaskThreads[i] = tasker;
             tasker.start();
         }
