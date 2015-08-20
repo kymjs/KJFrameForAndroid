@@ -407,7 +407,7 @@ public class KJHttp {
     private void start() {
         stop();// 首先关闭之前的运行，不管是否存在
         mCacheDispatcher = new CacheDispatcher(mCacheQueue, mNetworkQueue,
-                HttpConfig.mCache, mConfig.mDelivery, mConfig);
+                mConfig);
         mCacheDispatcher.start();
         // 构建线程池
         for (int i = 0; i < mTaskThreads.length; i++) {

@@ -61,12 +61,11 @@ public class CacheDispatcher extends Thread {
      *            分发器
      */
     public CacheDispatcher(BlockingQueue<Request<?>> cacheQueue,
-            BlockingQueue<Request<?>> networkQueue, Cache cache,
-            Delivery delivery, HttpConfig config) {
+            BlockingQueue<Request<?>> networkQueue, HttpConfig config) {
         mCacheQueue = cacheQueue;
         mNetworkQueue = networkQueue;
-        mCache = cache;
-        mDelivery = delivery;
+        mCache = HttpConfig.mCache;
+        mDelivery = config.mDelivery;
         mConfig = config;
     }
 
