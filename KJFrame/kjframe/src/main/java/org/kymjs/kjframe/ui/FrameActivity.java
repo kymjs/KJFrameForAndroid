@@ -18,9 +18,9 @@ package org.kymjs.kjframe.ui;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.support.v4.app.FragmentActivity;
 
 /**
  * Activity's framework,the developer shouldn't extends it<br>

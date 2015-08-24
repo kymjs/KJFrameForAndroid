@@ -15,18 +15,8 @@
  */
 package org.kymjs.kjframe;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import org.kymjs.kjframe.http.Cache;
 import org.kymjs.kjframe.http.CacheDispatcher;
-import org.kymjs.kjframe.http.Delivery;
 import org.kymjs.kjframe.http.DownloadController;
 import org.kymjs.kjframe.http.DownloadTaskQueue;
 import org.kymjs.kjframe.http.FileRequest;
@@ -39,6 +29,15 @@ import org.kymjs.kjframe.http.NetworkDispatcher;
 import org.kymjs.kjframe.http.Request;
 import org.kymjs.kjframe.http.Request.HttpMethod;
 import org.kymjs.kjframe.utils.KJLoger;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 本类工作流程： 每当发起一次Request，会对这个Request标记一个唯一值。<br>
@@ -53,7 +52,7 @@ import org.kymjs.kjframe.utils.KJLoger;
  * 2、另一边由TaskThread不停从NetworkQueue中取Request并交给Network执行器(逻辑请查看
  * {@link NetworkDispatcher} )，<br>
  * 3、Network执行器将执行成功的NetworkResponse返回给TaskThead，并通过Request的定制方法
- * {@link Request#parseNetworkResponse()}封装成Response，最终交给分发器 {@link Delivery}
+ * Request.parseNetworkResponse()封装成Response，最终交给分发器 Delivery
  * 分发到主线程并调用HttpCallback相应的方法
  * 
  * @author kymjs (https://www.kymjs.com/)

@@ -5,15 +5,23 @@
 *KJFrameForAndroid* 又叫KJLibrary，是一个android的orm 和 ioc 框架。同时封装了android中的Bitmap与Http操作的框架，使其更加简单易用；<br>
 KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复杂操作而达到简化Android应用级开发，最终实现快速而又安全的开发APP。我们提倡用最少的代码，完成最多的操作，用最高的效率，完成最复杂的功能。<br>
 
-## 使用方法
-1、复制jar包 [KJFrameForAndroid_v2.x](https://github.com/kymjs/KJFrameForAndroid/tree/master/binrary) 到你工程的/libs目录中.<br>
-2、查看各个模块的使用帮助<br>
+## 使用说明
+####AndroidStudio
+build.gradle中添加：  
+``` 
+compile 'org.kymjs.kjframe:KJFrameForAndroid:2.4.2' 
+```
+####eclipse
+复制jar包 [KJFrameForAndroid_v2.x](https://github.com/kymjs/KJFrameForAndroid/tree/master/binrary) 到你工程的/libs目录中.<br>
+
+## 快速入门
+1、查看各个模块的使用帮助<br>
     [MVC模块](https://github.com/kymjs/KJFrameForAndroid/wiki/MVCLibrary_cn)<br>
     [Bitmap加载](https://github.com/kymjs/KJFrameForAndroid/wiki/BitmapLibrary_cn)<br>
     [Http请求](https://github.com/kymjs/KJFrameForAndroid/wiki/HttpLibrary_cn)<br>
     [数据库模块](https://github.com/kymjs/KJFrameForAndroid/wiki/DBLibrary)<br>
-3、更多在实际项目中使用的Demo: [音乐播放器](https://github.com/KJFrame/KJMusic) [爱看博客客户端](https://github.com/KJFrame/KJBlog) <br>
-4、框架API文档：[http://kjframe.github.io](http://kjframe.github.io/)
+2、更多在实际项目中使用的Demo: [音乐播放器](https://github.com/KJFrame/KJMusic) [爱看博客客户端](https://github.com/KJFrame/KJBlog) <br>
+3、框架API文档：[http://kjframe.github.io](http://kjframe.github.io/)
 *注，KJFrameForAndroid需要在AndroidManifest.xml 中声明如下权限*
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />

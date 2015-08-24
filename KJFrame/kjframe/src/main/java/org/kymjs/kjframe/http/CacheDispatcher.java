@@ -15,17 +15,17 @@
  */
 package org.kymjs.kjframe.http;
 
-import java.util.concurrent.BlockingQueue;
+import android.os.Process;
 
 import org.kymjs.kjframe.KJHttp;
 import org.kymjs.kjframe.bitmap.ImageRequest;
 import org.kymjs.kjframe.utils.KJLoger;
 
-import android.os.Process;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * 缓存调度器<br>
- * 
+ *     
  * Note:<br>
  * 工作描述： 缓存逻辑同样也采用责任链模式，参考注释{@link KJHttp }，
  * 由缓存任务队列CacheQueue，缓存调度器CacheDispatcher，缓存器Cache组成<br>
@@ -36,7 +36,7 @@ import android.os.Process;
  * 如果缓存器中没有有效缓存，则把请求添加到mNetworkQueue工作队列中去执行网络请求;<br>
  * 
  * Note:<br>
- * 关于中介相应查看{@link Response#intermediate}
+ * 关于中介相应查看 Response.intermediate()
  */
 public class CacheDispatcher extends Thread {
 
@@ -50,18 +50,13 @@ public class CacheDispatcher extends Thread {
 
     /**
      * 创建分发器(必须手动调用star()方法启动分发任务)
-     * 
-     * @param cacheQueue
-     *            缓存队列
-     * @param networkQueue
-     *            正在执行的队列
-     * @param cache
-     *            缓存器对象
-     * @param delivery
-     *            分发器
+     *
+     * @param cacheQueue   缓存队列
+     * @param networkQueue 正在执行的队列
+     * @param config       配置器
      */
     public CacheDispatcher(BlockingQueue<Request<?>> cacheQueue,
-            BlockingQueue<Request<?>> networkQueue, HttpConfig config) {
+                           BlockingQueue<Request<?>> networkQueue, HttpConfig config) {
         mCacheQueue = cacheQueue;
         mNetworkQueue = networkQueue;
         mCache = HttpConfig.mCache;
