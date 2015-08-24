@@ -1,0 +1,20 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_maron_bg"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/bottombar_height"
+        android:layout_marginTop="@dimen/title_topmargin" />
+
+    <include
+        android:id="@+id/titlebar"
+        layout="@layout/main_titlebar" />
+
+    <include layout="@layout/main_bottombar" />
+
+</RelativeLayout>

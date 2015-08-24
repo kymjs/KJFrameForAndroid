@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/titlebar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/titlebar_height"
+    android:background="@drawable/titlebar_bg" >
+
+    <TextView
+        android:id="@+id/titlebar_text_exittip"
+        style="@style/titlebar_text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:text="@string/double_click_exit"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/titlebar_text_title"
+        style="@style/titlebar_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:maxEms="8"
+        android:singleLine="true" />
+
+    <ImageView
+        android:id="@+id/titlebar_img_back"
+        style="@style/titlebar_img"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="4dp"
+        android:clickable="true"
+        android:contentDescription="@null"
+        android:focusable="false"
+        android:src="@drawable/titlebar_back" />
+
+    <ImageView
+        android:id="@+id/titlebar_img_menu"
+        style="@style/titlebar_img"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="4dp"
+        android:clickable="true"
+        android:contentDescription="@null"
+        android:focusable="false"
+        android:src="@drawable/titlebar_add" />
+
+</RelativeLayout>

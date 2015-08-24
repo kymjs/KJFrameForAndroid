@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- 背景颜色设置为 -->
+    <solid android:color="#ff000000" />
+
+</shape>

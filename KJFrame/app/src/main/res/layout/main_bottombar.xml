@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bottombar_group"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/bottombar_height"
+    android:layout_alignParentBottom="true"
+    android:layout_gravity="bottom"
+    android:background="@drawable/bottombar_bg"
+    android:orientation="horizontal" >
+
+    <RadioButton
+        android:id="@+id/bottombar_content1"
+        style="@style/bottombar"
+        android:layout_weight="1"
+        android:drawableTop="@drawable/selector_bottombar_blog"
+        android:button="@null"
+        android:checked="true"
+        android:text="@string/blog" />
+
+    <RadioButton
+        android:id="@+id/bottombar_content2"
+        style="@style/bottombar"
+        android:layout_weight="1"
+        android:drawableTop="@drawable/selector_bottombar_find"
+        android:button="@null"
+        android:text="@string/find" />
+
+    <RadioButton
+        android:id="@+id/bottombar_content3"
+        style="@style/bottombar"
+        android:layout_weight="1"
+        android:drawableTop="@drawable/selector_bottombar_mine"
+        android:button="@null"
+        android:text="@string/mine" />
+
+</RadioGroup>

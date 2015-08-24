@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.kymjs.blog"
+    android:versionCode="7"
+    android:versionName="1.5" >
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="21" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:name="org.kymjs.blog.AppContext"
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="org.kymjs.blog.ui.AppStart"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="org.kymjs.blog.ui.Main" />
+        <activity android:name="org.kymjs.blog.ui.SimpleBackActivity" />
+        <activity android:name="org.kymjs.blog.ui.Browser" />
+        <activity android:name="org.kymjs.blog.ui.MyBlogBrowser" />
+        <activity
+            android:name="org.kymjs.blog.ui.Splash"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="org.kymjs.blog.ui.Login"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="org.kymjs.blog.ui.ImageActivity"
+            android:theme="@android:style/Theme.NoTitleBar" />
+
+        <service android:name="org.kymjs.blog.service.CommonService"/>
+        
+        <!--&lt;!&ndash; KJPush，一个广播一个Service &ndash;&gt;-->
+
+        <!--<service-->
+            <!--android:name="org.kymjs.push.core.PullService"-->
+            <!--android:exported="false"-->
+            <!--android:persistent="true"-->
+            <!--android:process=":kymjs_pullservice" >-->
+            <!--<intent-filter android:priority="1000" >-->
+                <!--<action android:name="org.kymjs.push.service.pull_service" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
+
+        <!--<receiver-->
+            <!--android:name="org.kymjs.blog.receiver.KJPushReceiver"-->
+            <!--android:process=":kymjs_pullservice" >-->
+        <!--</receiver>-->
+    </application>
+
+</manifest>

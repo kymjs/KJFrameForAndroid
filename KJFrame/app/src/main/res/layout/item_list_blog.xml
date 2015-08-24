@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white" >
+
+    <RelativeLayout
+        android:id="@+id/item_blog_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp" >
+
+        <ImageView
+            android:id="@+id/item_blog_tip_recommend"
+            android:layout_width="20dp"
+            android:layout_height="25dp"
+            android:contentDescription="@null"
+            android:src="@drawable/blog_item_recommend_icon" />
+
+        <ImageView
+            android:id="@+id/item_blog_tip_tody"
+            android:layout_width="20dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="2dp"
+            android:layout_toRightOf="@+id/item_blog_tip_recommend"
+            android:contentDescription="@null"
+            android:padding="2dp"
+            android:src="@drawable/blog_item_today_icon" />
+
+        <TextView
+            android:id="@+id/item_blog_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/item_blog_tip_tody"
+            android:layout_toRightOf="@+id/item_blog_tip_tody"
+            android:gravity="top"
+            android:paddingTop="1dp"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/item_blog_tv_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_blog_layout"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:textColor="#9a9a9a" />
+
+    <ImageView
+        android:id="@+id/item_blog_img"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/space_140"
+        android:layout_below="@id/item_blog_tv_description"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="4dp"
+        android:clickable="true"
+        android:contentDescription="@null"
+        android:minWidth="@dimen/space_180"
+        android:scaleType="centerCrop"
+        android:src="@drawable/pic_bg"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/item_blog_tv_author"
+        style="@style/list_text_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_blog_img"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp" />
+
+    <TextView
+        android:id="@+id/item_blog_tv_date"
+        style="@style/list_text_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/item_blog_img"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="5dp"
+        android:drawableLeft="@drawable/ic_time"
+        android:drawablePadding="2dp" />
+
+    <ImageView
+        android:id="@+id/item_blog_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:contentDescription="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_axis_top_line" />
+
+</RelativeLayout>

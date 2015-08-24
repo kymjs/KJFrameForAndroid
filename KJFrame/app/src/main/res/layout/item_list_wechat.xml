@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_wechat_root"
+    android:layout_width="match_parent"
+    android:layout_height="640dp"
+    android:background="#eee"
+    android:focusable="false"
+    android:orientation="vertical"
+    android:paddingBottom="20dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp" >
+
+    <TextView
+        android:id="@+id/item_wechat_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
+        android:background="#ffaaaaaa"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="@string/app_name"
+        android:textColor="@android:color/white"
+        android:textSize="13sp" />
+
+    <RelativeLayout
+        android:id="@+id/item_wechat_layout_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_background"
+        android:padding="8dp"
+        android:visibility="visible" >
+
+        <ImageView
+            android:id="@+id/item_wechat_img_head"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:src="@drawable/main_maron_bg" />
+
+        <TextView
+            android:id="@+id/item_wechat_tv_head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/item_wechat_img_head"
+            android:background="#7000"
+            android:paddingBottom="8dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingTop="8dp"
+            android:text="@string/app_name"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_wechat_layout_single"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_background"
+        android:padding="13dp"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/item_wechat_tv_single"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:paddingBottom="7dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:text="@string/app_name"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/item_wechat_img_single"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:layout_below="@+id/item_wechat_tv_single"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:src="@drawable/main_maron_bg" />
+
+        <TextView
+            android:id="@+id/item_wechat_tv_single_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/item_wechat_img_single"
+            android:paddingBottom="10dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:text="@string/app_name"
+            android:textColor="#666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/item_wechat_tv_single_content"
+            android:layout_below="@+id/item_wechat_tv_single_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp"
+            android:text="查看全文"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+</LinearLayout>

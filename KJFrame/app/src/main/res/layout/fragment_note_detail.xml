@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/more_style_bg"
+    android:orientation="vertical"
+    android:paddingBottom="20dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp" >
+
+    <EditText
+        android:id="@+id/note_detail_edit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:gravity="top"
+        android:hint="@null"
+        android:singleLine="false"
+        android:textColor="#333" />
+
+    <include
+        android:id="@+id/note_detail_menu"
+        layout="@layout/layout_note_detail_menu" />
+
+    <RelativeLayout
+        android:id="@+id/note_detail_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp" >
+
+        <TextView
+            android:id="@+id/note_detail_tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:textColor="#666" />
+
+        <ImageView
+            android:id="@+id/note_detail_img_button"
+            style="@style/note_detail_menu"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:src="@drawable/icon_color" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/note_detail_img_thumbtack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/note_detail_titlebar"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@null"
+        android:paddingBottom="5dp" />
+
+</RelativeLayout>

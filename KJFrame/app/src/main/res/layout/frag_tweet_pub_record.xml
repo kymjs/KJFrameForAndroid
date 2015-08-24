@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fafafa" >
+
+    <EditText
+        android:id="@+id/tweet_edit_record"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_record_button"
+        android:gravity="top"
+        android:hint="为你的声音附一段描述…"
+        android:minLines="4"
+        android:padding="7dp" />
+
+    <TextView
+        android:id="@+id/tweet_text_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/tweet_edit_record"
+        android:layout_below="@+id/tweet_edit_record"
+        android:text="你还可以输入160字"
+        android:textColor="#999999" />
+
+    <RelativeLayout
+        android:id="@+id/tweet_layout_record"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/tweet_edit_record"
+        android:layout_below="@+id/tweet_edit_record"
+        android:layout_marginTop="14dp"
+        android:padding="3dp"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/tweet_img_layout"
+            android:layout_width="95dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="7dp"
+            android:background="@drawable/selector_record_layout"
+            android:contentDescription="@null" />
+
+        <ImageView
+            android:id="@+id/tweet_img_volume"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="3dp"
+            android:background="@anim/audio_animations"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:id="@+id/tweet_time_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tweet_img_layout"
+            android:textColor="#666666"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/tweet_img_add"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignLeft="@+id/tweet_edit_record"
+        android:layout_below="@+id/tweet_edit_record"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/splash_box_bg"
+        android:contentDescription="@null"
+        android:padding="2dp"
+        android:src="@drawable/selector_image_add" />
+
+    <org.kymjs.blog.ui.widget.RecordButton
+        android:id="@+id/tweet_btn_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

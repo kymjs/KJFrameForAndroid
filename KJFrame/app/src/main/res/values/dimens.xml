@@ -1,0 +1,30 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    
+    <dimen name="space_19">19dp</dimen>
+    <dimen name="space_35">35dp</dimen>
+    <dimen name="space_65">65dp</dimen>
+    <dimen name="space_140">140dp</dimen>
+    <dimen name="space_180">180dp</dimen>
+
+    
+    <dimen name="size_16">12sp</dimen>
+
+    
+    <!-- Splash -->
+    <dimen name="splash_head_width">65.0dp</dimen>
+    <dimen name="splash_head_height">65.0dp</dimen>
+    <dimen name="splash_btn_go_height">40dp</dimen>
+    
+    <!-- Main -->
+    <dimen name="title_topmargin">43dp</dimen>
+    <dimen name="titlebar_height">45dp</dimen>
+    <dimen name="bottombar_height">60dp</dimen>
+    
+    <!-- About -->
+    <dimen name="tv_size_big_large">18.0sp</dimen>
+    <dimen name="tv_size_large">16.0sp</dimen>
+</resources>

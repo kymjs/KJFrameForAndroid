@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.kymjs.kjframe.widget.KJScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/more_style_bg" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/mine_title_ll"
+            style="@style/mine_item_style"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/mine_tv_collect"
+                style="@style/option_item_rl"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_mine_collect"
+                android:gravity="center"
+                android:text="@string/my_collect" />
+
+            <TextView
+                android:id="@+id/mine_tv_join"
+                style="@style/option_item_rl"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/logo_kjframe"
+                android:gravity="center"
+                android:text="@string/join_qgroup" />
+
+            <TextView
+                android:id="@+id/mine_tv_other"
+                style="@style/option_item_rl"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_tandong_android"
+                android:gravity="center"
+                android:text="手机学Android" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/mine_rl_push"
+            style="@style/mine_item_style"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/mine_tv_push"
+                style="@style/mine_item_text_style"
+                android:text="@string/push" />
+
+            <CheckBox
+                android:id="@+id/mine_cbox_push"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/selector_checkbox"
+                android:button="@null"
+                android:gravity="center" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/mine_rl_about"
+            style="@style/mine_item_style" >
+
+            <TextView
+                android:id="@+id/mine_tv_about"
+                style="@style/mine_item_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/about" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/mine_rl_clean"
+            style="@style/mine_item_style" >
+
+            <TextView
+                android:id="@+id/mine_tv_clean"
+                style="@style/mine_item_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/clean" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/mine_rl_feedback"
+            style="@style/mine_item_style" >
+
+            <TextView
+                android:id="@+id/mine_tv_feedback"
+                style="@style/mine_item_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/feedback" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/mine_rl_exit"
+            style="@style/mine_item_style" >
+
+            <TextView
+                android:id="@+id/mine_tv_exit"
+                style="@style/mine_item_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/exit" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/mine_tv_currentversion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:padding="20dp" />
+    </LinearLayout>
+
+</org.kymjs.kjframe.widget.KJScrollView>

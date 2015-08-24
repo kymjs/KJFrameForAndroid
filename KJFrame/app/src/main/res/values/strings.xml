@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">爱看博客</string>
+    <string name="www_kymjs_com">www.kymjs.com</string>
+    
+    
+    <string name="splash_content">你好，我是作者kymjs。
+    \n\n你可以在github搜索KJBlog阅读到本软件源码，希望这个APP能带给你更多的知识，也希望你能为本项目点个star。</string>
+    
+    <!-- bottombar -->
+    <string name="blog">博客</string>
+    <string name="find">发现</string>
+    <string name="mine">我爱看</string>
+    
+    <!-- 每日资讯 -->
+    <string name="today_message">今日资讯</string>
+    <string name="everyday_message_description">每日最新开发技术与业界资讯头条，时刻掌握前沿技术，不做OUT程序猿</string>
+
+    <!-- 我爱看界面 -->
+    <string name="my_collect">我的收藏</string>
+    <string name="join_qgroup">加入我们</string>
+    <string name="about">关于</string>
+    <string name="push">早间推送</string>
+    <string name="clean">清空缓存</string>
+    <string name="feedback">意见反馈</string>
+    <string name="exit">退出应用</string>
+    <string name="sign_out">注销</string>
+    <string name="double_click_exit">再次点击返回键切换到桌面</string>
+    
+    <!-- 博客内容 -->
+    <string name="blog_detail">博客详情</string>
+    
+    <!-- 发现界面 -->
+    <string name="tweet">我要吐槽</string>
+    <string name="osc_joke">OSC乱弹</string>
+    <string name="sticies">随手记</string>
+    <string name="follow">关注大神</string>
+    <string name="str_active_title">猿活动</string>
+    <string name="sticky">随手记</string>
+    
+    <!-- 吐槽界面 -->
+    <string name="str_tweet_title">神吐槽</string>
+    <string name="str_tweet_pub_record">来一发</string>
+    <string name="monkey_active">猿活动</string>
+    <string name="record_sound_notfound">糟糕，小屁孩把声音弄丢了</string>
+    
+    <!-- 关注大神界面 -->
+    <string name="str_follow">关注大神</string>
+    
+    <string name="str_collect">我的收藏</string>
+    
+    <!-- 误操作提示 -->
+    <string name="account_not_empty">账号不能为空</string>
+    <string name="password_not_empty">密码不能为空</string>
+    
+</resources>

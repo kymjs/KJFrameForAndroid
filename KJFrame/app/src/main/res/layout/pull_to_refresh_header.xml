@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#efefef"
+    android:gravity="bottom"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="65dp"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@null"
+        android:src="@drawable/osl_logo" />
+
+    <RelativeLayout
+        android:id="@+id/pull_to_refresh_header_content"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingBottom="8dp" >
+
+        <RelativeLayout
+            android:id="@+id/pull_to_refresh_header_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" >
+
+            <TextView
+                android:id="@+id/pull_to_refresh_header_hint_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:text="@string/pull_to_refresh_header_hint_normal"
+                android:textColor="#999"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="28dip"
+            android:layout_height="28dip"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="8dp" >
+
+            <ImageView
+                android:id="@+id/pull_to_refresh_header_arrow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:contentDescription="@null" />
+
+            <ProgressBar
+                android:id="@+id/pull_to_refresh_header_progressbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:indeterminate="true"
+                android:indeterminateDuration="700"
+                android:visibility="invisible" />
+        </FrameLayout>
+    </RelativeLayout>
+
+</LinearLayout>

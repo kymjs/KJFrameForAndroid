@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_maron_bg" >
+
+    <ImageView
+        android:id="@+id/login_img_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/osl_logo" />
+
+    <RelativeLayout
+        android:id="@+id/login_layout_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/splash_box_bg"
+        android:paddingBottom="15dp"
+        android:paddingLeft="18dp"
+        android:paddingRight="18dp"
+        android:paddingTop="5dp" >
+
+        <TextView
+            android:id="@+id/login_text_uid"
+            style="@style/text_style_uid"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/bg_uid"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="账号" />
+
+        <EditText
+            android:id="@+id/login_et_uid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/login_text_uid"
+            android:layout_alignLeft="@+id/login_text_uid"
+            android:layout_alignRight="@+id/login_text_uid"
+            android:layout_alignTop="@+id/login_text_uid"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingLeft="65dp"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/login_img_delete"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignRight="@+id/login_text_uid"
+            android:layout_alignTop="@+id/login_text_uid"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="10dp"
+            android:contentDescription="@null"
+            android:src="@drawable/selector_del_input"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/login_text_pwd"
+            style="@style/text_style_uid"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignLeft="@+id/login_text_uid"
+            android:layout_alignRight="@+id/login_text_uid"
+            android:layout_below="@+id/login_text_uid"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_uid"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="密码" />
+
+        <EditText
+            android:id="@+id/login_et_pwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/login_text_pwd"
+            android:layout_alignLeft="@+id/login_text_pwd"
+            android:layout_alignRight="@+id/login_text_pwd"
+            android:layout_alignTop="@+id/login_text_pwd"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:inputType="textPassword"
+            android:maxLength="16"
+            android:maxLines="1"
+            android:paddingLeft="65dp"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/login_btn_login"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignLeft="@+id/login_text_uid"
+            android:layout_alignRight="@+id/login_text_uid"
+            android:layout_below="@+id/login_text_pwd"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/selector_btn_green"
+            android:gravity="center"
+            android:text="使用开源中国账号登录"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/login_img_baidu"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignLeft="@+id/login_text_pwd"
+            android:layout_below="@+id/login_btn_login"
+            android:layout_margin="5dp"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/login_logo_baidu"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/login_img_qq"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignBottom="@+id/login_img_baidu"
+            android:layout_alignTop="@+id/login_img_baidu"
+            android:layout_toRightOf="@+id/login_img_baidu"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/login_logo_qq"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/login_img_sina"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignBottom="@+id/login_img_baidu"
+            android:layout_alignTop="@+id/login_img_baidu"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/login_img_qq"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/login_logo_weibo"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <org.kymjs.kjframe.widget.RoundImageView
+        android:id="@+id/login_img_head"
+        android:layout_width="@dimen/splash_head_height"
+        android:layout_height="@dimen/splash_head_height"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/login_tv_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:text="@string/www_kymjs_com"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+</RelativeLayout>

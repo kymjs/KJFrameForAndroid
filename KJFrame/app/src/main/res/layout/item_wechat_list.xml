@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_wechat_layout_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_background"
+    android:clickable="true"
+    android:focusable="false"
+    android:padding="5dp" >
+
+    <ImageView
+        android:id="@+id/item_wechat_img_list"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon" />
+
+    <TextView
+        android:id="@+id/item_wechat_tv_list"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_toLeftOf="@+id/item_wechat_img_list"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:text="@string/app_name"
+        android:textSize="17sp" />
+
+</RelativeLayout>

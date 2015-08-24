@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone" >
+
+    <ImageView
+        android:id="@+id/note_detail_img_menu"
+        style="@style/note_detail_menu"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="30dp"
+        android:contentDescription="@null"
+        android:scaleType="fitXY"
+        android:visibility="invisible" />
+
+    <org.kymjs.kjframe.widget.RoundImageView
+        android:id="@+id/note_detail_img_green"
+        style="@style/note_detail_menu_item"
+        android:layout_alignLeft="@+id/note_detail_img_menu"
+        android:layout_below="@+id/note_detail_img_menu"
+        android:src="@drawable/icon_green" />
+
+    <org.kymjs.kjframe.widget.RoundImageView
+        android:id="@+id/note_detail_img_blue"
+        style="@style/note_detail_menu_item"
+        android:layout_alignLeft="@+id/note_detail_img_menu"
+        android:layout_below="@+id/note_detail_img_green"
+        android:src="@drawable/icon_blue" />
+
+    <org.kymjs.kjframe.widget.RoundImageView
+        android:id="@+id/note_detail_img_purple"
+        style="@style/note_detail_menu_item"
+        android:layout_alignLeft="@+id/note_detail_img_menu"
+        android:layout_below="@+id/note_detail_img_blue"
+        android:background="@android:color/transparent"
+        android:src="@drawable/icon_purple" />
+
+    <org.kymjs.kjframe.widget.RoundImageView
+        android:id="@+id/note_detail_img_yellow"
+        style="@style/note_detail_menu_item"
+        android:layout_alignLeft="@+id/note_detail_img_menu"
+        android:layout_below="@+id/note_detail_img_purple"
+        android:background="@android:color/transparent"
+        android:src="@drawable/icon_yellow" />
+
+    <org.kymjs.kjframe.widget.RoundImageView
+        android:id="@+id/note_detail_img_red"
+        style="@style/note_detail_menu_item"
+        android:layout_alignLeft="@+id/note_detail_img_menu"
+        android:layout_below="@+id/note_detail_img_yellow"
+        android:background="@android:color/transparent"
+        android:src="@drawable/icon_red" />
+
+</RelativeLayout>

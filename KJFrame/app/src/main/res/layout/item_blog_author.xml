@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/item_blogauthor_head"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:layout_marginBottom="3dp"
+        android:contentDescription="@null" />
+
+    <TextView
+        android:id="@+id/item_blogauthor_tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/item_blogauthor_head"
+        android:singleLine="true"
+        android:textColor="#333"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/item_blogauthor_tv_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/item_blogauthor_tv_name"
+        android:layout_toRightOf="@+id/item_blogauthor_head"
+        android:paddingBottom="3dp"
+        android:textColor="#999"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/item_blog_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:contentDescription="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_axis_top_line" />
+
+</RelativeLayout>

@@ -1,0 +1,59 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/splash_layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_maron_bg" >
+
+    <TextView
+        android:id="@+id/splash_tv_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:text="@string/www_kymjs_com"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+    <RelativeLayout
+        android:id="@+id/splash_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/splash_box_bg" >
+
+        <TextView
+            android:id="@+id/splash_tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:gravity="left|center_vertical"
+            android:padding="10dp"
+            android:textColor="#333"
+            android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/splash_btn_go"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/splash_btn_go_height"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/selector_btn_green"
+            android:gravity="center"
+            android:text="进 入"
+            android:textColor="#ffffff"
+            android:textSize="17sp" />
+    </RelativeLayout>
+
+    <org.kymjs.kjframe.widget.RoundImageView
+        android:id="@+id/splash_img_head"
+        android:layout_width="@dimen/splash_head_width"
+        android:layout_height="@dimen/splash_head_height"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:src="@drawable/main_head" />
+
+</RelativeLayout>

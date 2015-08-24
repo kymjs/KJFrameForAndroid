@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="titlebar_color">#ddffaf60</color>
+    
+    <color name="list_item_background_normal">#ffff</color>
+    <color name="list_item_background_pressed">#efefef</color>
+    
+    <color name="list_item_id_text">#ff008000</color>
+    
+    <!-- 下拉刷新时，颜色值 -->
+    <color name="swiperefresh_color1">#ff00ddff</color>
+    <color name="swiperefresh_color2">#ffffbb33</color>
+    <color name="swiperefresh_color3">#ffff4444</color>
+    <color name="swiperefresh_color4">#ffaa66cc</color>
+
+    <color name="more_style_bg">#eafdfdfd</color>
+    
+    <color name="window_background">#EBEBEB</color>
+    <color name="main_gray">#9A9A9A</color>
+    
+</resources>
