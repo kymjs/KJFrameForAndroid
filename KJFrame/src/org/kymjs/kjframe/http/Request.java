@@ -23,7 +23,6 @@ import java.util.Map;
 import org.kymjs.kjframe.KJHttp;
 import org.kymjs.kjframe.utils.KJLoger;
 
-import android.net.TrafficStats;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.text.TextUtils;
@@ -111,7 +110,7 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     }
 
     /**
-     * @return A tag for use with {@link TrafficStats#setThreadStatsTag(int)}
+     * @return A tag for use with TrafficStats.setThreadStatsTag(int)
      */
     public int getTrafficStatsTag() {
         return mDefaultTrafficStatsTag;

@@ -36,7 +36,7 @@ import android.os.Process;
  * 如果缓存器中没有有效缓存，则把请求添加到mNetworkQueue工作队列中去执行网络请求;<br>
  * 
  * Note:<br>
- * 关于中介相应查看{@link Response#intermediate}
+ * 关于中介相应查看Response.intermediate()
  */
 public class CacheDispatcher extends Thread {
 
@@ -55,10 +55,6 @@ public class CacheDispatcher extends Thread {
      *            缓存队列
      * @param networkQueue
      *            正在执行的队列
-     * @param cache
-     *            缓存器对象
-     * @param delivery
-     *            分发器
      */
     public CacheDispatcher(BlockingQueue<Request<?>> cacheQueue,
             BlockingQueue<Request<?>> networkQueue, HttpConfig config) {
