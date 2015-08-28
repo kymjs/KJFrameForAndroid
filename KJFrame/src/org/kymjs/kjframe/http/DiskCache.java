@@ -522,9 +522,10 @@ public class DiskCache implements Cache {
         Map<String, String> result = (size == 0) ? Collections
                 .<String, String> emptyMap()
                 : new HashMap<String, String>(size);
+        String str = readString(is);
         for (int i = 0; i < size; i++) {
-            String key = readString(is).intern();
-            String value = readString(is).intern();
+            String key = str.intern();
+            String value = str.intern();
             result.put(key, value);
         }
         return result;
