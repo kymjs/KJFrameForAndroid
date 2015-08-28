@@ -15,13 +15,18 @@
  */
 package org.kymjs.kjframe;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.List;
-import java.util.Vector;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.ImageView;
 
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
 import org.kymjs.kjframe.bitmap.BitmapConfig;
@@ -36,24 +41,19 @@ import org.kymjs.kjframe.utils.KJLoger;
 import org.kymjs.kjframe.utils.StringUtils;
 import org.kymjs.kjframe.utils.SystemTool;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.view.View;
-import android.widget.ImageView;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * The BitmapLibrary's core classes<br>
  * <b>创建时间</b> 2014-6-11<br>
  * <b>最后修改</b> 2015-4-23<br>
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
  * @version 2.4
  */
@@ -76,38 +76,28 @@ public class KJBitmap {
 
     /**
      * 使用默认配置加载网络图片(屏幕的一半显示图片)
-     * 
-     * @param imageView
-     *            要显示图片的控件(ImageView设置src，普通View设置bg)
-     * @param imageUrl
-     *            图片的URL
+     *
+     * @param imageView 要显示图片的控件(ImageView设置src，普通View设置bg)
+     * @param imageUrl  图片的URL
      */
     public void display(View imageView, String imageUrl) {
         displayWithDefWH(imageView, imageUrl, null, null, null);
     }
 
     /**
-     * @param imageView
-     *            要显示的View
-     * @param imageUrl
-     *            网络图片地址
-     * @param width
-     *            要显示的图片的最大宽度
-     * @param height
-     *            要显示图片的最大高度
+     * @param imageView 要显示的View
+     * @param imageUrl  网络图片地址
+     * @param width     要显示的图片的最大宽度
+     * @param height    要显示图片的最大高度
      */
     public void display(View imageView, String imageUrl, int width, int height) {
         display(imageView, imageUrl, width, height, null, null, null);
     }
 
     /**
-     * 
-     * @param imageView
-     *            要显示的View
-     * @param imageUrl
-     *            网络图片地址
-     * @param callback
-     *            加载过程的回调
+     * @param imageView 要显示的View
+     * @param imageUrl  网络图片地址
+     * @param callback  加载过程的回调
      */
     public void display(View imageView, String imageUrl, BitmapCallBack callback) {
         displayWithDefWH(imageView, imageUrl, null, null, callback);
@@ -115,16 +105,13 @@ public class KJBitmap {
 
     /**
      * 如果内存缓存有图片，则显示内存缓存的图片，否则显示默认图片
-     * 
-     * @param imageView
-     *            要显示的View
-     * @param imageUrl
-     *            网络图片地址
-     * @param defaultImage
-     *            如果没有内存缓存，则显示默认图片
+     *
+     * @param imageView    要显示的View
+     * @param imageUrl     网络图片地址
+     * @param defaultImage 如果没有内存缓存，则显示默认图片
      */
     public void displayCacheOrDefult(View imageView, String imageUrl,
-            int defaultImage) {
+                                     int defaultImage) {
         Bitmap cache = getMemoryCache(imageUrl);
         if (cache == null) {
             setViewImage(imageView, defaultImage);
@@ -134,64 +121,47 @@ public class KJBitmap {
     }
 
     /**
-     * @param imageView
-     *            要显示的View
-     * @param imageUrl
-     *            网络图片地址
-     * @param width
-     *            要显示的图片的最大宽度
-     * @param height
-     *            要显示图片的最大高度
-     * @param loadBitmap
-     *            加载中图片
+     * @param imageView  要显示的View
+     * @param imageUrl   网络图片地址
+     * @param width      要显示的图片的最大宽度
+     * @param height     要显示图片的最大高度
+     * @param loadBitmap 加载中图片
      */
     public void display(View imageView, String imageUrl, int width, int height,
-            int loadBitmap) {
+                        int loadBitmap) {
         display(imageView, imageUrl, width, height, imageView.getResources()
                 .getDrawable(loadBitmap), null, null);
     }
 
     /**
-     * 
-     * @param imageView
-     *            要显示的View
-     * @param imageUrl
-     *            网络图片地址
-     * @param loadBitmap
-     *            加载中的图片
+     * @param imageView  要显示的View
+     * @param imageUrl   网络图片地址
+     * @param loadBitmap 加载中的图片
      */
     public void displayWithLoadBitmap(View imageView, String imageUrl,
-            int loadBitmap) {
+                                      int loadBitmap) {
         displayWithDefWH(imageView, imageUrl, imageView.getResources()
                 .getDrawable(loadBitmap), null, null);
     }
 
     /**
-     * 
-     * @param imageView
-     *            要显示的View
-     * @param imageUrl
-     *            网络图片地址
-     * @param errorBitmap
-     *            加载出错时设置的默认图片
+     * @param imageView   要显示的View
+     * @param imageUrl    网络图片地址
+     * @param errorBitmap 加载出错时设置的默认图片
      */
     public void displayWithErrorBitmap(View imageView, String imageUrl,
-            int errorBitmap) {
+                                       int errorBitmap) {
         displayWithDefWH(imageView, imageUrl, null, imageView.getResources()
                 .getDrawable(errorBitmap), null);
     }
 
     /**
-     * 
-     * @param imageView
-     *            要显示的View
-     * @param imageUrl
-     *            网络图片地址
-     * @param errorBitmap
-     *            加载出错时设置的默认图片
+     * @param imageView   要显示的View
+     * @param imageUrl    网络图片地址
+     * @param errorBitmap 加载出错时设置的默认图片
      */
     public void displayLoadAndErrorBitmap(View imageView, String imageUrl,
-            int loadBitmap, int errorBitmap) {
+                                          int loadBitmap, int errorBitmap) {
         Resources res = imageView.getResources();
         displayWithDefWH(imageView, imageUrl, res.getDrawable(loadBitmap),
                 res.getDrawable(errorBitmap), null);
@@ -199,21 +169,18 @@ public class KJBitmap {
 
     /**
      * 如果不指定宽高，则使用默认宽高计算方法
-     * 
-     * @param imageView
-     *            要显示的View
-     * @param imageUrl
-     *            网络图片地址
-     * @param loadBitmap
-     *            加载中图片
-     * @param errorBitmap
-     *            加载失败的图片
-     * @param callback
-     *            加载过程的回调
+     *
+     * @param imageView   要显示的View
+     * @param imageUrl    网络图片地址
+     * @param loadBitmap  加载中图片
+     * @param errorBitmap 加载失败的图片
+     * @param callback    加载过程的回调
      */
     public void displayWithDefWH(View imageView, String imageUrl,
-            Drawable loadBitmap, Drawable errorBitmap, BitmapCallBack callback) {
-        int w = imageView.getWidth();;
+                                 Drawable loadBitmap, Drawable errorBitmap, BitmapCallBack 
+                                         callback) {
+        int w = imageView.getWidth();
+        ;
         int h = imageView.getHeight();
         if (w == 0) {
             w = DensityUtils.getScreenW(imageView.getContext()) / 2;
@@ -225,21 +192,15 @@ public class KJBitmap {
     }
 
     /**
-     * @param imageView
-     *            要显示的View
-     * @param imageUrl
-     *            网络图片地址
-     * @param width
-     *            要显示的图片的最大宽度
-     * @param height
-     *            要显示图片的最大高度
-     * @param loadOrErrorBitmap
-     *            加载中或加载失败都显示这张图片
-     * @param callback
-     *            加载过程的回调
+     * @param imageView         要显示的View
+     * @param imageUrl          网络图片地址
+     * @param width             要显示的图片的最大宽度
+     * @param height            要显示图片的最大高度
+     * @param loadOrErrorBitmap 加载中或加载失败都显示这张图片
+     * @param callback          加载过程的回调
      */
     public void display(View imageView, String imageUrl, int loadOrErrorBitmap,
-            int width, int height, BitmapCallBack callback) {
+                        int width, int height, BitmapCallBack callback) {
         display(imageView, imageUrl, width, height, imageView.getResources()
                 .getDrawable(loadOrErrorBitmap), imageView.getResources()
                 .getDrawable(loadOrErrorBitmap), callback);
@@ -247,41 +208,32 @@ public class KJBitmap {
 
     /**
      * 显示网络图片(core)
-     * 
-     * @param imageView
-     *            要显示的View
-     * @param imageUrl
-     *            网络图片地址
-     * @param width
-     *            要显示的图片的最大宽度
-     * @param height
-     *            要显示图片的最大高度
-     * @param loadBitmap
-     *            加载中图片
-     * @param errorBitmap
-     *            加载失败的图片
-     * @param callback
-     *            加载过程的回调
+     *
+     * @param imageView   要显示的View
+     * @param imageUrl    网络图片地址
+     * @param width       要显示的图片的最大宽度
+     * @param height      要显示图片的最大高度
+     * @param loadBitmap  加载中图片
+     * @param errorBitmap 加载失败的图片
+     * @param callback    加载过程的回调
      */
     public void display(View imageView, String imageUrl, int width, int height,
-            Drawable loadBitmap, Drawable errorBitmap, BitmapCallBack callback) {
+                        Drawable loadBitmap, Drawable errorBitmap, BitmapCallBack callback) {
         if (imageView == null) {
             showLogIfOpen("imageview is null");
             return;
         }
+        if (errorBitmap == null) {
+            errorBitmap = new ColorDrawable(0xFFCFCFCF);
+        }
         if (StringUtils.isEmpty(imageUrl)) {
             showLogIfOpen("image url is empty");
+            setViewImage(imageView, errorBitmap);
             return;
         }
 
         if (loadBitmap == null) {
             loadBitmap = new ColorDrawable(0xFFCFCFCF);
-        }
-        if (errorBitmap == null) {
-            errorBitmap = new ColorDrawable(0xFFCFCFCF);
-        }
-        if (callback == null) {
-            callback = new BitmapCallBack() {};
         }
         doDisplay(imageView, imageUrl, width, height, loadBitmap, errorBitmap,
                 callback);
@@ -291,8 +243,8 @@ public class KJBitmap {
      * 真正去加载一个图片
      */
     private void doDisplay(final View imageView, final String imageUrl,
-            int width, int height, final Drawable loadBitmap,
-            final Drawable errorBitmap, final BitmapCallBack callback) {
+                           int width, int height, final Drawable loadBitmap,
+                           final Drawable errorBitmap, final BitmapCallBack callback) {
         checkViewExist(imageView);
 
         imageView.setTag(imageUrl);
@@ -370,9 +322,8 @@ public class KJBitmap {
 
     /**
      * 移除一个缓存
-     * 
-     * @param url
-     *            哪条url的缓存
+     *
+     * @param url 哪条url的缓存
      */
     public void removeCache(String url) {
         BitmapConfig.mMemoryCache.remove(url);
@@ -389,9 +340,8 @@ public class KJBitmap {
 
     /**
      * 获取缓存数据
-     * 
-     * @param url
-     *            哪条url的缓存
+     *
+     * @param url 哪条url的缓存
      * @return
      */
     public byte[] getCache(String url) {
@@ -407,7 +357,7 @@ public class KJBitmap {
 
     /**
      * 获取内存缓存
-     * 
+     *
      * @param url
      * @return
      */
@@ -417,7 +367,7 @@ public class KJBitmap {
 
     /**
      * 取消一个加载请求(拼写错误，请使用cancel(url))
-     * 
+     *
      * @param url
      */
     @Deprecated
@@ -427,7 +377,7 @@ public class KJBitmap {
 
     /**
      * 取消一个加载请求
-     * 
+     *
      * @param url
      */
     public void cancel(String url) {
@@ -436,12 +386,10 @@ public class KJBitmap {
 
     /**
      * 保存一张图片到本地，并自动通知图库刷新
-     * 
+     *
      * @param cxt
-     * @param url
-     *            网络图片链接
-     * @param path
-     *            保存到本地的绝对路径
+     * @param url  网络图片链接
+     * @param path 保存到本地的绝对路径
      */
     public void saveImage(Context cxt, String url, String path) {
         saveImage(cxt, url, path, true, null);
@@ -449,16 +397,13 @@ public class KJBitmap {
 
     /**
      * 保存一张图片到本地
-     * 
-     * @param url
-     *            网络图片链接
-     * @param path
-     *            保存到本地的绝对路径
-     * @param cb
-     *            保存过程监听器
+     *
+     * @param url  网络图片链接
+     * @param path 保存到本地的绝对路径
+     * @param cb   保存过程监听器
      */
     public void saveImage(final Context cxt, String url, final String path,
-            final boolean isRefresh, HttpCallBack cb) {
+                          final boolean isRefresh, HttpCallBack cb) {
         if (cb == null) {
             cb = new HttpCallBack() {
                 @Override
@@ -507,7 +452,7 @@ public class KJBitmap {
 
     /**
      * 刷新图库
-     * 
+     *
      * @param cxt
      * @param path
      */
@@ -525,7 +470,9 @@ public class KJBitmap {
                 .parse("file://" + path)));
     }
 
-    /********************* private method *********************/
+    /*********************
+     * private method
+     *********************/
 
     @SuppressLint("NewApi")
     @SuppressWarnings("deprecation")
@@ -573,7 +520,7 @@ public class KJBitmap {
 
     /**
      * 检测一个View是否已经有任务了，如果是，则取消之前的任务
-     * 
+     *
      * @param view
      */
     private void checkViewExist(View view) {
