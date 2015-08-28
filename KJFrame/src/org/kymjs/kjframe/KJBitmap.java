@@ -269,19 +269,17 @@ public class KJBitmap {
             showLogIfOpen("imageview is null");
             return;
         }
+        if (errorBitmap == null) {
+            errorBitmap = new ColorDrawable(0xFFCFCFCF);
+        }
         if (StringUtils.isEmpty(imageUrl)) {
             showLogIfOpen("image url is empty");
+            setViewImage(imageView, errorBitmap);
             return;
         }
 
         if (loadBitmap == null) {
             loadBitmap = new ColorDrawable(0xFFCFCFCF);
-        }
-        if (errorBitmap == null) {
-            errorBitmap = new ColorDrawable(0xFFCFCFCF);
-        }
-        if (callback == null) {
-            callback = new BitmapCallBack() {};
         }
         doDisplay(imageView, imageUrl, width, height, loadBitmap, errorBitmap,
                 callback);
