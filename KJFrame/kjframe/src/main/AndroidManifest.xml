@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.kymjs.kjframe"
           android:versionCode="224"
-          android:versionName="2.242" >
+          android:versionName="2.243" >
 
     <uses-sdk
         android:minSdkVersion="11"
