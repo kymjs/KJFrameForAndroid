@@ -69,8 +69,12 @@ public class KJBitmap {
     }
 
     public KJBitmap(BitmapConfig bitmapConfig) {
+        this(new HttpConfig(), bitmapConfig);
+    }
+
+    public KJBitmap(HttpConfig httpConfig, BitmapConfig bitmapConfig) {
         this.mConfig = bitmapConfig;
-        displayer = new ImageDisplayer(mConfig);
+        displayer = new ImageDisplayer(httpConfig, mConfig);
         doLoadingViews = new Vector<View>(30);
     }
 

@@ -16,9 +16,11 @@
 
 package org.kymjs.kjframe.bitmap;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.kymjs.kjframe.http.HttpCallBack;
+import org.kymjs.kjframe.http.HttpConfig;
 import org.kymjs.kjframe.http.HttpHeaderParser;
 import org.kymjs.kjframe.http.KJHttpException;
 import org.kymjs.kjframe.http.NetworkResponse;
@@ -41,9 +43,12 @@ public class ImageRequest extends Request<Bitmap> {
     // 用来保证当前对象只有一个线程在访问
     private static final Object sDecodeLock = new Object();
 
+    private final Map<String, String> mHeaders = new HashMap<String, String>();
+
     public ImageRequest(String url, int maxWidth, int maxHeight,
             HttpCallBack callback) {
         super(HttpMethod.GET, url, callback);
+        mHeaders.put("cookie", HttpConfig.sCookie);
         mMaxWidth = maxWidth;
         mMaxHeight = maxHeight;
     }
@@ -56,6 +61,11 @@ public class ImageRequest extends Request<Bitmap> {
     @Override
     public String getCacheKey() {
         return getUrl();
+    }
+
+    @Override
+    public Map<String, String> getHeaders() {
+        return mHeaders;
     }
 
     /**
