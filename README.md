@@ -9,10 +9,11 @@ KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复�
 ####AndroidStudio
 build.gradle中添加：  
 ``` 
-compile 'org.kymjs.kjframe:kjframe:2.+'
+compile 'org.kymjs.kjframe:kjframe:2.4.4'
 ```
 ####eclipse
 复制jar包 [KJFrameForAndroid_v2.x](https://github.com/kymjs/KJFrameForAndroid/tree/master/binrary) 到你工程的/libs目录中.<br>
+eclipes版本源码请查看[相关分支](https://github.com/kymjs/KJFrameForAndroid/tree/eclipse_end)<br>
 
 ## 快速入门
 1、查看各个模块的使用帮助<br>
