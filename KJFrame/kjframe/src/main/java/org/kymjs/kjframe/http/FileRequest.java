@@ -15,6 +15,12 @@
  */
 package org.kymjs.kjframe.http;
 
+import android.text.TextUtils;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.kymjs.kjframe.utils.KJLoger;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,19 +29,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.kymjs.kjframe.utils.KJLoger;
-
-import android.text.TextUtils;
-
 public class FileRequest extends Request<byte[]> {
     private final File mStoreFile;
     private final File mTemporaryFile; // 临时文件
 
+    private Map<String, String> mHeaders = new HashMap<String, String>();
+
     public FileRequest(String storeFilePath, String url, HttpCallBack callback) {
         super(HttpMethod.GET, url, callback);
         mStoreFile = new File(storeFilePath);
+        mHeaders.put("cookie", HttpConfig.sCookie);
         File folder = mStoreFile.getParentFile();
         if (folder != null) {
             folder.mkdirs();
@@ -92,10 +95,13 @@ public class FileRequest extends Request<byte[]> {
 
     @Override
     public Map<String, String> getHeaders() {
-        Map<String, String> header = new HashMap<String, String>();
-        header.put("Range", "bytes=" + mTemporaryFile.length() + "-");
-        header.put("Accept-Encoding", "identity");
-        return header;
+        mHeaders.put("Range", "bytes=" + mTemporaryFile.length() + "-");
+        mHeaders.put("Accept-Encoding", "identity");
+        return mHeaders;
+    }
+
+    public void setHeaders(Map<String, String> mHeaders) {
+        this.mHeaders = mHeaders;
     }
 
     public byte[] handleResponse(HttpResponse response) throws IOException,

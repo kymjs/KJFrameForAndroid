@@ -16,6 +16,14 @@
 
 package org.kymjs.kjframe.http;
 
+import android.text.TextUtils;
+import android.util.Log;
+
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.message.BasicHeader;
+import org.kymjs.kjframe.utils.FileUtils;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -28,14 +36,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.message.BasicHeader;
-import org.kymjs.kjframe.utils.FileUtils;
-
-import android.text.TextUtils;
-import android.util.Log;
 
 /**
  * Http请求的参数集合
@@ -153,7 +153,6 @@ public class HttpParams implements HttpEntity {
     /**
      * 将数据写入到输出流中
      * 
-     * @param key
      * @param rawData
      * @param type
      * @param encodingBytes
