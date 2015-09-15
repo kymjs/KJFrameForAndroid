@@ -72,6 +72,11 @@ public abstract class FrameFragment extends Fragment implements OnClickListener 
     protected void initData() {}
 
     /**
+     * 当通过changeFragment()显示时会被调用(类似于onResume)
+     */
+    protected void onChange() {}
+
+    /**
      * initialization data. And this method run in background thread, so you
      * shouldn't change ui<br>
      * on initializated, will call threadDataInited();

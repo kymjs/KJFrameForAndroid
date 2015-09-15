@@ -91,7 +91,7 @@ public class AnnotateUtil {
     /**
      * 必须在setContentView之后调用
      * 
-     * @param frag
+     * @param frag 要初始化的Fragment
      */
     public static void initBindView(Fragment frag) {
         initBindView(frag, frag.getActivity().getWindow().getDecorView());

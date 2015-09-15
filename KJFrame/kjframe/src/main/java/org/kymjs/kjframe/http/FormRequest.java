@@ -15,17 +15,16 @@
  */
 package org.kymjs.kjframe.http;
 
+import android.util.Log;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
-import android.util.Log;
-
 /**
  * Form表单形式的Http请求
- * 
+ *
  * @author kymjs
- * 
  */
 public class FormRequest extends Request<byte[]> {
 
@@ -36,7 +35,7 @@ public class FormRequest extends Request<byte[]> {
     }
 
     public FormRequest(int httpMethod, String url, HttpParams params,
-            HttpCallBack callback) {
+                       HttpCallBack callback) {
         super(httpMethod, url, callback);
         if (params == null) {
             params = new HttpParams();
@@ -55,11 +54,7 @@ public class FormRequest extends Request<byte[]> {
 
     @Override
     public String getBodyContentType() {
-        if (mParams.getContentType() != null) {
-            return mParams.getContentType().getValue();
-        } else {
-            return super.getBodyContentType();
-        }
+        return mParams.getContentType().getValue();
     }
 
     @Override

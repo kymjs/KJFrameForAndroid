@@ -33,19 +33,13 @@ import org.kymjs.kjframe.bitmap.BitmapConfig;
 import org.kymjs.kjframe.bitmap.DiskImageRequest;
 import org.kymjs.kjframe.bitmap.ImageDisplayer;
 import org.kymjs.kjframe.http.Cache;
-import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpConfig;
 import org.kymjs.kjframe.utils.DensityUtils;
-import org.kymjs.kjframe.utils.FileUtils;
 import org.kymjs.kjframe.utils.KJLoger;
 import org.kymjs.kjframe.utils.StringUtils;
 import org.kymjs.kjframe.utils.SystemTool;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Vector;
 
@@ -370,88 +364,12 @@ public class KJBitmap {
     }
 
     /**
-     * 取消一个加载请求(拼写错误，请使用cancel(url))
-     *
-     * @param url
-     */
-    @Deprecated
-    public void cancle(String url) {
-        displayer.cancel(url);
-    }
-
-    /**
      * 取消一个加载请求
      *
      * @param url
      */
     public void cancel(String url) {
         displayer.cancel(url);
-    }
-
-    /**
-     * 保存一张图片到本地，并自动通知图库刷新
-     *
-     * @param cxt
-     * @param url  网络图片链接
-     * @param path 保存到本地的绝对路径
-     */
-    public void saveImage(Context cxt, String url, String path) {
-        saveImage(cxt, url, path, true, null);
-    }
-
-    /**
-     * 保存一张图片到本地
-     *
-     * @param url  网络图片链接
-     * @param path 保存到本地的绝对路径
-     * @param cb   保存过程监听器
-     */
-    public void saveImage(final Context cxt, String url, final String path,
-                          final boolean isRefresh, HttpCallBack cb) {
-        if (cb == null) {
-            cb = new HttpCallBack() {
-                @Override
-                public void onSuccess(byte[] t) {
-                    super.onSuccess(t);
-                    if (isRefresh) {
-                        refresh(cxt, path);
-                    }
-                }
-            };
-        }
-        byte[] data = getCache(url);
-        if (data.length == 0) {
-            new KJHttp().download(path, url, cb);
-        } else {
-            File file = new File(path);
-            cb.onPreStart();
-            File folder = file.getParentFile();
-            if (folder != null) {
-                folder.mkdirs();
-            }
-            if (!file.exists()) {
-                try {
-                    file.createNewFile();
-                } catch (IOException e1) {
-                    cb.onFailure(-1, e1.getMessage());
-                    return;
-                }
-            }
-            OutputStream os = null;
-            try {
-                os = new FileOutputStream(file);
-                os.write(data);
-                cb.onSuccess(data);
-                if (isRefresh) {
-                    refresh(cxt, path);
-                }
-            } catch (IOException e) {
-                cb.onFailure(-1, e.getMessage());
-            } finally {
-                FileUtils.closeIO(os);
-                cb.onFinish();
-            }
-        }
     }
 
     /**
@@ -531,7 +449,7 @@ public class KJBitmap {
         if (doLoadingViews.contains(view)) {
             String url = (String) view.getTag();
             if (!StringUtils.isEmpty(url)) {
-                cancle(url);
+                cancel(url);
             }
         }
         doLoadingViews.add(view);

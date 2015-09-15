@@ -157,6 +157,7 @@ public abstract class FrameActivity extends FragmentActivity implements
         }
         if (targetFragment.isHidden()) {
             transaction.show(targetFragment);
+            targetFragment.onChange();
         }
         if (currentKJFragment != null && currentKJFragment.isVisible()) {
             transaction.hide(currentKJFragment);
@@ -185,6 +186,7 @@ public abstract class FrameActivity extends FragmentActivity implements
         }
         if (targetFragment.isHidden()) {
             transaction.show(targetFragment);
+            targetFragment.onChange();
         }
         if (currentSupportFragment != null
                 && currentSupportFragment.isVisible()) {
