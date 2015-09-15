@@ -15,18 +15,18 @@
  */
 package org.kymjs.kjframe.http;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Collections;
-import java.util.Map;
-
-import org.kymjs.kjframe.KJHttp;
-import org.kymjs.kjframe.utils.KJLoger;
-
 import android.net.TrafficStats;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.text.TextUtils;
+
+import org.kymjs.kjframe.KJHttp;
+import org.kymjs.kjframe.utils.KJLoger;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * 一个请求基类

@@ -81,7 +81,7 @@ public class HttpClientStack implements HttpStack {
         onPrepareRequest(httpRequest);
         HttpParams httpParams = httpRequest.getParams();
         int timeoutMs = request.getTimeoutMs();
-        HttpConnectionParams.setConnectionTimeout(httpParams, 5000);
+        HttpConnectionParams.setConnectionTimeout(httpParams, timeoutMs);
         HttpConnectionParams.setSoTimeout(httpParams, timeoutMs);
         return mClient.execute(httpRequest);
     }
