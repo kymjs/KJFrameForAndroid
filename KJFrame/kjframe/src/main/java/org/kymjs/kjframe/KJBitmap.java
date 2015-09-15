@@ -33,20 +33,26 @@ import org.kymjs.kjframe.bitmap.BitmapConfig;
 import org.kymjs.kjframe.bitmap.DiskImageRequest;
 import org.kymjs.kjframe.bitmap.ImageDisplayer;
 import org.kymjs.kjframe.http.Cache;
+import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpConfig;
 import org.kymjs.kjframe.utils.DensityUtils;
+import org.kymjs.kjframe.utils.FileUtils;
 import org.kymjs.kjframe.utils.KJLoger;
 import org.kymjs.kjframe.utils.StringUtils;
 import org.kymjs.kjframe.utils.SystemTool;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Vector;
 
 /**
  * The BitmapLibrary's core classes<br>
  * <b>创建时间</b> 2014-6-11<br>
- * <b>最后修改</b> 2015-4-23<br>
+ * <b>最后修改</b> 2015-9-13<br>
  *
  * @author kymjs (https://github.com/kymjs)
  * @version 2.4
@@ -175,7 +181,7 @@ public class KJBitmap {
      * @param callback    加载过程的回调
      */
     public void displayWithDefWH(View imageView, String imageUrl,
-                                 Drawable loadBitmap, Drawable errorBitmap, BitmapCallBack 
+                                 Drawable loadBitmap, Drawable errorBitmap, BitmapCallBack
                                          callback) {
         int w = imageView.getWidth();
         ;
@@ -278,6 +284,7 @@ public class KJBitmap {
                 try {
                     doLoadingViews.remove(imageView);
                 } catch (Exception e) {
+                    //
                 }
                 if (callback != null) {
                     callback.onFinish();
@@ -296,7 +303,7 @@ public class KJBitmap {
         if (imageUrl.startsWith("http")) {
             displayer.get(imageUrl, width, height, mCallback);
         } else {
-            new DiskImageRequest().load(imageUrl, width, width, mCallback);
+            new DiskImageRequest().load(imageUrl, width, height, mCallback);
         }
     }
 
@@ -340,7 +347,7 @@ public class KJBitmap {
      * 获取缓存数据
      *
      * @param url 哪条url的缓存
-     * @return
+     * @return 缓存数据的二进制数组
      */
     public byte[] getCache(String url) {
         Cache cache = HttpConfig.mCache;
@@ -356,8 +363,8 @@ public class KJBitmap {
     /**
      * 获取内存缓存
      *
-     * @param url
-     * @return
+     * @param url key
+     * @return 缓存的bitmap或null
      */
     public Bitmap getMemoryCache(String url) {
         return BitmapConfig.mMemoryCache.getBitmap(url);
@@ -366,21 +373,84 @@ public class KJBitmap {
     /**
      * 取消一个加载请求
      *
-     * @param url
+     * @param url 要取消的url
      */
     public void cancel(String url) {
         displayer.cancel(url);
     }
 
     /**
+     * 保存一张图片到本地，并自动通知图库刷新
+     *
+     * @param url  网络图片链接
+     * @param path 保存到本地的绝对路径
+     */
+    public void saveImage(Context cxt, String url, String path) {
+        saveImage(cxt, url, path, true, null);
+    }
+
+    /**
+     * 保存一张图片到本地
+     *
+     * @param url  网络图片链接
+     * @param path 保存到本地的绝对路径
+     * @param cb   保存过程监听器
+     */
+    public void saveImage(final Context cxt, String url, final String path,
+                          final boolean isRefresh, HttpCallBack cb) {
+        if (cb == null) {
+            cb = new HttpCallBack() {
+                @Override
+                public void onSuccess(byte[] t) {
+                    super.onSuccess(t);
+                    if (isRefresh) {
+                        refresh(cxt, path);
+                    }
+                }
+            };
+        }
+        byte[] data = getCache(url);
+        if (data.length == 0) {
+            new KJHttp().download(path, url, cb);
+        } else {
+            File file = new File(path);
+            cb.onPreStart();
+            File folder = file.getParentFile();
+            if (folder != null) {
+                folder.mkdirs();
+            }
+            if (!file.exists()) {
+                try {
+                    file.createNewFile();
+                } catch (IOException e1) {
+                    cb.onFailure(-1, e1.getMessage());
+                    return;
+                }
+            }
+            OutputStream os = null;
+            try {
+                os = new FileOutputStream(file);
+                os.write(data);
+                cb.onSuccess(data);
+                if (isRefresh) {
+                    refresh(cxt, path);
+                }
+            } catch (IOException e) {
+                cb.onFailure(-1, e.getMessage());
+            } finally {
+                FileUtils.closeIO(os);
+                cb.onFinish();
+            }
+        }
+    }
+
+    /**
      * 刷新图库
      *
-     * @param cxt
-     * @param path
+     * @param path 要刷新的文件的绝对路径
      */
     public void refresh(Context cxt, String path) {
-        String name = "";
-        name = path.substring(path.lastIndexOf('/'));
+        String name = path.substring(path.lastIndexOf('/'));
         try {
             MediaStore.Images.Media.insertImage(cxt.getContentResolver(), path,
                     name, null);
@@ -442,8 +512,6 @@ public class KJBitmap {
 
     /**
      * 检测一个View是否已经有任务了，如果是，则取消之前的任务
-     *
-     * @param view
      */
     private void checkViewExist(View view) {
         if (doLoadingViews.contains(view)) {

@@ -15,19 +15,18 @@
  */
 package org.kymjs.kjframe.http;
 
-import java.util.LinkedList;
-import java.util.List;
+import android.os.Looper;
 
 import org.kymjs.kjframe.KJHttp;
 
-import android.os.Looper;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 负责维护当前正在下载状态<br>
  * 对每个下载请求提供一个控制器，来控制下载的各种状态改变
- * 
+ *
  * @author kymjs
- * 
  */
 public class DownloadTaskQueue {
     private final int mParallelTaskCount; // 最大同时下载量
@@ -39,7 +38,7 @@ public class DownloadTaskQueue {
             parallelTaskCount = HttpConfig.NETWORK_POOL_SIZE - 1;
         }
         mParallelTaskCount = parallelTaskCount;
-        mTaskQueue = new LinkedList<DownloadController>();
+        mTaskQueue = new LinkedList<>();
     }
 
     public List<DownloadController> getTaskQueue() {
@@ -59,8 +58,8 @@ public class DownloadTaskQueue {
 
     /**
      * 添加一个下载请求,如果这个请求已经存在，则尝试唤醒这个请求
-     * 
-     * @param request
+     *
+     * @param request 要添加的下载请求
      */
     public void add(FileRequest request) {
         throwIfNotOnMainThread();
@@ -76,8 +75,8 @@ public class DownloadTaskQueue {
 
     /**
      * 移除一个下载任务
-     * 
-     * @param url
+     *
+     * @param url 要移除的url
      */
     public void remove(String url) {
         for (DownloadController controller : mTaskQueue) {
@@ -92,10 +91,9 @@ public class DownloadTaskQueue {
     }
 
     /**
-     * 
-     * @param storeFilePath
-     * @param url
-     * @return
+     * @param storeFilePath 下载后文件在本地的地址
+     * @param url           下载的url
+     * @return DownloadController下载控制器
      */
     public DownloadController get(String storeFilePath, String url) {
         synchronized (mTaskQueue) {
@@ -150,16 +148,16 @@ public class DownloadTaskQueue {
 
     /**
      * 如果这个请求本身就存在，则直接返回这个请求
-     * 
-     * @param request
-     * @return
+     *
+     * @param request 要被判断的request
+     * @return 如果这个请求本身就存在，则直接返回这个请求
      */
     private DownloadController requestExist(FileRequest request) {
         for (DownloadController task : mTaskQueue) {
             FileRequest req = task.getRequest();
             if (request.getUrl().equals(req.getUrl())
                     && request.getStoreFile().getAbsolutePath()
-                            .equals(req.getStoreFile().getAbsolutePath())) {
+                    .equals(req.getStoreFile().getAbsolutePath())) {
                 return task;
             }
         }

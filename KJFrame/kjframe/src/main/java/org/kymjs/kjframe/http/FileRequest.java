@@ -170,8 +170,7 @@ public class FileRequest extends Request<byte[]> {
             }
         } finally {
             try {
-                if (entity != null)
-                    entity.consumeContent();
+                entity.consumeContent();
             } catch (Exception e) {
                 KJLoger.debug("Error occured when calling consumingContent");
             }

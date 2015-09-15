@@ -43,10 +43,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 本类工作流程： 每当发起一次Request，会对这个Request标记一个唯一值。<br>
  * 并加入当前请求的Set中(保证唯一;方便控制)。<br>
  * 同时判断是否启用缓存，若启用则加入缓存队列，否则加入执行队列。<br>
- * 
+ * <p/>
  * Note:<br>
  * 整个KJHttp工作流程：采用责任链设计模式，由三部分组成，类似设计可以类比Handle...Looper...MessageQueue<br>
- * 
+ * <p/>
  * 1、KJHttp负责不停向NetworkQueue(或CacheQueue实际还是NetworkQueue， 具体逻辑请查看
  * {@link CacheDispatcher})添加Request<br>
  * 2、另一边由TaskThread不停从NetworkQueue中取Request并交给Network执行器(逻辑请查看
@@ -54,20 +54,22 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 3、Network执行器将执行成功的NetworkResponse返回给TaskThead，并通过Request的定制方法
  * Request.parseNetworkResponse()封装成Response，最终交给分发器 Delivery
  * 分发到主线程并调用HttpCallback相应的方法
- * 
+ *
  * @author kymjs (https://www.kymjs.com/)
  */
 public class KJHttp {
     // 请求缓冲区
-    private final Map<String, Queue<Request<?>>> mWaitingRequests = new HashMap<String, Queue<Request<?>>>();
+    private final Map<String, Queue<Request<?>>> mWaitingRequests = new HashMap<>();
     // 请求的序列化生成器
     private final AtomicInteger mSequenceGenerator = new AtomicInteger();
     // 当前正在执行请求的线程集合
-    private final Set<Request<?>> mCurrentRequests = new HashSet<Request<?>>();
+    private final Set<Request<?>> mCurrentRequests = new HashSet<>();
     // 执行缓存任务的队列.
-    private final PriorityBlockingQueue<Request<?>> mCacheQueue = new PriorityBlockingQueue<Request<?>>();
+    private final PriorityBlockingQueue<Request<?>> mCacheQueue = new 
+            PriorityBlockingQueue<>();
     // 需要执行网络请求的工作队列
-    private final PriorityBlockingQueue<Request<?>> mNetworkQueue = new PriorityBlockingQueue<Request<?>>();
+    private final PriorityBlockingQueue<Request<?>> mNetworkQueue = new 
+            PriorityBlockingQueue<>();
     // 请求任务执行池
     private final NetworkDispatcher[] mTaskThreads;
     // 缓存队列调度器
@@ -88,11 +90,9 @@ public class KJHttp {
 
     /**
      * 发起get请求
-     * 
-     * @param url
-     *            地址
-     * @param callback
-     *            请求中的回调方法
+     *
+     * @param url      地址
+     * @param callback 请求中的回调方法
      */
     public Request<byte[]> get(String url, HttpCallBack callback) {
         return get(url, new HttpParams(), callback);
@@ -100,33 +100,26 @@ public class KJHttp {
 
     /**
      * 发起get请求
-     * 
-     * @param url
-     *            地址
-     * @param params
-     *            参数集
-     * @param callback
-     *            请求中的回调方法
+     *
+     * @param url      地址
+     * @param params   参数集
+     * @param callback 请求中的回调方法
      */
     public Request<byte[]> get(String url, HttpParams params,
-            HttpCallBack callback) {
+                               HttpCallBack callback) {
         return get(url, params, true, callback);
     }
 
     /**
      * 发起get请求
-     * 
-     * @param url
-     *            地址
-     * @param params
-     *            参数集
-     * @param callback
-     *            请求中的回调方法
-     * @param useCache
-     *            是否缓存本条请求
+     *
+     * @param url      地址
+     * @param params   参数集
+     * @param callback 请求中的回调方法
+     * @param useCache 是否缓存本条请求
      */
     public Request<byte[]> get(String url, HttpParams params, boolean useCache,
-            HttpCallBack callback) {
+                               HttpCallBack callback) {
         if (params != null) {
             url += params.getUrlParams();
         }
@@ -139,33 +132,26 @@ public class KJHttp {
 
     /**
      * 发起post请求
-     * 
-     * @param url
-     *            地址
-     * @param params
-     *            参数集
-     * @param callback
-     *            请求中的回调方法
+     *
+     * @param url      地址
+     * @param params   参数集
+     * @param callback 请求中的回调方法
      */
     public Request<byte[]> post(String url, HttpParams params,
-            HttpCallBack callback) {
+                                HttpCallBack callback) {
         return post(url, params, true, callback);
     }
 
     /**
      * 发起post请求
-     * 
-     * @param url
-     *            地址
-     * @param params
-     *            参数集
-     * @param callback
-     *            请求中的回调方法
-     * @param useCache
-     *            是否缓存本条请求
+     *
+     * @param url      地址
+     * @param params   参数集
+     * @param callback 请求中的回调方法
+     * @param useCache 是否缓存本条请求
      */
     public Request<byte[]> post(String url, HttpParams params,
-            boolean useCache, HttpCallBack callback) {
+                                boolean useCache, HttpCallBack callback) {
         Request<byte[]> request = new FormRequest(HttpMethod.POST, url, params,
                 callback);
         request.setShouldCache(useCache);
@@ -175,33 +161,26 @@ public class KJHttp {
 
     /**
      * 使用JSON传参的post请求
-     * 
-     * @param url
-     *            地址
-     * @param params
-     *            参数集
-     * @param callback
-     *            请求中的回调方法
+     *
+     * @param url      地址
+     * @param params   参数集
+     * @param callback 请求中的回调方法
      */
     public Request<byte[]> jsonPost(String url, HttpParams params,
-            HttpCallBack callback) {
+                                    HttpCallBack callback) {
         return jsonPost(url, params, true, callback);
     }
 
     /**
      * 使用JSON传参的post请求
-     * 
-     * @param url
-     *            地址
-     * @param params
-     *            参数集
-     * @param callback
-     *            请求中的回调方法
-     * @param useCache
-     *            是否缓存本条请求
+     *
+     * @param url      地址
+     * @param params   参数集
+     * @param callback 请求中的回调方法
+     * @param useCache 是否缓存本条请求
      */
     public Request<byte[]> jsonPost(String url, HttpParams params,
-            boolean useCache, HttpCallBack callback) {
+                                    boolean useCache, HttpCallBack callback) {
         Request<byte[]> request = new JsonRequest(HttpMethod.POST, url, params,
                 callback);
         request.setShouldCache(useCache);
@@ -211,16 +190,13 @@ public class KJHttp {
 
     /**
      * 使用JSON传参的get请求
-     * 
-     * @param url
-     *            地址
-     * @param params
-     *            参数集
-     * @param callback
-     *            请求中的回调方法
+     *
+     * @param url      地址
+     * @param params   参数集
+     * @param callback 请求中的回调方法
      */
     public Request<byte[]> jsonGet(String url, HttpParams params,
-            HttpCallBack callback) {
+                                   HttpCallBack callback) {
         Request<byte[]> request = new JsonRequest(HttpMethod.GET, url, params,
                 callback);
         doRequest(request);
@@ -229,18 +205,14 @@ public class KJHttp {
 
     /**
      * 使用JSON传参的get请求
-     * 
-     * @param url
-     *            地址
-     * @param params
-     *            参数集
-     * @param callback
-     *            请求中的回调方法
-     * @param useCache
-     *            是否缓存本条请求
+     *
+     * @param url      地址
+     * @param params   参数集
+     * @param callback 请求中的回调方法
+     * @param useCache 是否缓存本条请求
      */
     public Request<byte[]> jsonGet(String url, HttpParams params,
-            boolean useCache, HttpCallBack callback) {
+                                   boolean useCache, HttpCallBack callback) {
         Request<byte[]> request = new JsonRequest(HttpMethod.GET, url, params,
                 callback);
         request.setShouldCache(useCache);
@@ -250,16 +222,13 @@ public class KJHttp {
 
     /**
      * 下载
-     * 
-     * @param storeFilePath
-     *            文件保存路径。注，必须是一个file路径不能是folder
-     * @param url
-     *            下载地址
-     * @param callback
-     *            请求中的回调方法
+     *
+     * @param storeFilePath 文件保存路径。注，必须是一个file路径不能是folder
+     * @param url           下载地址
+     * @param callback      请求中的回调方法
      */
     public DownloadTaskQueue download(String storeFilePath, String url,
-            HttpCallBack callback) {
+                                      HttpCallBack callback) {
         FileRequest request = new FileRequest(storeFilePath, url, callback);
         request.setConfig(mConfig);
         mConfig.mController.add(request);
@@ -268,11 +237,9 @@ public class KJHttp {
 
     /**
      * 尝试唤醒一个处于暂停态的下载任务(不推荐)
-     * 
-     * @param storeFilePath
-     *            文件保存路径。注，必须是一个file路径不能是folder
-     * @param url
-     *            下载地址
+     *
+     * @param storeFilePath 文件保存路径。注，必须是一个file路径不能是folder
+     * @param url           下载地址
      * @deprecated 会造成莫名其妙的问题，建议直接再次调用download方法
      */
     @Deprecated
@@ -284,11 +251,11 @@ public class KJHttp {
 
     /**
      * 返回下载总控制器
-     * 
-     * @return
+     *
+     * @return 下载控制器
      */
     public DownloadController getDownloadController(String storeFilePath,
-            String url) {
+                                                    String url) {
         return mConfig.mController.get(storeFilePath, url);
     }
 
@@ -298,8 +265,8 @@ public class KJHttp {
 
     /**
      * 执行一个自定义请求
-     * 
-     * @param request
+     *
+     * @param request 要执行的自定义请求
      */
     public void doRequest(Request<?> request) {
         request.setConfig(mConfig);
@@ -308,10 +275,9 @@ public class KJHttp {
 
     /**
      * 获取缓存数据
-     * 
-     * @param url
-     *            哪条url的缓存
-     * @return
+     *
+     * @param url 哪条url的缓存
+     * @return 缓存的二进制数组
      */
     public byte[] getCache(String url) {
         Cache cache = HttpConfig.mCache;
@@ -326,11 +292,9 @@ public class KJHttp {
 
     /**
      * 获取缓存数据
-     * 
-     * @param url
-     *            哪条url的缓存
-     * @param params
-     *            http请求中的参数集(KJHttp的缓存会连同请求参数一起作为一个缓存的key)
+     *
+     * @param url    哪条url的缓存
+     * @param params http请求中的参数集(KJHttp的缓存会连同请求参数一起作为一个缓存的key)
      * @since 2.234以后有用
      */
     public byte[] getCache(String url, HttpParams params) {
@@ -342,11 +306,9 @@ public class KJHttp {
 
     /**
      * 只有你确定cache是一个String时才可以使用这个方法，否则还是应该使用getCache(String);
-     * 
-     * @param url
-     *            url
-     * @param params
-     *            http请求中的参数集(KJHttp的缓存会连同请求参数一起作为一个缓存的key)
+     *
+     * @param url    url
+     * @param params http请求中的参数集(KJHttp的缓存会连同请求参数一起作为一个缓存的key)
      */
     public String getStringCache(String url, HttpParams params) {
         if (params != null) {
@@ -357,9 +319,6 @@ public class KJHttp {
 
     /**
      * 只有你确定cache是一个String时才可以使用这个方法，否则还是应该使用getCache(String);
-     * 
-     * @param url
-     * @return
      */
     public String getStringCache(String url) {
         return new String(getCache(url));
@@ -367,9 +326,8 @@ public class KJHttp {
 
     /**
      * 移除一个缓存
-     * 
-     * @param url
-     *            哪条url的缓存
+     *
+     * @param url 哪条url的缓存
      */
     public void removeCache(String url) {
         HttpConfig.mCache.remove(url);
@@ -386,13 +344,6 @@ public class KJHttp {
         return mConfig;
     }
 
-    /**
-     * 已过期，请更换为setConfig()
-     */
-    @Deprecated
-    public void setHttpConfig(HttpConfig config) {
-        setConfig(config);
-    }
 
     public void setConfig(HttpConfig config) {
         this.mConfig = config;
@@ -424,11 +375,12 @@ public class KJHttp {
         if (mCacheDispatcher != null) {
             mCacheDispatcher.quit();
         }
-        for (int i = 0; i < mTaskThreads.length; i++) {
-            if (mTaskThreads[i] != null) {
-                mTaskThreads[i].quit();
+        for (NetworkDispatcher thread : mTaskThreads) {
+            if (thread != null) {
+                thread.quit();
             }
         }
+
     }
 
     public void cancel(String url) {

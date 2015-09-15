@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2013 The Android Open Source Project
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,7 +30,7 @@ import java.util.LinkedList;
 
 /**
  * 图片显示器
- * 
+ *
  * @author kymjs (https://www.kymjs.com/)
  */
 public class ImageDisplayer {
@@ -43,21 +43,21 @@ public class ImageDisplayer {
     private final Handler mHandler = new Handler(Looper.getMainLooper());
 
     // 正在请求的事件
-    private final HashMap<String, ImageRequestEven> mRequestsMap = new HashMap<String, ImageRequestEven>();
+    private final HashMap<String, ImageRequestEven> mRequestsMap = new HashMap<>();
     // 已经请求完成，待处理的事件
-    private final HashMap<String, ImageRequestEven> mResponsesMap = new HashMap<String, ImageRequestEven>();
+    private final HashMap<String, ImageRequestEven> mResponsesMap = new HashMap<>();
 
     /**
      * 创建一个图片显示器
      *
-     * @param bitmapConfig
+     * @param bitmapConfig KJBitmap配置器
      */
     public ImageDisplayer(HttpConfig httpConfig, BitmapConfig bitmapConfig) {
-        // 靠，在这里踩了个坑。 最初写的是Integer.MAX_VALUE,
+        // 在这里踩了个坑。 最初写的是Integer.MAX_VALUE,
         // 结果把这个值*60000转成毫秒long以后溢出了 这次我给个死的值行不行。1000天，能不能算永久了
         // 其实还有一种解决办法是直接在缓存读取的时候，看到是bitmap缓存不管是否失效都返回，
         // 但是这种不利于自定义扩展，就不用了，有兴趣的可以看CacheDispatcher的105行
-        // @kymjs记录于2015.4.30
+        // kymjs记录于2015.4.30
         // config.cacheTime = bitmapConfig.cacheTime;
         mKJHttp = new KJHttp(httpConfig);
         mMemoryCache = BitmapConfig.mMemoryCache;
@@ -66,10 +66,10 @@ public class ImageDisplayer {
 
     /**
      * 判断指定图片是否已经被缓存
-     * 
+     *
      * @param requestUrl
      *            图片地址
-     * @return
+     * @return 图片是否已经被缓存
      */
     public boolean isCached(String requestUrl) {
         throwIfNotOnMainThread();
@@ -78,18 +78,18 @@ public class ImageDisplayer {
 
     /**
      * 加载一张图片
-     * 
+     *
      * @param requestUrl
      *            图片地址
      * @param maxWidth
      *            图片最大宽度(如果网络图片大于这个宽度则缩放至这个大小)
      * @param maxHeight
      *            图片最大高度
-     * @param callback
-     * @return
+     * @param callback 回调
+     * @return 加载的图片封装
      */
     public ImageBale get(String requestUrl, int maxWidth, int maxHeight,
-            BitmapCallBack callback) {
+                         BitmapCallBack callback) {
         throwIfNotOnMainThread();
         callback.onPreLoad();
 
@@ -124,7 +124,7 @@ public class ImageDisplayer {
      * 创建一个网络请求
      */
     protected Request<Bitmap> makeImageRequest(final String requestUrl,
-            int maxWidth, int maxHeight) {
+                                               int maxWidth, int maxHeight) {
         return new ImageRequest(requestUrl, maxWidth, maxHeight,
                 new HttpCallBack() {
                     @Override
@@ -143,7 +143,7 @@ public class ImageDisplayer {
 
     /**
      * 从网络获取bitmap成功时调用
-     * 
+     *
      * @param url
      *            缓存key
      * @param bitmap
@@ -162,7 +162,7 @@ public class ImageDisplayer {
 
     /**
      * 从网络获取bitmap失败时调用
-     * 
+     *
      * @param url
      *            缓存key
      * @param error
@@ -181,9 +181,9 @@ public class ImageDisplayer {
 
     /**
      * 对一个图片的封装，包含了这张图片所需要携带的信息
-     * 
+     *
      * @author kymjs
-     * 
+     *
      */
     public class ImageBale {
         private Bitmap mBitmap;
@@ -191,7 +191,7 @@ public class ImageDisplayer {
         private final BitmapCallBack mCallback;
 
         public ImageBale(Bitmap bitmap, String requestUrl,
-                BitmapCallBack callback) {
+                         BitmapCallBack callback) {
             mBitmap = bitmap;
             mRequestUrl = requestUrl;
             mCallback = callback;
@@ -230,9 +230,9 @@ public class ImageDisplayer {
 
     /**
      * 图片从网络请求并获取到相应的事件
-     * 
+     *
      * @author kymjs
-     * 
+     *
      */
     private class ImageRequestEven {
         private final Request<?> mRequest;
@@ -311,35 +311,25 @@ public class ImageDisplayer {
 
     /**
      * 取消一个加载请求
-     * 
-     * @param url
+     *
+     * @param url key
      */
     public void cancel(String url) {
         mKJHttp.cancel(url);
     }
 
     /**
-     * 取消一个加载请求(拼写错误，请使用cancel(url))
-     * 
-     * @param url
-     */
-    @Deprecated
-    public void cancle(String url) {
-        this.cancel(url);
-    }
-
-    /**
      * 内存缓存接口定义
-     * 
+     *
      * @author kymjs
      */
     public interface ImageCache {
-        public Bitmap getBitmap(String url);
+        Bitmap getBitmap(String url);
 
-        public void remove(String key);
+        void remove(String key);
 
-        public void clean();
+        void clean();
 
-        public void putBitmap(String url, Bitmap bitmap);
+        void putBitmap(String url, Bitmap bitmap);
     }
 }

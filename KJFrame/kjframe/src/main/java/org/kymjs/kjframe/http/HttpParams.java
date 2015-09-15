@@ -42,17 +42,22 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class HttpParams implements HttpEntity {
 
-    private final static char[] MULTIPART_CHARS = "-_1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            .toCharArray();
+    private final static char[] MULTIPART_CHARS =
+            "-_1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    .toCharArray();
     private String mBoundary = null;
     private final String NEW_LINE_STR = "\r\n";
     private final String CONTENT_TYPE = "Content-Type: ";
     private final String CONTENT_DISPOSITION = "Content-Disposition: ";
 
-    /** 文本参数和字符集 */
+    /**
+     * 文本参数和字符集
+     */
     private final String TYPE_TEXT_CHARSET = "text/plain; charset=UTF-8";
 
-    /** 字节流参数 */
+    /**
+     * 字节流参数
+     */
     private final String TYPE_OCTET_STREAM = "application/octet-stream";
     /**
      * 二进制参数
@@ -81,10 +86,8 @@ public class HttpParams implements HttpEntity {
 
     /**
      * 生成分隔符
-     * 
-     * @return
      */
-    private final String generateBoundary() {
+    private String generateBoundary() {
         final StringBuffer buf = new StringBuffer();
         final Random rand = new Random();
         for (int i = 0; i < 30; i++) {
@@ -111,9 +114,6 @@ public class HttpParams implements HttpEntity {
 
     /**
      * 添加文本参数
-     * 
-     * @param key
-     * @param value
      */
     public void put(final String key, final String value) {
         urlParams.put(key, value);
@@ -123,9 +123,6 @@ public class HttpParams implements HttpEntity {
 
     /**
      * 添加二进制参数, 例如Bitmap的字节流参数
-     * 
-     * @param paramName
-     * @param rawData
      */
     public void put(String paramName, final byte[] rawData) {
         hasFile = true;
@@ -135,9 +132,6 @@ public class HttpParams implements HttpEntity {
 
     /**
      * 添加文件参数,可以实现文件上传功能
-     * 
-     * @param key
-     * @param file
      */
     public void put(final String key, final File file) {
         try {
@@ -152,14 +146,9 @@ public class HttpParams implements HttpEntity {
 
     /**
      * 将数据写入到输出流中
-     * 
-     * @param rawData
-     * @param type
-     * @param encodingBytes
-     * @param fileName
      */
     private void writeToOutputStream(String paramName, byte[] rawData,
-            String type, byte[] encodingBytes, String fileName) {
+                                     String type, byte[] encodingBytes, String fileName) {
         try {
             writeFirstBoundary();
             mOutputStream
@@ -176,7 +165,7 @@ public class HttpParams implements HttpEntity {
 
     /**
      * 参数开头的分隔符
-     * 
+     *
      * @throws IOException
      */
     private void writeFirstBoundary() throws IOException {
@@ -185,11 +174,10 @@ public class HttpParams implements HttpEntity {
 
     private byte[] getContentDispositionBytes(String paramName, String fileName) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("--").append(mBoundary).append("\r\n");
-        stringBuilder.append(CONTENT_DISPOSITION + "form-data; name=\""
-                + paramName + "\"");
+        stringBuilder.append("--").append(mBoundary).append("\r\n").append(CONTENT_DISPOSITION)
+                .append("form-data; name=\"").append(paramName).append("\"");
         if (!TextUtils.isEmpty(fileName)) {
-            stringBuilder.append("; filename=\"" + fileName + "\"");
+            stringBuilder.append("; filename=\"").append(fileName).append("\"");
         }
         return stringBuilder.append(NEW_LINE_STR).toString().getBytes();
     }
