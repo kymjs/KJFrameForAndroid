@@ -43,11 +43,11 @@ import android.widget.RelativeLayout;
 
 /**
  * 新用户登陆界面
- * 
- * @点击登陆 传递账号、密码、IMEI；
- * @第三方登陆 传递ID,token，IMEI，若返回201，表示未登陆过，跳转到注册界面
- * @注册 跳转到注册页面
+ *
  * @author kymjs (http://www.kymjs.com/)
+ * @点击登陆 传递账号、密码、IMEI；
+ * @第三方登陆 传递ID, token，IMEI，若返回201，表示未登陆过，跳转到注册界面
+ * @注册 跳转到注册页面
  */
 public class Login extends KJActivity {
 
@@ -104,14 +104,17 @@ public class Login extends KJActivity {
         mEtUid.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
-                    int count) {}
+                                      int count) {
+            }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count,
-                    int after) {}
+                                          int after) {
+            }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
     }
 
@@ -140,7 +143,8 @@ public class Login extends KJActivity {
                 .getLayoutParams();
         logoParams.width = (int) (DensityUtils.getScreenW(aty) * 0.4);
         logoParams.height = (int) (logoParams.width / 2.3);
-        logoParams.topMargin = (DensityUtils.getScreenH(aty) - layoutH - headH - logoParams.height) / 4;
+        logoParams.topMargin = (DensityUtils.getScreenH(aty) - layoutH - headH - logoParams
+                .height) / 4;
         mImgLogo.setLayoutParams(logoParams);
     }
 
@@ -148,12 +152,12 @@ public class Login extends KJActivity {
     public void widgetClick(View v) {
         super.widgetClick(v);
         switch (v.getId()) {
-        case R.id.login_btn_login:
-            doLogin();
-            break;
-        case R.id.login_img_delete:
-            mEtUid.setText(null);
-            break;
+            case R.id.login_btn_login:
+                doLogin();
+                break;
+            case R.id.login_img_delete:
+                mEtUid.setText(null);
+                break;
         }
     }
 
@@ -185,6 +189,12 @@ public class Login extends KJActivity {
         kjh.post("http://www.oschina.net/action/api/login_validate", params,
                 new HttpCallBack() {
                     @Override
+                    public void onFailure(int errorNo, String strMsg) {
+                        super.onFailure(errorNo, strMsg);
+                        ViewInject.toast("网络不好" + strMsg);
+                    }
+
+                    @Override
                     public void onSuccess(
                             java.util.Map<String, String> headers, byte[] t) {
                         String cookie = headers.get("Set-Cookie");
@@ -214,7 +224,9 @@ public class Login extends KJActivity {
                                 mEtUid.setText(null);
                             }
                         }
-                    };
+                    }
+
+                    ;
                 });
     }
 }
