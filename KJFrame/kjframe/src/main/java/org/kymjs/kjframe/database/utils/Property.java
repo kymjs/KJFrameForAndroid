@@ -15,14 +15,14 @@
  */
 package org.kymjs.kjframe.database.utils;
 
+import android.annotation.SuppressLint;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import android.annotation.SuppressLint;
 
 /**
  * 属性 ，【非主键】的【基本数据类型】 都是属性<br>
@@ -80,14 +80,12 @@ public class Property {
                     set.invoke(receiver, value);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
             }
         } else {
             try {
                 field.setAccessible(true);
                 field.set(receiver, value);
             } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
@@ -104,11 +102,8 @@ public class Property {
             try {
                 return (T) get.invoke(obj);
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
             } catch (InvocationTargetException e) {
-                e.printStackTrace();
             }
         }
         return null;
@@ -123,7 +118,6 @@ public class Property {
             try {
                 return sdf.parse(strDate);
             } catch (ParseException e) {
-                e.printStackTrace();
             }
         }
         return null;

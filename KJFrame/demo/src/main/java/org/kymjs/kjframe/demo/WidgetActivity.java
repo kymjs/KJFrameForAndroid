@@ -1,13 +1,12 @@
 package org.kymjs.kjframe.demo;
 
-import org.kymjs.kjframe.KJActivity;
-import org.kymjs.kjframe.demo.widget.KJSlidingMenuDemo;
-import org.kymjs.kjframe.demo.widget.ScaleImageDemo;
-import org.kymjs.kjframe.ui.BindView;
-import org.kymjs.kjframe.ui.ViewInject;
-
 import android.view.View;
 import android.widget.Button;
+
+import org.kymjs.kjframe.KJActivity;
+import org.kymjs.kjframe.demo.widget.KJSlidingMenuDemo;
+import org.kymjs.kjframe.ui.BindView;
+import org.kymjs.kjframe.ui.ViewInject;
 
 public class WidgetActivity extends KJActivity {
     @BindView(id = R.id.button1, click = true)
@@ -33,7 +32,6 @@ public class WidgetActivity extends KJActivity {
         mBtn2.setText("上下拉ListView，圆形imageView，万能适配器");
         mBtn3.setText("KJScrollView请访问：https://github.com/KJFrame/KJBlog");
         mBtn4.setText("KJViewPager请访问：https://github.com/kymjs/KJController");
-        mBtn5.setText("缩放旋转ImageView");
     }
 
     @Override
@@ -52,7 +50,6 @@ public class WidgetActivity extends KJActivity {
             ViewInject.toast("请查看KJController项目");
             break;
         case R.id.button5:
-            showActivity(aty, ScaleImageDemo.class);
             break;
         }
     }
