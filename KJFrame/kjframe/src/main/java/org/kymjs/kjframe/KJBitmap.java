@@ -75,7 +75,7 @@ public class KJBitmap {
     public KJBitmap(HttpConfig httpConfig, BitmapConfig bitmapConfig) {
         this.mConfig = bitmapConfig;
         displayer = new ImageDisplayer(httpConfig, mConfig);
-        doLoadingViews = new Vector<View>(30);
+        doLoadingViews = new Vector<>(30);
     }
 
     /**
@@ -233,6 +233,9 @@ public class KJBitmap {
         if (StringUtils.isEmpty(imageUrl)) {
             showLogIfOpen("image url is empty");
             setViewImage(imageView, errorBitmap);
+            if (callback != null) {
+                callback.onFailure(new RuntimeException("image url is empty"));
+            }
             return;
         }
 
