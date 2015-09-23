@@ -23,6 +23,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.message.BasicHeader;
 import org.kymjs.kjframe.utils.FileUtils;
+import org.kymjs.kjframe.utils.StringUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -227,7 +228,7 @@ public class HttpParams implements HttpEntity {
             mOutputStream.write(endString.getBytes());
             //
             outstream.write(mOutputStream.toByteArray());
-        } else {
+        } else if (!StringUtils.isEmpty(getUrlParams())) {
             outstream.write(getUrlParams().substring(1).getBytes());
         }
     }

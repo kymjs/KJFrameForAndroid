@@ -16,6 +16,17 @@
 
 package org.kymjs.kjframe.http;
 
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.ProtocolVersion;
+import org.apache.http.StatusLine;
+import org.apache.http.entity.BasicHttpEntity;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.message.BasicHttpResponse;
+import org.apache.http.message.BasicStatusLine;
+import org.kymjs.kjframe.http.Request.HttpMethod;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,17 +39,6 @@ import java.util.Map.Entry;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
-
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.ProtocolVersion;
-import org.apache.http.StatusLine;
-import org.apache.http.entity.BasicHttpEntity;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.message.BasicHttpResponse;
-import org.apache.http.message.BasicStatusLine;
-import org.kymjs.kjframe.http.Request.HttpMethod;
 
 /**
  * HttpUrlConnection方式实现
@@ -66,14 +66,14 @@ public class HttpConnectStack implements HttpStack {
     }
 
     public HttpConnectStack(UrlRewriter urlRewriter,
-            SSLSocketFactory sslSocketFactory) {
+                            SSLSocketFactory sslSocketFactory) {
         mUrlRewriter = urlRewriter;
         mSslSocketFactory = sslSocketFactory;
     }
 
     @Override
     public HttpResponse performRequest(Request<?> request,
-            Map<String, String> additionalHeaders) throws IOException {
+                                       Map<String, String> additionalHeaders) throws IOException {
         String url = request.getUrl();
         HashMap<String, String> map = new HashMap<String, String>();
         map.putAll(request.getHeaders());
@@ -147,47 +147,53 @@ public class HttpConnectStack implements HttpStack {
         connection.setDoInput(true);
 
         // use caller-provided custom SslSocketFactory, if any, for HTTPS
-        if ("https".equals(url.getProtocol()) && mSslSocketFactory != null) {
-            ((HttpsURLConnection) connection)
-                    .setSSLSocketFactory(mSslSocketFactory);
+        if ("https".equals(url.getProtocol())) {
+            if (mSslSocketFactory != null) {
+                ((HttpsURLConnection) connection)
+                        .setSSLSocketFactory(mSslSocketFactory);
+            } else {
+                //信任所有证书
+                HTTPSTrustManager.allowAllSSL();
+            }
         }
 
         return connection;
     }
 
-    /* package */static void setConnectionParametersForRequest(
+    /* package */
+    static void setConnectionParametersForRequest(
             HttpURLConnection connection, Request<?> request)
             throws IOException {
         switch (request.getMethod()) {
-        case HttpMethod.GET:
-            connection.setRequestMethod("GET");
-            break;
-        case HttpMethod.DELETE:
-            connection.setRequestMethod("DELETE");
-            break;
-        case HttpMethod.POST:
-            connection.setRequestMethod("POST");
-            addBodyIfExists(connection, request);
-            break;
-        case HttpMethod.PUT:
-            connection.setRequestMethod("PUT");
-            addBodyIfExists(connection, request);
-            break;
-        case HttpMethod.HEAD:
-            connection.setRequestMethod("HEAD");
-            break;
-        case HttpMethod.OPTIONS:
-            connection.setRequestMethod("OPTIONS");
-            break;
-        case HttpMethod.TRACE:
-            connection.setRequestMethod("TRACE");
-            break;
-        case HttpMethod.PATCH:
-            connection.setRequestMethod("PATCH");
-            addBodyIfExists(connection, request);
-            break;
-        default:
-            throw new IllegalStateException("Unknown method type.");
+            case HttpMethod.GET:
+                connection.setRequestMethod("GET");
+                break;
+            case HttpMethod.DELETE:
+                connection.setRequestMethod("DELETE");
+                break;
+            case HttpMethod.POST:
+                connection.setRequestMethod("POST");
+                addBodyIfExists(connection, request);
+                break;
+            case HttpMethod.PUT:
+                connection.setRequestMethod("PUT");
+                addBodyIfExists(connection, request);
+                break;
+            case HttpMethod.HEAD:
+                connection.setRequestMethod("HEAD");
+                break;
+            case HttpMethod.OPTIONS:
+                connection.setRequestMethod("OPTIONS");
+                break;
+            case HttpMethod.TRACE:
+                connection.setRequestMethod("TRACE");
+                break;
+            case HttpMethod.PATCH:
+                connection.setRequestMethod("PATCH");
+                addBodyIfExists(connection, request);
+                break;
+            default:
+                throw new IllegalStateException("Unknown method type.");
         }
     }
 
@@ -195,7 +201,7 @@ public class HttpConnectStack implements HttpStack {
      * 如果有body则添加
      */
     private static void addBodyIfExists(HttpURLConnection connection,
-            Request<?> request) throws IOException {
+                                        Request<?> request) throws IOException {
         byte[] body = request.getBody();
         if (body != null) {
             connection.setDoOutput(true);

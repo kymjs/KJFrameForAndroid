@@ -15,6 +15,14 @@
  */
 package org.kymjs.blog.ui;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+
 import org.kymjs.blog.R;
 import org.kymjs.blog.domain.LoginData;
 import org.kymjs.blog.domain.User;
@@ -32,14 +40,6 @@ import org.kymjs.kjframe.utils.DensityUtils;
 import org.kymjs.kjframe.utils.KJLoger;
 import org.kymjs.kjframe.utils.StringUtils;
 import org.kymjs.kjframe.widget.RoundImageView;
-
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 /**
  * 新用户登陆界面
