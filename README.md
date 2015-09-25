@@ -10,15 +10,16 @@ build.gradle中添加：
 compile 'org.kymjs.kjframe:kjframe:2.4.8'
 ```
 ####eclipse
-复制jar包 [KJFrameForAndroid_v2.x](https://github.com/kymjs/KJFrameForAndroid/tree/master/binrary) 到你工程的/libs目录中.<br>
-eclipes版本源码请查看[相关分支](https://github.com/kymjs/KJFrameForAndroid/tree/eclipse_end)<br>
+复制jar包 [KJFrameForAndroid_v2.x](https://github.com/kymjs/KJFrameForAndroid/tree/master/binrary) 到你工程的/libs目录中.   
+eclipes版本源码请查看[相关分支](https://github.com/kymjs/KJFrameForAndroid/tree/eclipse_end)   
 
 ##使用帮助
-1、查看各个模块的使用帮助<br>
-    [MVC模块](https://github.com/kymjs/KJFrameForAndroid/wiki/MVCLibrary_cn)<br>
-    [Bitmap加载](https://github.com/kymjs/KJFrameForAndroid/wiki/BitmapLibrary_cn)<br>
-    [Http请求](https://github.com/kymjs/KJFrameForAndroid/wiki/HttpLibrary_cn)<br>
-    [数据库模块](https://github.com/kymjs/KJFrameForAndroid/wiki/DBLibrary)<br>
+1、很遗憾，没有帮助文档，但这几篇博客也许能帮到你  
+    [MVC模块](https://github.com/kymjs/KJFrameForAndroid/wiki/MVCLibrary_cn)   
+    [KJBitmap使用方法](http://www.kymjs.com/code/2015/03/25/01/)   
+    [KJHttp请求的使用](http://www.kymjs.com/code/2015/05/12/01/)   
+    [数据库模块使用方法](https://github.com/kymjs/KJFrameForAndroid/wiki/DBLibrary)   
+    [KJBitmap与KJHttp的深度用法](http://www.kymjs.com/code/2015/09/24/01/)   
 2、更多在实际项目中使用的Demo: [音乐播放器](https://github.com/KJFrame/KJMusic) [爱看博客客户端](https://github.com/KJFrame/KJBlog)    
 3、框架API文档：[http://kjframe.github.io](http://kjframe.github.io/)    
 *注，KJFrameForAndroid需要在AndroidManifest.xml 中声明如下权限*
