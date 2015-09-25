@@ -43,10 +43,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 本类工作流程： 每当发起一次Request，会对这个Request标记一个唯一值。<br>
  * 并加入当前请求的Set中(保证唯一;方便控制)。<br>
  * 同时判断是否启用缓存，若启用则加入缓存队列，否则加入执行队列。<br>
- * 
+ * <p/>
  * Note:<br>
  * 整个KJHttp工作流程：采用责任链设计模式，由三部分组成，类似设计可以类比Handle...Looper...MessageQueue<br>
- * 
+ * <p/>
  * 1、KJHttp负责不停向NetworkQueue(或CacheQueue实际还是NetworkQueue， 具体逻辑请查看
  * {@link CacheDispatcher})添加Request<br>
  * 2、另一边由TaskThread不停从NetworkQueue中取Request并交给Network执行器(逻辑请查看
@@ -58,6 +58,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author kymjs (https://www.kymjs.com/)
  */
 public class KJHttp {
+
+    public interface ContentType {
+        int FORM = 0;
+        int JSON = 1;
+    }
+
     // 请求缓冲区
     private final Map<String, Queue<Request<?>>> mWaitingRequests = new HashMap<>();
     // 请求的序列化生成器
@@ -65,10 +71,10 @@ public class KJHttp {
     // 当前正在执行请求的线程集合
     private final Set<Request<?>> mCurrentRequests = new HashSet<>();
     // 执行缓存任务的队列.
-    private final PriorityBlockingQueue<Request<?>> mCacheQueue = new 
+    private final PriorityBlockingQueue<Request<?>> mCacheQueue = new
             PriorityBlockingQueue<>();
     // 需要执行网络请求的工作队列
-    private final PriorityBlockingQueue<Request<?>> mNetworkQueue = new 
+    private final PriorityBlockingQueue<Request<?>> mNetworkQueue = new
             PriorityBlockingQueue<>();
     // 请求任务执行池
     private final NetworkDispatcher[] mTaskThreads;
@@ -78,14 +84,96 @@ public class KJHttp {
     private HttpConfig mConfig;
 
     public KJHttp() {
-        this(new HttpConfig());
+        this(null);
     }
 
     public KJHttp(HttpConfig config) {
+        if (config == null) {
+            config = new HttpConfig();
+        }
         this.mConfig = config;
         mConfig.mController.setRequestQueue(this);
         mTaskThreads = new NetworkDispatcher[HttpConfig.NETWORK_POOL_SIZE];
         start();
+    }
+
+    public static class Builder {
+        private String url;
+        private HttpCallBack callBack;
+        private HttpParams params;
+        private boolean useCache;
+        private int httpMethod;
+        private int contentType;
+        private HttpConfig httpConfig;
+
+        public Builder config(HttpConfig httpConfig) {
+            this.httpConfig = httpConfig;
+            return this;
+        }
+
+        public Builder url(String url) {
+            this.url = url;
+            return this;
+        }
+
+        public Builder callback(HttpCallBack callBack) {
+            this.callBack = callBack;
+            return this;
+        }
+
+        public Builder params(HttpParams params) {
+            this.params = params;
+            return this;
+        }
+
+        public Builder useCache(boolean useCache) {
+            this.useCache = useCache;
+            return this;
+        }
+
+        public Builder httpMethod(int method) {
+            this.httpMethod = method;
+            return this;
+        }
+
+        public Builder contentType(int contentType) {
+            this.contentType = contentType;
+            return this;
+        }
+
+        public void request() {
+            request(new KJHttp(httpConfig));
+        }
+
+        public void request(KJHttp kjHttp) {
+            switch (httpMethod) {
+                case HttpMethod.GET:
+                    if (contentType == ContentType.FORM) {
+                        kjHttp.get(url, params, useCache, callBack);
+                    } else if (contentType == ContentType.JSON) {
+                        kjHttp.jsonGet(url, params, useCache, callBack);
+                    }
+                    break;
+                case HttpMethod.POST:
+                    if (contentType == ContentType.FORM) {
+                        kjHttp.post(url, params, useCache, callBack);
+                    } else if (contentType == ContentType.JSON) {
+                        kjHttp.jsonPost(url, params, useCache, callBack);
+                    }
+                    break;
+                default:
+                    if (contentType == ContentType.FORM) {
+                        FormRequest request = new FormRequest(httpMethod, url, params, callBack);
+                        request.setShouldCache(useCache);
+                        kjHttp.doRequest(request);
+                    } else if (contentType == ContentType.JSON) {
+                        JsonRequest request = new JsonRequest(httpMethod, url, params, callBack);
+                        request.setShouldCache(useCache);
+                        kjHttp.doRequest(request);
+                    }
+                    break;
+            }
+        }
     }
 
     /**
@@ -95,7 +183,7 @@ public class KJHttp {
      * @param callback 请求中的回调方法
      */
     public Request<byte[]> get(String url, HttpCallBack callback) {
-        return get(url, new HttpParams(), callback);
+        return get(url, null, callback);
     }
 
     /**
@@ -107,6 +195,7 @@ public class KJHttp {
      */
     public Request<byte[]> get(String url, HttpParams params,
                                HttpCallBack callback) {
+        if (params == null) params = new HttpParams();
         return get(url, params, true, callback);
     }
 

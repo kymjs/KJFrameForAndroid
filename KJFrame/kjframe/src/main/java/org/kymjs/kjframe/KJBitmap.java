@@ -52,7 +52,7 @@ import java.util.Vector;
 /**
  * The BitmapLibrary's core classes<br>
  * <b>创建时间</b> 2014-6-11<br>
- * <b>最后修改</b> 2015-9-13<br>
+ * <b>最后修改</b> 2015-9-25<br>
  *
  * @author kymjs (https://github.com/kymjs)
  * @version 2.4
@@ -73,9 +73,81 @@ public class KJBitmap {
     }
 
     public KJBitmap(HttpConfig httpConfig, BitmapConfig bitmapConfig) {
+        if (httpConfig == null) {
+            httpConfig = new HttpConfig();
+        }
+        if (bitmapConfig == null) {
+            bitmapConfig = new BitmapConfig();
+        }
         this.mConfig = bitmapConfig;
         displayer = new ImageDisplayer(httpConfig, mConfig);
         doLoadingViews = new Vector<>(30);
+    }
+
+
+    public static class Builder {
+        private View imageView;
+        private String imageUrl;
+        private int width;
+        private int height;
+        private Drawable loadBitmap;
+        private Drawable errorBitmap;
+        private BitmapCallBack callback;
+        private BitmapConfig bitmapConfig;
+        private HttpConfig httpConfig;
+
+        public Builder bitmapConfig(BitmapConfig bitmapConfig) {
+            this.bitmapConfig = bitmapConfig;
+            return this;
+        }
+
+        public Builder httpConfig(HttpConfig httpConfig) {
+            this.httpConfig = httpConfig;
+            return this;
+        }
+
+        public Builder view(View imageView) {
+            this.imageView = imageView;
+            return this;
+        }
+
+        public Builder imageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
+            return this;
+        }
+
+        public Builder width(int width) {
+            this.width = width;
+            return this;
+        }
+
+        public Builder height(int height) {
+            this.height = height;
+            return this;
+        }
+
+        public Builder loadBitmap(Drawable loadBitmap) {
+            this.loadBitmap = loadBitmap;
+            return this;
+        }
+
+        public Builder errorBitmap(Drawable errorBitmap) {
+            this.errorBitmap = errorBitmap;
+            return this;
+        }
+
+        public Builder errorBitmap(BitmapCallBack callback) {
+            this.callback = callback;
+            return this;
+        }
+
+        public void display() {
+            display(new KJBitmap(httpConfig, bitmapConfig));
+        }
+
+        public void display(KJBitmap kjb) {
+            kjb.display(imageView, imageUrl, width, height, loadBitmap, errorBitmap, callback);
+        }
     }
 
     /**
@@ -94,6 +166,7 @@ public class KJBitmap {
      * @param width     要显示的图片的最大宽度
      * @param height    要显示图片的最大高度
      */
+    @Deprecated
     public void display(View imageView, String imageUrl, int width, int height) {
         display(imageView, imageUrl, width, height, null, null, null);
     }
@@ -103,6 +176,7 @@ public class KJBitmap {
      * @param imageUrl  网络图片地址
      * @param callback  加载过程的回调
      */
+    @Deprecated
     public void display(View imageView, String imageUrl, BitmapCallBack callback) {
         displayWithDefWH(imageView, imageUrl, null, null, callback);
     }
@@ -131,6 +205,7 @@ public class KJBitmap {
      * @param height     要显示图片的最大高度
      * @param loadBitmap 加载中图片
      */
+    @Deprecated
     public void display(View imageView, String imageUrl, int width, int height,
                         int loadBitmap) {
         display(imageView, imageUrl, width, height, imageView.getResources()
@@ -142,6 +217,7 @@ public class KJBitmap {
      * @param imageUrl   网络图片地址
      * @param loadBitmap 加载中的图片
      */
+    @Deprecated
     public void displayWithLoadBitmap(View imageView, String imageUrl,
                                       int loadBitmap) {
         displayWithDefWH(imageView, imageUrl, imageView.getResources()
@@ -153,6 +229,7 @@ public class KJBitmap {
      * @param imageUrl    网络图片地址
      * @param errorBitmap 加载出错时设置的默认图片
      */
+    @Deprecated
     public void displayWithErrorBitmap(View imageView, String imageUrl,
                                        int errorBitmap) {
         displayWithDefWH(imageView, imageUrl, null, imageView.getResources()
@@ -164,6 +241,7 @@ public class KJBitmap {
      * @param imageUrl    网络图片地址
      * @param errorBitmap 加载出错时设置的默认图片
      */
+    @Deprecated
     public void displayLoadAndErrorBitmap(View imageView, String imageUrl,
                                           int loadBitmap, int errorBitmap) {
         Resources res = imageView.getResources();
@@ -180,6 +258,7 @@ public class KJBitmap {
      * @param errorBitmap 加载失败的图片
      * @param callback    加载过程的回调
      */
+    @Deprecated
     public void displayWithDefWH(View imageView, String imageUrl,
                                  Drawable loadBitmap, Drawable errorBitmap, BitmapCallBack
                                          callback) {
@@ -203,6 +282,7 @@ public class KJBitmap {
      * @param loadOrErrorBitmap 加载中或加载失败都显示这张图片
      * @param callback          加载过程的回调
      */
+    @Deprecated
     public void display(View imageView, String imageUrl, int loadOrErrorBitmap,
                         int width, int height, BitmapCallBack callback) {
         display(imageView, imageUrl, width, height, imageView.getResources()
@@ -221,6 +301,7 @@ public class KJBitmap {
      * @param errorBitmap 加载失败的图片
      * @param callback    加载过程的回调
      */
+    @Deprecated
     public void display(View imageView, String imageUrl, int width, int height,
                         Drawable loadBitmap, Drawable errorBitmap, BitmapCallBack callback) {
         if (imageView == null) {
