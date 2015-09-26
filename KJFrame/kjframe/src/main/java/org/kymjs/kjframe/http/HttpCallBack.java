@@ -15,9 +15,9 @@
  */
 package org.kymjs.kjframe.http;
 
-import java.util.Map;
-
 import android.graphics.Bitmap;
+
+import java.util.Map;
 
 /**
  * Http请求回调类<br>
