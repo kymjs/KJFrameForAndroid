@@ -17,8 +17,6 @@ package org.kymjs.kjframe.http;
 
 import android.text.TextUtils;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.kymjs.kjframe.utils.KJLoger;
 
 import java.io.File;
@@ -33,7 +31,7 @@ public class FileRequest extends Request<byte[]> {
     private final File mStoreFile;
     private final File mTemporaryFile; // 临时文件
 
-    private Map<String, String> mHeaders = new HashMap<String, String>();
+    private Map<String, String> mHeaders = new HashMap<>();
 
     public FileRequest(String storeFilePath, String url, HttpCallBack callback) {
         super(HttpMethod.GET, url, callback);
@@ -104,10 +102,9 @@ public class FileRequest extends Request<byte[]> {
         this.mHeaders = mHeaders;
     }
 
-    public byte[] handleResponse(HttpResponse response) throws IOException,
+    public byte[] handleResponse(KJHttpResponse response) throws IOException,
             KJHttpException {
-        HttpEntity entity = response.getEntity();
-        long fileSize = entity.getContentLength();
+        long fileSize = response.getContentLength();
         if (fileSize <= 0) {
             KJLoger.debug("Response doesn't present Content-Length!");
         }
@@ -117,8 +114,7 @@ public class FileRequest extends Request<byte[]> {
         if (isSupportRange) {
             fileSize += downloadedSize;
 
-            String realRangeValue = HttpUtils.getHeader(response,
-                    "Content-Range");
+            String realRangeValue = response.getHeaders().get("Content-Range");
             if (!TextUtils.isEmpty(realRangeValue)) {
                 String assumeRangeValue = "bytes " + downloadedSize + "-"
                         + (fileSize - 1);
@@ -149,7 +145,7 @@ public class FileRequest extends Request<byte[]> {
         }
 
         try {
-            InputStream in = entity.getContent();
+            InputStream in = response.getContentStream();
             if (HttpUtils.isGzipContent(response)
                     && !(in instanceof GZIPInputStream)) {
                 in = new GZIPInputStream(in);
@@ -170,7 +166,7 @@ public class FileRequest extends Request<byte[]> {
             }
         } finally {
             try {
-                entity.consumeContent();
+                response.getContentStream().close();
             } catch (Exception e) {
                 KJLoger.debug("Error occured when calling consumingContent");
             }

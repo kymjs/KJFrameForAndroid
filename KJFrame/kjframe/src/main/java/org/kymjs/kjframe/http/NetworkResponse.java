@@ -19,15 +19,13 @@ package org.kymjs.kjframe.http;
 import java.util.Collections;
 import java.util.Map;
 
-import org.apache.http.HttpStatus;
-
 /**
  * 从NetWork执行器返回的Http响应，包含了本次响应是成功还是失败，请求头，响应内容，HTTP状态码
  */
 public class NetworkResponse {
 
     public NetworkResponse(int statusCode, byte[] data,
-            Map<String, String> headers, boolean notModified) {
+                           Map<String, String> headers, boolean notModified) {
         this.statusCode = statusCode;
         this.data = data;
         this.headers = headers;
@@ -35,7 +33,7 @@ public class NetworkResponse {
     }
 
     public NetworkResponse(byte[] data) {
-        this(HttpStatus.SC_OK, data, Collections.<String, String> emptyMap(),
+        this(HttpStatus.SC_OK, data, Collections.<String, String>emptyMap(),
                 false);
     }
 
