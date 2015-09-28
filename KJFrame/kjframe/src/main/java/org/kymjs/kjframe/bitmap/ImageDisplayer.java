@@ -34,7 +34,7 @@ import java.util.LinkedList;
  * @author kymjs (https://www.kymjs.com/)
  */
 public class ImageDisplayer {
-    private final KJHttp mKJHttp; // 使用KJHttp的线程池执行队列去加载图片
+    private static KJHttp sKJHttp = new KJHttp(); // 使用KJHttp的线程池执行队列去加载图片
 
     private final ImageCache mMemoryCache; // 内存缓存器
     private final long mResponseDelayMs;
@@ -59,7 +59,7 @@ public class ImageDisplayer {
         // 但是这种不利于自定义扩展，就不用了，有兴趣的可以看CacheDispatcher的105行
         // kymjs记录于2015.4.30
         // config.cacheTime = bitmapConfig.cacheTime;
-        mKJHttp = new KJHttp(httpConfig);
+        sKJHttp.setConfig(httpConfig);
         mMemoryCache = BitmapConfig.mMemoryCache;
         mResponseDelayMs = bitmapConfig.delayTime;
     }
@@ -67,8 +67,7 @@ public class ImageDisplayer {
     /**
      * 判断指定图片是否已经被缓存
      *
-     * @param requestUrl
-     *            图片地址
+     * @param requestUrl 图片地址
      * @return 图片是否已经被缓存
      */
     public boolean isCached(String requestUrl) {
@@ -79,13 +78,10 @@ public class ImageDisplayer {
     /**
      * 加载一张图片
      *
-     * @param requestUrl
-     *            图片地址
-     * @param maxWidth
-     *            图片最大宽度(如果网络图片大于这个宽度则缩放至这个大小)
-     * @param maxHeight
-     *            图片最大高度
-     * @param callback 回调
+     * @param requestUrl 图片地址
+     * @param maxWidth   图片最大宽度(如果网络图片大于这个宽度则缩放至这个大小)
+     * @param maxHeight  图片最大高度
+     * @param callback   回调
      * @return 加载的图片封装
      */
     public ImageBale get(String requestUrl, int maxWidth, int maxHeight,
@@ -113,8 +109,8 @@ public class ImageDisplayer {
 
         Request<Bitmap> newRequest = makeImageRequest(requestUrl, maxWidth,
                 maxHeight);
-        newRequest.setConfig(mKJHttp.getConfig());
-        mKJHttp.doRequest(newRequest);
+        newRequest.setConfig(sKJHttp.getConfig());
+        sKJHttp.doRequest(newRequest);
         mRequestsMap.put(requestUrl,
                 new ImageRequestEven(newRequest, imageBale));
         return imageBale;
@@ -144,10 +140,8 @@ public class ImageDisplayer {
     /**
      * 从网络获取bitmap成功时调用
      *
-     * @param url
-     *            缓存key
-     * @param bitmap
-     *            获取到的bitmap
+     * @param url    缓存key
+     * @param bitmap 获取到的bitmap
      */
     protected void onGetImageSuccess(String url, Bitmap bitmap) {
         mMemoryCache.putBitmap(url, bitmap);
@@ -163,10 +157,8 @@ public class ImageDisplayer {
     /**
      * 从网络获取bitmap失败时调用
      *
-     * @param url
-     *            缓存key
-     * @param error
-     *            失败原因
+     * @param url   缓存key
+     * @param error 失败原因
      */
     protected void onGetImageError(String url, KJHttpException error) {
         // 从正在请求的列表中移除这个已完成的请求
@@ -183,7 +175,6 @@ public class ImageDisplayer {
      * 对一个图片的封装，包含了这张图片所需要携带的信息
      *
      * @author kymjs
-     *
      */
     public class ImageBale {
         private Bitmap mBitmap;
@@ -232,7 +223,6 @@ public class ImageDisplayer {
      * 图片从网络请求并获取到相应的事件
      *
      * @author kymjs
-     *
      */
     private class ImageRequestEven {
         private final Request<?> mRequest;
@@ -315,7 +305,7 @@ public class ImageDisplayer {
      * @param url key
      */
     public void cancel(String url) {
-        mKJHttp.cancel(url);
+        sKJHttp.cancel(url);
     }
 
     /**
