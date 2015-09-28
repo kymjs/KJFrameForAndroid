@@ -34,7 +34,7 @@ import android.os.Looper;
  * @author kymjs (https://www.kymjs.com/)
  */
 public class ImageDisplayer {
-    private final KJHttp mKJHttp; // 使用KJHttp的线程池执行队列去加载图片
+    private static KJHttp sKJHttp = new KJHttp(); // 使用KJHttp的线程池执行队列去加载图片
 
     private final ImageCache mMemoryCache; // 内存缓存器
     private final long mResponseDelayMs;
@@ -59,7 +59,7 @@ public class ImageDisplayer {
         // 但是这种不利于自定义扩展，就不用了，有兴趣的可以看CacheDispatcher的105行
         // @kymjs记录于2015.4.30
         // config.cacheTime = bitmapConfig.cacheTime;
-        mKJHttp = new KJHttp(httpConfig);
+        sKJHttp.setConfig(httpConfig);
         mMemoryCache = BitmapConfig.mMemoryCache;
         mResponseDelayMs = bitmapConfig.delayTime;
     }
@@ -113,8 +113,8 @@ public class ImageDisplayer {
 
         Request<Bitmap> newRequest = makeImageRequest(requestUrl, maxWidth,
                 maxHeight);
-        newRequest.setConfig(mKJHttp.getConfig());
-        mKJHttp.doRequest(newRequest);
+        newRequest.setConfig(sKJHttp.getConfig());
+        sKJHttp.doRequest(newRequest);
         mRequestsMap.put(requestUrl,
                 new ImageRequestEven(newRequest, imageBale));
         return imageBale;
@@ -315,7 +315,7 @@ public class ImageDisplayer {
      * @param url
      */
     public void cancel(String url) {
-        mKJHttp.cancel(url);
+        sKJHttp.cancel(url);
     }
 
     /**
