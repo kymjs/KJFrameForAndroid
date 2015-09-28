@@ -16,15 +16,6 @@
 
 package org.kymjs.kjframe.http;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.ProtocolVersion;
-import org.apache.http.StatusLine;
-import org.apache.http.entity.BasicHttpEntity;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.message.BasicHttpResponse;
-import org.apache.http.message.BasicStatusLine;
 import org.kymjs.kjframe.http.Request.HttpMethod;
 
 import java.io.DataOutputStream;
@@ -72,7 +63,7 @@ public class HttpConnectStack implements HttpStack {
     }
 
     @Override
-    public HttpResponse performRequest(Request<?> request,
+    public KJHttpResponse performRequest(Request<?> request,
                                        Map<String, String> additionalHeaders) throws IOException {
         String url = request.getUrl();
         HashMap<String, String> map = new HashMap<String, String>();
@@ -92,18 +83,33 @@ public class HttpConnectStack implements HttpStack {
             connection.addRequestProperty(headerName, map.get(headerName));
         }
         setConnectionParametersForRequest(connection, request);
+        KJHttpResponse response = responseFromConnection(connection);
+        return response;
+    }
 
-        ProtocolVersion protocolVersion = new ProtocolVersion("HTTP", 1, 1);
+    private KJHttpResponse responseFromConnection(HttpURLConnection connection) throws IOException {
+        KJHttpResponse response = new KJHttpResponse();
         int responseCode = connection.getResponseCode();
         if (responseCode == -1) {
             throw new IOException(
                     "Could not retrieve response code from HttpUrlConnection.");
         }
-        StatusLine responseStatus = new BasicStatusLine(protocolVersion,
-                connection.getResponseCode(), connection.getResponseMessage());
-
-        BasicHttpResponse response = new BasicHttpResponse(responseStatus);
-        response.setEntity(entityFromConnection(connection));
+        response.setResponseCode(responseCode);
+        response.setResponseMessage(connection.getResponseMessage());
+        //contentStream
+        InputStream inputStream;
+        try {
+            inputStream = connection.getInputStream();
+        } catch (IOException ioe) {
+            inputStream = connection.getErrorStream();
+        }
+        response.setContentStream(inputStream);
+        
+        response.setContentLength(connection.getContentLength());
+        response.setContentEncoding(connection.getContentEncoding());
+        response.setContentType(connection.getContentType());
+        //header
+        Map<String, String> headerMap = new HashMap<>();
         for (Entry<String, List<String>> header : connection.getHeaderFields()
                 .entrySet()) {
             if (header.getKey() != null) {
@@ -111,29 +117,11 @@ public class HttpConnectStack implements HttpStack {
                 for (String v : header.getValue()) {
                     value += (v + "; ");
                 }
-                Header h = new BasicHeader(header.getKey(), value);
-                response.addHeader(h);
+                headerMap.put(header.getKey(), value);
             }
         }
+        response.setHeaders(headerMap);
         return response;
-    }
-
-    /**
-     * 从给定的HttpurlConnection创建HttpEntity
-     */
-    private static HttpEntity entityFromConnection(HttpURLConnection connection) {
-        BasicHttpEntity entity = new BasicHttpEntity();
-        InputStream inputStream;
-        try {
-            inputStream = connection.getInputStream();
-        } catch (IOException ioe) {
-            inputStream = connection.getErrorStream();
-        }
-        entity.setContent(inputStream);
-        entity.setContentLength(connection.getContentLength());
-        entity.setContentEncoding(connection.getContentEncoding());
-        entity.setContentType(connection.getContentType());
-        return entity;
     }
 
     private HttpURLConnection openConnection(URL url, Request<?> request)
