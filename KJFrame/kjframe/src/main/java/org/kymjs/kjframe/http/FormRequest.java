@@ -15,7 +15,7 @@
  */
 package org.kymjs.kjframe.http;
 
-import android.util.Log;
+import org.kymjs.kjframe.utils.KJLoger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -72,7 +72,7 @@ public class FormRequest extends Request<byte[]> {
         try {
             mParams.writeTo(bos);
         } catch (IOException e) {
-            Log.e("kymjs", "IOException writing to ByteArrayOutputStream");
+            KJLoger.debug("FormRequest75--->IOException writing to ByteArrayOutputStream");
         }
         return bos.toByteArray();
     }
