@@ -43,10 +43,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 本类工作流程： 每当发起一次Request，会对这个Request标记一个唯一值。<br>
  * 并加入当前请求的Set中(保证唯一;方便控制)。<br>
  * 同时判断是否启用缓存，若启用则加入缓存队列，否则加入执行队列。<br>
- * <p/>
  * Note:<br>
  * 整个KJHttp工作流程：采用责任链设计模式，由三部分组成，类似设计可以类比Handle...Looper...MessageQueue<br>
- * <p/>
  * 1、KJHttp负责不停向NetworkQueue(或CacheQueue实际还是NetworkQueue， 具体逻辑请查看
  * {@link CacheDispatcher})添加Request<br>
  * 2、另一边由TaskThread不停从NetworkQueue中取Request并交给Network执行器(逻辑请查看

@@ -15,8 +15,7 @@
  */
 package org.kymjs.kjframe.database;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
+import android.database.Cursor;
 
 import org.kymjs.kjframe.KJDB;
 import org.kymjs.kjframe.database.utils.ManyToOne;
@@ -24,7 +23,8 @@ import org.kymjs.kjframe.database.utils.OneToMany;
 import org.kymjs.kjframe.database.utils.Property;
 import org.kymjs.kjframe.database.utils.TableInfo;
 
-import android.database.Cursor;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 /**
  * 游标操作的帮助类<br>
@@ -126,7 +126,6 @@ public class CursorHelper {
      * @param dbModel
      * @param clazz
      *            待生成的JavaBean对象
-     * @return
      */
     public static <T> T dbModel2Entity(DbModel dbModel, Class<?> clazz) {
         if (dbModel != null) {

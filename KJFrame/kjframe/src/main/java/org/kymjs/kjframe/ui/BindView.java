@@ -22,7 +22,6 @@ import java.lang.annotation.Target;
 
 /**
  * 注解式绑定控件<br>
- * <p/>
  * <b>创建时间</b> 2014-7-11
  *
  * @author kymjs (https://github.com/kymjs)
