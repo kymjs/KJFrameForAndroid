@@ -7,7 +7,7 @@ KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复�
 ####AndroidStudio
 build.gradle中添加：  
 ``` 
-compile 'org.kymjs.kjframe:kjframe:2.4.8'
+compile 'org.kymjs.kjframe:kjframe:2.4.9'
 ```
 ####eclipse
 复制jar包 [KJFrameForAndroid_v2.x](https://github.com/kymjs/KJFrameForAndroid/tree/master/binrary) 到你工程的/libs目录中.   
@@ -42,7 +42,7 @@ eclipes版本源码请查看[相关分支](https://github.com/kymjs/KJFrameForAn
 
 ##开源协议
 ```
- Copyright (C) 2014, 张涛
+ Copyright (C) 2014-1015, 张涛
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
