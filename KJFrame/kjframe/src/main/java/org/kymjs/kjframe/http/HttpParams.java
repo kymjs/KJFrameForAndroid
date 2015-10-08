@@ -19,9 +19,6 @@ package org.kymjs.kjframe.http;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.message.BasicHeader;
 import org.kymjs.kjframe.utils.FileUtils;
 import org.kymjs.kjframe.utils.StringUtils;
 
@@ -33,6 +30,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -41,7 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Http请求的参数集合
  */
-public class HttpParams implements HttpEntity {
+public class HttpParams implements Serializable {
 
     private final static char[] MULTIPART_CHARS =
             "-_1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -183,43 +181,34 @@ public class HttpParams implements HttpEntity {
         return stringBuilder.append(NEW_LINE_STR).toString().getBytes();
     }
 
-    @Override
     public long getContentLength() {
         return mOutputStream.toByteArray().length;
     }
 
-    @Override
-    public Header getContentType() {
-        if (contentType != null) {
-            return new BasicHeader("Content-Type", contentType);
+    public String getContentType() {
+        //如果contentType没有被自定义，且参数集包含文件，则使用有文件的contentType
+        if (hasFile && contentType == null) {
+            contentType = "multipart/form-data; boundary=" + mBoundary;
         }
-        if (hasFile) {
-            return new BasicHeader("Content-Type",
-                    "multipart/form-data; boundary=" + mBoundary);
-        }
-        return null;
+        return contentType;
     }
 
     public void setContentType(String contentType) {
         this.contentType = contentType;
     }
 
-    @Override
     public boolean isChunked() {
         return false;
     }
 
-    @Override
     public boolean isRepeatable() {
         return false;
     }
 
-    @Override
     public boolean isStreaming() {
         return false;
     }
 
-    @Override
     public void writeTo(final OutputStream outstream) throws IOException {
         if (hasFile) {
             // 参数最末尾的结束符
@@ -233,7 +222,6 @@ public class HttpParams implements HttpEntity {
         }
     }
 
-    @Override
     public void consumeContent() throws IOException,
             UnsupportedOperationException {
         if (isStreaming()) {
@@ -242,7 +230,6 @@ public class HttpParams implements HttpEntity {
         }
     }
 
-    @Override
     public InputStream getContent() {
         return new ByteArrayInputStream(mOutputStream.toByteArray());
     }
@@ -273,8 +260,7 @@ public class HttpParams implements HttpEntity {
         return mHeaders;
     }
 
-    @Override
-    public Header getContentEncoding() {
+    public Map<String, String> getContentEncoding() {
         return null;
     }
 }

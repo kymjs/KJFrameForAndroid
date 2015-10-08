@@ -15,7 +15,14 @@
  */
 package org.kymjs.blog.ui.fragment;
 
-import java.util.List;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
 import org.kymjs.blog.R;
 import org.kymjs.blog.adapter.CollectAdapter;
@@ -28,20 +35,12 @@ import org.kymjs.blog.utils.UIHelper;
 import org.kymjs.kjframe.KJDB;
 import org.kymjs.kjframe.ui.BindView;
 
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
+import java.util.List;
 
 /**
  * 用户收藏
- * 
+ *
  * @author kymjs (http://www.kymjs.com/)
- * 
  */
 public class MyCollectFragment extends TitleBarFragment {
 
@@ -59,7 +58,7 @@ public class MyCollectFragment extends TitleBarFragment {
 
     @Override
     protected View inflaterView(LayoutInflater inflater, ViewGroup container,
-            Bundle bundle) {
+                                Bundle bundle) {
         View root = View.inflate(outsideAty,
                 R.layout.frag_pull_refresh_listview, null);
         return root;
@@ -76,12 +75,12 @@ public class MyCollectFragment extends TitleBarFragment {
     protected void initWidget(View parentView) {
         super.initWidget(parentView);
         mListView = mRefreshLayout.getRefreshView();
-        mListView.setDivider(new ColorDrawable(android.R.color.transparent));
+        mListView.setDivider(new ColorDrawable(0x00000000));
 
         mListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
+                                    int position, long id) {
                 if (parent.getAdapter() instanceof CollectAdapter) {
                     CollectData data = (CollectData) parent.getAdapter()
                             .getItem(position);
@@ -100,7 +99,8 @@ public class MyCollectFragment extends TitleBarFragment {
 
             @Override
             public void onPullUpToRefresh(
-                    PullToRefreshBase<ListView> refreshView) {}
+                    PullToRefreshBase<ListView> refreshView) {
+            }
         });
         fillUI();
     }

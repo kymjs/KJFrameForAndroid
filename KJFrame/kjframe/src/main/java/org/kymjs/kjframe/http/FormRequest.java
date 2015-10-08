@@ -55,7 +55,7 @@ public class FormRequest extends Request<byte[]> {
     @Override
     public String getBodyContentType() {
         if (mParams.getContentType() != null) {
-            return mParams.getContentType().getValue();
+            return mParams.getContentType();
         } else {
             return super.getBodyContentType();
         }

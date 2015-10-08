@@ -81,7 +81,8 @@ public class KJBitmap {
         }
         this.mConfig = bitmapConfig;
         displayer = new ImageDisplayer(httpConfig, mConfig);
-        doLoadingViews = new Vector<>(30);
+        //一般很难超过25吧,超过15都不容易了
+        doLoadingViews = new Vector<>(25);
     }
 
 

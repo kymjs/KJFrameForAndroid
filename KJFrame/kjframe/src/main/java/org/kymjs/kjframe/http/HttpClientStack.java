@@ -16,12 +16,7 @@
 
 package org.kymjs.kjframe.http;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -41,11 +36,20 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.kymjs.kjframe.http.Request.HttpMethod;
 
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * HttpClient请求端实现
  */
+@Deprecated
 public class HttpClientStack implements HttpStack {
     protected final HttpClient mClient;
+    private HttpEntity entity;
 
     private final static String HEADER_CONTENT_TYPE = "Content-Type";
 
@@ -54,7 +58,7 @@ public class HttpClientStack implements HttpStack {
     }
 
     private static void addHeaders(HttpUriRequest httpRequest,
-            Map<String, String> headers) {
+                                   Map<String, String> headers) {
         for (String key : headers.keySet()) {
             httpRequest.setHeader(key, headers.get(key));
         }
@@ -72,8 +76,8 @@ public class HttpClientStack implements HttpStack {
     }
 
     @Override
-    public HttpResponse performRequest(Request<?> request,
-            Map<String, String> additionalHeaders) throws IOException {
+    public KJHttpResponse performRequest(Request<?> request,
+                                         Map<String, String> additionalHeaders) throws IOException {
         HttpUriRequest httpRequest = createHttpRequest(request,
                 additionalHeaders);
         addHeaders(httpRequest, additionalHeaders);
@@ -83,58 +87,80 @@ public class HttpClientStack implements HttpStack {
         int timeoutMs = request.getTimeoutMs();
         HttpConnectionParams.setConnectionTimeout(httpParams, timeoutMs);
         HttpConnectionParams.setSoTimeout(httpParams, timeoutMs);
-        return mClient.execute(httpRequest);
+        HttpResponse response = mClient.execute(httpRequest);
+        KJHttpResponse kjHttpResponse = createKjHttpResponse(response);
+        return kjHttpResponse;
     }
 
-    /* protected */static HttpUriRequest createHttpRequest(Request<?> request,
-            Map<String, String> additionalHeaders) {
+    private KJHttpResponse createKjHttpResponse(HttpResponse response) throws
+            IllegalStateException, IOException {
+        KJHttpResponse kjHttpResponse = new KJHttpResponse();
+        kjHttpResponse.setContentEncoding(entity.getContentEncoding().getValue());
+        kjHttpResponse.setContentLength(response.getEntity().getContentLength());
+        kjHttpResponse.setContentStream(response.getEntity().getContent());
+        kjHttpResponse.setContentType(response.getEntity().getContentType().getValue());
+        kjHttpResponse.setResponseCode(response.getStatusLine().getStatusCode());
+        kjHttpResponse.setResponseMessage(response.getStatusLine().getReasonPhrase());
+        Header[] headers = response.getAllHeaders();
+        Map<String, String> headerMap = new HashMap<String, String>();
+        for (Header header : headers) {
+            headerMap.put(header.getName(), header.getName());
+        }
+        kjHttpResponse.setHeaders(headerMap);
+        return kjHttpResponse;
+    }
+
+    /* protected */
+    HttpUriRequest createHttpRequest(Request<?> request,
+                                     Map<String, String> additionalHeaders) {
         switch (request.getMethod()) {
-        case HttpMethod.GET:
-            return new HttpGet(request.getUrl());
-        case HttpMethod.DELETE:
-            return new HttpDelete(request.getUrl());
-        case HttpMethod.POST: {
-            HttpPost postRequest = new HttpPost(request.getUrl());
-            postRequest.addHeader(HEADER_CONTENT_TYPE,
-                    request.getBodyContentType());
-            setEntityIfNonEmptyBody(postRequest, request);
-            return postRequest;
-        }
-        case HttpMethod.PUT: {
-            HttpPut putRequest = new HttpPut(request.getUrl());
-            putRequest.addHeader(HEADER_CONTENT_TYPE,
-                    request.getBodyContentType());
-            setEntityIfNonEmptyBody(putRequest, request);
-            return putRequest;
-        }
-        case HttpMethod.HEAD:
-            return new HttpHead(request.getUrl());
-        case HttpMethod.OPTIONS:
-            return new HttpOptions(request.getUrl());
-        case HttpMethod.TRACE:
-            return new HttpTrace(request.getUrl());
-        case HttpMethod.PATCH: {
-            HttpPatch patchRequest = new HttpPatch(request.getUrl());
-            patchRequest.addHeader(HEADER_CONTENT_TYPE,
-                    request.getBodyContentType());
-            setEntityIfNonEmptyBody(patchRequest, request);
-            return patchRequest;
-        }
-        default:
-            throw new IllegalStateException("Unknown request method.");
+            case HttpMethod.GET:
+                return new HttpGet(request.getUrl());
+            case HttpMethod.DELETE:
+                return new HttpDelete(request.getUrl());
+            case HttpMethod.POST: {
+                HttpPost postRequest = new HttpPost(request.getUrl());
+                postRequest.addHeader(HEADER_CONTENT_TYPE,
+                        request.getBodyContentType());
+                setEntityIfNonEmptyBody(postRequest, request);
+                return postRequest;
+            }
+            case HttpMethod.PUT: {
+                HttpPut putRequest = new HttpPut(request.getUrl());
+                putRequest.addHeader(HEADER_CONTENT_TYPE,
+                        request.getBodyContentType());
+                setEntityIfNonEmptyBody(putRequest, request);
+                return putRequest;
+            }
+            case HttpMethod.HEAD:
+                return new HttpHead(request.getUrl());
+            case HttpMethod.OPTIONS:
+                return new HttpOptions(request.getUrl());
+            case HttpMethod.TRACE:
+                return new HttpTrace(request.getUrl());
+            case HttpMethod.PATCH: {
+                HttpPatch patchRequest = new HttpPatch(request.getUrl());
+                patchRequest.addHeader(HEADER_CONTENT_TYPE,
+                        request.getBodyContentType());
+                setEntityIfNonEmptyBody(patchRequest, request);
+                return patchRequest;
+            }
+            default:
+                throw new IllegalStateException("Unknown request method.");
         }
     }
 
-    private static void setEntityIfNonEmptyBody(
+    private void setEntityIfNonEmptyBody(
             HttpEntityEnclosingRequestBase httpRequest, Request<?> request) {
         byte[] body = request.getBody();
         if (body != null) {
-            HttpEntity entity = new ByteArrayEntity(body);
+            entity = new ByteArrayEntity(body);
             httpRequest.setEntity(entity);
         }
     }
 
-    protected void onPrepareRequest(HttpUriRequest request) throws IOException {}
+    protected void onPrepareRequest(HttpUriRequest request) throws IOException {
+    }
 
     public static final class HttpPatch extends HttpEntityEnclosingRequestBase {
 
