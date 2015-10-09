@@ -15,10 +15,14 @@
  */
 package org.kymjs.blog.ui.fragment;
 
-import java.io.File;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ListView;
 
 import org.kymjs.blog.R;
 import org.kymjs.blog.adapter.TweetAdapter;
@@ -40,14 +44,10 @@ import org.kymjs.kjframe.ui.BindView;
 import org.kymjs.kjframe.utils.KJLoger;
 import org.kymjs.kjframe.utils.StringUtils;
 
-import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ListView;
+import java.io.File;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * 
@@ -114,8 +114,8 @@ public class TweetFragment extends TitleBarFragment {
             }
         });
         mListView = mRefreshLayout.getRefreshView();
-        mListView.setDivider(new ColorDrawable(android.R.color.transparent));
-        mListView.setSelector(new ColorDrawable(android.R.color.transparent));
+        mListView.setDivider(new ColorDrawable(0x00000000));
+        mListView.setSelector(new ColorDrawable(0x00000000));
         mRefreshLayout.setPullLoadEnabled(true);
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener<ListView>() {
             @Override
@@ -142,9 +142,6 @@ public class TweetFragment extends TitleBarFragment {
 
     /**
      * 刷新
-     * 
-     * @param page
-     *            请求第几页数据
      */
     private void refresh() {
         double page = tweets.size() / 20;
@@ -244,8 +241,8 @@ public class TweetFragment extends TitleBarFragment {
         kjh.post("http://www.oschina.net/action/api/tweet_pub", params,
                 new HttpCallBack() {
                     @Override
-                    public void onPreStar() {
-                        super.onPreStar();
+                    public void onPreStart() {
+                        super.onPreStart();
                         // 设置上传动画
                     }
 

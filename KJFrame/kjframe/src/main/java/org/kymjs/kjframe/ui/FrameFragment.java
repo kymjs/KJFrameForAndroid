@@ -27,7 +27,6 @@ import java.lang.ref.SoftReference;
 
 /**
  * Fragment's framework,the developer shouldn't extends it<br>
- * <p/>
  * <b>创建时间</b> 2014-3-1 <br>
  * <b>最后修改时间</b> 2014-5-30<br>
  *
