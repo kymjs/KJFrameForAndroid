@@ -16,9 +16,9 @@
 
 package org.kymjs.kjframe.http;
 
-import java.util.concurrent.Executor;
-
 import android.os.Handler;
+
+import java.util.concurrent.Executor;
 
 /**
  * Http响应的分发器，这里用于把异步线程中的响应分发到UI线程中执行
@@ -46,14 +46,16 @@ public class DeliveryExecutor implements Delivery {
     }
 
     /**
-     * 当有中介响应的时候，会被调用，首先返回中介响应，并执行runnable(实际就是再去请求网络)<br>
-     * Note:所谓中介响应：当本地有一个未过期缓存的时候会优先返回一个缓存，但如果这个缓存又是需要刷新的时候，会再次去请求网络，
-     * 那么之前返回的那个有效但需要刷新的就是中介响应
+     * 如果请求成功，则将这个结果分发到主线程
+     * 10.09添加：分发结果之前先在异步执行一次onSuccessInAsync()回调
      */
     @Override
     public void postResponse(Request<?> request, Response<?> response,
-            Runnable runnable) {
+                             Runnable runnable) {
         request.markDelivered();
+        if (response.isSuccess() && response.result instanceof byte[]) {
+            request.onAsyncSuccess((byte[]) response.result);
+        }
         mResponsePoster.execute(new ResponseDeliveryRunnable(request, response,
                 runnable));
     }
@@ -75,7 +77,7 @@ public class DeliveryExecutor implements Delivery {
         private final Runnable mRunnable;
 
         public ResponseDeliveryRunnable(Request request, Response response,
-                Runnable runnable) {
+                                        Runnable runnable) {
             mRequest = request;
             mResponse = response;
             mRunnable = runnable;
@@ -104,10 +106,11 @@ public class DeliveryExecutor implements Delivery {
 
     @Override
     public void postDownloadProgress(Request<?> request, long fileSize,
-            long downloadedSize) {
+                                     long downloadedSize) {
         request.mCallback.onLoading(fileSize, downloadedSize);
     }
 
     @Override
-    public void postCancel(Request<?> request) {}
+    public void postCancel(Request<?> request) {
+    }
 }

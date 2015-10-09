@@ -33,14 +33,16 @@ public abstract class HttpCallBack {
      * 请求开始之前回调
      */
     public void onPreStart() {
-        onPreStar();
     }
 
     /**
-     * 拼写错误，请使用onPreStart()
+     * 注意：本方法将在异步调用。
+     * Http异步请求成功时在异步回调,并且仅当本方法执行完成才会继续调用onSuccess()
+     *
+     * @param t 返回的信息
      */
-    @Deprecated
-    public void onPreStar() {}
+    public void onSuccessInAsync(byte[] t) {
+    }
 
     /**
      * Http请求成功时回调
