@@ -18,16 +18,17 @@ package org.kymjs.kjframe.ui;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.support.v4.app.FragmentActivity;
+
+import java.lang.ref.SoftReference;
 
 /**
- * Activity's framework,the developer shouldn't extends it<br>
- * 
+ * Activity's framework,the developer shouldn't extends it <br>
  * <b>创建时间</b> 2014-3-1 <br>
  * <b>最后修改时间</b> 2014-10-17<br>
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
  * @version 1.8
  */
@@ -38,6 +39,8 @@ public abstract class FrameActivity extends FragmentActivity implements
 
     protected KJFragment currentKJFragment;
     protected SupportFragment currentSupportFragment;
+    private ThreadDataCallBack callback;
+    private KJActivityHandle threadHandle = new KJActivityHandle(this);
 
     /**
      * 一个私有回调类，线程中初始化数据完成后的回调
@@ -46,22 +49,28 @@ public abstract class FrameActivity extends FragmentActivity implements
         void onSuccess();
     }
 
-    private static ThreadDataCallBack callback;
 
-    // 当线程中初始化的数据初始化完成后，调用回调方法
-    private static Handler threadHandle = new Handler() {
+    private static class KJActivityHandle extends Handler {
+        private final SoftReference<FrameActivity> mOuterInstance;
+
+        KJActivityHandle(FrameActivity outer) {
+            mOuterInstance = new SoftReference<>(outer);
+        }
+
+        // 当线程中初始化的数据初始化完成后，调用回调方法
         @Override
         public void handleMessage(android.os.Message msg) {
-            if (msg.what == WHICH_MSG) {
-                callback.onSuccess();
+            if (msg.what == WHICH_MSG && mOuterInstance.get() != null) {
+                mOuterInstance.get().callback.onSuccess();
             }
-        };
-    };
+        }
+    }
 
     /**
      * 如果调用了initDataFromThread()，则当数据初始化完成后将回调该方法。
      */
-    protected void threadDataInited() {}
+    protected void threadDataInited() {
+    }
 
     /**
      * 在线程中初始化数据，注意不能在这里执行UI操作
@@ -77,10 +86,12 @@ public abstract class FrameActivity extends FragmentActivity implements
     }
 
     @Override
-    public void initData() {}
+    public void initData() {
+    }
 
     @Override
-    public void initWidget() {}
+    public void initWidget() {
+    }
 
     // 仅仅是为了代码整洁点
     private void initializer() {
@@ -95,19 +106,24 @@ public abstract class FrameActivity extends FragmentActivity implements
         initWidget();
     }
 
-    /** listened widget's click method */
+    /**
+     * listened widget's click method
+     */
     @Override
-    public void widgetClick(View v) {}
+    public void widgetClick(View v) {
+    }
 
     @Override
     public void onClick(View v) {
         widgetClick(v);
     }
 
+    @SuppressWarnings("unchecked")
     protected <T extends View> T bindView(int id) {
         return (T) findViewById(id);
     }
 
+    @SuppressWarnings("unchecked")
     protected <T extends View> T bindView(int id, boolean click) {
         T view = (T) findViewById(id);
         if (click) {
@@ -117,10 +133,12 @@ public abstract class FrameActivity extends FragmentActivity implements
     }
 
     @Override
-    public void registerBroadcast() {}
+    public void registerBroadcast() {
+    }
 
     @Override
-    public void unRegisterBroadcast() {}
+    public void unRegisterBroadcast() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,11 +157,9 @@ public abstract class FrameActivity extends FragmentActivity implements
 
     /**
      * 用Fragment替换视图
-     * 
-     * @param resView
-     *            将要被替换掉的视图
-     * @param targetFragment
-     *            用来替换的Fragment
+     *
+     * @param resView        将要被替换掉的视图
+     * @param targetFragment 用来替换的Fragment
      */
     public void changeFragment(int resView, KJFragment targetFragment) {
         if (targetFragment.equals(currentKJFragment)) {
@@ -168,11 +184,9 @@ public abstract class FrameActivity extends FragmentActivity implements
 
     /**
      * 用Fragment替换视图
-     * 
-     * @param resView
-     *            将要被替换掉的视图
-     * @param targetFragment
-     *            用来替换的Fragment
+     *
+     * @param resView        将要被替换掉的视图
+     * @param targetFragment 用来替换的Fragment
      */
     public void changeFragment(int resView, SupportFragment targetFragment) {
         if (targetFragment.equals(currentSupportFragment)) {

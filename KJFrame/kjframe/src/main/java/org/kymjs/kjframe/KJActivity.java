@@ -15,34 +15,33 @@
  */
 package org.kymjs.kjframe;
 
-import org.kymjs.kjframe.ui.FrameActivity;
-import org.kymjs.kjframe.ui.KJActivityStack;
-import org.kymjs.kjframe.utils.KJLoger;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+
+import org.kymjs.kjframe.ui.FrameActivity;
+import org.kymjs.kjframe.ui.KJActivityStack;
+import org.kymjs.kjframe.utils.KJLoger;
 
 /**
  * @author kymjs (https://github.com/kymjs)
  */
 public abstract class KJActivity extends FrameActivity {
 
-    /**
-     * 当前Activity状态
-     */
-    public static enum ActivityState {
-        RESUME, PAUSE, STOP, DESTROY
-    }
+    public static int DESTROY = 0;
+    public static int STOP = 2;
+    public static int PAUSE = 1;
+    public static int RESUME = 3;
+
 
     public Activity aty;
-    /** Activity状态 */
-    public ActivityState activityState = ActivityState.DESTROY;
+    /**
+     * Activity状态
+     */
+    public int activityState = DESTROY;
 
     /***************************************************************************
-     * 
      * print Activity callback methods
-     * 
      ***************************************************************************/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,21 +60,21 @@ public abstract class KJActivity extends FrameActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        activityState = ActivityState.RESUME;
+        activityState = RESUME;
         KJLoger.state(this.getClass().getName(), "---------onResume ");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        activityState = ActivityState.PAUSE;
+        activityState = PAUSE;
         KJLoger.state(this.getClass().getName(), "---------onPause ");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        activityState = ActivityState.STOP;
+        activityState = STOP;
         KJLoger.state(this.getClass().getName(), "---------onStop ");
     }
 
@@ -87,7 +86,7 @@ public abstract class KJActivity extends FrameActivity {
 
     @Override
     protected void onDestroy() {
-        activityState = ActivityState.DESTROY;
+        activityState = DESTROY;
         KJLoger.state(this.getClass().getName(), "---------onDestroy ");
         super.onDestroy();
         KJActivityStack.create().finishActivity(this);

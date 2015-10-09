@@ -23,12 +23,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
+import java.lang.ref.SoftReference;
+
 /**
  * Fragment's framework,the developer shouldn't extends it<br>
- * 
+ * <p/>
  * <b>创建时间</b> 2014-3-1 <br>
  * <b>最后修改时间</b> 2014-5-30<br>
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
  * @version 1.6
  */
@@ -37,6 +39,8 @@ public abstract class FrameFragment extends Fragment implements OnClickListener 
     public static final int WHICH_MSG = 0X37211;
 
     protected View fragmentRootView;
+    private ThreadDataCallBack callback;
+    private KJFragmentHandle threadHandle = new KJFragmentHandle(this);
 
     /**
      * 一个私有回调类，线程中初始化数据完成后的回调
@@ -45,36 +49,46 @@ public abstract class FrameFragment extends Fragment implements OnClickListener 
         void onSuccess();
     }
 
-    private static ThreadDataCallBack callback;
 
-    // 当线程中初始化的数据初始化完成后，调用回调方法
-    private static Handler threadHandle = new Handler() {
+    private static class KJFragmentHandle extends Handler {
+        private final SoftReference<FrameFragment> mOuterInstance;
+
+        KJFragmentHandle(FrameFragment outer) {
+            mOuterInstance = new SoftReference<>(outer);
+        }
+
+        // 当线程中初始化的数据初始化完成后，调用回调方法
         @Override
         public void handleMessage(android.os.Message msg) {
-            if (msg.what == WHICH_MSG) {
-                callback.onSuccess();
+            if (msg.what == WHICH_MSG && mOuterInstance.get() != null) {
+                mOuterInstance.get().callback.onSuccess();
             }
-        };
-    };
+        }
+    }
 
     protected abstract View inflaterView(LayoutInflater inflater,
-            ViewGroup container, Bundle bundle);
+                                         ViewGroup container, Bundle bundle);
 
     /**
      * initialization widget, you should look like parentView.findviewbyid(id);
      * call method
-     * 
-     * @param parentView
+     *
+     * @param parentView 根View
      */
-    protected void initWidget(View parentView) {}
+    protected void initWidget(View parentView) {
+    }
 
-    /** initialization data */
-    protected void initData() {}
+    /**
+     * initialization data
+     */
+    protected void initData() {
+    }
 
     /**
      * 当通过changeFragment()显示时会被调用(类似于onResume)
      */
-    protected void onChange() {}
+    protected void onChange() {
+    }
 
     /**
      * initialization data. And this method run in background thread, so you
@@ -93,10 +107,14 @@ public abstract class FrameFragment extends Fragment implements OnClickListener 
     /**
      * 如果调用了initDataFromThread()，则当数据初始化完成后将回调该方法。
      */
-    protected void threadDataInited() {}
+    protected void threadDataInited() {
+    }
 
-    /** widget click method */
-    protected void widgetClick(View v) {}
+    /**
+     * widget click method
+     */
+    protected void widgetClick(View v) {
+    }
 
     @Override
     public void onClick(View v) {
@@ -105,7 +123,7 @@ public abstract class FrameFragment extends Fragment implements OnClickListener 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         fragmentRootView = inflaterView(inflater, container, savedInstanceState);
         AnnotateUtil.initBindView(this, fragmentRootView);
         initData();
