@@ -23,33 +23,31 @@ import java.util.Map;
  */
 public interface Cache {
 
-    public Entry get(String key);
+    Entry get(String key);
 
-    public void put(String key, Entry entry);
+    void put(String key, Entry entry);
 
-    public void remove(String key);
+    void remove(String key);
 
-    public void clean();
+    void clean();
 
     /**
      * 执行在线程中
      */
-    public void initialize();
+    void initialize();
 
     /**
      * 让一个缓存过期
-     * 
-     * @param key
-     *            Cache key
-     * @param fullExpire
-     *            True to fully expire the entry, false to soft expire
+     *
+     * @param key        Cache key
+     * @param fullExpire True to fully expire the entry, false to soft expire
      */
-    public void invalidate(String key, boolean fullExpire);
+    void invalidate(String key, boolean fullExpire);
 
     /**
      * cache真正缓存的数据bean，这个是会被保存的缓存对象
      */
-    public static class Entry {
+    class Entry {
         public byte[] data;
         public String etag; // 为cache标记一个tag
 
@@ -65,5 +63,4 @@ public interface Cache {
             return this.ttl < System.currentTimeMillis();
         }
     }
-
 }

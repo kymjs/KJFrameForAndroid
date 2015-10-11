@@ -33,8 +33,6 @@ public class BitmapConfig {
     @Deprecated
     public static String CACHEPATH = HttpConfig.CACHEPATH;
 
-    /** 磁盘缓存大小 */
-    public static int DISK_CACHE_SIZE = 10 * 1024 * 1024;
     /** 磁盘缓存器 **/
     public static ImageCache mMemoryCache;
 
