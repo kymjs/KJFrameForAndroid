@@ -15,10 +15,10 @@
  */
 package org.kymjs.kjframe.ui;
 
-import java.util.Stack;
-
 import android.app.Activity;
 import android.content.Context;
+
+import java.util.Stack;
 
 /**
  * 应用程序Activity管理类：用于Activity管理和应用程序退出<br>
@@ -50,7 +50,7 @@ final public class KJActivityStack {
      */
     public void addActivity(I_KJActivity activity) {
         if (activityStack == null) {
-            activityStack = new Stack<I_KJActivity>();
+            activityStack = new Stack<>();
         }
         activityStack.add(activity);
     }

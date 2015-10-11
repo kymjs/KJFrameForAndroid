@@ -111,7 +111,7 @@ public class HttpConfig {
      * @return
      */
     public HttpStack httpStackFactory() {
-        return new HttpConnectStack();
+            return new HttpConnectStack();
 //        if (Build.VERSION.SDK_INT >= 11) {
 //            return new HttpConnectStack();
 //        } else {

@@ -603,6 +603,7 @@ public class KJBitmap {
             String url = (String) view.getTag();
             if (!StringUtils.isEmpty(url)) {
                 cancel(url);
+                doLoadingViews.remove(view);
             }
         }
         doLoadingViews.add(view);
