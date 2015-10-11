@@ -15,8 +15,6 @@
  */
 package org.kymjs.kjframe.http;
 
-import android.net.http.AndroidHttpClient;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -113,12 +111,13 @@ public class HttpConfig {
      * @return
      */
     public HttpStack httpStackFactory() {
-        if (Build.VERSION.SDK_INT >= 11) {
             return new HttpConnectStack();
-        } else {
-            return new HttpClientStack(
-                    AndroidHttpClient.newInstance("kjframe/0"));
-        }
+//        if (Build.VERSION.SDK_INT >= 11) {
+//            return new HttpConnectStack();
+//        } else {
+//            return new HttpClientStack(
+//                    AndroidHttpClient.newInstance("kjframe/0"));
+//        }
     }
 
     public HttpStack httpStackFactory(SSLSocketFactory ssl) {
