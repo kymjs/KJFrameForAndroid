@@ -2,18 +2,16 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
-version = "2.5.1"
-
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
     resourcePrefix "kjframe_"
 
     defaultConfig {
         minSdkVersion 11
-        targetSdkVersion 22
-        versionCode 1
-        versionName version
+        targetSdkVersion 23
+        versionCode 225
+        versionName "2.251"
     }
     buildTypes {
         release {
@@ -25,7 +23,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.+'
+    compile 'com.android.support:appcompat-v7:23.0.1'
 }
 
 def siteUrl = 'https://github.com/kymjs/KJFrameForAndroid'      // 项目的主页
