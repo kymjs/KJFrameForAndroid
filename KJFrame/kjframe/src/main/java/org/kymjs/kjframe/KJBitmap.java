@@ -137,7 +137,7 @@ public class KJBitmap {
             return this;
         }
 
-        public Builder errorBitmap(BitmapCallBack callback) {
+        public Builder callback(BitmapCallBack callback) {
             this.callback = callback;
             return this;
         }
