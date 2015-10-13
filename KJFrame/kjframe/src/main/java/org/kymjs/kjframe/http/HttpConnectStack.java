@@ -144,7 +144,6 @@ public class HttpConnectStack implements HttpStack {
                 HTTPSTrustManager.allowAllSSL();
             }
         }
-
         return connection;
     }
 

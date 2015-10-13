@@ -24,7 +24,7 @@ import java.util.Map;
  *
  * @author kymjs
  * @see HttpConnectStack
- * @see HttpClientStack
+ * 过时移除 HttpClientStack
  */
 public interface HttpStack {
     /**
