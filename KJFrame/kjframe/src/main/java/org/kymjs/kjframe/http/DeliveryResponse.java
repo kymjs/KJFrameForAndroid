@@ -17,14 +17,13 @@ package org.kymjs.kjframe.http;
 
 /**
  * 分发器，将异步线程中的结果响应到UI线程中
- * 
- * @author kymjs (http://blog.kymjs.com)
- * 
+ *
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public interface DeliveryResponse {
     /**
      * 分发响应结果
-     * 
+     *
      * @param request
      * @param response
      */
@@ -32,11 +31,9 @@ public interface DeliveryResponse {
 
     /**
      * 分发Failure事件
-     * 
-     * @param request
-     *            请求
-     * @param error
-     *            异常原因
+     *
+     * @param request 请求
+     * @param error   异常原因
      */
     public void postError(Request<?> request, KJHttpException error);
 
@@ -46,6 +43,6 @@ public interface DeliveryResponse {
      * 那么之前返回的那个有效但需要刷新的就是中介响应
      */
     public void postResponse(Request<?> request, Response<?> response,
-            Runnable runnable);
+                             Runnable runnable);
 
 }

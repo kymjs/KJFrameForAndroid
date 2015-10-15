@@ -20,6 +20,8 @@ import java.util.Map;
 
 /**
  * Http响应封装类，包含了本次响应的全部信息
+ *
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public class Response<T> {
     /**
@@ -41,7 +43,7 @@ public class Response<T> {
     }
 
     private Response(T result, Map<String, String> headers,
-            Cache.Entry cacheEntry) {
+                     Cache.Entry cacheEntry) {
         this.result = result;
         this.cacheEntry = cacheEntry;
         this.error = null;
@@ -57,22 +59,19 @@ public class Response<T> {
 
     /**
      * 返回一个成功的HttpRespond
-     * 
-     * @param result
-     *            Http响应的类型
-     * @param cacheEntry
-     *            缓存对象
+     *
+     * @param result     Http响应的类型
+     * @param cacheEntry 缓存对象
      */
     public static <T> Response<T> success(T result,
-            Map<String, String> headers, Cache.Entry cacheEntry) {
+                                          Map<String, String> headers, Cache.Entry cacheEntry) {
         return new Response<T>(result, headers, cacheEntry);
     }
 
     /**
      * 返回一个失败的HttpRespond
-     * 
-     * @param error
-     *            失败原因
+     *
+     * @param error 失败原因
      */
     public static <T> Response<T> error(KJHttpException error) {
         return new Response<T>(error);

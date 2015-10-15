@@ -22,6 +22,8 @@ import java.util.concurrent.Executor;
 
 /**
  * Http响应的分发器，这里用于把异步线程中的响应分发到UI线程中执行
+ *
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public class DeliveryExecutor implements Delivery {
 

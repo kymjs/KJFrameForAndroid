@@ -27,7 +27,7 @@ import javax.net.ssl.SSLSocketFactory;
 /**
  * Http配置器
  *
- * @author kymjs
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public class HttpConfig {
 

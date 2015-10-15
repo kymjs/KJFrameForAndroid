@@ -22,6 +22,8 @@ import java.util.Map;
 
 /**
  * 用于解析HttpHeader的工具类
+ *
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public class HttpHeaderParser {
 

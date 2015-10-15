@@ -26,7 +26,7 @@ import java.util.List;
  * 负责维护当前正在下载状态<br>
  * 对每个下载请求提供一个控制器，来控制下载的各种状态改变
  *
- * @author kymjs
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public class DownloadTaskQueue {
     private final int mParallelTaskCount; // 最大同时下载量

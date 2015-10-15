@@ -30,6 +30,8 @@ import java.util.Map;
 
 /**
  * 网络请求执行器，将传入的Request使用HttpStack客户端发起网络请求，并返回一个NetworkRespond结果
+ *
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public class Network {
     protected static final boolean DEBUG = HttpConfig.DEBUG;
@@ -133,7 +135,7 @@ public class Network {
             Date refTime = new Date(entry.serverDate);
             DateFormat sdf = SimpleDateFormat.getDateTimeInstance();
             headers.put("If-Modified-Since", sdf.format(refTime));
-            
+
         }
     }
 

@@ -23,8 +23,8 @@ import java.util.Map;
  * Http请求回调类<br>
  * 
  * <b>创建时间</b> 2014-8-7
- * 
- * @author kymjs (https://github.com/kymjs)
+ *
+ * @author kymjs (http://www.kymjs.com/) .
  * @version 1.4
  */
 public abstract class HttpCallBack {

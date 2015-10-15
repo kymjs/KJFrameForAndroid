@@ -32,6 +32,7 @@ import java.util.Map;
  * 一个请求基类
  *
  * @param <T> Http返回类型
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public abstract class Request<T> implements Comparable<Request<T>> {
 

@@ -17,6 +17,11 @@ package org.kymjs.kjframe.http;
 
 import android.util.Log;
 
+/**
+ * KJHttp.download()控制器
+ * 
+ * @author kymjs (http://www.kymjs.com/) .
+ */
 public class DownloadController {
 
     private final FileRequest mRequest;
@@ -45,7 +50,7 @@ public class DownloadController {
 
     /**
      * 如果当前任务是等待态，让他转入运行态
-     * 
+     *
      * @return
      */
     /* package */boolean doLoadOnWait() {
@@ -66,7 +71,7 @@ public class DownloadController {
 
     /**
      * 这个控制器负责的Request
-     * 
+     *
      * @return
      */
     public FileRequest getRequest() {
@@ -91,11 +96,12 @@ public class DownloadController {
 
     /**
      * 暂停任务
-     * 
+     *
      * @return
      */
     public boolean pause() {
-        if ((mStatus == STATUS_DOWNLOADING || mStatus == STATUS_WAITING) && mRequest != null && mQueue != null) {
+        if ((mStatus == STATUS_DOWNLOADING || mStatus == STATUS_WAITING) && mRequest != null && 
+                mQueue != null) {
             mStatus = STATUS_PAUSE;
             mRequest.cancel();
             mQueue.wake();
@@ -106,7 +112,7 @@ public class DownloadController {
 
     /**
      * 恢复处于暂停态的任务
-     * 
+     *
      * @return 如果mQueue为null或当前状态不是STATUS_PAUSE，返回false
      * @deprecated 不推荐直接调用本方法，建议直接再次调用{@link DownloadTaskQueue#add(FileRequest)}
      */
@@ -123,7 +129,7 @@ public class DownloadController {
 
     /**
      * 废弃当前下载任务
-     * 
+     *
      * @return
      */
     public boolean removeTask() {

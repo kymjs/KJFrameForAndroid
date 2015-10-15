@@ -27,6 +27,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
+/**
+ * 请求文件方法类
+ *
+ * @author kymjs (http://www.kymjs.com/) .
+ */
 public class FileRequest extends Request<byte[]> {
     private final File mStoreFile;
     private final File mTemporaryFile; // 临时文件

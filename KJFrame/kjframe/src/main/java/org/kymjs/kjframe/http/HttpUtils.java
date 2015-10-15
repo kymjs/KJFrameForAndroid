@@ -24,6 +24,11 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
+/**
+ * Http请求工具类
+ *
+ * @author kymjs (http://www.kymjs.com/) .
+ */
 public class HttpUtils {
 
     public static byte[] responseToBytes(KJHttpResponse response)

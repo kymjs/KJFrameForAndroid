@@ -16,18 +16,20 @@
 
 package org.kymjs.kjframe.http;
 
-import java.util.concurrent.BlockingQueue;
-
-import org.kymjs.kjframe.utils.KJLoger;
-
 import android.annotation.TargetApi;
 import android.net.TrafficStats;
 import android.os.Build;
 import android.os.Process;
 
+import org.kymjs.kjframe.utils.KJLoger;
+
+import java.util.concurrent.BlockingQueue;
+
 /**
  * 网络请求任务的调度器，负责不停的从RequestQueue中取Request并交给NetWork执行，
  * 执行完成后分发执行结果到UI线程的回调并缓存结果到缓存器
+ *
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public class NetworkDispatcher extends Thread {
     private final BlockingQueue<Request<?>> mQueue; // 正在发生请求的队列
@@ -37,7 +39,7 @@ public class NetworkDispatcher extends Thread {
     private volatile boolean mQuit = false; // 标记是否退出本线程
 
     public NetworkDispatcher(BlockingQueue<Request<?>> queue, Network network,
-            Cache cache, Delivery delivery) {
+                             Cache cache, Delivery delivery) {
         mQueue = queue;
         mNetwork = network;
         mCache = cache;
@@ -111,7 +113,7 @@ public class NetworkDispatcher extends Thread {
     }
 
     private void parseAndDeliverNetworkError(Request<?> request,
-            KJHttpException error) {
+                                             KJHttpException error) {
         error = request.parseNetworkError(error);
         mDelivery.postError(request, error);
     }
