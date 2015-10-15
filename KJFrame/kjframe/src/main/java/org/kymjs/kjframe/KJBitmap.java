@@ -200,6 +200,23 @@ public class KJBitmap {
     }
 
     /**
+     * 如果内存缓存有图片，则显示内存缓存的图片，否则显示默认图片
+     *
+     * @param imageView    要显示的View
+     * @param imageUrl     网络图片地址
+     * @param defaultImage 如果没有内存缓存，则显示默认图片
+     */
+    public void displayCacheOrDefult(View imageView, String imageUrl,
+                                     Drawable defaultImage) {
+        Bitmap cache = getMemoryCache(imageUrl);
+        if (cache == null) {
+            setViewImage(imageView, defaultImage);
+        } else {
+            setViewImage(imageView, cache);
+        }
+    }
+
+    /**
      * @param imageView  要显示的View
      * @param imageUrl   网络图片地址
      * @param width      要显示的图片的最大宽度

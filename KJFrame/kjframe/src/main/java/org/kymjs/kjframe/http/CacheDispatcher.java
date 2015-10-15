@@ -18,7 +18,7 @@ package org.kymjs.kjframe.http;
 import android.os.Process;
 
 import org.kymjs.kjframe.KJHttp;
-import org.kymjs.kjframe.bitmap.ImageRequest;
+import org.kymjs.kjframe.bitmap.Persistence;
 import org.kymjs.kjframe.utils.KJLoger;
 
 import java.util.concurrent.BlockingQueue;
@@ -95,7 +95,7 @@ public class CacheDispatcher extends Thread {
                 }
 
                 // 如果缓存过期，去网络请求,图片缓存永久有效
-                if (entry.isExpired() && !(request instanceof ImageRequest)) {
+                if (entry.isExpired() && !(request instanceof Persistence)) {
                     request.setCacheEntry(entry);
                     mNetworkQueue.put(request);
                     continue;
