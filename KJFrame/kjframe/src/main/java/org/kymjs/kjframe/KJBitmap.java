@@ -46,8 +46,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
-import java.util.Vector;
 
 /**
  * The BitmapLibrary's core classes<br>
@@ -61,8 +59,6 @@ public class KJBitmap {
 
     private final BitmapConfig mConfig;
     private final ImageDisplayer displayer;
-
-    private final List<View> doLoadingViews;
 
     public KJBitmap() {
         this(new BitmapConfig());
@@ -81,8 +77,6 @@ public class KJBitmap {
         }
         this.mConfig = bitmapConfig;
         displayer = new ImageDisplayer(httpConfig, mConfig);
-        //一般很难超过25吧,超过15都不容易了
-        doLoadingViews = new Vector<>(25);
     }
 
 
@@ -351,8 +345,6 @@ public class KJBitmap {
     private void doDisplay(final View imageView, final String imageUrl,
                            int width, int height, final Drawable loadBitmap,
                            final Drawable errorBitmap, final BitmapCallBack callback) {
-        checkViewExist(imageView);
-
         imageView.setTag(imageUrl);
 
         BitmapCallBack mCallback = new BitmapCallBack() {
@@ -383,11 +375,6 @@ public class KJBitmap {
 
             @Override
             public void onFinish() {
-                try {
-                    doLoadingViews.remove(imageView);
-                } catch (Exception e) {
-                    //
-                }
                 if (callback != null) {
                     callback.onFinish();
                 }
@@ -610,19 +597,5 @@ public class KJBitmap {
         if (mConfig.isDEBUG) {
             KJLoger.debugLog(getClass().getSimpleName(), msg);
         }
-    }
-
-    /**
-     * 检测一个View是否已经有任务了，如果是，则取消之前的任务
-     */
-    private void checkViewExist(View view) {
-        if (doLoadingViews.contains(view)) {
-            String url = (String) view.getTag();
-            if (!StringUtils.isEmpty(url)) {
-                cancel(url);
-                doLoadingViews.remove(view);
-            }
-        }
-        doLoadingViews.add(view);
     }
 }
