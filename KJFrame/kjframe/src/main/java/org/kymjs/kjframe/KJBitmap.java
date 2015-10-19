@@ -350,6 +350,7 @@ public class KJBitmap {
         BitmapCallBack mCallback = new BitmapCallBack() {
             @Override
             public void onPreLoad() {
+                setViewImage(imageView, loadBitmap);
                 if (callback != null) {
                     callback.onPreLoad();
                 }
