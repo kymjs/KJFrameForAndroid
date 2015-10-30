@@ -15,10 +15,6 @@
  */
 package org.kymjs.kjframe.ui;
 
-import org.kymjs.kjframe.utils.DensityUtils;
-import org.kymjs.kjframe.utils.StringUtils;
-import org.kymjs.kjframe.utils.SystemTool;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -32,14 +28,19 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.kymjs.kjframe.utils.DensityUtils;
+import org.kymjs.kjframe.utils.StringUtils;
+import org.kymjs.kjframe.utils.SystemTool;
+
 /**
  * 侵入式View的调用工具类
- * 
- * @author kymjs (https://github.com/kymjs)
+ *
+ * @author kymjs (http://www.kymjs.com/).
  */
 public class ViewInject {
 
-    private ViewInject() {}
+    private ViewInject() {
+    }
 
     private static class ClassHolder {
         private static final ViewInject instance = new ViewInject();
@@ -47,7 +48,7 @@ public class ViewInject {
 
     /**
      * 类对象创建方法
-     * 
+     *
      * @return 本类的对象
      */
     public static ViewInject create() {
@@ -56,7 +57,7 @@ public class ViewInject {
 
     /**
      * 显示一个toast
-     * 
+     *
      * @param msg
      */
     public static void toast(String msg) {
@@ -68,7 +69,7 @@ public class ViewInject {
 
     /**
      * 长时间显示一个toast
-     * 
+     *
      * @param msg
      */
     public static void longToast(String msg) {
@@ -80,7 +81,7 @@ public class ViewInject {
 
     /**
      * 长时间显示一个toast
-     * 
+     *
      * @param msg
      */
     public static void longToast(Context context, String msg) {
@@ -89,7 +90,7 @@ public class ViewInject {
 
     /**
      * 显示一个toast
-     * 
+     *
      * @param msg
      */
     public static void toast(Context context, String msg) {
@@ -100,7 +101,7 @@ public class ViewInject {
      * 返回一个退出确认对话框
      */
     public void getExitDialog(final Context context, String title,
-            OnClickListener l) {
+                              OnClickListener l) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(title);
         builder.setCancelable(false);
@@ -150,7 +151,7 @@ public class ViewInject {
                 new OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year,
-                            int monthOfYear, int dayOfMonth) {
+                                          int monthOfYear, int dayOfMonth) {
                         textView.setText(year + "-" + (monthOfYear + 1) + "-"
                                 + dayOfMonth);
                     }
@@ -161,16 +162,13 @@ public class ViewInject {
 
     /**
      * 返回一个等待信息弹窗
-     * 
-     * @param aty
-     *            要显示弹出窗的Activity
-     * @param msg
-     *            弹出窗上要显示的文字
-     * @param cancel
-     *            dialog是否可以被取消
+     *
+     * @param aty    要显示弹出窗的Activity
+     * @param msg    弹出窗上要显示的文字
+     * @param cancel dialog是否可以被取消
      */
     public static ProgressDialog getprogress(Activity aty, String msg,
-            boolean cancel) {
+                                             boolean cancel) {
         // 实例化一个ProgressBarDialog
         ProgressDialog progressDialog = new ProgressDialog(aty);
         progressDialog.setMessage(msg);

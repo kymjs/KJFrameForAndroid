@@ -26,7 +26,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.kymjs.kjframe.http.Cache;
 import org.kymjs.kjframe.http.CacheDispatcher;
-import org.kymjs.kjframe.http.Delivery;
 import org.kymjs.kjframe.http.DownloadController;
 import org.kymjs.kjframe.http.DownloadTaskQueue;
 import org.kymjs.kjframe.http.FileRequest;
@@ -44,21 +43,25 @@ import org.kymjs.kjframe.utils.KJLoger;
  * 本类工作流程： 每当发起一次Request，会对这个Request标记一个唯一值。<br>
  * 并加入当前请求的Set中(保证唯一;方便控制)。<br>
  * 同时判断是否启用缓存，若启用则加入缓存队列，否则加入执行队列。<br>
- * 
  * Note:<br>
  * 整个KJHttp工作流程：采用责任链设计模式，由三部分组成，类似设计可以类比Handle...Looper...MessageQueue<br>
- * 
  * 1、KJHttp负责不停向NetworkQueue(或CacheQueue实际还是NetworkQueue， 具体逻辑请查看
  * {@link CacheDispatcher})添加Request<br>
  * 2、另一边由TaskThread不停从NetworkQueue中取Request并交给Network执行器(逻辑请查看
  * {@link NetworkDispatcher} )，<br>
  * 3、Network执行器将执行成功的NetworkResponse返回给TaskThead，并通过Request的定制方法
- * Request.parseNetworkResponse()封装成Response，最终交给分发器 {@link Delivery}
+ * Request.parseNetworkResponse()封装成Response，最终交给分发器 Delivery
  * 分发到主线程并调用HttpCallback相应的方法
  * 
  * @author kymjs (https://www.kymjs.com/)
  */
 public class KJHttp {
+
+    public interface ContentType {
+        int FORM = 0;
+        int JSON = 1;
+    }
+
     // 请求缓冲区
     private final Map<String, Queue<Request<?>>> mWaitingRequests = new HashMap<String, Queue<Request<?>>>();
     // 请求的序列化生成器
@@ -77,14 +80,98 @@ public class KJHttp {
     private HttpConfig mConfig;
 
     public KJHttp() {
-        this(new HttpConfig());
+        this(null);
     }
 
     public KJHttp(HttpConfig config) {
+        if (config == null) {
+            config = new HttpConfig();
+        }
         this.mConfig = config;
         mConfig.mController.setRequestQueue(this);
         mTaskThreads = new NetworkDispatcher[HttpConfig.NETWORK_POOL_SIZE];
         start();
+    }
+
+    public static class Builder {
+        private String url;
+        private HttpCallBack callBack;
+        private HttpParams params;
+        private boolean useCache;
+        private int httpMethod;
+        private int contentType;
+        private HttpConfig httpConfig;
+
+        public Builder config(HttpConfig httpConfig) {
+            this.httpConfig = httpConfig;
+            return this;
+        }
+
+        public Builder url(String url) {
+            this.url = url;
+            return this;
+        }
+
+        public Builder callback(HttpCallBack callBack) {
+            this.callBack = callBack;
+            return this;
+        }
+
+        public Builder params(HttpParams params) {
+            this.params = params;
+            return this;
+        }
+
+        public Builder useCache(boolean useCache) {
+            this.useCache = useCache;
+            return this;
+        }
+
+        public Builder httpMethod(int method) {
+            this.httpMethod = method;
+            return this;
+        }
+
+        public Builder contentType(int contentType) {
+            this.contentType = contentType;
+            return this;
+        }
+
+        public void request() {
+            request(new KJHttp(httpConfig));
+        }
+
+        public void request(KJHttp kjHttp) {
+            switch (httpMethod) {
+            case HttpMethod.GET:
+                if (contentType == ContentType.FORM) {
+                    kjHttp.get(url, params, useCache, callBack);
+                } else if (contentType == ContentType.JSON) {
+                    kjHttp.jsonGet(url, params, useCache, callBack);
+                }
+                break;
+            case HttpMethod.POST:
+                if (contentType == ContentType.FORM) {
+                    kjHttp.post(url, params, useCache, callBack);
+                } else if (contentType == ContentType.JSON) {
+                    kjHttp.jsonPost(url, params, useCache, callBack);
+                }
+                break;
+            default:
+                if (contentType == ContentType.FORM) {
+                    FormRequest request = new FormRequest(httpMethod, url,
+                            params, callBack);
+                    request.setShouldCache(useCache);
+                    kjHttp.doRequest(request);
+                } else if (contentType == ContentType.JSON) {
+                    JsonRequest request = new JsonRequest(httpMethod, url,
+                            params, callBack);
+                    request.setShouldCache(useCache);
+                    kjHttp.doRequest(request);
+                }
+                break;
+            }
+        }
     }
 
     /**
@@ -96,7 +183,7 @@ public class KJHttp {
      *            请求中的回调方法
      */
     public Request<byte[]> get(String url, HttpCallBack callback) {
-        return get(url, new HttpParams(), callback);
+        return get(url, null, callback);
     }
 
     /**
@@ -111,6 +198,8 @@ public class KJHttp {
      */
     public Request<byte[]> get(String url, HttpParams params,
             HttpCallBack callback) {
+        if (params == null)
+            params = new HttpParams();
         return get(url, params, true, callback);
     }
 
@@ -286,7 +375,7 @@ public class KJHttp {
     /**
      * 返回下载总控制器
      * 
-     * @return
+     * @return 下载控制器
      */
     public DownloadController getDownloadController(String storeFilePath,
             String url) {
@@ -301,6 +390,7 @@ public class KJHttp {
      * 执行一个自定义请求
      * 
      * @param request
+     *            要执行的自定义请求
      */
     public void doRequest(Request<?> request) {
         request.setConfig(mConfig);
@@ -312,7 +402,7 @@ public class KJHttp {
      * 
      * @param url
      *            哪条url的缓存
-     * @return
+     * @return 缓存的二进制数组
      */
     public byte[] getCache(String url) {
         Cache cache = HttpConfig.mCache;
@@ -358,9 +448,6 @@ public class KJHttp {
 
     /**
      * 只有你确定cache是一个String时才可以使用这个方法，否则还是应该使用getCache(String);
-     * 
-     * @param url
-     * @return
      */
     public String getStringCache(String url) {
         return new String(getCache(url));
@@ -385,14 +472,6 @@ public class KJHttp {
 
     public HttpConfig getConfig() {
         return mConfig;
-    }
-
-    /**
-     * 已过期，请更换为setConfig()
-     */
-    @Deprecated
-    public void setHttpConfig(HttpConfig config) {
-        setConfig(config);
     }
 
     public void setConfig(HttpConfig config) {
@@ -425,11 +504,12 @@ public class KJHttp {
         if (mCacheDispatcher != null) {
             mCacheDispatcher.quit();
         }
-        for (int i = 0; i < mTaskThreads.length; i++) {
-            if (mTaskThreads[i] != null) {
-                mTaskThreads[i].quit();
+        for (NetworkDispatcher thread : mTaskThreads) {
+            if (thread != null) {
+                thread.quit();
             }
         }
+
     }
 
     public void cancel(String url) {

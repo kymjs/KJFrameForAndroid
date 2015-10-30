@@ -15,11 +15,6 @@
  */
 package org.kymjs.kjframe.widget;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,12 +22,16 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 /**
  * 对ViewHolder的封装，以及更方便的控制ListView滑动过程中不加载图片
- * 
- * @author kymjs (https://www.kymjs.com/)
- * 
+ *
  * @param <T>
+ * @author kymjs (https://www.kymjs.com/)
  */
 public abstract class KJAdapter<T> extends BaseAdapter implements
         AbsListView.OnScrollListener {
@@ -101,15 +100,16 @@ public abstract class KJAdapter<T> extends BaseAdapter implements
     }
 
     private AdapterHolder getViewHolder(int position, View convertView,
-            ViewGroup parent) {
+                                        ViewGroup parent) {
         return AdapterHolder.get(convertView, parent, mItemLayoutId, position);
     }
 
-    public abstract void convert(AdapterHolder helper, T item,
-            boolean isScrolling);
+    public void convert(AdapterHolder helper, T item,
+                        boolean isScrolling) {
+    }
 
     public void convert(AdapterHolder helper, T item, boolean isScrolling,
-            int position) {
+                        int position) {
         convert(helper, getItem(position), isScrolling);
     }
 
@@ -129,7 +129,7 @@ public abstract class KJAdapter<T> extends BaseAdapter implements
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem,
-            int visibleItemCount, int totalItemCount) {
+                         int visibleItemCount, int totalItemCount) {
         if (listener != null) {
             listener.onScroll(view, firstVisibleItem, visibleItemCount,
                     totalItemCount);

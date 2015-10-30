@@ -15,28 +15,29 @@
  */
 package org.kymjs.kjframe.http;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.zip.GZIPInputStream;
-
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.protocol.HTTP;
-import org.kymjs.kjframe.utils.KJLoger;
-
 import android.text.TextUtils;
 
+import org.kymjs.kjframe.utils.KJLoger;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+import java.util.zip.GZIPInputStream;
+
+/**
+ * Http请求工具类
+ *
+ * @author kymjs (http://www.kymjs.com/) .
+ */
 public class HttpUtils {
 
-    public static byte[] responseToBytes(HttpResponse response)
+    public static byte[] responseToBytes(KJHttpResponse response)
             throws IOException, KJHttpException {
-        HttpEntity entity = response.getEntity();
         PoolingByteArrayOutputStream bytes = new PoolingByteArrayOutputStream(
-                ByteArrayPool.get(), (int) entity.getContentLength());
+                ByteArrayPool.get(), (int) response.getContentLength());
         byte[] buffer = null;
         try {
-            InputStream in = entity.getContent();
+            InputStream in = response.getContentStream();
             if (isGzipContent(response) && !(in instanceof GZIPInputStream)) {
                 in = new GZIPInputStream(in);
             }
@@ -55,7 +56,8 @@ public class HttpUtils {
             try {
                 // Close the InputStream and release the resources by
                 // "consuming the content".
-                entity.consumeContent();
+//                entity.consumeContent();
+                response.getContentStream().close();
             } catch (IOException e) {
                 // This can happen if there was an exception above that left the
                 // entity in
@@ -67,11 +69,13 @@ public class HttpUtils {
         }
     }
 
-    /** Returns the charset specified in the Content-Type of this header. */
-    public static String getCharset(HttpResponse response) {
-        Header header = response.getFirstHeader(HTTP.CONTENT_TYPE);
+    /**
+     * Returns the charset specified in the Content-Type of this header.
+     */
+    public static String getCharset(KJHttpResponse response) {
+        Map<String, String> header = response.getHeaders();
         if (header != null) {
-            String contentType = header.getValue();
+            String contentType = header.get("Content-Type");
             if (!TextUtils.isEmpty(contentType)) {
                 String[] params = contentType.split(";");
                 for (int i = 1; i < params.length; i++) {
@@ -87,12 +91,11 @@ public class HttpUtils {
         return null;
     }
 
-    public static String getHeader(HttpResponse response, String key) {
-        Header header = response.getFirstHeader(key);
-        return header == null ? null : header.getValue();
+    public static String getHeader(KJHttpResponse response, String key) {
+        return response.getHeaders().get(key);
     }
 
-    public static boolean isSupportRange(HttpResponse response) {
+    public static boolean isSupportRange(KJHttpResponse response) {
         if (TextUtils.equals(getHeader(response, "Accept-Ranges"), "bytes")) {
             return true;
         }
@@ -100,7 +103,7 @@ public class HttpUtils {
         return value != null && value.startsWith("bytes");
     }
 
-    public static boolean isGzipContent(HttpResponse response) {
+    public static boolean isGzipContent(KJHttpResponse response) {
         return TextUtils
                 .equals(getHeader(response, "Content-Encoding"), "gzip");
     }

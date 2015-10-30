@@ -19,28 +19,22 @@ package org.kymjs.kjframe.http;
 import java.io.IOException;
 import java.util.Map;
 
-import org.apache.http.HttpResponse;
-
 /**
  * Http请求端，已知实现类:
- * 
+ *
+ * @author kymjs (http://www.kymjs.com/) .
  * @see HttpConnectStack
- * @see HttpClientStack
- * 
- * @author kymjs
- * 
+ * 过时移除 HttpClientStack
  */
 public interface HttpStack {
     /**
      * 让Http请求端去发起一个Request
-     * 
-     * @param request
-     *            一次实际请求集合
-     * @param additionalHeaders
-     *            Http请求头
+     *
+     * @param request           一次实际请求集合
+     * @param additionalHeaders Http请求头
      * @return 一个Http响应
      */
-    public HttpResponse performRequest(Request<?> request,
-            Map<String, String> additionalHeaders) throws IOException;
+    KJHttpResponse performRequest(Request<?> request,
+                                  Map<String, String> additionalHeaders) throws IOException;
 
 }

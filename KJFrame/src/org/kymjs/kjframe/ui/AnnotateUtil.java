@@ -15,13 +15,13 @@
  */
 package org.kymjs.kjframe.ui;
 
-import java.lang.reflect.Field;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import java.lang.reflect.Field;
 
 /**
  * 注解工具类<br>
@@ -67,7 +67,7 @@ public class AnnotateUtil {
     /**
      * 必须在setContentView之后调用
      * 
-     * @param aty
+     * @param aty Activity对象
      */
     public static void initBindView(Activity aty) {
         initBindView(aty, aty.getWindow().getDecorView());
@@ -91,7 +91,7 @@ public class AnnotateUtil {
     /**
      * 必须在setContentView之后调用
      * 
-     * @param frag
+     * @param frag 要初始化的Fragment
      */
     public static void initBindView(Fragment frag) {
         initBindView(frag, frag.getActivity().getWindow().getDecorView());

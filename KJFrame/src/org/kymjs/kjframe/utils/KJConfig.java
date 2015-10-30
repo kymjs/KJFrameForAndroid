@@ -16,20 +16,25 @@
 package org.kymjs.kjframe.utils;
 
 /**
- * 
  * @author kymjs (https://github.com/kymjs)
  */
 public final class KJConfig {
 
-    public static final double VERSION = 2.2451;
+    public static final double VERSION = 2.2512;
 
-    /** 错误处理广播 */
+    /**
+     * 错误处理广播
+     */
     public static final String RECEIVER_ERROR = KJConfig.class.getName()
             + "org.kymjs.android.frame.error";
-    /** 无网络警告广播 */
+    /**
+     * 无网络警告广播
+     */
     public static final String RECEIVER_NOT_NET_WARN = KJConfig.class.getName()
             + "org.kymjs.android.frame.notnet";
-    /** preference键值对 */
+    /**
+     * preference键值对
+     */
     public static final String SETTING_FILE = "kjframe_preference";
     public static final String ONLY_WIFI = "only_wifi";
 }

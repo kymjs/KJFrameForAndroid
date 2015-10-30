@@ -15,6 +15,10 @@
  */
 package org.kymjs.kjframe.http;
 
+import android.os.SystemClock;
+
+import org.kymjs.kjframe.utils.KJLoger;
+
 import java.io.BufferedInputStream;
 import java.io.EOFException;
 import java.io.File;
@@ -29,10 +33,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import org.kymjs.kjframe.utils.KJLoger;
-
-import android.os.SystemClock;
 
 /**
  * 缓存器实现类，磁盘缓存器
@@ -50,10 +50,8 @@ public class DiskCache implements Cache {
     private static final int CACHE_MAGIC = 0x20150423;
 
     /**
-     * @param rootDirectory
-     *            缓存文件夹
-     * @param maxCacheSizeInBytes
-     *            缓存大小
+     * @param rootDirectory       缓存文件夹
+     * @param maxCacheSizeInBytes 缓存大小
      */
     public DiskCache(File rootDirectory, int maxCacheSizeInBytes) {
         mRootDirectory = rootDirectory;
@@ -62,9 +60,8 @@ public class DiskCache implements Cache {
 
     /**
      * 使用默认缓存大小(5MB)构造磁盘缓存器
-     * 
-     * @param rootDirectory
-     *            The root directory of the cache.
+     *
+     * @param rootDirectory The root directory of the cache.
      */
     public DiskCache(File rootDirectory) {
         this(rootDirectory, 5 * 1024 * 1024);
@@ -88,7 +85,7 @@ public class DiskCache implements Cache {
 
     /**
      * 获取一个cache
-     * 
+     *
      * @return 如果不存在返回null
      */
     @Override
@@ -159,11 +156,9 @@ public class DiskCache implements Cache {
 
     /**
      * 刷新缓存
-     * 
+     *
      * @param key
-     * 
-     * @param fullExpire
-     *            True to fully expire the entry, false to soft expire
+     * @param fullExpire True to fully expire the entry, false to soft expire
      */
     @Override
     public synchronized void invalidate(String key, boolean fullExpire) {
@@ -214,9 +209,8 @@ public class DiskCache implements Cache {
 
     /**
      * Creates a pseudo-unique filename for the specified cache key.
-     * 
-     * @param key
-     *            The key to generate a file name for.
+     *
+     * @param key The key to generate a file name for.
      * @return A pseudo-unique filename.
      */
     private String getFilenameForKey(String key) {
@@ -237,9 +231,8 @@ public class DiskCache implements Cache {
 
     /**
      * Prunes the cache to fit the amount of bytes specified.
-     * 
-     * @param neededSpace
-     *            The amount of bytes we are trying to fit into the cache.
+     *
+     * @param neededSpace The amount of bytes we are trying to fit into the cache.
      */
     private void pruneIfNeeded(int neededSpace) {
         if ((mTotalSize + neededSpace) < mMaxCacheSizeInBytes) {
@@ -284,11 +277,9 @@ public class DiskCache implements Cache {
 
     /**
      * Puts the entry with the specified key into the cache.
-     * 
-     * @param key
-     *            The key to identify the entry by.
-     * @param entry
-     *            The entry to cache.
+     *
+     * @param key   The key to identify the entry by.
+     * @param entry The entry to cache.
      */
     private void putEntry(String key, CacheHeader entry) {
         if (!mEntries.containsKey(key)) {
@@ -313,7 +304,7 @@ public class DiskCache implements Cache {
 
     /**
      * Reads the contents of an InputStream into a byte[].
-     * */
+     */
     private static byte[] streamToBytes(InputStream in, int length)
             throws IOException {
         byte[] bytes = new byte[length];
@@ -342,7 +333,8 @@ public class DiskCache implements Cache {
         public long softTtl;
         public Map<String, String> responseHeaders;
 
-        private CacheHeader() {}
+        private CacheHeader() {
+        }
 
         public CacheHeader(String key, Entry entry) {
             this.key = key;
@@ -356,9 +348,8 @@ public class DiskCache implements Cache {
         /**
          * Reads the header off of an InputStream and returns a CacheHeader
          * object.
-         * 
-         * @param is
-         *            The InputStream to read from.
+         *
+         * @param is The InputStream to read from.
          * @throws IOException
          */
         public static CacheHeader readHeader(InputStream is) throws IOException {
@@ -519,10 +510,8 @@ public class DiskCache implements Cache {
     static Map<String, String> readStringStringMap(InputStream is)
             throws IOException {
         int size = readInt(is);
-        Map<String, String> result = (size == 0) ? Collections
-                .<String, String> emptyMap()
-                : new HashMap<String, String>(size);
-        // String str = ;
+        Map<String, String> result = (size == 0) ? Collections.<String, String>emptyMap() : new 
+                HashMap<String, String>(size);
         for (int i = 0; i < size; i++) {
             String key = readString(is).intern();
             String value = readString(is).intern();
@@ -530,5 +519,4 @@ public class DiskCache implements Cache {
         }
         return result;
     }
-
 }

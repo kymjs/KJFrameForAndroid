@@ -26,8 +26,7 @@ import android.os.Looper;
  * 负责维护当前正在下载状态<br>
  * 对每个下载请求提供一个控制器，来控制下载的各种状态改变
  * 
- * @author kymjs
- * 
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public class DownloadTaskQueue {
     private final int mParallelTaskCount; // 最大同时下载量
@@ -61,6 +60,7 @@ public class DownloadTaskQueue {
      * 添加一个下载请求,如果这个请求已经存在，则尝试唤醒这个请求
      * 
      * @param request
+     *            要添加的下载请求
      */
     public void add(FileRequest request) {
         throwIfNotOnMainThread();
@@ -78,6 +78,7 @@ public class DownloadTaskQueue {
      * 移除一个下载任务
      * 
      * @param url
+     *            要移除的url
      */
     public void remove(String url) {
         for (DownloadController controller : mTaskQueue) {
@@ -92,10 +93,11 @@ public class DownloadTaskQueue {
     }
 
     /**
-     * 
      * @param storeFilePath
+     *            下载后文件在本地的地址
      * @param url
-     * @return
+     *            下载的url
+     * @return DownloadController下载控制器
      */
     public DownloadController get(String storeFilePath, String url) {
         synchronized (mTaskQueue) {
@@ -152,7 +154,8 @@ public class DownloadTaskQueue {
      * 如果这个请求本身就存在，则直接返回这个请求
      * 
      * @param request
-     * @return
+     *            要被判断的request
+     * @return 如果这个请求本身就存在，则直接返回这个请求
      */
     private DownloadController requestExist(FileRequest request) {
         for (DownloadController task : mTaskQueue) {

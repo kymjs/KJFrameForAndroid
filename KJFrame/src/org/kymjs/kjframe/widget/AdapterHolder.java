@@ -20,8 +20,6 @@ package org.kymjs.kjframe.widget;
  * 
  * @author kymjs(http://www.kymjs.com/)
  */
-import org.kymjs.kjframe.KJBitmap;
-
 import android.graphics.Bitmap;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -29,6 +27,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.kymjs.kjframe.KJBitmap;
 
 public class AdapterHolder {
     private final SparseArray<View> mViews;
@@ -98,7 +98,7 @@ public class AdapterHolder {
      * @param text
      * @return
      */
-    public AdapterHolder setText(int viewId, String text) {
+    public AdapterHolder setText(int viewId, CharSequence text) {
         TextView view = getView(viewId);
         view.setText(text);
         return this;

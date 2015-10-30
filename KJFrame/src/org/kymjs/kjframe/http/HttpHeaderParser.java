@@ -16,19 +16,19 @@
 
 package org.kymjs.kjframe.http;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Map;
-
-import org.apache.http.impl.cookie.DateParseException;
-import org.apache.http.impl.cookie.DateUtils;
-import org.apache.http.protocol.HTTP;
 
 /**
  * 用于解析HttpHeader的工具类
+ *
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public class HttpHeaderParser {
 
     public static Cache.Entry parseCacheHeaders(HttpConfig httpconfig,
-            NetworkResponse response) {
+                                                NetworkResponse response) {
         long now = System.currentTimeMillis();
 
         Map<String, String> headers = response.headers;
@@ -97,13 +97,14 @@ public class HttpHeaderParser {
 
     /**
      * 使用RFC1123格式解析服务器返回的时间
-     * 
+     *
      * @return 如果解析异常，返回null
      */
     public static long parseDateAsEpoch(String dateStr) {
+        SimpleDateFormat sdf = new SimpleDateFormat();
         try {
-            return DateUtils.parseDate(dateStr).getTime();
-        } catch (DateParseException e) {
+            return sdf.parse(dateStr).getTime();
+        } catch (ParseException e) {
             return 0;
         }
     }
@@ -112,7 +113,7 @@ public class HttpHeaderParser {
      * 返回这个内容头的编码，如果没有则使用HTTP默认（ISO-8859-1）指定的字符集
      */
     public static String parseCharset(Map<String, String> headers) {
-        String contentType = headers.get(HTTP.CONTENT_TYPE);
+        String contentType = headers.get("Content-Type");
         if (contentType != null) {
             String[] params = contentType.split(";");
             for (int i = 1; i < params.length; i++) {
@@ -124,6 +125,6 @@ public class HttpHeaderParser {
                 }
             }
         }
-        return HTTP.DEFAULT_CONTENT_CHARSET;
+        return "ISO-8859-1";
     }
 }

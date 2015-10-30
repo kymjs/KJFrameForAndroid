@@ -18,6 +18,8 @@ package org.kymjs.kjframe.http;
 
 /**
  * 整个框架异常的基类
+ *
+ * @author kymjs (http://www.kymjs.com/) .
  */
 @SuppressWarnings("serial")
 public class KJHttpException extends Exception {

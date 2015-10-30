@@ -16,6 +16,12 @@
 
 package org.kymjs.kjframe.http;
 
+import android.text.TextUtils;
+import android.util.Log;
+
+import org.kymjs.kjframe.utils.FileUtils;
+import org.kymjs.kjframe.utils.StringUtils;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -24,35 +30,35 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.message.BasicHeader;
-import org.kymjs.kjframe.utils.FileUtils;
-
-import android.text.TextUtils;
-import android.util.Log;
-
 /**
  * Http请求的参数集合
+ *
+ * @author kymjs (http://www.kymjs.com/) .
  */
-public class HttpParams implements HttpEntity {
+public class HttpParams implements Serializable {
 
-    private final static char[] MULTIPART_CHARS = "-_1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            .toCharArray();
+    private final static char[] MULTIPART_CHARS =
+            "-_1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    .toCharArray();
     private String mBoundary = null;
     private final String NEW_LINE_STR = "\r\n";
     private final String CONTENT_TYPE = "Content-Type: ";
     private final String CONTENT_DISPOSITION = "Content-Disposition: ";
 
-    /** 文本参数和字符集 */
+    /**
+     * 文本参数和字符集
+     */
     private final String TYPE_TEXT_CHARSET = "text/plain; charset=UTF-8";
 
-    /** 字节流参数 */
+    /**
+     * 字节流参数
+     */
     private final String TYPE_OCTET_STREAM = "application/octet-stream";
     /**
      * 二进制参数
@@ -81,10 +87,8 @@ public class HttpParams implements HttpEntity {
 
     /**
      * 生成分隔符
-     * 
-     * @return
      */
-    private final String generateBoundary() {
+    private String generateBoundary() {
         final StringBuffer buf = new StringBuffer();
         final Random rand = new Random();
         for (int i = 0; i < 30; i++) {
@@ -111,9 +115,6 @@ public class HttpParams implements HttpEntity {
 
     /**
      * 添加文本参数
-     * 
-     * @param key
-     * @param value
      */
     public void put(final String key, final String value) {
         urlParams.put(key, value);
@@ -123,9 +124,6 @@ public class HttpParams implements HttpEntity {
 
     /**
      * 添加二进制参数, 例如Bitmap的字节流参数
-     * 
-     * @param paramName
-     * @param rawData
      */
     public void put(String paramName, final byte[] rawData) {
         hasFile = true;
@@ -135,9 +133,6 @@ public class HttpParams implements HttpEntity {
 
     /**
      * 添加文件参数,可以实现文件上传功能
-     * 
-     * @param key
-     * @param file
      */
     public void put(final String key, final File file) {
         try {
@@ -152,15 +147,9 @@ public class HttpParams implements HttpEntity {
 
     /**
      * 将数据写入到输出流中
-     * 
-     * @param key
-     * @param rawData
-     * @param type
-     * @param encodingBytes
-     * @param fileName
      */
     private void writeToOutputStream(String paramName, byte[] rawData,
-            String type, byte[] encodingBytes, String fileName) {
+                                     String type, byte[] encodingBytes, String fileName) {
         try {
             writeFirstBoundary();
             mOutputStream
@@ -177,7 +166,7 @@ public class HttpParams implements HttpEntity {
 
     /**
      * 参数开头的分隔符
-     * 
+     *
      * @throws IOException
      */
     private void writeFirstBoundary() throws IOException {
@@ -186,52 +175,42 @@ public class HttpParams implements HttpEntity {
 
     private byte[] getContentDispositionBytes(String paramName, String fileName) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("--").append(mBoundary).append("\r\n");
-        stringBuilder.append(CONTENT_DISPOSITION + "form-data; name=\""
-                + paramName + "\"");
+        stringBuilder.append("--").append(mBoundary).append("\r\n").append(CONTENT_DISPOSITION)
+                .append("form-data; name=\"").append(paramName).append("\"");
         if (!TextUtils.isEmpty(fileName)) {
-            stringBuilder.append("; filename=\"" + fileName + "\"");
+            stringBuilder.append("; filename=\"").append(fileName).append("\"");
         }
         return stringBuilder.append(NEW_LINE_STR).toString().getBytes();
     }
 
-    @Override
     public long getContentLength() {
         return mOutputStream.toByteArray().length;
     }
 
-    @Override
-    public Header getContentType() {
-        if (contentType != null) {
-            return new BasicHeader("Content-Type", contentType);
+    public String getContentType() {
+        //如果contentType没有被自定义，且参数集包含文件，则使用有文件的contentType
+        if (hasFile && contentType == null) {
+            contentType = "multipart/form-data; boundary=" + mBoundary;
         }
-        if (hasFile) {
-            return new BasicHeader("Content-Type",
-                    "multipart/form-data; boundary=" + mBoundary);
-        }
-        return null;
+        return contentType;
     }
 
     public void setContentType(String contentType) {
         this.contentType = contentType;
     }
 
-    @Override
     public boolean isChunked() {
         return false;
     }
 
-    @Override
     public boolean isRepeatable() {
         return false;
     }
 
-    @Override
     public boolean isStreaming() {
         return false;
     }
 
-    @Override
     public void writeTo(final OutputStream outstream) throws IOException {
         if (hasFile) {
             // 参数最末尾的结束符
@@ -240,12 +219,11 @@ public class HttpParams implements HttpEntity {
             mOutputStream.write(endString.getBytes());
             //
             outstream.write(mOutputStream.toByteArray());
-        } else {
+        } else if (!StringUtils.isEmpty(getUrlParams())) {
             outstream.write(getUrlParams().substring(1).getBytes());
         }
     }
 
-    @Override
     public void consumeContent() throws IOException,
             UnsupportedOperationException {
         if (isStreaming()) {
@@ -254,7 +232,6 @@ public class HttpParams implements HttpEntity {
         }
     }
 
-    @Override
     public InputStream getContent() {
         return new ByteArrayInputStream(mOutputStream.toByteArray());
     }
@@ -285,8 +262,7 @@ public class HttpParams implements HttpEntity {
         return mHeaders;
     }
 
-    @Override
-    public Header getContentEncoding() {
+    public Map<String, String> getContentEncoding() {
         return null;
     }
 }

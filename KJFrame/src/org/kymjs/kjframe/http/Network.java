@@ -16,25 +16,22 @@
 
 package org.kymjs.kjframe.http;
 
+import org.kymjs.kjframe.utils.KJLoger;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.conn.ConnectTimeoutException;
-import org.apache.http.impl.cookie.DateUtils;
-import org.kymjs.kjframe.utils.KJLoger;
-
 /**
  * 网络请求执行器，将传入的Request使用HttpStack客户端发起网络请求，并返回一个NetworkRespond结果
+ *
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public class Network {
     protected static final boolean DEBUG = HttpConfig.DEBUG;
@@ -46,16 +43,15 @@ public class Network {
 
     /**
      * 实际执行一个请求的方法
-     * 
-     * @param request
-     *            一个请求任务
+     *
+     * @param request 一个请求任务
      * @return 一个不会为null的响应
      * @throws KJHttpException
      */
     public NetworkResponse performRequest(Request<?> request)
             throws KJHttpException {
         while (true) {
-            HttpResponse httpResponse = null;
+            KJHttpResponse httpResponse = null;
             byte[] responseContents = null;
             Map<String, String> responseHeaders = new HashMap<String, String>();
             try {
@@ -64,9 +60,8 @@ public class Network {
                 addCacheHeaders(headers, request.getCacheEntry());
                 httpResponse = mHttpStack.performRequest(request, headers);
 
-                StatusLine statusLine = httpResponse.getStatusLine();
-                int statusCode = statusLine.getStatusCode();
-                responseHeaders = convertHeaders(httpResponse.getAllHeaders());
+                int statusCode = httpResponse.getResponseCode();
+                responseHeaders = httpResponse.getHeaders();
                 if (statusCode == HttpStatus.SC_NOT_MODIFIED) { // 304
                     return new NetworkResponse(HttpStatus.SC_NOT_MODIFIED,
                             request.getCacheEntry() == null ? null : request
@@ -74,13 +69,12 @@ public class Network {
                             responseHeaders, true);
                 }
 
-                if (httpResponse.getEntity() != null) {
+                if (httpResponse.getContentStream() != null) {
                     if (request instanceof FileRequest) {
                         responseContents = ((FileRequest) request)
                                 .handleResponse(httpResponse);
                     } else {
-                        responseContents = entityToBytes(httpResponse
-                                .getEntity());
+                        responseContents = entityToBytes(httpResponse);
                     }
                 } else {
                     responseContents = new byte[0];
@@ -94,16 +88,13 @@ public class Network {
             } catch (SocketTimeoutException e) {
                 throw new KJHttpException(new SocketTimeoutException(
                         "socket timeout"));
-            } catch (ConnectTimeoutException e) {
-                throw new KJHttpException(new SocketTimeoutException(
-                        "socket timeout"));
             } catch (MalformedURLException e) {
                 throw new RuntimeException("Bad URL " + request.getUrl(), e);
             } catch (IOException e) {
                 int statusCode = 0;
                 NetworkResponse networkResponse = null;
                 if (httpResponse != null) {
-                    statusCode = httpResponse.getStatusLine().getStatusCode();
+                    statusCode = httpResponse.getResponseCode();
                 } else {
                     throw new KJHttpException("NoConnection error", e);
                 }
@@ -121,7 +112,7 @@ public class Network {
                                 networkResponse);
                     }
                 } else {
-                    throw new KJHttpException(networkResponse);
+                    throw new KJHttpException();
                 }
             }
         }
@@ -129,7 +120,7 @@ public class Network {
 
     /**
      * 标记Respondeader响应头在Cache中的tag
-     * 
+     *
      * @param headers
      * @param entry
      */
@@ -142,25 +133,25 @@ public class Network {
         }
         if (entry.serverDate > 0) {
             Date refTime = new Date(entry.serverDate);
-            headers.put("If-Modified-Since", DateUtils.formatDate(refTime));
+            DateFormat sdf = SimpleDateFormat.getDateTimeInstance();
+            headers.put("If-Modified-Since", sdf.format(refTime));
+
         }
     }
 
     /**
      * 把HttpEntry转换为byte[]
-     * 
-     * @param entity
-     * @return
+     *
      * @throws IOException
      * @throws KJHttpException
      */
-    private byte[] entityToBytes(HttpEntity entity) throws IOException,
+    private byte[] entityToBytes(KJHttpResponse kjHttpResponse) throws IOException,
             KJHttpException {
         PoolingByteArrayOutputStream bytes = new PoolingByteArrayOutputStream(
-                ByteArrayPool.get(), (int) entity.getContentLength());
+                ByteArrayPool.get(), (int) kjHttpResponse.getContentLength());
         byte[] buffer = null;
         try {
-            InputStream in = entity.getContent();
+            InputStream in = kjHttpResponse.getContentStream();
             if (in == null) {
                 throw new KJHttpException("server error");
             }
@@ -172,23 +163,13 @@ public class Network {
             return bytes.toByteArray();
         } finally {
             try {
-                entity.consumeContent();
+//                entity.consumeContent();
+                kjHttpResponse.getContentStream().close();
             } catch (IOException e) {
                 KJLoger.debug("Error occured when calling consumingContent");
             }
             ByteArrayPool.get().returnBuf(buffer);
             bytes.close();
         }
-    }
-
-    /**
-     * 转换RespondHeader为Map类型
-     */
-    private static Map<String, String> convertHeaders(Header[] headers) {
-        Map<String, String> result = new HashMap<String, String>();
-        for (int i = 0; i < headers.length; i++) {
-            result.put(headers[i].getName(), headers[i].getValue());
-        }
-        return result;
     }
 }

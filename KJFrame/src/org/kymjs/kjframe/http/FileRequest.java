@@ -23,12 +23,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.kymjs.kjframe.utils.KJLoger;
 
 import android.text.TextUtils;
 
+/**
+ * 请求文件方法类
+ * 
+ * @author kymjs (http://www.kymjs.com/) .
+ */
 public class FileRequest extends Request<byte[]> {
     private final File mStoreFile;
     private final File mTemporaryFile; // 临时文件
@@ -104,10 +107,9 @@ public class FileRequest extends Request<byte[]> {
         this.mHeaders = mHeaders;
     }
 
-    public byte[] handleResponse(HttpResponse response) throws IOException,
+    public byte[] handleResponse(KJHttpResponse response) throws IOException,
             KJHttpException {
-        HttpEntity entity = response.getEntity();
-        long fileSize = entity.getContentLength();
+        long fileSize = response.getContentLength();
         if (fileSize <= 0) {
             KJLoger.debug("Response doesn't present Content-Length!");
         }
@@ -117,8 +119,7 @@ public class FileRequest extends Request<byte[]> {
         if (isSupportRange) {
             fileSize += downloadedSize;
 
-            String realRangeValue = HttpUtils.getHeader(response,
-                    "Content-Range");
+            String realRangeValue = response.getHeaders().get("Content-Range");
             if (!TextUtils.isEmpty(realRangeValue)) {
                 String assumeRangeValue = "bytes " + downloadedSize + "-"
                         + (fileSize - 1);
@@ -149,7 +150,7 @@ public class FileRequest extends Request<byte[]> {
         }
 
         try {
-            InputStream in = entity.getContent();
+            InputStream in = response.getContentStream();
             if (HttpUtils.isGzipContent(response)
                     && !(in instanceof GZIPInputStream)) {
                 in = new GZIPInputStream(in);
@@ -170,8 +171,7 @@ public class FileRequest extends Request<byte[]> {
             }
         } finally {
             try {
-                if (entity != null)
-                    entity.consumeContent();
+                response.getContentStream().close();
             } catch (Exception e) {
                 KJLoger.debug("Error occured when calling consumingContent");
             }

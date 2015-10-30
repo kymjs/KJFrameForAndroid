@@ -15,23 +15,24 @@
  */
 package org.kymjs.kjframe.http;
 
+import android.net.TrafficStats;
+import android.net.Uri;
+import android.os.SystemClock;
+import android.text.TextUtils;
+
+import org.kymjs.kjframe.KJHttp;
+import org.kymjs.kjframe.utils.KJLoger;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.Map;
 
-import org.kymjs.kjframe.KJHttp;
-import org.kymjs.kjframe.utils.KJLoger;
-
-import android.net.Uri;
-import android.os.SystemClock;
-import android.text.TextUtils;
-
 /**
  * 一个请求基类
- * 
- * @param <T>
- *            Http返回类型
+ *
+ * @param <T> Http返回类型
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public abstract class Request<T> implements Comparable<Request<T>> {
 
@@ -110,7 +111,7 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     }
 
     /**
-     * @return A tag for use with TrafficStats.setThreadStatsTag(int)
+     * @return A tag for use with {@link TrafficStats#setThreadStatsTag(int)}
      */
     public int getTrafficStatsTag() {
         return mDefaultTrafficStatsTag;
@@ -222,7 +223,7 @@ public abstract class Request<T> implements Comparable<Request<T>> {
      * 对中文参数做URL转码
      */
     private byte[] encodeParameters(Map<String, String> params,
-            String paramsEncoding) {
+                                    String paramsEncoding) {
         StringBuilder encodedParams = new StringBuilder();
         try {
             for (Map.Entry<String, String> entry : params.entrySet()) {
@@ -280,9 +281,8 @@ public abstract class Request<T> implements Comparable<Request<T>> {
 
     /**
      * 将网络请求执行器(NetWork)返回的NetWork响应转换为Http响应
-     * 
-     * @param response
-     *            网络请求执行器(NetWork)返回的NetWork响应
+     *
+     * @param response 网络请求执行器(NetWork)返回的NetWork响应
      * @return 转换后的HttpRespond, or null in the case of an error
      */
     abstract public Response<T> parseNetworkResponse(NetworkResponse response);
@@ -296,18 +296,16 @@ public abstract class Request<T> implements Comparable<Request<T>> {
 
     /**
      * 将Http请求结果分发到主线程
-     * 
-     * @param response
-     *            {@link #parseNetworkResponse(NetworkResponse)}
+     *
+     * @param response {@link #parseNetworkResponse(NetworkResponse)}
      */
     abstract protected void deliverResponse(Map<String, String> headers,
-            T response);
+                                            T response);
 
     /**
      * 响应Http请求异常的回调
-     * 
-     * @param error
-     *            原因
+     *
+     * @param error 原因
      */
     public void deliverError(KJHttpException error) {
         if (mCallback != null) {
@@ -325,6 +323,17 @@ public abstract class Request<T> implements Comparable<Request<T>> {
                 strMsg = "unknow";
             }
             mCallback.onFailure(errorNo, strMsg);
+        }
+    }
+
+    /**
+     * Http请求成功后，在异步调用本方法，本方法执行完成才会继续调用onSuccess()
+     *
+     * @param t 请求成功后的数据
+     */
+    protected void onAsyncSuccess(byte[] t) {
+        if (mCallback != null) {
+            mCallback.onSuccessInAsync(t);
         }
     }
 
