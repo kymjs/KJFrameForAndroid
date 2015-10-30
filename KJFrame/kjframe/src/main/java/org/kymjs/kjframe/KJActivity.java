@@ -20,7 +20,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import org.kymjs.kjframe.ui.AnnotateUtil;
@@ -43,7 +43,7 @@ import java.lang.ref.SoftReference;
  * @author kymjs (https://github.com/kymjs)
  * @version 1.8
  */
-public abstract class KJActivity extends FragmentActivity implements
+public abstract class KJActivity extends AppCompatActivity implements
         View.OnClickListener, I_BroadcastReg, I_KJActivity, I_SkipActivity {
 
     public static final int WHICH_MSG = 0X37210;
