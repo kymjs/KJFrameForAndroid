@@ -91,13 +91,6 @@ public class HttpConnectStack implements HttpStack {
 
     private KJHttpResponse responseFromConnection(HttpURLConnection connection) throws IOException {
         KJHttpResponse response = new KJHttpResponse();
-        int responseCode = connection.getResponseCode();
-        if (responseCode == -1) {
-            throw new IOException(
-                    "Could not retrieve response code from HttpUrlConnection.");
-        }
-        response.setResponseCode(responseCode);
-        response.setResponseMessage(connection.getResponseMessage());
         //contentStream
         InputStream inputStream;
         try {
@@ -105,6 +98,14 @@ public class HttpConnectStack implements HttpStack {
         } catch (IOException ioe) {
             inputStream = connection.getErrorStream();
         }
+        int responseCode = connection.getResponseCode();
+        if (responseCode == -1) {
+            throw new IOException(
+                    "Could not retrieve response code from HttpUrlConnection.");
+        }
+        response.setResponseCode(responseCode);
+        response.setResponseMessage(connection.getResponseMessage());
+        
         response.setContentStream(inputStream);
 
         response.setContentLength(connection.getContentLength());
