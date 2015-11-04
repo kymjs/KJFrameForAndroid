@@ -27,13 +27,13 @@ import org.kymjs.kjframe.utils.KJLoger;
  */
 public class BitmapConfig {
 
-    public boolean isDEBUG = KJLoger.DEBUG_LOG;
+    public static boolean isDEBUG = KJLoger.DEBUG_LOG;
 
     /** 新版本图片缓存与http缓存处于同一目录 */
     @Deprecated
     public static String CACHEPATH = HttpConfig.CACHEPATH;
 
-    /** 磁盘缓存器 **/
+    /** 缓存器 **/
     public static ImageCache mMemoryCache;
 
     public int cacheTime = 1440000;

@@ -18,10 +18,8 @@ package org.kymjs.kjframe;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -76,17 +74,20 @@ public class KJBitmap {
             bitmapConfig = new BitmapConfig();
         }
         this.mConfig = bitmapConfig;
-        displayer = new ImageDisplayer(httpConfig, mConfig);
+        displayer = new ImageDisplayer(httpConfig, bitmapConfig);
     }
 
 
     public static class Builder {
+        private static final int DEF_WIDTH_HEIGHT = -100;
         private View imageView;
         private String imageUrl;
-        private int width;
-        private int height;
+        private int width = DEF_WIDTH_HEIGHT;
+        private int height = DEF_WIDTH_HEIGHT;
         private Drawable loadBitmap;
         private Drawable errorBitmap;
+        private int loadBitmapRes;
+        private int errorBitmapRes;
         private BitmapCallBack callback;
         private BitmapConfig bitmapConfig;
         private HttpConfig httpConfig;
@@ -121,6 +122,16 @@ public class KJBitmap {
             return this;
         }
 
+        public Builder loadBitmapRes(int loadBitmapRes) {
+            this.loadBitmapRes = loadBitmapRes;
+            return this;
+        }
+
+        public Builder errorBitmapRes(int errorBitmapRes) {
+            this.errorBitmapRes = errorBitmapRes;
+            return this;
+        }
+
         public Builder loadBitmap(Drawable loadBitmap) {
             this.loadBitmap = loadBitmap;
             return this;
@@ -141,234 +152,70 @@ public class KJBitmap {
         }
 
         public void display(KJBitmap kjb) {
-            kjb.display(imageView, imageUrl, width, height, loadBitmap, errorBitmap, callback);
-        }
-    }
-
-    /**
-     * 使用默认配置加载网络图片(屏幕的一半显示图片)
-     *
-     * @param imageView 要显示图片的控件(ImageView设置src，普通View设置bg)
-     * @param imageUrl  图片的URL
-     */
-    public void display(View imageView, String imageUrl) {
-        displayWithDefWH(imageView, imageUrl, null, null, null);
-    }
-
-    /**
-     * @param imageView 要显示的View
-     * @param imageUrl  网络图片地址
-     * @param width     要显示的图片的最大宽度
-     * @param height    要显示图片的最大高度
-     */
-    @Deprecated
-    public void display(View imageView, String imageUrl, int width, int height) {
-        display(imageView, imageUrl, width, height, null, null, null);
-    }
-
-    /**
-     * @param imageView 要显示的View
-     * @param imageUrl  网络图片地址
-     * @param callback  加载过程的回调
-     */
-    @Deprecated
-    public void display(View imageView, String imageUrl, BitmapCallBack callback) {
-        displayWithDefWH(imageView, imageUrl, null, null, callback);
-    }
-
-    /**
-     * 如果内存缓存有图片，则显示内存缓存的图片，否则显示默认图片
-     *
-     * @param imageView    要显示的View
-     * @param imageUrl     网络图片地址
-     * @param defaultImage 如果没有内存缓存，则显示默认图片
-     */
-    public void displayCacheOrDefult(View imageView, String imageUrl,
-                                     int defaultImage) {
-        Bitmap cache = getMemoryCache(imageUrl);
-        if (cache == null) {
-            setViewImage(imageView, defaultImage);
-        } else {
-            setViewImage(imageView, cache);
-        }
-    }
-
-    /**
-     * 如果内存缓存有图片，则显示内存缓存的图片，否则显示默认图片
-     *
-     * @param imageView    要显示的View
-     * @param imageUrl     网络图片地址
-     * @param defaultImage 如果没有内存缓存，则显示默认图片
-     */
-    public void displayCacheOrDefult(View imageView, String imageUrl,
-                                     Drawable defaultImage) {
-        Bitmap cache = getMemoryCache(imageUrl);
-        if (cache == null) {
-            setViewImage(imageView, defaultImage);
-        } else {
-            setViewImage(imageView, cache);
-        }
-    }
-
-    /**
-     * @param imageView  要显示的View
-     * @param imageUrl   网络图片地址
-     * @param width      要显示的图片的最大宽度
-     * @param height     要显示图片的最大高度
-     * @param loadBitmap 加载中图片
-     */
-    @Deprecated
-    public void display(View imageView, String imageUrl, int width, int height,
-                        int loadBitmap) {
-        display(imageView, imageUrl, width, height, imageView.getResources()
-                .getDrawable(loadBitmap), null, null);
-    }
-
-    /**
-     * @param imageView  要显示的View
-     * @param imageUrl   网络图片地址
-     * @param loadBitmap 加载中的图片
-     */
-    @Deprecated
-    public void displayWithLoadBitmap(View imageView, String imageUrl,
-                                      int loadBitmap) {
-        displayWithDefWH(imageView, imageUrl, imageView.getResources()
-                .getDrawable(loadBitmap), null, null);
-    }
-
-    /**
-     * @param imageView   要显示的View
-     * @param imageUrl    网络图片地址
-     * @param errorBitmap 加载出错时设置的默认图片
-     */
-    @Deprecated
-    public void displayWithErrorBitmap(View imageView, String imageUrl,
-                                       int errorBitmap) {
-        displayWithDefWH(imageView, imageUrl, null, imageView.getResources()
-                .getDrawable(errorBitmap), null);
-    }
-
-    /**
-     * @param imageView   要显示的View
-     * @param imageUrl    网络图片地址
-     * @param errorBitmap 加载出错时设置的默认图片
-     */
-    @Deprecated
-    public void displayLoadAndErrorBitmap(View imageView, String imageUrl,
-                                          int loadBitmap, int errorBitmap) {
-        Resources res = imageView.getResources();
-        displayWithDefWH(imageView, imageUrl, res.getDrawable(loadBitmap),
-                res.getDrawable(errorBitmap), null);
-    }
-
-    /**
-     * 如果不指定宽高，则使用默认宽高计算方法
-     *
-     * @param imageView   要显示的View
-     * @param imageUrl    网络图片地址
-     * @param loadBitmap  加载中图片
-     * @param errorBitmap 加载失败的图片
-     * @param callback    加载过程的回调
-     */
-    @Deprecated
-    public void displayWithDefWH(View imageView, String imageUrl,
-                                 Drawable loadBitmap, Drawable errorBitmap, BitmapCallBack
-                                         callback) {
-        int w = imageView.getWidth();
-        ;
-        int h = imageView.getHeight();
-        if (w == 0) {
-            w = DensityUtils.getScreenW(imageView.getContext()) / 2;
-        }
-        if (h == 0) {
-            h = DensityUtils.getScreenH(imageView.getContext()) / 2;
-        }
-        display(imageView, imageUrl, w, h, loadBitmap, errorBitmap, callback);
-    }
-
-    /**
-     * @param imageView         要显示的View
-     * @param imageUrl          网络图片地址
-     * @param width             要显示的图片的最大宽度
-     * @param height            要显示图片的最大高度
-     * @param loadOrErrorBitmap 加载中或加载失败都显示这张图片
-     * @param callback          加载过程的回调
-     */
-    @Deprecated
-    public void display(View imageView, String imageUrl, int loadOrErrorBitmap,
-                        int width, int height, BitmapCallBack callback) {
-        display(imageView, imageUrl, width, height, imageView.getResources()
-                .getDrawable(loadOrErrorBitmap), imageView.getResources()
-                .getDrawable(loadOrErrorBitmap), callback);
-    }
-
-    /**
-     * 显示网络图片(core)
-     *
-     * @param imageView   要显示的View
-     * @param imageUrl    网络图片地址
-     * @param width       要显示的图片的最大宽度
-     * @param height      要显示图片的最大高度
-     * @param loadBitmap  加载中图片
-     * @param errorBitmap 加载失败的图片
-     * @param callback    加载过程的回调
-     */
-    @Deprecated
-    public void display(View imageView, String imageUrl, int width, int height,
-                        Drawable loadBitmap, Drawable errorBitmap, BitmapCallBack callback) {
-        if (imageView == null) {
-            showLogIfOpen("imageview is null");
-            return;
-        }
-        if (errorBitmap == null) {
-            errorBitmap = new ColorDrawable(0xFFCFCFCF);
-        }
-        if (StringUtils.isEmpty(imageUrl)) {
-            showLogIfOpen("image url is empty");
-            setViewImage(imageView, errorBitmap);
-            if (callback != null) {
-                callback.onFailure(new RuntimeException("image url is empty"));
+            if (imageView == null) {
+                showLogIfOpen("imageview is null");
+                return;
             }
-            return;
-        }
+            if (StringUtils.isEmpty(imageUrl)) {
+                showLogIfOpen("image url is empty");
+                doFailure(imageView, errorBitmap, errorBitmapRes);
+                if (callback != null)
+                    callback.onFailure(new RuntimeException("image url is empty"));
+                return;
+            }
 
-        if (loadBitmap == null) {
-            loadBitmap = new ColorDrawable(0xFFCFCFCF);
+            if (width == DEF_WIDTH_HEIGHT && height == DEF_WIDTH_HEIGHT) {
+                width = imageView.getWidth();
+                height = imageView.getHeight();
+                if (width == 0) {
+                    width = DensityUtils.getScreenW(imageView.getContext()) / 2;
+                }
+                if (height == 0) {
+                    height = DensityUtils.getScreenH(imageView.getContext()) / 2;
+                }
+            } else if (width == DEF_WIDTH_HEIGHT) {
+                width = DensityUtils.getScreenW(imageView.getContext());
+            } else if (height == DEF_WIDTH_HEIGHT) {
+                height = DensityUtils.getScreenH(imageView.getContext());
+            }
+
+            kjb.doDisplay(imageView, imageUrl, width, height, loadBitmap, loadBitmapRes,
+                    errorBitmap, errorBitmapRes, callback);
         }
-        doDisplay(imageView, imageUrl, width, height, loadBitmap, errorBitmap,
-                callback);
     }
 
     /**
      * 真正去加载一个图片
      */
-    private void doDisplay(final View imageView, final String imageUrl,
-                           int width, int height, final Drawable loadBitmap,
-                           final Drawable errorBitmap, final BitmapCallBack callback) {
+    private void doDisplay(final View imageView, final String imageUrl, int width, int height,
+                           final Drawable loadBitmap, final int loadBitmapRes,
+                           final Drawable errorBitmap, final int errorBitmapRes,
+                           final BitmapCallBack callback) {
         imageView.setTag(imageUrl);
-
-        BitmapCallBack mCallback = new BitmapCallBack() {
+        BitmapCallBack bitmapCallBack = new BitmapCallBack() {
             @Override
             public void onPreLoad() {
-                setViewImage(imageView, loadBitmap);
-                if (callback != null) {
+                super.onPreLoad();
+                if (getMemoryCache(imageUrl) == null)
+                    setImageWithResource(imageView, loadBitmap, loadBitmapRes);
+                if (callback != null)
                     callback.onPreLoad();
-                }
             }
 
             @Override
             public void onSuccess(Bitmap bitmap) {
+                super.onSuccess(bitmap);
                 if (imageUrl.equals(imageView.getTag())) {
-                    doSuccess(imageView, bitmap, loadBitmap);
-                    if (callback != null) {
+                    doSuccess(imageView, bitmap, errorBitmap, errorBitmapRes);
+                    if (callback != null)
                         callback.onSuccess(bitmap);
-                    }
                 }
             }
 
             @Override
             public void onFailure(Exception e) {
-                doFailure(imageView, errorBitmap);
+                super.onFailure(e);
+                doFailure(imageView, errorBitmap, errorBitmapRes);
                 if (callback != null) {
                     callback.onFailure(e);
                 }
@@ -391,30 +238,38 @@ public class KJBitmap {
         };
 
         if (imageUrl.startsWith("http")) {
-            displayer.get(imageUrl, width, height, mCallback);
+            displayer.get(imageUrl, width, height, bitmapCallBack);
         } else {
-            new DiskImageRequest().load(imageUrl, width, height, mCallback);
-        }
-    }
-
-    private void doFailure(View view, Drawable errorImage) {
-        if (errorImage != null) {
-            setViewImage(view, errorImage);
+            new DiskImageRequest().load(imageUrl, width, height, bitmapCallBack);
         }
     }
 
     /**
-     * 需要解释一下：如果在本地没有缓存的时候，会首先调用一次onSuccess(null)，此时返回的bitmap是null，
-     * 在这个时候我们去设置加载中的图片，当网络请求成功的时候，会再次调用onSuccess(bitmap)，此时才返回网络下载成功的bitmap
+     * 如果内存缓存有图片，则显示内存缓存的图片，否则显示默认图片
+     *
+     * @param imageView    要显示的View
+     * @param imageUrl     网络图片地址
+     * @param defaultImage 如果没有内存缓存，则显示默认图片
      */
-    private void doSuccess(View view, Bitmap bitmap, Drawable defaultImage) {
-        if (bitmap != null) {
-            setViewImage(view, bitmap);
-        } else if (defaultImage != null) {
-            setViewImage(view, defaultImage);
-        }
+    public void displayCacheOrDefult(View imageView, String imageUrl,
+                                     int defaultImage) {
+        Bitmap cache = getMemoryCache(imageUrl);
+        doSuccess(imageView, cache, null, defaultImage);
     }
 
+    /**
+     * 如果内存缓存有图片，则显示内存缓存的图片，否则显示默认图片
+     *
+     * @param imageView    要显示的View
+     * @param imageUrl     网络图片地址
+     * @param defaultImage 如果没有内存缓存，则显示默认图片
+     */
+    public void displayCacheOrDefult(View imageView, String imageUrl,
+                                     Drawable defaultImage) {
+        Bitmap cache = getMemoryCache(imageUrl);
+        doSuccess(imageView, cache, defaultImage, 0);
+    }
+    
     /**
      * 移除一个缓存
      *
@@ -423,6 +278,15 @@ public class KJBitmap {
     public void removeCache(String url) {
         BitmapConfig.mMemoryCache.remove(url);
         HttpConfig.mCache.remove(url);
+    }
+
+    /**
+     * 取消一个加载请求
+     *
+     * @param url 要取消的url
+     */
+    public void cancel(String url) {
+        displayer.cancel(url);
     }
 
     /**
@@ -456,17 +320,8 @@ public class KJBitmap {
      * @param url key
      * @return 缓存的bitmap或null
      */
-    public Bitmap getMemoryCache(String url) {
+    public static Bitmap getMemoryCache(String url) {
         return BitmapConfig.mMemoryCache.getBitmap(url);
-    }
-
-    /**
-     * 取消一个加载请求
-     *
-     * @param url 要取消的url
-     */
-    public void cancel(String url) {
-        displayer.cancel(url);
     }
 
     /**
@@ -556,9 +411,63 @@ public class KJBitmap {
      * private method
      *********************/
 
+    /**
+     * 按照优先级为View设置图片资源
+     * 优先使用drawable，仅当drawable无效时使用bitmapRes，若两值均无效，则不作处理
+     *
+     * @param view          要设置图片的控件(View设置bg，ImageView设置src)
+     * @param errorImage    优先使用项
+     * @param errorImageRes 次级使用项
+     */
+    private static void doFailure(View view, Drawable errorImage, int errorImageRes) {
+        setImageWithResource(view, errorImage, errorImageRes);
+    }
+
+    /**
+     * 按照优先级为View设置图片资源
+     *
+     * @param view          要设置图片的控件(View设置bg，ImageView设置src)
+     * @param bitmap        优先使用项
+     * @param errorImage    二级使用项
+     * @param errorImageRes 三级使用项
+     */
+    private static void doSuccess(View view, Bitmap bitmap, Drawable errorImage,
+                                  int errorImageRes) {
+        if (bitmap != null) {
+            setViewImage(view, bitmap);
+        } else {
+            setImageWithResource(view, errorImage, errorImageRes);
+        }
+    }
+
+    /**
+     * 按照优先级为View设置图片资源
+     * 优先使用drawable，仅当drawable无效时使用bitmapRes，若两值均无效，则不作处理
+     *
+     * @param imageView 要设置图片的控件(View设置bg，ImageView设置src)
+     * @param drawable  优先使用项
+     * @param bitmapRes 次级使用项
+     */
+    private static void setImageWithResource(View imageView, Drawable drawable,
+                                             int bitmapRes) {
+        if (drawable != null) {
+            setViewImage(imageView, drawable);
+        } else if (bitmapRes > 0) { //大于0视为有效ImageResource
+            setViewImage(imageView, bitmapRes);
+        }
+    }
+
+    private static void setViewImage(View view, int background) {
+        if (view instanceof ImageView) {
+            ((ImageView) view).setImageResource(background);
+        } else {
+            view.setBackgroundResource(background);
+        }
+    }
+
     @SuppressLint("NewApi")
     @SuppressWarnings("deprecation")
-    private void setViewImage(View view, Bitmap background) {
+    private static void setViewImage(View view, Bitmap background) {
         if (view instanceof ImageView) {
             ((ImageView) view).setImageBitmap(background);
         } else {
@@ -572,17 +481,9 @@ public class KJBitmap {
         }
     }
 
-    private void setViewImage(View view, int background) {
-        if (view instanceof ImageView) {
-            ((ImageView) view).setImageResource(background);
-        } else {
-            view.setBackgroundResource(background);
-        }
-    }
-
     @SuppressLint("NewApi")
     @SuppressWarnings("deprecation")
-    private void setViewImage(View view, Drawable background) {
+    private static void setViewImage(View view, Drawable background) {
         if (view instanceof ImageView) {
             ((ImageView) view).setImageDrawable(background);
         } else {
@@ -594,9 +495,65 @@ public class KJBitmap {
         }
     }
 
-    private void showLogIfOpen(String msg) {
-        if (mConfig.isDEBUG) {
-            KJLoger.debugLog(getClass().getSimpleName(), msg);
+    private static void showLogIfOpen(String msg) {
+        if (BitmapConfig.isDEBUG) {
+            KJLoger.debugLog(KJBitmap.class.getSimpleName(), msg);
         }
+    }
+
+
+    /*********************
+     * Deprecated method
+     *********************/
+
+    @Deprecated
+    public void display(View imageView, String imageUrl) {
+        new Builder().view(imageView).imageUrl(imageUrl).display(this);
+    }
+
+    @Deprecated
+    public void display(View imageView, String imageUrl, int width, int height) {
+        new Builder().view(imageView).imageUrl(imageUrl).width(width).height(height).display(this);
+    }
+
+    @Deprecated
+    public void display(View imageView, String imageUrl, BitmapCallBack callback) {
+        new Builder().view(imageView).imageUrl(imageUrl).callback(callback).display(this);
+    }
+
+    @Deprecated
+    public void display(View imageView, String imageUrl, int width, int height, int loadBitmap) {
+        new Builder().view(imageView).imageUrl(imageUrl).width(width).height(height)
+                .loadBitmapRes(loadBitmap).display(this);
+    }
+    
+    @Deprecated
+    public void displayWithLoadBitmap(View imageView, String imageUrl, int loadBitmap) {
+        new Builder().view(imageView).imageUrl(imageUrl).loadBitmapRes(loadBitmap).display(this);
+    }
+
+    @Deprecated
+    public void displayWithErrorBitmap(View imageView, String imageUrl, int errorBitmap) {
+        new Builder().view(imageView).imageUrl(imageUrl).errorBitmapRes(errorBitmap).display(this);
+    }
+
+    @Deprecated
+    public void displayLoadAndErrorBitmap(View imageView, String imageUrl,
+                                          int loadBitmap, int errorBitmap) {
+        new Builder().view(imageView).imageUrl(imageUrl).loadBitmapRes(loadBitmap)
+                .errorBitmapRes(errorBitmap).display(this);
+    }
+
+    public void displayWithDefWH(View imageView, String imageUrl, Drawable loadBitmap,
+                                 Drawable errorBitmap, BitmapCallBack callback) {
+        new Builder().view(imageView).imageUrl(imageUrl).loadBitmap(loadBitmap)
+                .errorBitmap(errorBitmap).callback(callback).display(this);
+    }
+
+    public void display(View imageView, String imageUrl, int loadAndErrorRes,
+                        int width, int height, BitmapCallBack callback) {
+        new Builder().view(imageView).imageUrl(imageUrl).loadBitmapRes(loadAndErrorRes)
+                .errorBitmapRes(loadAndErrorRes).width(width).height(height).callback(callback)
+                .display(this);
     }
 }

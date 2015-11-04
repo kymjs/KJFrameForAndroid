@@ -555,8 +555,7 @@ public class KJHttp {
                         .remove(cacheKey);
                 if (waitingRequests != null) {
                     if (HttpConfig.DEBUG) {
-                        KJLoger.debug(
-                                "Releasing %d waiting requests for cacheKey=%s.",
+                        KJLoger.debug("Releasing %d waiting requests for cacheKey=%s.",
                                 waitingRequests.size(), cacheKey);
                     }
                     mCacheQueue.addAll(waitingRequests);
