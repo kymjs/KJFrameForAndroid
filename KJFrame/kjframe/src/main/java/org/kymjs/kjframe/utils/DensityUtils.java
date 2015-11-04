@@ -22,7 +22,6 @@ import android.util.TypedValue;
 
 /**
  * 系统屏幕的一些操作<br>
- * <p/>
  * <b>创建时间</b> 2014-8-14
  *
  * @author kymjs (https://github.com/kymjs)
