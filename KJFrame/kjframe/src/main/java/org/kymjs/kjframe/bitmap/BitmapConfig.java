@@ -16,7 +16,6 @@
 package org.kymjs.kjframe.bitmap;
 
 import org.kymjs.kjframe.bitmap.ImageDisplayer.ImageCache;
-import org.kymjs.kjframe.http.HttpConfig;
 import org.kymjs.kjframe.utils.KJLoger;
 
 /**
@@ -29,16 +28,12 @@ public class BitmapConfig {
 
     public static boolean isDEBUG = KJLoger.DEBUG_LOG;
 
-    /** 新版本图片缓存与http缓存处于同一目录 */
-    @Deprecated
-    public static String CACHEPATH = HttpConfig.CACHEPATH;
-
     /** 缓存器 **/
     public static ImageCache mMemoryCache;
 
     public int cacheTime = 1440000;
     // 为了防止网速很快的时候速度过快而造成先显示加载中图片，然后瞬间显示网络图片的闪烁问题
-    public long delayTime = 100;
+    public long delayTime = 0;
 
     public BitmapConfig() {
         if (mMemoryCache == null) {

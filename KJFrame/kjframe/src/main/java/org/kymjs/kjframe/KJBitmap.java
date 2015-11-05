@@ -44,6 +44,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashSet;
 
 /**
  * The BitmapLibrary's core classes<br>
@@ -55,8 +56,8 @@ import java.io.OutputStream;
  */
 public class KJBitmap {
 
-    private final BitmapConfig mConfig;
-    private final ImageDisplayer displayer;
+    private ImageDisplayer displayer;
+    private HashSet<String> currentUrls = new HashSet<>(20);
 
     public KJBitmap() {
         this(new BitmapConfig());
@@ -73,7 +74,6 @@ public class KJBitmap {
         if (bitmapConfig == null) {
             bitmapConfig = new BitmapConfig();
         }
-        this.mConfig = bitmapConfig;
         displayer = new ImageDisplayer(httpConfig, bitmapConfig);
     }
 
@@ -209,6 +209,7 @@ public class KJBitmap {
                     doSuccess(imageView, bitmap, errorBitmap, errorBitmapRes);
                     if (callback != null)
                         callback.onSuccess(bitmap);
+                    currentUrls.add(imageUrl);
                 }
             }
 
@@ -269,7 +270,7 @@ public class KJBitmap {
         Bitmap cache = getMemoryCache(imageUrl);
         doSuccess(imageView, cache, defaultImage, 0);
     }
-    
+
     /**
      * 移除一个缓存
      *
@@ -278,6 +279,14 @@ public class KJBitmap {
     public void removeCache(String url) {
         BitmapConfig.mMemoryCache.remove(url);
         HttpConfig.mCache.remove(url);
+    }
+
+    public void finish() {
+        for (String url : currentUrls) {
+            BitmapConfig.mMemoryCache.remove(url);
+        }
+        currentUrls = null;
+        displayer = null;
     }
 
     /**
@@ -526,7 +535,7 @@ public class KJBitmap {
         new Builder().view(imageView).imageUrl(imageUrl).width(width).height(height)
                 .loadBitmapRes(loadBitmap).display(this);
     }
-    
+
     @Deprecated
     public void displayWithLoadBitmap(View imageView, String imageUrl, int loadBitmap) {
         new Builder().view(imageView).imageUrl(imageUrl).loadBitmapRes(loadBitmap).display(this);
@@ -544,12 +553,14 @@ public class KJBitmap {
                 .errorBitmapRes(errorBitmap).display(this);
     }
 
+    @Deprecated
     public void displayWithDefWH(View imageView, String imageUrl, Drawable loadBitmap,
                                  Drawable errorBitmap, BitmapCallBack callback) {
         new Builder().view(imageView).imageUrl(imageUrl).loadBitmap(loadBitmap)
                 .errorBitmap(errorBitmap).callback(callback).display(this);
     }
 
+    @Deprecated
     public void display(View imageView, String imageUrl, int loadAndErrorRes,
                         int width, int height, BitmapCallBack callback) {
         new Builder().view(imageView).imageUrl(imageUrl).loadBitmapRes(loadAndErrorRes)
