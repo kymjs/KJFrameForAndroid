@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -57,6 +58,7 @@ import java.util.HashSet;
 public class KJBitmap {
 
     private ImageDisplayer displayer;
+    private DiskImageRequest diskImageRequest;
     private HashSet<String> currentUrls = new HashSet<>(20);
 
     public KJBitmap() {
@@ -68,7 +70,7 @@ public class KJBitmap {
     }
 
     public KJBitmap(HttpConfig httpConfig, BitmapConfig bitmapConfig) {
-        displayer = new ImageDisplayer(new KJHttp(httpConfig), bitmapConfig);
+        this(new KJHttp(httpConfig), bitmapConfig);
     }
 
     public KJBitmap(KJHttp kjHttp, BitmapConfig bitmapConfig) {
@@ -178,6 +180,10 @@ public class KJBitmap {
                 height = DensityUtils.getScreenH(imageView.getContext());
             }
 
+            if (loadBitmapRes == 0 && loadBitmap == null) {
+                loadBitmap = new ColorDrawable(0xFFCFCFCF);
+            }
+
             kjb.doDisplay(imageView, imageUrl, width, height, loadBitmap, loadBitmapRes,
                     errorBitmap, errorBitmapRes, callback);
         }
@@ -240,7 +246,10 @@ public class KJBitmap {
         if (imageUrl.startsWith("http")) {
             displayer.get(imageUrl, width, height, bitmapCallBack);
         } else {
-            new DiskImageRequest().load(imageUrl, width, height, bitmapCallBack);
+            if (diskImageRequest == null) {
+                diskImageRequest = new DiskImageRequest();
+            }
+            diskImageRequest.load(imageUrl, width, height, bitmapCallBack);
         }
     }
 
@@ -286,6 +295,7 @@ public class KJBitmap {
         }
         currentUrls = null;
         displayer = null;
+        diskImageRequest = null;
     }
 
     /**
