@@ -21,7 +21,6 @@ import android.os.Looper;
 
 import org.kymjs.kjframe.KJHttp;
 import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpConfig;
 import org.kymjs.kjframe.http.KJHttpException;
 import org.kymjs.kjframe.http.Request;
 
@@ -34,7 +33,7 @@ import java.util.LinkedList;
  * @author kymjs (https://www.kymjs.com/)
  */
 public class ImageDisplayer {
-    private static KJHttp sKJHttp = new KJHttp(); // 使用KJHttp的线程池执行队列去加载图片
+    private KJHttp kjHttp; // 使用KJHttp的线程池执行队列去加载图片
 
     private final ImageCache mMemoryCache; // 内存缓存器
     private final long mResponseDelayMs;
@@ -52,14 +51,8 @@ public class ImageDisplayer {
      *
      * @param bitmapConfig KJBitmap配置器
      */
-    public ImageDisplayer(HttpConfig httpConfig, BitmapConfig bitmapConfig) {
-        // 在这里踩了个坑。 最初写的是Integer.MAX_VALUE,
-        // 结果把这个值*60000转成毫秒long以后溢出了 这次我给个死的值行不行。1000天，能不能算永久了
-        // 其实还有一种解决办法是直接在缓存读取的时候，看到是bitmap缓存不管是否失效都返回，
-        // 但是这种不利于自定义扩展，就不用了，有兴趣的可以看CacheDispatcher的105行
-        // kymjs记录于2015.4.30
-        // config.cacheTime = bitmapConfig.cacheTime;
-        sKJHttp.setConfig(httpConfig);
+    public ImageDisplayer(KJHttp http, BitmapConfig bitmapConfig) {
+        kjHttp = http;
         mMemoryCache = BitmapConfig.mMemoryCache;
         mResponseDelayMs = bitmapConfig.delayTime;
     }
@@ -109,8 +102,8 @@ public class ImageDisplayer {
 
         Request<Bitmap> newRequest = makeImageRequest(requestUrl, maxWidth,
                 maxHeight);
-        newRequest.setConfig(sKJHttp.getConfig());
-        sKJHttp.doRequest(newRequest);
+        newRequest.setConfig(kjHttp.getConfig());
+        kjHttp.doRequest(newRequest);
         mRequestsMap.put(requestUrl,
                 new ImageRequestEven(newRequest, imageBale));
         return imageBale;
@@ -305,7 +298,7 @@ public class ImageDisplayer {
      * @param url key
      */
     public void cancel(String url) {
-        sKJHttp.cancel(url);
+        kjHttp.cancel(url);
     }
 
     /**

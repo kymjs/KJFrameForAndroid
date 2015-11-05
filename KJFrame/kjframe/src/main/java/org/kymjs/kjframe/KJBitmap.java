@@ -60,23 +60,22 @@ public class KJBitmap {
     private HashSet<String> currentUrls = new HashSet<>(20);
 
     public KJBitmap() {
-        this(new BitmapConfig());
+        this(null);
     }
 
     public KJBitmap(BitmapConfig bitmapConfig) {
-        this(new HttpConfig(), bitmapConfig);
+        this((KJHttp) null, bitmapConfig);
     }
 
     public KJBitmap(HttpConfig httpConfig, BitmapConfig bitmapConfig) {
-        if (httpConfig == null) {
-            httpConfig = new HttpConfig();
-        }
-        if (bitmapConfig == null) {
-            bitmapConfig = new BitmapConfig();
-        }
-        displayer = new ImageDisplayer(httpConfig, bitmapConfig);
+        displayer = new ImageDisplayer(new KJHttp(httpConfig), bitmapConfig);
     }
 
+    public KJBitmap(KJHttp kjHttp, BitmapConfig bitmapConfig) {
+        if (kjHttp == null) kjHttp = new KJHttp();
+        if (bitmapConfig == null) bitmapConfig = new BitmapConfig();
+        displayer = new ImageDisplayer(kjHttp, bitmapConfig);
+    }
 
     public static class Builder {
         private static final int DEF_WIDTH_HEIGHT = -100;

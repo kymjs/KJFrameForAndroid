@@ -112,12 +112,6 @@ public class HttpConfig {
      */
     public HttpStack httpStackFactory() {
             return new HttpConnectStack();
-//        if (Build.VERSION.SDK_INT >= 11) {
-//            return new HttpConnectStack();
-//        } else {
-//            return new HttpClientStack(
-//                    AndroidHttpClient.newInstance("kjframe/0"));
-//        }
     }
 
     public HttpStack httpStackFactory(SSLSocketFactory ssl) {

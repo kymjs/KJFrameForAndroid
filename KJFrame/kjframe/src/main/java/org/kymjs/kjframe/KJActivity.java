@@ -215,6 +215,11 @@ public abstract class KJActivity extends FragmentActivity implements
         KJLoger.state(this.getClass().getName(), "---------onDestroy ");
         super.onDestroy();
         KJActivityStack.create().finishActivity(this);
+        currentKJFragment = null;
+        currentSupportFragment = null;
+        callback = null;
+        threadHandle = null;
+        aty = null;
     }
 
     /**

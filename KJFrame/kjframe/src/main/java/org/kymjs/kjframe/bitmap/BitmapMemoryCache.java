@@ -23,7 +23,6 @@ import org.kymjs.kjframe.utils.SystemTool;
 
 /**
  * 使用lru算法的Bitmap内存缓存池
- * <p/>
  * <b>创建时间</b> 2014-7-11
  *
  * @author kymjs (https://github.com/kymjs)
