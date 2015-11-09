@@ -20,15 +20,16 @@ import org.kymjs.kjframe.utils.KJLoger;
 
 /**
  * Bitmap配置器
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
- * 
  */
-public class BitmapConfig {
+public final class BitmapConfig {
 
     public static boolean isDEBUG = KJLoger.DEBUG_LOG;
 
-    /** 缓存器 **/
+    /**
+     * 缓存器
+     **/
     public static ImageCache mMemoryCache;
 
     public int cacheTime = 1440000;

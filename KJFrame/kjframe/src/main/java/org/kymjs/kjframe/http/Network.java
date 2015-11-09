@@ -83,11 +83,9 @@ public class Network {
                 if (statusCode < 200 || statusCode > 299) {
                     throw new IOException();
                 }
-                return new NetworkResponse(statusCode, responseContents,
-                        responseHeaders, false);
+                return new NetworkResponse(statusCode, responseContents, responseHeaders, false);
             } catch (SocketTimeoutException e) {
-                throw new KJHttpException(new SocketTimeoutException(
-                        "socket timeout"));
+                throw new KJHttpException(new SocketTimeoutException("socket timeout"));
             } catch (MalformedURLException e) {
                 throw new RuntimeException("Bad URL " + request.getUrl(), e);
             } catch (IOException e) {
@@ -98,8 +96,7 @@ public class Network {
                 } else {
                     throw new KJHttpException("NoConnection error", e);
                 }
-                KJLoger.debug("Unexpected response code %d for %s", statusCode,
-                        request.getUrl());
+                KJLoger.debug("Unexpected response code %d for %s", statusCode, request.getUrl());
                 if (responseContents != null) {
                     networkResponse = new NetworkResponse(statusCode,
                             responseContents, responseHeaders, false);

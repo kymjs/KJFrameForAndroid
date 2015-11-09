@@ -113,13 +113,27 @@ public class KJBitmap {
             return this;
         }
 
+        /**
+         * 使用size(width, height)
+         */
+        @Deprecated
         public Builder width(int width) {
             this.width = width;
             return this;
         }
 
+        /**
+         * 使用size(width, height)
+         */
+        @Deprecated
         public Builder height(int height) {
             this.height = height;
+            return this;
+        }
+
+        public Builder size(int width, int height) {
+            this.height = height;
+            this.width = width;
             return this;
         }
 

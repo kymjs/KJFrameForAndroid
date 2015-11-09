@@ -17,6 +17,7 @@ package org.kymjs.kjframe.http;
 
 import android.os.SystemClock;
 
+import org.kymjs.kjframe.utils.FileUtils;
 import org.kymjs.kjframe.utils.KJLoger;
 
 import java.io.BufferedInputStream;
@@ -174,21 +175,21 @@ public class DiskCache implements Cache {
     public synchronized void put(String key, Entry entry) {
         pruneIfNeeded(entry.data.length);
         File file = getFileForKey(key);
+        FileOutputStream fos = null;
         try {
-            FileOutputStream fos = new FileOutputStream(file);
+            fos = new FileOutputStream(file);
             CacheHeader e = new CacheHeader(key, entry);
             boolean success = e.writeHeader(fos);
             if (!success) {
-                fos.close();
                 KJLoger.debug("Failed to write header for %s",
                         file.getAbsolutePath());
                 throw new IOException();
             }
             fos.write(entry.data);
-            fos.close();
             putEntry(key, e);
             return;
         } catch (IOException e) {
+            FileUtils.closeIO(fos);
         }
         boolean deleted = file.delete();
         if (!deleted) {
@@ -510,7 +511,7 @@ public class DiskCache implements Cache {
     static Map<String, String> readStringStringMap(InputStream is)
             throws IOException {
         int size = readInt(is);
-        Map<String, String> result = (size == 0) ? Collections.<String, String>emptyMap() : new 
+        Map<String, String> result = (size == 0) ? Collections.<String, String>emptyMap() : new
                 HashMap<String, String>(size);
         for (int i = 0; i < size; i++) {
             String key = readString(is).intern();

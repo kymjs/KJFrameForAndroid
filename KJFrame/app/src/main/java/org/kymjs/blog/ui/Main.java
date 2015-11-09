@@ -162,7 +162,7 @@ public class Main extends TitleBarActivity {
                 mMainLoopHandler.removeCallbacks(onBackTimeRunnable);
                 isOnKeyBacking = false;
                 // UIHelper.toHome(aty);
-                KJActivityStack.create().AppExit(aty);
+                KJActivityStack.create().appExit(aty);
             } else {
                 isOnKeyBacking = true;
                 showExitTip();

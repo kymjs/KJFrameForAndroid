@@ -15,24 +15,25 @@
  */
 package org.kymjs.kjframe.database.utils;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.kymjs.kjframe.database.annotate.Id;
 import org.kymjs.kjframe.database.annotate.ManyToOne;
 import org.kymjs.kjframe.database.annotate.OneToMany;
 import org.kymjs.kjframe.database.annotate.Property;
 import org.kymjs.kjframe.database.annotate.Transient;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * 字段操作工具类<br>
- * 
+ * <p/>
  * <b>创建时间</b> 2014-8-15
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  */
@@ -50,7 +51,7 @@ public class FieldUtils {
     }
 
     public static Method getBooleanFieldGetMethod(Class<?> clazz,
-            String fieldName) {
+                                                  String fieldName) {
         String mn = "is" + fieldName.substring(0, 1).toUpperCase()
                 + fieldName.substring(1);
         if (isISStart(fieldName)) {
@@ -123,7 +124,7 @@ public class FieldUtils {
 
     /**
      * 获取某个字段的值
-     * 
+     *
      * @param entity
      * @param field
      * @return
@@ -135,7 +136,7 @@ public class FieldUtils {
 
     /**
      * 获取某个字段的值
-     * 
+     *
      * @param entity
      * @param fieldName
      * @return
@@ -147,7 +148,7 @@ public class FieldUtils {
 
     /**
      * 设置某个字段的值
-     * 
+     *
      * @param entity
      * @param field
      * @param value
@@ -189,7 +190,7 @@ public class FieldUtils {
 
     /**
      * 获取某个字段的值
-     * 
+     *
      * @param clazz
      * @param columnName
      * @return
@@ -230,11 +231,9 @@ public class FieldUtils {
 
     /**
      * 获取某个字段的值
-     * 
-     * @param clazz
-     *            JavaBean实例
-     * @param fieldName
-     *            字段名
+     *
+     * @param clazz     JavaBean实例
+     * @param fieldName 字段名
      * @return
      */
     public static Field getFieldByName(Class<?> clazz, String fieldName) {
@@ -253,7 +252,7 @@ public class FieldUtils {
 
     /**
      * 获取某个属性对应的 表的列
-     * 
+     *
      * @param field
      * @return
      */
@@ -291,7 +290,7 @@ public class FieldUtils {
 
     /**
      * 检测 字段是否已经被标注为 非数据库字段
-     * 
+     *
      * @param f
      * @return
      */
@@ -301,7 +300,7 @@ public class FieldUtils {
 
     /**
      * 获取某个实体执行某个方法的结果
-     * 
+     *
      * @param obj
      * @param method
      * @return
@@ -344,13 +343,12 @@ public class FieldUtils {
                 || clazz.equals(java.sql.Date.class) || clazz.isPrimitive();
     }
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat(
-            "yyyy-MM-dd HH:mm:ss");
 
     private static Date stringToDateTime(String strDate) {
         if (strDate != null) {
             try {
-                return sdf.parse(strDate);
+                return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse
+                        (strDate);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

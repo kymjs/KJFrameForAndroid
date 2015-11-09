@@ -29,7 +29,7 @@ import javax.net.ssl.SSLSocketFactory;
  *
  * @author kymjs (http://www.kymjs.com/) .
  */
-public class HttpConfig {
+public final class HttpConfig {
 
     public static boolean DEBUG = true;
 
@@ -111,17 +111,19 @@ public class HttpConfig {
      * @return
      */
     public HttpStack httpStackFactory() {
-            return new HttpConnectStack();
+        return new HttpConnectStack();
     }
 
     public HttpStack httpStackFactory(SSLSocketFactory ssl) {
         return new HttpConnectStack(null, ssl);
     }
 
+    @Deprecated
     public void setCookieString(String cookie) {
         sCookie = cookie;
     }
 
+    @Deprecated
     public String getCookieString() {
         return sCookie;
     }

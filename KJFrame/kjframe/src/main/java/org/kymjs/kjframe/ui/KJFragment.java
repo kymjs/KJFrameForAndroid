@@ -59,8 +59,9 @@ public abstract class KJFragment extends Fragment implements View.OnClickListene
         // 当线程中初始化的数据初始化完成后，调用回调方法
         @Override
         public void handleMessage(android.os.Message msg) {
-            if (msg.what == WHICH_MSG && mOuterInstance.get() != null) {
-                mOuterInstance.get().callback.onSuccess();
+            KJFragment kjFragment = mOuterInstance.get();
+            if (msg.what == WHICH_MSG && kjFragment != null) {
+                kjFragment.callback.onSuccess();
             }
         }
     }
