@@ -20,7 +20,6 @@ import java.util.Locale;
 
 /**
  * 键值对封装<br>
- * <p/>
  * <b>创建时间</b> 2014-8-15
  *
  * @author kymjs (https://github.com/kymjs)

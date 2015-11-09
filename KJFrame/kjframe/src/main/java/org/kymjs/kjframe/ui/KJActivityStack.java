@@ -22,7 +22,6 @@ import java.util.Stack;
 
 /**
  * 应用程序Activity管理类：用于Activity管理和应用程序退出<br>
- * <p/>
  * <b>创建时间</b> 2014-2-28
  *
  * @author kymjs (https://github.com/kymjs)

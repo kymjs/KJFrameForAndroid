@@ -27,7 +27,6 @@ import java.util.Locale;
 
 /**
  * 属性 ，【非主键】的【基本数据类型】 都是属性<br>
- * <p/>
  * <b>创建时间</b> 2014-8-15
  *
  * @author kymjs (https://github.com/kymjs)

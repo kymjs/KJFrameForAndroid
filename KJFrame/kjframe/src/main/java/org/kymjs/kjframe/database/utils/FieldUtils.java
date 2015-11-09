@@ -31,7 +31,6 @@ import java.util.Locale;
 
 /**
  * 字段操作工具类<br>
- * <p/>
  * <b>创建时间</b> 2014-8-15
  *
  * @author kymjs (https://github.com/kymjs)
