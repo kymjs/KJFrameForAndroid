@@ -78,8 +78,9 @@ public abstract class KJActivity extends FragmentActivity implements
         // 当线程中初始化的数据初始化完成后，调用回调方法
         @Override
         public void handleMessage(android.os.Message msg) {
-            if (msg.what == WHICH_MSG && mOuterInstance.get() != null) {
-                mOuterInstance.get().callback.onSuccess();
+            KJActivity aty = mOuterInstance.get();
+            if (msg.what == WHICH_MSG && aty != null) {
+                aty.callback.onSuccess();
             }
         }
     }
@@ -215,6 +216,11 @@ public abstract class KJActivity extends FragmentActivity implements
         KJLoger.state(this.getClass().getName(), "---------onDestroy ");
         super.onDestroy();
         KJActivityStack.create().finishActivity(this);
+        currentKJFragment = null;
+        currentSupportFragment = null;
+        callback = null;
+        threadHandle = null;
+        aty = null;
     }
 
     /**

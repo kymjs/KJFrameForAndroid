@@ -15,17 +15,16 @@
  */
 package org.kymjs.blog.ui;
 
-import org.kymjs.blog.AppContext;
-import org.kymjs.blog.R;
-import org.kymjs.blog.service.CommonService;
-import org.kymjs.kjframe.KJActivity;
-import org.kymjs.kjframe.utils.DensityUtils;
-import org.kymjs.kjframe.utils.PreferenceHelper;
-
 import android.content.Intent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+
+import org.kymjs.blog.AppContext;
+import org.kymjs.blog.R;
+import org.kymjs.kjframe.KJActivity;
+import org.kymjs.kjframe.utils.DensityUtils;
+import org.kymjs.kjframe.utils.PreferenceHelper;
 
 /**
  * 开机界面
@@ -65,7 +64,7 @@ public class AppStart extends KJActivity {
     private void configPush() {}
 
     private void jumpTo() {
-        startService(new Intent(aty, CommonService.class));
+//        startService(new Intent(aty, CommonService.class));
         configPush();
         boolean isFirst = PreferenceHelper.readBoolean(aty, TAG, "first_open",
                 true);

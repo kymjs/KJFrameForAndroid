@@ -22,9 +22,8 @@ import java.util.Stack;
 
 /**
  * 应用程序Activity管理类：用于Activity管理和应用程序退出<br>
- * 
  * <b>创建时间</b> 2014-2-28
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
  * @version 1.1
  */
@@ -32,7 +31,8 @@ final public class KJActivityStack {
     private static Stack<I_KJActivity> activityStack;
     private static final KJActivityStack instance = new KJActivityStack();
 
-    private KJActivityStack() {}
+    private KJActivityStack() {
+    }
 
     public static KJActivityStack create() {
         return instance;
@@ -116,7 +116,7 @@ final public class KJActivityStack {
 
     /**
      * 关闭除了指定activity以外的全部activity 如果cls不存在于栈中，则栈全部清空
-     * 
+     *
      * @param cls
      */
     public void finishOthersActivity(Class<?> cls) {
@@ -139,11 +139,15 @@ final public class KJActivityStack {
         activityStack.clear();
     }
 
+    @Deprecated
+    public void AppExit(Context cxt) {
+        appExit(cxt);
+    }
+
     /**
      * 应用程序退出
-     * 
      */
-    public void AppExit(Context context) {
+    public void appExit(Context context) {
         try {
             finishAllActivity();
             Runtime.getRuntime().exit(0);

@@ -15,7 +15,15 @@
  */
 package org.kymjs.blog.ui.fragment;
 
-import java.util.List;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
 import org.kymjs.blog.R;
 import org.kymjs.blog.adapter.BlogAdapter;
@@ -35,15 +43,7 @@ import org.kymjs.kjframe.ui.BindView;
 import org.kymjs.kjframe.utils.KJLoger;
 import org.kymjs.kjframe.utils.StringUtils;
 
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
+import java.util.List;
 
 /**
  * 主界面博客模块
@@ -114,7 +114,7 @@ public class BlogFragment extends TitleBarFragment {
      */
     private void listViewPreference() {
         mList = mRefreshLayout.getRefreshView();
-        mList.setDivider(new ColorDrawable(android.R.color.transparent));
+        mList.setDivider(new ColorDrawable(0x00000000));
         mList.setOverscrollFooter(null);
         mList.setOverscrollHeader(null);
         mList.setOverScrollMode(ListView.OVER_SCROLL_NEVER);

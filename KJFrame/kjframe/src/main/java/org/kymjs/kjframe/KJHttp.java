@@ -492,7 +492,7 @@ public class KJHttp {
     }
 
     /**
-     * 向请求队列加入一个请求<br>
+     * 向请求队列加入一个请求
      * Note:此处工作模式是这样的：KJHttp可以看做是一个队列类，而本方法不断的向这个队列添加request；另一方面，
      * TaskThread不停的从这个队列中取request并执行。类似的设计可以参考Handle...Looper...MessageQueue的关系
      */
@@ -528,8 +528,7 @@ public class KJHttp {
                 stagedRequests.add(request);
                 mWaitingRequests.put(cacheKey, stagedRequests);
                 if (HttpConfig.DEBUG) {
-                    KJLoger.debug(
-                            "Request for cacheKey=%s is in flight, putting on hold.",
+                    KJLoger.debug("Request for cacheKey=%s is in flight, putting on hold.", 
                             cacheKey);
                 }
             } else {
@@ -551,12 +550,10 @@ public class KJHttp {
         if (request.shouldCache()) {
             synchronized (mWaitingRequests) {
                 String cacheKey = request.getCacheKey();
-                Queue<Request<?>> waitingRequests = mWaitingRequests
-                        .remove(cacheKey);
+                Queue<Request<?>> waitingRequests = mWaitingRequests.remove(cacheKey);
                 if (waitingRequests != null) {
                     if (HttpConfig.DEBUG) {
-                        KJLoger.debug(
-                                "Releasing %d waiting requests for cacheKey=%s.",
+                        KJLoger.debug("Releasing %d waiting requests for cacheKey=%s.",
                                 waitingRequests.size(), cacheKey);
                     }
                     mCacheQueue.addAll(waitingRequests);

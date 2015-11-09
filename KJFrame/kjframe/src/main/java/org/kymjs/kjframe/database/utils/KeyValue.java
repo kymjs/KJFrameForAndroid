@@ -16,12 +16,12 @@
 package org.kymjs.kjframe.database.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * 键值对封装<br>
- * 
  * <b>创建时间</b> 2014-8-15
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  */
@@ -34,7 +34,8 @@ public class KeyValue {
         this.value = value;
     }
 
-    public KeyValue() {}
+    public KeyValue() {
+    }
 
     public String getKey() {
         return key;
@@ -44,11 +45,10 @@ public class KeyValue {
         this.key = key;
     }
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat(
-            "yyyy-MM-dd HH:mm:ss");
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
     public Object getValue() {
-        if (value instanceof java.util.Date || value instanceof java.sql.Date) {
+        if (value instanceof java.util.Date) {
             return sdf.format(value);
         }
         return value;

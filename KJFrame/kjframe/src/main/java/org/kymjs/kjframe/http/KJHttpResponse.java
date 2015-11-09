@@ -22,6 +22,9 @@ import java.util.Map;
 /**
  * 兼容6.0，用于替换掉org.apache.http.HttpResponse
  * NOTE:再次感谢Q群中的 @黑猫白猫抓到老鼠 提供的这个KJHttpResponse的思路以及代码实现
+ *
+ * @author 李晨光(https://github.com/lichenguang8706)
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public class KJHttpResponse implements Serializable {
 

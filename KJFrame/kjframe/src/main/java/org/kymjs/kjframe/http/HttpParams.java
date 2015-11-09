@@ -38,6 +38,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Http请求的参数集合
+ *
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public class HttpParams implements Serializable {
 

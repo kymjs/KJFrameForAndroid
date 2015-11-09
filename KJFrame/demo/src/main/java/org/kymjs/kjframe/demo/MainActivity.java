@@ -26,7 +26,7 @@ public class MainActivity extends KJActivity {
     public void setRootView() {
         setContentView(R.layout.activity_main);
         if (!"org.kymjs.kjframe.demo".equals(getApplication().getPackageName())) {
-            KJActivityStack.create().AppExit(aty);
+            KJActivityStack.create().appExit(aty);
         }
     }
 

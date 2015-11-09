@@ -18,25 +18,21 @@ package org.kymjs.kjframe.http;
 import android.os.Process;
 
 import org.kymjs.kjframe.KJHttp;
-import org.kymjs.kjframe.bitmap.ImageRequest;
+import org.kymjs.kjframe.bitmap.Persistence;
 import org.kymjs.kjframe.utils.KJLoger;
 
 import java.util.concurrent.BlockingQueue;
 
 /**
- * 缓存调度器<br>
- *     
- * Note:<br>
+ * 缓存调度器
  * 工作描述： 缓存逻辑同样也采用责任链模式，参考注释{@link KJHttp }，
- * 由缓存任务队列CacheQueue，缓存调度器CacheDispatcher，缓存器Cache组成<br>
- * 
+ * 由缓存任务队列CacheQueue，缓存调度器CacheDispatcher，缓存器Cache组成
  * 调度器不停的从CacheQueue中取request，并把这个request尝试从缓存器中获取缓存响应。<br>
  * 如果缓存器有有效且及时的缓存则直接返回缓存;<br>
  * 如果缓存器有有效但待刷新的有效缓存，则交给分发器去分发一次中介相应，并再去添加到工作队列中执行网络请求获取最新的数据;<br>
  * 如果缓存器中没有有效缓存，则把请求添加到mNetworkQueue工作队列中去执行网络请求;<br>
- * 
- * Note:<br>
- * 关于中介相应查看 Response.intermediate()
+ *
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public class CacheDispatcher extends Thread {
 
@@ -95,7 +91,7 @@ public class CacheDispatcher extends Thread {
                 }
 
                 // 如果缓存过期，去网络请求,图片缓存永久有效
-                if (entry.isExpired() && !(request instanceof ImageRequest)) {
+                if (entry.isExpired() && !(request instanceof Persistence)) {
                     request.setCacheEntry(entry);
                     mNetworkQueue.put(request);
                     continue;

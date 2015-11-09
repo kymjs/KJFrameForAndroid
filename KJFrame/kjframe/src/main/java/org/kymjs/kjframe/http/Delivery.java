@@ -18,7 +18,7 @@ package org.kymjs.kjframe.http;
 /**
  * 分发器，将异步线程中的结果响应到UI线程中
  * 
- * @author kymjs
+ * @author kymjs (http://www.kymjs.com/).
  * 
  */
 public interface Delivery {

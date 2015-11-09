@@ -15,17 +15,16 @@
  */
 package org.kymjs.kjframe.bitmap;
 
-import org.kymjs.kjframe.bitmap.ImageDisplayer.ImageCache;
-import org.kymjs.kjframe.utils.SystemTool;
-
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 
+import org.kymjs.kjframe.bitmap.ImageDisplayer.ImageCache;
+import org.kymjs.kjframe.utils.SystemTool;
+
 /**
- * 使用lru算法的Bitmap内存缓存池<br>
- * 
+ * 使用lru算法的Bitmap内存缓存池
  * <b>创建时间</b> 2014-7-11
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  */
@@ -39,16 +38,14 @@ public final class BitmapMemoryCache implements ImageCache {
     }
 
     /**
-     * @param maxSize
-     *            使用内存缓存的内存大小，单位：kb
+     * @param maxSize 使用内存缓存的内存大小，单位：kb
      */
     public BitmapMemoryCache(int maxSize) {
         init(maxSize);
     }
 
     /**
-     * @param maxSize
-     *            使用内存缓存的内存大小，单位：kb
+     * @param maxSize 使用内存缓存的内存大小，单位：kb
      */
     @SuppressLint("NewApi")
     private void init(int maxSize) {
@@ -76,8 +73,7 @@ public final class BitmapMemoryCache implements ImageCache {
     }
 
     /**
-     * @param url
-     *            图片的地址
+     * @param url 图片的地址
      * @return
      */
     @Override
@@ -86,10 +82,8 @@ public final class BitmapMemoryCache implements ImageCache {
     }
 
     /**
-     * @param url
-     *            图片的地址
-     * @param bitmap
-     *            要缓存的bitmap
+     * @param url    图片的地址
+     * @param bitmap 要缓存的bitmap
      */
     @Override
     public void putBitmap(String url, Bitmap bitmap) {

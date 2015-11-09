@@ -12,7 +12,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */package org.kymjs.blog.ui;
+ */
+package org.kymjs.blog.ui;
+
+import android.view.View;
+import android.widget.ProgressBar;
 
 import org.kymjs.blog.R;
 import org.kymjs.kjframe.KJActivity;
@@ -22,14 +26,11 @@ import org.kymjs.kjframe.ui.BindView;
 
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
-import android.view.View;
-import android.widget.ProgressBar;
 
 /**
  * 图片预览
- * 
+ *
  * @author kymjs (http://www.kymjs.com/)
- * 
  */
 public class ImageActivity extends KJActivity {
 
@@ -77,5 +78,11 @@ public class ImageActivity extends KJActivity {
                 ImageActivity.this.finish();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        kjb.finish();
     }
 }

@@ -33,6 +33,8 @@ import javax.net.ssl.SSLSocketFactory;
 
 /**
  * HttpUrlConnection方式实现
+ *
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public class HttpConnectStack implements HttpStack {
 
@@ -64,7 +66,7 @@ public class HttpConnectStack implements HttpStack {
 
     @Override
     public KJHttpResponse performRequest(Request<?> request,
-                                       Map<String, String> additionalHeaders) throws IOException {
+                                         Map<String, String> additionalHeaders) throws IOException {
         String url = request.getUrl();
         HashMap<String, String> map = new HashMap<String, String>();
         map.putAll(request.getHeaders());
@@ -89,13 +91,6 @@ public class HttpConnectStack implements HttpStack {
 
     private KJHttpResponse responseFromConnection(HttpURLConnection connection) throws IOException {
         KJHttpResponse response = new KJHttpResponse();
-        int responseCode = connection.getResponseCode();
-        if (responseCode == -1) {
-            throw new IOException(
-                    "Could not retrieve response code from HttpUrlConnection.");
-        }
-        response.setResponseCode(responseCode);
-        response.setResponseMessage(connection.getResponseMessage());
         //contentStream
         InputStream inputStream;
         try {
@@ -103,8 +98,16 @@ public class HttpConnectStack implements HttpStack {
         } catch (IOException ioe) {
             inputStream = connection.getErrorStream();
         }
-        response.setContentStream(inputStream);
+        int responseCode = connection.getResponseCode();
+        if (responseCode == -1) {
+            throw new IOException(
+                    "Could not retrieve response code from HttpUrlConnection.");
+        }
+        response.setResponseCode(responseCode);
+        response.setResponseMessage(connection.getResponseMessage());
         
+        response.setContentStream(inputStream);
+
         response.setContentLength(connection.getContentLength());
         response.setContentEncoding(connection.getContentEncoding());
         response.setContentType(connection.getContentType());

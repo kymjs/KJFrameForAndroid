@@ -21,6 +21,8 @@ import java.util.Map;
 
 /**
  * 从NetWork执行器返回的Http响应，包含了本次响应是成功还是失败，请求头，响应内容，HTTP状态码
+ *
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public class NetworkResponse {
 

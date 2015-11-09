@@ -33,10 +33,10 @@ import java.util.Map;
 
 /**
  * 从网络下载一张bitmap
- * 
+ *
  * @author kymjs (https://www.kymjs.com/)
  */
-public class ImageRequest extends Request<Bitmap> {
+public class ImageRequest extends Request<Bitmap> implements Persistence {
 
     private final int mMaxWidth;
     private final int mMaxHeight;
@@ -46,7 +46,7 @@ public class ImageRequest extends Request<Bitmap> {
     private final Map<String, String> mHeaders = new HashMap<String, String>();
 
     public ImageRequest(String url, int maxWidth, int maxHeight,
-            HttpCallBack callback) {
+                        HttpCallBack callback) {
         super(HttpMethod.GET, url, callback);
         mHeaders.put("cookie", HttpConfig.sCookie);
         mMaxWidth = maxWidth;
@@ -72,19 +72,15 @@ public class ImageRequest extends Request<Bitmap> {
      * 框架会自动将大于设定值的bitmap转换成设定值，所以需要这个方法来判断应该显示默认大小或者是设定值大小。<br>
      * 本方法会根据maxPrimary与actualPrimary比较来判断，如果无法判断则会根据辅助值判断，辅助值一般是主要值对应的。
      * 比如宽为主值则高为辅值
-     * 
-     * @param maxPrimary
-     *            需要判断的值，用作主要判断
-     * @param maxSecondary
-     *            需要判断的值，用作辅助判断
-     * @param actualPrimary
-     *            真实宽度
-     * @param actualSecondary
-     *            真实高度
+     *
+     * @param maxPrimary      需要判断的值，用作主要判断
+     * @param maxSecondary    需要判断的值，用作辅助判断
+     * @param actualPrimary   真实宽度
+     * @param actualSecondary 真实高度
      * @return 获取图片需要显示的大小
      */
     private static int getResizedDimension(int maxPrimary, int maxSecondary,
-            int actualPrimary, int actualSecondary) {
+                                           int actualPrimary, int actualSecondary) {
         if (maxPrimary == 0 && maxSecondary == 0) {
             return actualPrimary;
         }
@@ -121,7 +117,7 @@ public class ImageRequest extends Request<Bitmap> {
     /**
      * 关于本函数的详细解释，可以看我的博客：
      * http://blog.kymjs.com/kjframeforandroid/2014/12/05/02/
-     * 
+     *
      * @param response
      * @return
      */
@@ -153,7 +149,7 @@ public class ImageRequest extends Request<Bitmap> {
             // 做缩放
             if (tempBitmap != null
                     && (tempBitmap.getWidth() > desiredWidth || tempBitmap
-                            .getHeight() > desiredHeight)) {
+                    .getHeight() > desiredHeight)) {
                 bitmap = Bitmap.createScaledBitmap(tempBitmap, desiredWidth,
                         desiredHeight, true);
                 tempBitmap.recycle();
@@ -179,7 +175,7 @@ public class ImageRequest extends Request<Bitmap> {
 
     /**
      * 关于本方法的判断，可以查看我的博客：http://blog.kymjs.com/kjframeforandroid/2014/12/05/02/
-     * 
+     *
      * @param actualWidth
      * @param actualHeight
      * @param desiredWidth
@@ -187,7 +183,7 @@ public class ImageRequest extends Request<Bitmap> {
      * @return
      */
     static int findBestSampleSize(int actualWidth, int actualHeight,
-            int desiredWidth, int desiredHeight) {
+                                  int desiredWidth, int desiredHeight) {
         double wr = (double) actualWidth / desiredWidth;
         double hr = (double) actualHeight / desiredHeight;
         double ratio = Math.min(wr, hr);

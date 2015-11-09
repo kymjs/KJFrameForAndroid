@@ -1,6 +1,8 @@
 package org.kymjs.kjframe.http;
 
 /**
+ * Http响应码
+ *
  * @author kymjs (http://www.kymjs.com/) on 9/28/15.
  */
 public interface HttpStatus {

@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Http请求端，已知实现类:
  *
- * @author kymjs
+ * @author kymjs (http://www.kymjs.com/) .
  * @see HttpConnectStack
  * 过时移除 HttpClientStack
  */

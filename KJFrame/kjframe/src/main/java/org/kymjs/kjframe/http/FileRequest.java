@@ -27,6 +27,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
+/**
+ * 请求文件方法类
+ *
+ * @author kymjs (http://www.kymjs.com/) .
+ */
 public class FileRequest extends Request<byte[]> {
     private final File mStoreFile;
     private final File mTemporaryFile; // 临时文件
@@ -144,8 +149,8 @@ public class FileRequest extends Request<byte[]> {
             downloadedSize = 0;
         }
 
+        InputStream in = response.getContentStream();
         try {
-            InputStream in = response.getContentStream();
             if (HttpUtils.isGzipContent(response)
                     && !(in instanceof GZIPInputStream)) {
                 in = new GZIPInputStream(in);
@@ -165,6 +170,7 @@ public class FileRequest extends Request<byte[]> {
                 }
             }
         } finally {
+            in.close();
             try {
                 response.getContentStream().close();
             } catch (Exception e) {

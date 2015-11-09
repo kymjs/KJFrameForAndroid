@@ -22,9 +22,8 @@ import android.util.TypedValue;
 
 /**
  * 系统屏幕的一些操作<br>
- * 
  * <b>创建时间</b> 2014-8-14
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
  * @version 1.1
  */
@@ -79,21 +78,15 @@ public final class DensityUtils {
      * 获取屏幕宽度
      */
     public static int getScreenW(Context aty) {
-        DisplayMetrics dm = new DisplayMetrics();
-        dm = aty.getResources().getDisplayMetrics();
-        int w = dm.widthPixels;
-        // int w = aty.getWindowManager().getDefaultDisplay().getWidth();
-        return w;
+        DisplayMetrics dm = aty.getResources().getDisplayMetrics();
+        return dm.widthPixels;
     }
 
     /**
      * 获取屏幕高度
      */
     public static int getScreenH(Context aty) {
-        DisplayMetrics dm = new DisplayMetrics();
-        dm = aty.getResources().getDisplayMetrics();
-        int h = dm.heightPixels;
-        // int h = aty.getWindowManager().getDefaultDisplay().getHeight();
-        return h;
+        DisplayMetrics dm = aty.getResources().getDisplayMetrics();
+        return dm.heightPixels;
     }
 }

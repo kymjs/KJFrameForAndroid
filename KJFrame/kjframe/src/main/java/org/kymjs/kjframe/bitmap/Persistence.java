@@ -13,25 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kymjs.blog;
-
-import android.app.Application;
-
-import org.kymjs.kjframe.http.HttpConfig;
+package org.kymjs.kjframe.bitmap;
 
 /**
- * 
- * @author kymjs (https://www.kymjs.com/)
- * @since 2015-3
+ * Request类如果继承(实现)了本接口，则无视httpconfig.cachetime的时长，缓存永久有效
+ *
+ * @author kymjs (http://www.kymjs.com/) on 10/15/15.
  */
-public class AppContext extends Application {
-    public static int screenW;
-    public static int screenH;
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        HttpConfig.CACHEPATH = AppConfig.httpCachePath;
-        CrashHandler.create(this);
-    }
+public interface Persistence {
 }

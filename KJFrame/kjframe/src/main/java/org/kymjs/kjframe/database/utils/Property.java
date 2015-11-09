@@ -15,7 +15,7 @@
  */
 package org.kymjs.kjframe.database.utils;
 
-import android.annotation.SuppressLint;
+import org.kymjs.kjframe.utils.KJLoger;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -23,12 +23,12 @@ import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * 属性 ，【非主键】的【基本数据类型】 都是属性<br>
- * 
  * <b>创建时间</b> 2014-8-15
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  */
@@ -92,7 +92,7 @@ public class Property {
 
     /**
      * 获取某个实体执行某个方法的结果
-     * 
+     *
      * @param obj
      * @return
      */
@@ -109,15 +109,13 @@ public class Property {
         return null;
     }
 
-    @SuppressLint("SimpleDateFormat")
-    private static SimpleDateFormat sdf = new SimpleDateFormat(
-            "yyyy-MM-dd HH:mm:ss");
-
     private static Date stringToDateTime(String strDate) {
         if (strDate != null) {
             try {
-                return sdf.parse(strDate);
+                return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse
+                        (strDate);
             } catch (ParseException e) {
+                KJLoger.debug("时间解析异常");
             }
         }
         return null;

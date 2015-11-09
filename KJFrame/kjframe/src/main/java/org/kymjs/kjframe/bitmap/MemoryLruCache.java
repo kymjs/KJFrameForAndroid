@@ -15,10 +15,10 @@
  */
 package org.kymjs.kjframe.bitmap;
 
+import android.annotation.SuppressLint;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import android.annotation.SuppressLint;
 
 /**
  * 经过Least Recently Used（最近最少使用）算法处理的LinkedHashMap<br>
@@ -35,7 +35,7 @@ public class MemoryLruCache<K, V> {
     private final LinkedHashMap<K, V> map;
 
     /** 当前缓存区已使用大小 */
-    private int size;
+    private volatile int size;
     private int maxSize;
 
     private int putCount;

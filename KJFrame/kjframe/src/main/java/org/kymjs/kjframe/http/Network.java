@@ -30,6 +30,8 @@ import java.util.Map;
 
 /**
  * 网络请求执行器，将传入的Request使用HttpStack客户端发起网络请求，并返回一个NetworkRespond结果
+ *
+ * @author kymjs (http://www.kymjs.com/) .
  */
 public class Network {
     protected static final boolean DEBUG = HttpConfig.DEBUG;
@@ -81,11 +83,9 @@ public class Network {
                 if (statusCode < 200 || statusCode > 299) {
                     throw new IOException();
                 }
-                return new NetworkResponse(statusCode, responseContents,
-                        responseHeaders, false);
+                return new NetworkResponse(statusCode, responseContents, responseHeaders, false);
             } catch (SocketTimeoutException e) {
-                throw new KJHttpException(new SocketTimeoutException(
-                        "socket timeout"));
+                throw new KJHttpException(new SocketTimeoutException("socket timeout"));
             } catch (MalformedURLException e) {
                 throw new RuntimeException("Bad URL " + request.getUrl(), e);
             } catch (IOException e) {
@@ -96,8 +96,7 @@ public class Network {
                 } else {
                     throw new KJHttpException("NoConnection error", e);
                 }
-                KJLoger.debug("Unexpected response code %d for %s", statusCode,
-                        request.getUrl());
+                KJLoger.debug("Unexpected response code %d for %s", statusCode, request.getUrl());
                 if (responseContents != null) {
                     networkResponse = new NetworkResponse(statusCode,
                             responseContents, responseHeaders, false);
@@ -133,7 +132,7 @@ public class Network {
             Date refTime = new Date(entry.serverDate);
             DateFormat sdf = SimpleDateFormat.getDateTimeInstance();
             headers.put("If-Modified-Since", sdf.format(refTime));
-            
+
         }
     }
 
