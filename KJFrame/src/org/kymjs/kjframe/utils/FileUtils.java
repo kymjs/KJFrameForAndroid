@@ -18,6 +18,7 @@ package org.kymjs.kjframe.utils;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -25,12 +26,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -49,6 +52,7 @@ import android.provider.MediaStore;
  * @author kymjs (https://github.com/kymjs)
  * @version 1.1
  */
+@SuppressLint("NewApi") 
 public final class FileUtils {
     /**
      * 检测SD卡是否存在
@@ -354,4 +358,45 @@ public final class FileUtils {
     // bitmapToFile(image, path);
     // }
     // }
+    
+    /**
+     * 将String写入文件
+     * @param path /C/test.txt
+     * @param data 
+     * @param isCover是否覆盖原文件
+     * @return
+     */
+    public static boolean writeByte2File(String absPath, String data,boolean isCover){
+    	String path=absPath.substring(0,absPath.lastIndexOf("/"));
+    	String fileName=absPath.substring(absPath.lastIndexOf("/"),absPath.length());
+		try {
+			File folder = new File(path);
+			if(!folder.exists()){
+				folder.mkdirs();
+			} 
+			File file = new File(path + "/" + fileName);
+			if(file.exists()){
+				if(isCover){
+				file.delete();
+				}else{
+					 FileWriter writer = null;      
+				     // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件     
+				     writer = new FileWriter(absPath, true);     
+				     writer.write(data);
+				     writer.close();
+				     return true;
+				}
+			}
+			file.createNewFile();
+			FileOutputStream fos = new FileOutputStream(file);  
+		    fos.write(data.getBytes());  
+		    fos.close(); 
+		    return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (NullPointerException e){
+			e.printStackTrace();
+		}
+		return false;
+	}
 }
