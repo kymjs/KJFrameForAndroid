@@ -50,7 +50,7 @@ import java.util.HashSet;
 /**
  * The BitmapLibrary's core classes<br>
  * <b>创建时间</b> 2014-6-11<br>
- * <b>最后修改</b> 2015-9-25<br>
+ * <b>最后修改</b> 2015-12-16<br>
  *
  * @author kymjs (https://github.com/kymjs)
  * @version 2.4
@@ -162,6 +162,10 @@ public class KJBitmap {
             return this;
         }
 
+        /**
+         * 推荐使用display(kjbitmap)
+         */
+        @Deprecated
         public void display() {
             display(new KJBitmap(httpConfig, bitmapConfig));
         }
