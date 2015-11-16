@@ -35,10 +35,4 @@ public final class BitmapConfig {
     public int cacheTime = 1440000;
     // 为了防止网速很快的时候速度过快而造成先显示加载中图片，然后瞬间显示网络图片的闪烁问题
     public long delayTime = 0;
-
-    public BitmapConfig() {
-        if (mMemoryCache == null) {
-            mMemoryCache = new BitmapMemoryCache();
-        }
-    }
 }

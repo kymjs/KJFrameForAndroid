@@ -29,6 +29,7 @@ import android.widget.ImageView;
 
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
 import org.kymjs.kjframe.bitmap.BitmapConfig;
+import org.kymjs.kjframe.bitmap.BitmapMemoryCache;
 import org.kymjs.kjframe.bitmap.DiskImageRequest;
 import org.kymjs.kjframe.bitmap.ImageDisplayer;
 import org.kymjs.kjframe.http.Cache;
@@ -76,6 +77,7 @@ public class KJBitmap {
     public KJBitmap(KJHttp kjHttp, BitmapConfig bitmapConfig) {
         if (kjHttp == null) kjHttp = new KJHttp();
         if (bitmapConfig == null) bitmapConfig = new BitmapConfig();
+        if (BitmapConfig.mMemoryCache == null) BitmapConfig.mMemoryCache = new BitmapMemoryCache();
         displayer = new ImageDisplayer(kjHttp, bitmapConfig);
     }
 
