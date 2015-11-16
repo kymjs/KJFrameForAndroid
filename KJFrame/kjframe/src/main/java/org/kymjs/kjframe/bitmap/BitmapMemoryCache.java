@@ -17,6 +17,7 @@ package org.kymjs.kjframe.bitmap;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
+import android.support.v4.util.LruCache;
 
 import org.kymjs.kjframe.bitmap.ImageDisplayer.ImageCache;
 import org.kymjs.kjframe.utils.SystemTool;
@@ -30,7 +31,8 @@ import org.kymjs.kjframe.utils.SystemTool;
  */
 public final class BitmapMemoryCache implements ImageCache {
 
-    private MemoryLruCache<String, Bitmap> cache;
+    private LruCache<String, Bitmap> cache;
+    private int maxSize = 0;
 
     public BitmapMemoryCache() {
         int maxMemory = (int) (Runtime.getRuntime().maxMemory());
@@ -49,7 +51,8 @@ public final class BitmapMemoryCache implements ImageCache {
      */
     @SuppressLint("NewApi")
     private void init(int maxSize) {
-        cache = new MemoryLruCache<String, Bitmap>(maxSize) {
+        this.maxSize = maxSize;
+        cache = new LruCache<String, Bitmap>(maxSize) {
             @Override
             protected int sizeOf(String key, Bitmap value) {
                 super.sizeOf(key, value);
@@ -69,7 +72,7 @@ public final class BitmapMemoryCache implements ImageCache {
 
     @Override
     public void clean() {
-        cache.clean();
+        init(maxSize);
     }
 
     /**
