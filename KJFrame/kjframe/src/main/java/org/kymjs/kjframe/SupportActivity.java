@@ -20,7 +20,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import org.kymjs.kjframe.ui.AnnotateUtil;
@@ -34,15 +34,10 @@ import org.kymjs.kjframe.utils.KJLoger;
 
 import java.lang.ref.SoftReference;
 
-
 /**
- * Activity's framework,the developer shouldn't extends it <br>
- * <b>创建时间</b> 2014-3-1 <br>
- * <b>最后修改时间</b> 2014-10-17<br>
- *
- * @author kymjs (http://www.kymjs.com)
+ * @author kymjs (http://www.kymjs.com/) on 11/19/15.
  */
-public abstract class KJActivity extends FragmentActivity implements
+public abstract class SupportActivity extends AppCompatActivity implements
         View.OnClickListener, I_BroadcastReg, I_KJActivity, I_SkipActivity {
 
     public static final int WHICH_MSG = 0X37210;
@@ -68,16 +63,16 @@ public abstract class KJActivity extends FragmentActivity implements
 
 
     private static class KJActivityHandle extends Handler {
-        private final SoftReference<KJActivity> mOuterInstance;
+        private final SoftReference<SupportActivity> mOuterInstance;
 
-        KJActivityHandle(KJActivity outer) {
+        KJActivityHandle(SupportActivity outer) {
             mOuterInstance = new SoftReference<>(outer);
         }
 
         // 当线程中初始化的数据初始化完成后，调用回调方法
         @Override
         public void handleMessage(android.os.Message msg) {
-            KJActivity aty = mOuterInstance.get();
+            SupportActivity aty = mOuterInstance.get();
             if (msg.what == WHICH_MSG && aty != null) {
                 aty.callback.onSuccess();
             }
