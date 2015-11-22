@@ -1,4 +1,5 @@
-/*
+/**
+ * Copyright (c) 2012-2013, Michael Yang 杨福海 (www.yangfuhai.com).
  * Copyright (c) 2014,KJFrameForAndroid Open Source Project,张涛.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,6 +32,7 @@ import java.util.Map.Entry;
  * 
  * <b>创建时间</b> 2014-8-15
  * 
+ * @author 杨福海 (www.yangfuhai.com)
  * @author kymjs (https://github.com/kymjs)
  * @version 1.0
  */

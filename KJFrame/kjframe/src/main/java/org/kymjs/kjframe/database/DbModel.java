@@ -1,12 +1,13 @@
-/*
+/**
+ * Copyright (c) 2012-2013, Michael Yang 杨福海 (www.yangfuhai.com).
  * Copyright (c) 2014,KJFrameForAndroid Open Source Project,张涛.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,10 +20,11 @@ import java.util.HashMap;
 
 /**
  * 数据库的模型<br>
- * 
+ * <p>
  * <b>创建时间</b> 2014-8-15
- * 
- * @author kymjs (https://github.com/kymjs)
+ *
+ * @author kymjs (http://www.kymjs.com)
+ * @author 杨福海 (www.yangfuhai.com)
  * @version 1.0
  */
 public class DbModel {

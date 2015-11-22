@@ -1,4 +1,5 @@
-/*
+/**
+ * Copyright (c) 2012-2013, Michael Yang 杨福海 (www.yangfuhai.com).
  * Copyright (c) 2014,KJFrameForAndroid Open Source Project,张涛.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,8 +20,9 @@ package org.kymjs.kjframe.database.utils;
  * 主键，一个特殊的属性<br>
  * 
  * <b>创建时间</b> 2014-8-15
- * 
- * @author kymjs (https://github.com/kymjs)
+ *
+ * @author kymjs (http://www.kymjs.com)
+ * @author 杨福海 (http://www.yangfuhai.com)
  * @version 1.0
  */
 public class Id extends Property {

@@ -1,4 +1,5 @@
-/*
+/**
+ * Copyright (c) 2012-2013, Michael Yang 杨福海 (www.yangfuhai.com).
  * Copyright (c) 2014,KJFrameForAndroid Open Source Project,张涛.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +16,7 @@
  */
 package org.kymjs.kjframe.database;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import android.text.TextUtils;
 
 import org.kymjs.kjframe.database.utils.Id;
 import org.kymjs.kjframe.database.utils.KeyValue;
@@ -25,14 +24,17 @@ import org.kymjs.kjframe.database.utils.ManyToOne;
 import org.kymjs.kjframe.database.utils.Property;
 import org.kymjs.kjframe.database.utils.TableInfo;
 
-import android.text.TextUtils;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * sql语句生产者<br>
  * 
  * <b>创建时间</b> 2014-8-15
- * 
- * @author kymjs (https://github.com/kymjs)
+ *
+ * @author kymjs (http://www.kymjs.com)
+ * @author 杨福海 (http://www.yangfuhai.com)
  * @version 1.0
  */
 public class SqlBuilder {

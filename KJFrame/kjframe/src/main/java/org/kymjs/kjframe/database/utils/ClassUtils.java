@@ -1,4 +1,5 @@
-/*
+/**
+ * Copyright (c) 2012-2013, Michael Yang 杨福海 (www.yangfuhai.com).
  * Copyright (c) 2014,KJFrameForAndroid Open Source Project,张涛.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,22 +16,23 @@
  */
 package org.kymjs.kjframe.database.utils;
 
+import org.kymjs.kjframe.database.ManyToOneLazyLoader;
+import org.kymjs.kjframe.database.annotate.Id;
+import org.kymjs.kjframe.database.annotate.Table;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kymjs.kjframe.database.ManyToOneLazyLoader;
-import org.kymjs.kjframe.database.annotate.Id;
-import org.kymjs.kjframe.database.annotate.Table;
-
 /**
  * 对实体类JavaBean的一些操作<br>
  * 
  * <b>创建时间</b> 2014-8-15
- * 
- * @author kymjs (https://github.com/kymjs)
+ *
+ * @author kymjs (http://www.kymjs.com)
+ * @author 杨福海 (http://www.yangfuhai.com)
  * @version 1.0
  */
 public class ClassUtils {
