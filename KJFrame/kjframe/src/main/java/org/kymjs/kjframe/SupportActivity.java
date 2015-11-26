@@ -162,12 +162,12 @@ public abstract class SupportActivity extends AppCompatActivity implements
         aty = this;
         KJActivityStack.create().addActivity(this);
         KJLoger.state(this.getClass().getName(), "---------onCreat ");
+        super.onCreate(savedInstanceState);
 
         setRootView(); // 必须放在annotate之前调用
         AnnotateUtil.initBindView(this);
         initializer();
         registerBroadcast();
-        super.onCreate(savedInstanceState);
     }
 
     @Override

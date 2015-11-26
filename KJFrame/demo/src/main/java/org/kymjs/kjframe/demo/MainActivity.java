@@ -1,15 +1,15 @@
 package org.kymjs.kjframe.demo;
 
-import org.kymjs.kjframe.KJActivity;
-import org.kymjs.kjframe.ui.BindView;
-import org.kymjs.kjframe.ui.KJActivityStack;
-import org.kymjs.kjframe.utils.KJConfig;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends KJActivity {
+import org.kymjs.kjframe.SupportActivity;
+import org.kymjs.kjframe.ui.BindView;
+import org.kymjs.kjframe.ui.KJActivityStack;
+import org.kymjs.kjframe.utils.KJConfig;
+
+public class MainActivity extends SupportActivity {
 
     @BindView(id = R.id.textView1)
     private TextView mTvVersion;

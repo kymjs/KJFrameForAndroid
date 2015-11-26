@@ -1,37 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.kymjs.kjframe.demo">
+<manifest package="org.kymjs.kjframe.demo"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-    <application
-        android:name="org.kymjs.kjframe.demo.AppContext"
-        android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+	<application
+		android:name="org.kymjs.kjframe.demo.AppContext"
+		android:allowBackup="true"
+		android:icon="@drawable/ic_launcher"
+		android:label="@string/app_name"
+		android:theme="@style/Theme.AppCompat">
+		<activity
+			android:name=".MainActivity"
+			android:label="@string/app_name"
+			android:theme="@style/Theme.AppCompat">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name="org.kymjs.kjframe.demo.OOMCheckActivity" />
-        <activity android:name="org.kymjs.kjframe.demo.HttpActivity" />
-        <activity android:name="org.kymjs.kjframe.demo.BitmapActivity" />
-        <activity android:name="org.kymjs.kjframe.demo.DBActivity" />
-        <activity android:name="org.kymjs.kjframe.demo.PluginActivity" />
-        <activity android:name="org.kymjs.kjframe.demo.WidgetActivity" />
-        <activity android:name="org.kymjs.kjframe.demo.widget.KJSlidingMenuDemo" />
-        <activity android:name="org.kymjs.kjframe.demo.widget.KJListViewDemo" />
-        <activity android:name="org.kymjs.kjframe.demo.widget.ScaleImageDemo" />
-        <activity android:name="org.kymjs.kjframe.demo.widget.NewListViewDemo" />
-        <activity android:name="org.kymjs.kjframe.plugin.CJProxyActivity"/>
-        <service android:name="org.kymjs.kjframe.plugin.CJProxyService"/>
-    </application>
+				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+		</activity>
+		<activity android:name="org.kymjs.kjframe.demo.HttpActivity"/>
+		<activity android:name="org.kymjs.kjframe.demo.BitmapActivity"/>
+		<activity android:name="org.kymjs.kjframe.demo.DBActivity"/>
+		<activity android:name="org.kymjs.kjframe.demo.WidgetActivity"/>
+		<activity android:name="org.kymjs.kjframe.demo.widget.KJSlidingMenuDemo"/>
+	</application>
 
 </manifest>
