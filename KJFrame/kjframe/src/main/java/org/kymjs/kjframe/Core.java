@@ -24,8 +24,8 @@ import org.kymjs.kjframe.utils.StringUtils;
  *
  * @author kymjs (http://www.kymjs.com/) on 11/20/15.
  */
-public final class KJCore {
-    private KJCore() {
+public final class Core {
+    private Core() {
     }
 
     private static final class SingletonHolder {
