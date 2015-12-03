@@ -212,7 +212,7 @@ public class KJBitmap {
     /**
      * 真正去加载一个图片
      */
-    private void doDisplay(final View imageView, final String imageUrl, int width, int height,
+    public void doDisplay(final View imageView, final String imageUrl, int width, int height,
                            final Drawable loadBitmap, final int loadBitmapRes,
                            final Drawable errorBitmap, final int errorBitmapRes,
                            final BitmapCallBack callback) {
@@ -457,7 +457,7 @@ public class KJBitmap {
      * @param errorImage    优先使用项
      * @param errorImageRes 次级使用项
      */
-    private static void doFailure(View view, Drawable errorImage, int errorImageRes) {
+    public static void doFailure(View view, Drawable errorImage, int errorImageRes) {
         setImageWithResource(view, errorImage, errorImageRes);
     }
 
