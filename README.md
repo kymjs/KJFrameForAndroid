@@ -42,7 +42,7 @@ eclipes版本源码请查看[相关分支](https://github.com/kymjs/KJFrameForAn
 
 ##开源协议
 ```
- Copyright (C) 2014-1015, 张涛
+ Copyright (C) 2014-2016, 张涛
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
