@@ -6,7 +6,7 @@ KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复�
 ## 快速入门
 ####AndroidStudio
 build.gradle中添加：  
-``` 
+```groovy 
 compile 'org.kymjs.kjframe:kjframe:2.6'
 ```
 ####eclipse
