@@ -1,5 +1,13 @@
+
+
+
 =================
-#[![OSL](http://www.kymjs.com/image/logo_s.png)](http://www.kymjs.com/works/)   
+
+网络请求与图片加载模块请使用：[RxVolley](https://github.com/kymjs/RxVolley)   
+重写的```KJFrame```, API 设计更合理，文档更完善。
+支持断点续传、大文件上传进度、https、cookie持久化、Rxjava。
+
+---
 *KJFrameForAndroid* 又叫KJLibrary，是一个android的orm 和 ioc 框架。同时封装了android中的Bitmap与Http操作的框架，使其更加简单易用；<br>
 KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复杂操作而达到简化Android应用级开发，最终实现快速而又安全的开发APP。我们提倡用最少的代码，完成最多的操作，用最高的效率，完成最复杂的功能。<br>
 
