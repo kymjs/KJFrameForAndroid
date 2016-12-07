@@ -3,7 +3,7 @@
 
 =================
 
-网络请求与图片加载模块请使用：[RxVolley](https://github.com/kymjs/RxVolley)   
+网络请求与图片加载模块请使用：[RxVolley：https://github.com/kymjs/RxVolley](https://github.com/kymjs/RxVolley) 
 重写的```KJFrame```, API 设计更合理，文档更完善。
 支持断点续传、大文件上传进度、https、cookie持久化、Rxjava。
 
