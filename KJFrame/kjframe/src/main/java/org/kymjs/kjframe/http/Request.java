@@ -207,16 +207,15 @@ public abstract class Request<T> implements Comparable<Request<T>> {
         return "application/x-www-form-urlencoded; charset="
                 + getParamsEncoding();
     }
-
-    /**
-     * 返回Http请求的body
-     */
-    public byte[] getBody() {
+    public void buildbody(OutputStream out) {
         Map<String, String> params = getParams();
         if (params != null && params.size() > 0) {
-            return encodeParameters(params, getParamsEncoding());
+            try {
+                out.write(encodeParameters(params, getParamsEncoding()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        return null;
     }
 
     /**

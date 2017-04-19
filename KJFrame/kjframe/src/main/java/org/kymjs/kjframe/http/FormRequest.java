@@ -17,8 +17,8 @@ package org.kymjs.kjframe.http;
 
 import org.kymjs.kjframe.utils.KJLoger;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
 /**
@@ -41,6 +41,7 @@ public class FormRequest extends Request<byte[]> {
             params = new HttpParams();
         }
         this.mParams = params;
+        this.mParams.showAll();
     }
 
     @Override
@@ -67,14 +68,12 @@ public class FormRequest extends Request<byte[]> {
     }
 
     @Override
-    public byte[] getBody() {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+    public void buildbody(final OutputStream outstream) {
         try {
-            mParams.writeTo(bos);
+            mParams.writeTo(outstream);
         } catch (IOException e) {
             KJLoger.debug("FormRequest75--->IOException writing to ByteArrayOutputStream");
         }
-        return bos.toByteArray();
     }
 
     @Override

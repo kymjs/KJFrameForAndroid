@@ -192,15 +192,15 @@ public class HttpConnectStack implements HttpStack {
      */
     private static void addBodyIfExists(HttpURLConnection connection,
                                         Request<?> request) throws IOException {
-        byte[] body = request.getBody();
-        if (body != null) {
+
             connection.setDoOutput(true);
+            connection.setChunkedStreamingMode(1024);//
             connection.addRequestProperty(HEADER_CONTENT_TYPE,
                     request.getBodyContentType());
             DataOutputStream out = new DataOutputStream(
                     connection.getOutputStream());
-            out.write(body);
+            request.buildbody(out);
             out.close();
-        }
+
     }
 }
