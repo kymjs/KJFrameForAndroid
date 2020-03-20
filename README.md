@@ -1,4 +1,4 @@
-
+[![OSL](https://kymjs.com/qiniu/image/logo3.png)](https://www.kymjs.com/works/)
 
 
 =================
@@ -21,7 +21,7 @@ compile 'org.kymjs.kjframe:kjframe:2.6'
 复制jar包 [KJFrameForAndroid_v2.x](https://github.com/kymjs/KJFrameForAndroid/tree/master/binrary) 到你工程的/libs目录中.   
 eclipes版本源码请查看[相关分支](https://github.com/kymjs/KJFrameForAndroid/tree/eclipse_end)   
 
-##使用帮助
+## 使用帮助
 1、很遗憾，没有帮助文档，但这几篇博客也许能帮到你  
     [MVC模块](https://github.com/kymjs/KJFrameForAndroid/wiki/MVCLibrary_cn)   
     [KJBitmap使用方法](http://www.kymjs.com/code/2015/03/25/01/)   
@@ -37,18 +37,11 @@ eclipes版本源码请查看[相关分支](https://github.com/kymjs/KJFrameForAn
 ```
 
 ## 关于
-自我介绍：[张涛就是我](http://blog.kymjs.com/about)<br>
-* GitHub项目地址：[https://github.com/kymjs/KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid)  
-* QQ 群[257053751](http://jq.qq.com/?_wv=1027&k=WoM2Aa)(开发者群1)，[201055521](http://jq.qq.com/?_wv=1027&k=MBVdpK)(开发者群2)<br>
-* 更多我的开源项目：[开源实验室](http://www.kymjs.com/works)
-* blog：http://blog.kymjs.com/
 
-## 回馈
-如果你认为KJFrameForAndroid帮你节省了大量的开发时间，可否在你有能力的基础捐助我的网站域名与服务器开销？<br>
-我们会将捐助者信息公布在[开源实验室·捐赠](http://www.kymjs.com/donate)捐赠页，如果你有什么想说的话也可以[留言](http://www.kymjs.com/tweet)给我。
+[开源实验室开放项目](https://kymjs.com/)  
 
 
-##开源协议
+## 开源协议
 ```
  Copyright (C) 2014-2016, 张涛
  
