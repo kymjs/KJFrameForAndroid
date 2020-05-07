@@ -72,15 +72,14 @@ public class JsonRequest extends Request<byte[]> {
     }
 
     @Override
-    public byte[] getBody() {
+    public void buildbody(final OutputStream outstream) {
         try {
-            return mRequestBody == null ? null : mRequestBody
-                    .getBytes(PROTOCOL_CHARSET);
-        } catch (UnsupportedEncodingException uee) {
+            outstream.write(mRequestBody == null ? null : mRequestBody
+                    .getBytes(PROTOCOL_CHARSET));
+        } catch (Exception uee) {
             KJLoger.debug(
                     "Unsupported Encoding while trying to get the bytes of %s using %s",
                     mRequestBody, PROTOCOL_CHARSET);
-            return null;
         }
     }
 }

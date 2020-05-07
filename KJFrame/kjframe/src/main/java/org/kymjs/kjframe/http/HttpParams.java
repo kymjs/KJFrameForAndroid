@@ -36,6 +36,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static android.R.attr.type;
+
 /**
  * Http请求的参数集合
  *
@@ -71,10 +73,10 @@ public class HttpParams implements Serializable {
     private final byte[] BIT_ENCODING = "Content-Transfer-Encoding: 8bit\r\n\r\n"
             .getBytes();
 
-    private final Map<String, String> urlParams = new ConcurrentHashMap<String, String>(
+    private final Map<String, Object> urlParams = new ConcurrentHashMap<String, Object>(
             8);
     private final Map<String, String> mHeaders = new HashMap<String, String>();
-    private final ByteArrayOutputStream mOutputStream = new ByteArrayOutputStream();
+//    private final ByteArrayOutputStream outstream = new ByteArrayOutputStream();
     private boolean hasFile;
     private String contentType = null;
 
@@ -105,6 +107,9 @@ public class HttpParams implements Serializable {
         mHeaders.put(key, value);
     }
 
+    public void put(final OutputStream outstream,final String key, final int value) {
+        this.put(outstream,key, value + "");
+    }
     public void put(final String key, final int value) {
         this.put(key, value + "");
     }
@@ -114,12 +119,36 @@ public class HttpParams implements Serializable {
     }
 
     /**
+     * 添加文本参数 写入流
+     */
+    public void put(final OutputStream outstream,final String key, final String value) {
+//        urlParams.put(key, value);
+        writeToOutputStream(outstream,key, value.getBytes(), TYPE_TEXT_CHARSET,
+                BIT_ENCODING, "");
+    }
+
+
+    /**
      * 添加文本参数
      */
     public void put(final String key, final String value) {
         urlParams.put(key, value);
-        writeToOutputStream(key, value.getBytes(), TYPE_TEXT_CHARSET,
-                BIT_ENCODING, "");
+
+    }
+
+    public void showAll(){
+    	for (String key : urlParams.keySet()) {
+    		Log.v("HttpMap","key = " + key + "; value = " + urlParams.get(key));
+    		}
+    }
+
+    /**
+     * 添加二进制参数, 例如Bitmap的字节流参数 写入流
+     */
+    public void put(final OutputStream outstream,String paramName, final byte[] rawData) {
+        hasFile = true;
+        writeToOutputStream(outstream,paramName, rawData, TYPE_OCTET_STREAM,
+                BINARY_ENCODING, "KJFrameFile");
     }
 
     /**
@@ -127,38 +156,73 @@ public class HttpParams implements Serializable {
      */
     public void put(String paramName, final byte[] rawData) {
         hasFile = true;
-        writeToOutputStream(paramName, rawData, TYPE_OCTET_STREAM,
-                BINARY_ENCODING, "KJFrameFile");
+        urlParams.put(paramName, rawData);
     }
+
+    /**
+     * 添加文件参数,可以实现文件上传功能 写入流
+     */
+    public void put(final OutputStream outstream,final String key, final File file) {
+
+        hasFile = true;
+        try {
+            writeFirstBoundary(outstream);
+            outstream
+                    .write((CONTENT_TYPE + type + NEW_LINE_STR).getBytes());
+            outstream
+                    .write(getContentDispositionBytes(key, file.getName()));
+            outstream.write(BINARY_ENCODING);
+            InputStream inStream=new FileInputStream(file);
+
+            byte[] buffer = null;
+            long sum=0;
+            int len = 0;
+            byte[] b = new byte[1024];
+            while ((len = inStream.read(b, 0, b.length)) != -1) {
+                System.out.println("写入到网络流"+":"+(sum+=len));
+                outstream.write(b, 0, len);
+            }
+            inStream.close();
+            outstream.write(NEW_LINE_STR.getBytes());
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+
+
+//        try {
+//
+//            writeToOutputStream(key,
+//                    FileUtils.input2byte(new FileInputStream(file)),
+//                    TYPE_OCTET_STREAM, BINARY_ENCODING, file.getName());
+//        } catch (FileNotFoundException e) {
+//            Log.e("kjframe", "HttpParams.put()-> file not found");
+//        }
+    }
+
 
     /**
      * 添加文件参数,可以实现文件上传功能
      */
     public void put(final String key, final File file) {
-        try {
-            hasFile = true;
-            writeToOutputStream(key,
-                    FileUtils.input2byte(new FileInputStream(file)),
-                    TYPE_OCTET_STREAM, BINARY_ENCODING, file.getName());
-        } catch (FileNotFoundException e) {
-            Log.e("kjframe", "HttpParams.put()-> file not found");
-        }
+
+        hasFile = true;
+        urlParams.put(key, file);
     }
 
     /**
      * 将数据写入到输出流中
      */
-    private void writeToOutputStream(String paramName, byte[] rawData,
+    private void writeToOutputStream(final OutputStream outstream,String paramName, byte[] rawData,
                                      String type, byte[] encodingBytes, String fileName) {
         try {
-            writeFirstBoundary();
-            mOutputStream
+            writeFirstBoundary(outstream);
+            outstream
                     .write((CONTENT_TYPE + type + NEW_LINE_STR).getBytes());
-            mOutputStream
+            outstream
                     .write(getContentDispositionBytes(paramName, fileName));
-            mOutputStream.write(encodingBytes);
-            mOutputStream.write(rawData);
-            mOutputStream.write(NEW_LINE_STR.getBytes());
+            outstream.write(encodingBytes);
+            outstream.write(rawData);
+            outstream.write(NEW_LINE_STR.getBytes());
         } catch (final IOException e) {
             e.printStackTrace();
         }
@@ -169,8 +233,8 @@ public class HttpParams implements Serializable {
      *
      * @throws IOException
      */
-    private void writeFirstBoundary() throws IOException {
-        mOutputStream.write(("--" + mBoundary + "\r\n").getBytes());
+    private void writeFirstBoundary(final OutputStream outstream) throws IOException {
+        outstream.write(("--" + mBoundary + "\r\n").getBytes());
     }
 
     private byte[] getContentDispositionBytes(String paramName, String fileName) {
@@ -183,9 +247,9 @@ public class HttpParams implements Serializable {
         return stringBuilder.append(NEW_LINE_STR).toString().getBytes();
     }
 
-    public long getContentLength() {
-        return mOutputStream.toByteArray().length;
-    }
+//    public long getContentLength() {
+//        return outstream.toByteArray().length;
+//    }
 
     public String getContentType() {
         //如果contentType没有被自定义，且参数集包含文件，则使用有文件的contentType
@@ -216,9 +280,21 @@ public class HttpParams implements Serializable {
             // 参数最末尾的结束符
             final String endString = "--" + mBoundary + "--\r\n";
             // 写入结束符
-            mOutputStream.write(endString.getBytes());
+            for (ConcurrentHashMap.Entry<String, Object> entry : urlParams
+                    .entrySet()) {
+                if(entry.getValue().getClass().getSimpleName().equals("String")){
+                    put(outstream,entry.getKey(),(String)entry.getValue());
+                }else if(entry.getValue().getClass().getSimpleName().equals("File")){
+                    put(outstream,entry.getKey(),(File)entry.getValue());
+                }else{
+                    put(outstream,entry.getKey(),(byte[]) entry.getValue());
+                }
+
+            }
+            
+            outstream.write(endString.getBytes());
             //
-            outstream.write(mOutputStream.toByteArray());
+//            outstream.write(outstream.toByteArray());
         } else if (!StringUtils.isEmpty(getUrlParams())) {
             outstream.write(getUrlParams().substring(1).getBytes());
         }
@@ -232,24 +308,27 @@ public class HttpParams implements Serializable {
         }
     }
 
-    public InputStream getContent() {
-        return new ByteArrayInputStream(mOutputStream.toByteArray());
-    }
+//    public InputStream getContent() {
+//        return new ByteArrayInputStream(outstream.toByteArray());
+//    }
 
     public StringBuilder getUrlParams() {
         StringBuilder result = new StringBuilder();
         boolean isFirst = true;
-        for (ConcurrentHashMap.Entry<String, String> entry : urlParams
+        for (ConcurrentHashMap.Entry<String, Object> entry : urlParams
                 .entrySet()) {
-            if (!isFirst) {
-                result.append("&");
-            } else {
-                result.append("?");
-                isFirst = false;
+            if(entry.getValue().getClass().getSimpleName().equals("String")){
+                if (!isFirst) {
+                    result.append("&");
+                } else {
+                    result.append("?");
+                    isFirst = false;
+                }
+                result.append(entry.getKey());
+                result.append("=");
+                result.append(entry.getValue());
             }
-            result.append(entry.getKey());
-            result.append("=");
-            result.append(entry.getValue());
+
         }
         return result;
     }
