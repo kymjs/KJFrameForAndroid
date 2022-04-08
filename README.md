@@ -17,6 +17,7 @@
 目前已经兼容  
 
 *   Android S 开发
+*   支持 androidx
 *   targetSdkVersion=30
 *   符合国家要求的隐私权限调用
 
@@ -24,6 +25,7 @@
 ## 快速入门
 #### AndroidStudio
   
+最新版本：[![](https://jitpack.io/v/kymjs/KJFrameForAndroid.svg)](https://jitpack.io/#kymjs/KJFrameForAndroid)  
 
 ``` 
 // root build.gradle
