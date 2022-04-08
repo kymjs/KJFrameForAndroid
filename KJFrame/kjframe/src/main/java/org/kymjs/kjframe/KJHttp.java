@@ -528,7 +528,7 @@ public class KJHttp {
                 stagedRequests.add(request);
                 mWaitingRequests.put(cacheKey, stagedRequests);
                 if (HttpConfig.DEBUG) {
-                    KJLoger.debug("Request for cacheKey=%s is in flight, putting on hold.", 
+                    KJLoger.debug("Request for cacheKey=%s is in flight, putting on hold.",
                             cacheKey);
                 }
             } else {

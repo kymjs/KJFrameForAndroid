@@ -38,19 +38,19 @@ public class WidgetActivity extends KJActivity {
     public void widgetClick(View v) {
         super.widgetClick(v);
         switch (v.getId()) {
-        case R.id.button1:
-            showActivity(aty, KJSlidingMenuDemo.class);
-            break;
-        case R.id.button2:
-            break;
-        case R.id.button3:
-            ViewInject.toast("请查看KJBlog项目");
-            break;
-        case R.id.button4:
-            ViewInject.toast("请查看KJController项目");
-            break;
-        case R.id.button5:
-            break;
+            case R.id.button1:
+                showActivity(aty, KJSlidingMenuDemo.class);
+                break;
+            case R.id.button2:
+                break;
+            case R.id.button3:
+                ViewInject.toast("请查看KJBlog项目");
+                break;
+            case R.id.button4:
+                ViewInject.toast("请查看KJController项目");
+                break;
+            case R.id.button5:
+                break;
         }
     }
 }

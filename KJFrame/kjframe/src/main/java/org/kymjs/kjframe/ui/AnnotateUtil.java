@@ -25,18 +25,16 @@ import java.lang.reflect.Field;
 
 /**
  * 注解工具类<br>
- * 
+ *
  * <b>创建时间</b> 2014-6-5
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
  * @version 1.1
  */
 public class AnnotateUtil {
     /**
-     * @param currentClass
-     *            当前类，一般为Activity或Fragment
-     * @param sourceView
-     *            待绑定控件的直接或间接父控件
+     * @param currentClass 当前类，一般为Activity或Fragment
+     * @param sourceView   待绑定控件的直接或间接父控件
      */
     public static void initBindView(Object currentClass, View sourceView) {
         // 通过反射获取到全部属性，反射的字段可能是一个类（静态）字段或实例字段
@@ -66,7 +64,7 @@ public class AnnotateUtil {
 
     /**
      * 必须在setContentView之后调用
-     * 
+     *
      * @param aty Activity对象
      */
     public static void initBindView(Activity aty) {
@@ -75,9 +73,8 @@ public class AnnotateUtil {
 
     /**
      * 必须在setContentView之后调用
-     * 
-     * @param view
-     *            侵入式的view，例如使用inflater载入的view
+     *
+     * @param view 侵入式的view，例如使用inflater载入的view
      */
     public static void initBindView(View view) {
         Context cxt = view.getContext();
@@ -90,7 +87,7 @@ public class AnnotateUtil {
 
     /**
      * 必须在setContentView之后调用
-     * 
+     *
      * @param frag 要初始化的Fragment
      */
     public static void initBindView(Fragment frag) {

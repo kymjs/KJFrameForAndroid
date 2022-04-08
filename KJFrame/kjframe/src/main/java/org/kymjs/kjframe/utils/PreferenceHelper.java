@@ -21,15 +21,15 @@ import android.content.SharedPreferences.Editor;
 
 /**
  * SharedPreferences操作工具包<br>
- * 
+ *
  * <b>说明</b> 本工具包只能在单进程项目下使用，多进程共享请使用如下demo的两行代码重写: <br>
  * Context otherContext = c.createPackageContext( "com.android.contacts",
  * Context.CONTEXT_IGNORE_SECURITY); <br>
  * SharedPreferences sp = otherContext.getSharedPreferences( "my_file",
  * Context.MODE_MULTI_PROCESS);<br>
- * 
+ *
  * <b>创建时间</b> 2014-7-27
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
  */
 public class PreferenceHelper {
@@ -42,7 +42,7 @@ public class PreferenceHelper {
     }
 
     public static void write(Context context, String fileName, String k,
-            boolean v) {
+                             boolean v) {
         SharedPreferences preference = context.getSharedPreferences(fileName,
                 Context.MODE_PRIVATE);
         Editor editor = preference.edit();
@@ -51,7 +51,7 @@ public class PreferenceHelper {
     }
 
     public static void write(Context context, String fileName, String k,
-            String v) {
+                             String v) {
         SharedPreferences preference = context.getSharedPreferences(fileName,
                 Context.MODE_PRIVATE);
         Editor editor = preference.edit();
@@ -66,7 +66,7 @@ public class PreferenceHelper {
     }
 
     public static int readInt(Context context, String fileName, String k,
-            int defv) {
+                              int defv) {
         SharedPreferences preference = context.getSharedPreferences(fileName,
                 Context.MODE_PRIVATE);
         return preference.getInt(k, defv);
@@ -79,7 +79,7 @@ public class PreferenceHelper {
     }
 
     public static boolean readBoolean(Context context, String fileName,
-            String k, boolean defBool) {
+                                      String k, boolean defBool) {
         SharedPreferences preference = context.getSharedPreferences(fileName,
                 Context.MODE_PRIVATE);
         return preference.getBoolean(k, defBool);
@@ -92,7 +92,7 @@ public class PreferenceHelper {
     }
 
     public static String readString(Context context, String fileName, String k,
-            String defV) {
+                                    String defV) {
         SharedPreferences preference = context.getSharedPreferences(fileName,
                 Context.MODE_PRIVATE);
         return preference.getString(k, defV);

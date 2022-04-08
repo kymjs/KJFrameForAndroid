@@ -1,1 +1,1 @@
-include ':app', ':kjframe', ':demo'
+include ':kjframe', ':demo'

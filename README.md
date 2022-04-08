@@ -8,43 +8,51 @@
 支持断点续传、大文件上传进度、https、cookie持久化、Rxjava。
 
 ---
-*KJFrameForAndroid* 又叫KJLibrary，是一个android的orm 和 ioc 框架。同时封装了android中的Bitmap与Http操作的框架，使其更加简单易用；<br>
-KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复杂操作而达到简化Android应用级开发，最终实现快速而又安全的开发APP。我们提倡用最少的代码，完成最多的操作，用最高的效率，完成最复杂的功能。<br>
+
+`KJFrameForAndroid` 是一个 `Android` 快速开发框架。同时封装了`Bitmap`、`Http`、`数据库`使原本复杂操作最简化，实现快速而又安全的开发APP。  
+
+这个框架是我从 `2014`年开始开发的，这么多年断断续续一直在维护，期间也被很多大厂使用，比如曾经的无盒子不开撸的`YY多玩盒子`、`乐视TV`、`中国联通`、当然还有很多我不知道的APP，希望也能帮到你。
+
+
+目前已经兼容  
+
+*   Android S 开发
+*   targetSdkVersion=30
+*   符合国家要求的隐私权限调用
+
 
 ## 快速入门
 #### AndroidStudio
+  
 
-build.gradle中添加：  
+``` 
+// root build.gradle
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
 
-```groovy 
-implementation 'org.kymjs.kjframe:kjframe:2.6'
+// module build.gradle
+dependencies {
+    implementation 'com.github.kymjs:kjframe:3.0.0'
+}
 ```
 
-#### eclipse
+#### eclipse（大清都亡了，还在用？）
 
 复制jar包 [KJFrameForAndroid_v2.x](https://github.com/kymjs/KJFrameForAndroid/tree/master/binrary) 到你工程的/libs目录中.   
 eclipes版本源码请查看[相关分支](https://github.com/kymjs/KJFrameForAndroid/tree/eclipse_end)   
 
 ## 使用帮助
-1、很遗憾，没有帮助文档，但这几篇博客也许能帮到你  
+1、这几篇博客也许能帮到你  
     [MVC模块](https://github.com/kymjs/KJFrameForAndroid/wiki/MVCLibrary_cn)   
     [KJBitmap使用方法](https://www.kymjs.com/code/2015/03/25/01/)   
     [KJHttp请求的使用](https://www.kymjs.com/code/2015/05/12/01/)   
     [数据库模块使用方法](https://github.com/kymjs/KJFrameForAndroid/wiki/DBLibrary)   
     [KJBitmap与KJHttp的深度用法](https://www.kymjs.com/code/2015/09/24/01/)   
 2、更多在实际项目中使用的Demo: [音乐播放器](https://github.com/KJFrame/KJMusic) [爱看博客客户端](https://github.com/KJFrame/KJBlog)    
-3、框架API文档：[http://kjframe.github.io](https://kjframe.github.io/)    
-
-*注，`KJFrameForAndroid`需要在 `AndroidManifest.xml` 中声明如下权限*
-
-```xml
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-```
-
-## 关于
-
-[开源实验室开放项目](https://kymjs.com/)  
+3、框架API文档：[http://kjframe.github.io](https://kjframe.github.io/)     
 
 
 ## 开源协议

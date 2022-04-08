@@ -1,18 +1,16 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.dcendents.android-maven'
 
-version = "2.6.0.1"
+group = 'com.github.kymjs'
+version = "3.0.0"
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileSdkVersion 30
     resourcePrefix "kjframe_"
 
     defaultConfig {
-        minSdkVersion 8
-        targetSdkVersion 23
-        versionCode 260
+        minSdkVersion 14
+        targetSdkVersion 30
+        versionCode 300
         versionName version
     }
     buildTypes {
@@ -24,72 +22,8 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.0.1'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
 }
 
-def siteUrl = 'https://github.com/kymjs/KJFrameForAndroid'      // 项目的主页
-def gitUrl = 'https://github.com/kymjs/KJFrameForAndroid.git'   // Git仓库的url
-group = "org.kymjs.kjframe"
-install {
-    repositories.mavenInstaller {
-        // This generates POM.xml with proper parameters
-        pom {
-            project {
-                packaging 'aar'
-                name 'KJFrameWorkForAndroid Library' 	//项目描述
-                url siteUrl
-                // Set your license
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'kymjs'		//填写的一些基本信息
-                        name 'ZhangTao'
-                        email 'kymjs123@gmail.com'
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
-        }
-    }
-}
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-    configurations = ['archives']
-    pkg {
-        repo = "maven"
-        name = "KJFrameForAndroid"	//发布到JCenter上的项目名字
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
-        publish = true
-    }
-}
+apply plugin: 'maven-publish'
+apply plugin: 'com.github.dcendents.android-maven'

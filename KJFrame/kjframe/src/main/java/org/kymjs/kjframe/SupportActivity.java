@@ -20,8 +20,9 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.kymjs.kjframe.ui.AnnotateUtil;
 import org.kymjs.kjframe.ui.I_BroadcastReg;
@@ -44,7 +45,6 @@ public abstract class SupportActivity extends AppCompatActivity implements
 
     public Activity aty;
 
-    protected KJFragment currentKJFragment;
     protected SupportFragment currentSupportFragment;
     private ThreadDataCallBack callback;
     private KJActivityHandle threadHandle = new KJActivityHandle(this);
@@ -210,7 +210,6 @@ public abstract class SupportActivity extends AppCompatActivity implements
         KJLoger.state(this.getClass().getName(), "---------onDestroy ");
         super.onDestroy();
         KJActivityStack.create().finishActivity(this);
-        currentKJFragment = null;
         currentSupportFragment = null;
         callback = null;
         threadHandle = null;
@@ -279,38 +278,11 @@ public abstract class SupportActivity extends AppCompatActivity implements
      * @param resView        将要被替换掉的视图
      * @param targetFragment 用来替换的Fragment
      */
-    public void changeFragment(int resView, KJFragment targetFragment) {
-        if (targetFragment.equals(currentKJFragment)) {
-            return;
-        }
-        FragmentTransaction transaction = getFragmentManager()
-                .beginTransaction();
-        if (!targetFragment.isAdded()) {
-            transaction.add(resView, targetFragment, targetFragment.getClass()
-                    .getName());
-        }
-        if (targetFragment.isHidden()) {
-            transaction.show(targetFragment);
-            targetFragment.onChange();
-        }
-        if (currentKJFragment != null && currentKJFragment.isVisible()) {
-            transaction.hide(currentKJFragment);
-        }
-        currentKJFragment = targetFragment;
-        transaction.commit();
-    }
-
-    /**
-     * 用Fragment替换视图
-     *
-     * @param resView        将要被替换掉的视图
-     * @param targetFragment 用来替换的Fragment
-     */
     public void changeFragment(int resView, SupportFragment targetFragment) {
         if (targetFragment.equals(currentSupportFragment)) {
             return;
         }
-        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager()
+        androidx.fragment.app.FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction();
         if (!targetFragment.isAdded()) {
             transaction.add(resView, targetFragment, targetFragment.getClass()
