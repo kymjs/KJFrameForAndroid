@@ -1,16 +1,20 @@
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
 
 group = 'com.github.kymjs'
-version = "3.0.0"
+version = "3.0.1"
 
 android {
-    compileSdkVersion 30
+    namespace = 'com.github.kymjs.kjframe'
+    compileSdk 33
     resourcePrefix "kjframe_"
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 30
-        versionCode 300
+        minSdk 17
+        targetSdk 35
+        versionCode 301
         versionName version
     }
     buildTypes {
@@ -26,4 +30,16 @@ dependencies {
 }
 
 apply plugin: 'maven-publish'
-apply plugin: 'com.github.dcendents.android-maven'
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = group
+                artifactId = project.name
+                version = version
+            }
+        }
+    }
+}

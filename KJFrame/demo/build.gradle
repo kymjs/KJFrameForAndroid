@@ -1,12 +1,15 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
+
 
 android {
-    compileSdkVersion 30
+    compileSdk 33
 
     defaultConfig {
         applicationId "org.kymjs.kjframe.demo"
-        minSdkVersion 14
-        targetSdkVersion 30
+        minSdk 17
+        targetSdk 35
         versionCode 1
         versionName "1.0"
     }

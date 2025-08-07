@@ -1,4 +1,4 @@
-[![OSL](https://kymjs.com/qiniu/image/logo3.png)](https://www.kymjs.com/works/)
+[![OSL](https://cdn.kymjs.com:8843/qiniu/image/logo3.png)](https://www.kymjs.com/works/)
 
 
 =================
@@ -16,16 +16,14 @@
 
 目前已经兼容  
 
-*   Android S 开发
-*   支持 androidx
-*   targetSdkVersion=30
+*   targetSdk=35
 *   符合国家要求的隐私权限调用
 
 
 ## 快速入门
+
 #### AndroidStudio
   
-最新版本：[![](https://jitpack.io/v/kymjs/KJFrameForAndroid.svg)](https://jitpack.io/#kymjs/KJFrameForAndroid)  
 
 ``` 
 // root build.gradle
@@ -37,14 +35,9 @@ allprojects {
 
 // module build.gradle
 dependencies {
-    implementation 'com.github.kymjs:KJFrameForAndroid:3.0.0'
+    implementation 'com.github.kymjs:kjframe:3.0.0'
 }
 ```
-
-#### eclipse（大清都亡了，还在用？）
-
-复制jar包 [KJFrameForAndroid_v2.x](https://github.com/kymjs/KJFrameForAndroid/tree/master/binrary) 到你工程的/libs目录中.   
-eclipes版本源码请查看[相关分支](https://github.com/kymjs/KJFrameForAndroid/tree/eclipse_end)   
 
 ## 使用帮助
 1、这几篇博客也许能帮到你  
@@ -59,7 +52,7 @@ eclipes版本源码请查看[相关分支](https://github.com/kymjs/KJFrameForAn
 
 ## 开源协议
 ```
- Copyright (C) 2014-2016, 张涛
+ Copyright (C) 2014-2025, 张涛
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

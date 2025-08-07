@@ -1,27 +1,16 @@
-
 buildscript {
+    ext.kotlin_version = '1.9.21'
     repositories {
-        maven { url 'https://jitpack.io' }
-        google()
-        mavenCentral()
-        jcenter()
+        maven { url 'https://maven.therouter.cn:8443/repository/maven-public/' }
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.1.2"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 allprojects {
     repositories {
-        maven { url 'https://jitpack.io' }
-        google()
-        mavenCentral()
-        jcenter()
+        maven { url 'https://maven.therouter.cn:8443/repository/maven-public/' }
     }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }
