@@ -35,7 +35,7 @@ allprojects {
 
 // module build.gradle
 dependencies {
-    implementation 'com.github.kymjs:kjframe:3.0.1'
+    implementation 'com.github.kymjs:kjframe:3.0.2'
 }
 ```
 
