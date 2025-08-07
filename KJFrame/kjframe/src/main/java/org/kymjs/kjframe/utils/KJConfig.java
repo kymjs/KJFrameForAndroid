@@ -20,7 +20,7 @@ package org.kymjs.kjframe.utils;
  */
 public final class KJConfig {
 
-    public static final double VERSION = 2.6;
+    public static final double VERSION = 3.02;
 
     /**
      * 错误处理广播

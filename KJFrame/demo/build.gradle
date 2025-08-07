@@ -4,6 +4,7 @@ plugins {
 
 
 android {
+    namespace 'org.kymjs.kjframe.demo'
     compileSdk 33
 
     defaultConfig {

@@ -33,7 +33,7 @@ public class MainActivity extends SupportActivity {
     @Override
     public void initWidget() {
         super.initWidget();
-        mTvVersion.setText("当前框架版本为:" + KJConfig.VERSION);
+        mTvVersion.setText("当前框架版本为:" + org.kymjs.kjframe.BuildConfig.VERSION);
     }
 
     @Override
