@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="再次声明：KJFrameForAndroid最低支持2.2版本" />
+        android:text="再次声明：KJFrameForAndroid最低支持API 17" />
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
