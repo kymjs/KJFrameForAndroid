@@ -66,3 +66,5 @@ dependencies {
  See the License for the specific language governing permissions and
  limitations under the License.
  ```
+
+![在线乞讨](https://cdn.kymjs.com:8843/qiniu/image/qrcode_transfer_kjframe.png)
