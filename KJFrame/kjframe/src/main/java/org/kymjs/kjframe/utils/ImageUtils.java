@@ -47,13 +47,11 @@ public class ImageUtils {
      */
     public static File getSmallImageFile(Context cxt, String filePath, int width, int height,
                                          boolean isAdjust) {
-
-        Bitmap bitmap = reduce(BitmapFactory.decodeFile(filePath), width, height, isAdjust);
-
-        File file = new File(getRandomFileName(cxt.getCacheDir().getPath()));
-
         BufferedOutputStream outputStream = null;
+        File file = null;
         try {
+            Bitmap bitmap = reduce(BitmapFactory.decodeFile(filePath), width, height, isAdjust);
+            file = new File(getRandomFileName(cxt.getCacheDir().getPath()));
             outputStream = new BufferedOutputStream(new FileOutputStream(file));
             bitmap.compress(Bitmap.CompressFormat.JPEG, 60, outputStream);
             outputStream.flush();
